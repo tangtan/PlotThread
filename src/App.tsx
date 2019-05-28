@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TodoApp from './components/demo/TodoApp';
 import paper, {
   Path,
   Point,
@@ -11,7 +11,6 @@ import paper, {
   Color,
   Segment
 } from 'paper';
-// import HitTest from "./components/HitTest";
 
 type Props = {};
 
@@ -151,6 +150,7 @@ class App extends React.Component<Props, State> {
           className="t-app"
           style={{ width: '800px', height: '800px', background: 'black' }}
         />
+        <TodoApp />
       </div>
     );
   }

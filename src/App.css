@@ -31,3 +31,8 @@
     transform: rotate(360deg);
   }
 }
+
+.t-app-root {
+  display: flex;
+  flex-direction: row;
+}
