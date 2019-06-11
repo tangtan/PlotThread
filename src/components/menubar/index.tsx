@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MenuItem from './MenuItem';
 import './MenuBar.css';
+
 import file from '../../assets/file.png';
 import add from '../../assets/add.png';
 import save from '../../assets/save.png';

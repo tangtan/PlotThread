@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { IMenu } from './index';
 import './MenuBar.css';
+
 type Props = {
   menuInfo: IMenu;
 };
