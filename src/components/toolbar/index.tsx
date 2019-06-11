@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ToolItem from './ToolItem';
+import './toolbar.css';
 
 type Props = {};
 
@@ -19,14 +20,34 @@ export default class ToolBar extends Component<Props, State> {
     this.state = {
       tools: [
         {
-          name: 'pan',
+          name: 'move',
           type: 'tool',
-          url: ''
+          url: '../../assets/move.png'
         },
         {
-          name: 'pen',
+          name: 'morph',
           type: 'tool',
-          url: ''
+          url: '../../assets/morph.png'
+        },
+        {
+          name: 'adjust',
+          type: 'tool',
+          url: '../../assets/adjust.png'
+        },
+        {
+          name: 'bend',
+          type: 'tool',
+          url: '../../assets/bend.png'
+        },
+        {
+          name: 'stroke',
+          type: 'tool',
+          url: '../../assets/stroke.png'
+        },
+        {
+          name: 'picture',
+          type: 'tool',
+          url: '../../assets/picture.png'
         }
       ]
     };
@@ -37,6 +58,10 @@ export default class ToolBar extends Component<Props, State> {
       <ToolItem toolInfo={tool} />
     ));
 
-    return <div className="tool-bar-wrapper">{toolList}</div>;
+    return (
+      <div className="toolbar-wrapper">
+        <div className="toolbar-icons-wrapper">{toolList}</div>
+      </div>
+    );
   }
 }

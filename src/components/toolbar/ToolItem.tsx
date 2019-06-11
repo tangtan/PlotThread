@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ITool } from './index';
-import '../../App.css';
+import './toolbar.css';
 
 type Props = {
   toolInfo: ITool;
@@ -15,6 +15,16 @@ export default class ToolItem extends Component<Props, State> {
   }
 
   render() {
-    return <div className="tool-item-wrapper">{this.props.toolInfo.name}</div>;
+    console.log(this.props.toolInfo.url);
+    return (
+      <div className="toolbar-icon-box">
+        <img
+          className="toolbar-icon-pic"
+          src={require('../../assets/' +
+            `${this.props.toolInfo.name}` +
+            '.png')}
+        />
+      </div>
+    );
   }
 }

@@ -25,3 +25,5 @@ yarn-error.log*
 # vscode workspace
 .vscode/
 *.code-workspace
+.idea/
+package-lock.json
