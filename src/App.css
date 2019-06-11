@@ -32,7 +32,11 @@
   }
 }
 
-.t-app-root {
+.tool-bar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  background: white;
 }
