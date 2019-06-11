@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import TodoApp from './components/demo/TodoApp';
+import ZoomCanvas from './components/canvas/ZoomCanvas';
 import paper, {
   Path,
   Point,
@@ -114,7 +115,7 @@ class App extends React.Component<Props, State> {
   };
 
   private onMouseMove = (e: MouseEvent) => {
-    console.log(e);
+    // console.log(e);
     project.activeLayer.selected = false;
     if (this.state.movePath) {
       this.state.focusPath.selected = true;
@@ -133,24 +134,18 @@ class App extends React.Component<Props, State> {
     }
   };
 
+  componentDidMount() {
+    paper.setup('canvas');
+    this.createPaths();
+    view.onMouseDown = this.onMouseDown;
+    view.onMouseMove = this.onMouseMove;
+  }
+
   render() {
-    // paper.install(window);
-    window.onload = () => {
-      paper.setup('t-canvas');
-      this.createPaths();
-      view.onMouseDown = this.onMouseDown;
-      view.onMouseMove = this.onMouseMove;
-      // view.onMouseDrag = this.onMouseDrag;
-      view.draw();
-    };
     return (
       <div className="t-app-root">
-        <canvas
-          id="t-canvas"
-          className="t-app"
-          style={{ width: '800px', height: '800px', background: 'black' }}
-        />
-        <TodoApp />
+        {/* <TodoApp /> */}
+        <ZoomCanvas />
       </div>
     );
   }
