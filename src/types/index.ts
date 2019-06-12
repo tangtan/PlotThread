@@ -8,6 +8,7 @@ export type ActionType = ActionType<typeof actions>;
 export type StateType = {
   todos: TodosType;
   visibilityFilter: string;
+  toolState: ToolStateType;
 };
 
 export type DispatchType = typeof store.dispatch;
@@ -26,4 +27,15 @@ export type TodosType = {
 
 export type ByIdsType = {
   [id: number]: ITodo;
+};
+
+// Tool State
+export type ToolStateType = {
+  toolName: string;
+  move: boolean;
+  morph: boolean;
+  adjust: boolean;
+  bend: boolean;
+  stroke: boolean;
+  picture: boolean;
 };
