@@ -31,3 +31,21 @@
     transform: rotate(360deg);
   }
 }
+
+.tool-bar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.menu-bar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 400;
+  display: flex;
+  flex-direction: row;
+  background: #61dafb;
+}
