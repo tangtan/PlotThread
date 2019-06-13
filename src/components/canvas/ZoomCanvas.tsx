@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { view, Point } from 'paper';
+import paper, { view, Point } from 'paper';
 import * as d3Zoom from 'd3-zoom';
 import { select, event } from 'd3-selection';
 import { StateType } from '../../types';
@@ -34,15 +34,6 @@ class ZoomCanvas extends Component<Props, State> {
       transformK: 1
     };
   }
-
-  private onMouseUp = () => {
-    // TODO: zoom state
-    this.setState({
-      transformX: 0,
-      transformY: 0,
-      transformK: 1
-    });
-  };
 
   componentDidMount() {
     const canvas = select<HTMLCanvasElement, any>('canvas');
@@ -83,7 +74,8 @@ class ZoomCanvas extends Component<Props, State> {
       });
 
     if (canvas) {
-      canvas.call(canvasZoom).on('mouseup', this.onMouseUp);
+      canvas.call(canvasZoom);
+      paper.setup('canvas');
     }
   }
 
