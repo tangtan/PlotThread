@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TodoApp from './components/demo/TodoApp';
 import ZoomCanvas from './components/canvas/ZoomCanvas';
+import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
 import paper, {
   Path,
@@ -147,6 +148,7 @@ class App extends React.Component<Props, State> {
       <div className="t-app-root">
         {/* <TodoApp /> */}
         <ZoomCanvas />
+        <MenuBar />
         <ToolBar />
       </div>
     );

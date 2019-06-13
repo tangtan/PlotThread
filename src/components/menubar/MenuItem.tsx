@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { IMenu } from './index';
-import '../../App.css';
-
+import './MenuBar.css';
 type Props = {
   menuInfo: IMenu;
 };
@@ -15,6 +14,15 @@ export default class MenuItem extends Component<Props, State> {
   }
 
   render() {
-    return <div className="menu-item-wrapper">{this.props.menuInfo.name}</div>;
+    const menuList = this.props.menuInfo;
+    return (
+      <div className="menu-bar-icon-box">
+        <img
+          className="menu-bar-icon-pic"
+          src={this.props.menuInfo.url}
+          alt={this.props.menuInfo.name}
+        />
+      </div>
+    );
   }
 }
