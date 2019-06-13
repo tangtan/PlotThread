@@ -63,7 +63,7 @@ export default class HitTest extends Component<Props, State> {
       });
       path.fillColor = color;
       path.strokeColor = 'black';
-      path.onMouseDrag = this.onMouseDrag;
+      // path.onMouseDrag = this.onMouseDrag;
       // path.onMouseMove = this.onMouseMove;
     }
   };
@@ -134,8 +134,9 @@ export default class HitTest extends Component<Props, State> {
   componentDidMount() {
     // paper.setup('canvas');
     this.createPaths();
-    view.onMouseDown = this.onMouseDown;
-    view.onMouseMove = this.onMouseMove;
+    // view.onMouseDown = this.onMouseDown;
+    // view.onMouseMove = this.onMouseMove;
+    console.log(view, project);
   }
 
   render() {

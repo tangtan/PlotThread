@@ -4,6 +4,7 @@ import TodoApp from './components/demo/TodoApp';
 import ZoomCanvas from './components/canvas/ZoomCanvas';
 import ToolBar from './components/toolbar';
 import HitTest from './components/utils/HitTest';
+import PenCanvas from './components/canvas/DrawCanvas';
 
 type Props = {};
 
@@ -18,7 +19,8 @@ class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="t-app-root">
-        <ZoomCanvas />
+        <PenCanvas />
+        {/* <ZoomCanvas /> */}
         {/* <TodoApp /> */}
         <HitTest />
         <ToolBar />

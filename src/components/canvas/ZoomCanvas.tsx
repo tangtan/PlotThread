@@ -81,13 +81,11 @@ class ZoomCanvas extends Component<Props, State> {
 
   render() {
     return (
-      <div className="zoom-canvas-wrapper">
-        <canvas
-          id="canvas"
-          className="canvas"
-          style={{ width: '100vw', height: '100vh' }}
-        />
-      </div>
+      <canvas
+        id="canvas"
+        className="canvas"
+        style={{ width: '100vw', height: '100vh' }}
+      />
     );
   }
 }
