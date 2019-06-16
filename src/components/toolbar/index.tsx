@@ -20,6 +20,7 @@ export interface ITool {
   name: string;
   type: string;
   url: string;
+  subTools: string[];
 }
 
 export default class ToolBar extends Component<Props, State> {
@@ -30,32 +31,38 @@ export default class ToolBar extends Component<Props, State> {
         {
           name: 'move',
           type: 'tool',
-          url: move
-        },
-        {
-          name: 'morph',
-          type: 'tool',
-          url: morph
-        },
-        {
-          name: 'adjust',
-          type: 'tool',
-          url: adjust
+          url: move,
+          subTools: []
         },
         {
           name: 'bend',
           type: 'tool',
-          url: bend
+          url: bend,
+          subTools: ['bend', 'scale']
+        },
+        {
+          name: 'morph',
+          type: 'tool',
+          url: morph,
+          subTools: ['twine', 'converge', 'separate']
+        },
+        {
+          name: 'adjust',
+          type: 'tool',
+          url: adjust,
+          subTools: ['whole', 'single']
         },
         {
           name: 'stroke',
           type: 'tool',
-          url: stroke
+          url: stroke,
+          subTools: ['stroke', 'style']
         },
         {
           name: 'picture',
           type: 'tool',
-          url: picture
+          url: picture,
+          subTools: []
         }
       ]
     };
