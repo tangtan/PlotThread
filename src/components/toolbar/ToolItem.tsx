@@ -55,8 +55,9 @@ class ToolItem extends Component<Props, State> {
       <div
         className={
           this.props.toolName === this.props.toolInfo.name &&
-          this.state.isClicked
-            ? 'toolbar-icon-box-clicked'
+          this.state.isClicked &&
+          this.props.toolState
+            ? 'toolbar-icon-clicked'
             : 'toolbar-icon-box'
         }
         onClick={this.onClick}

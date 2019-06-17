@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
-
+import TodoApp from './components/demo/TodoApp';
 import ToolBar from './components/toolbar';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
-
-import MenuBar from './components/menubar';
 import HitTest from './components/utils/HitTest';
-
 import ToolCanvas from './components/canvas/ToolCanvas';
 
 type Props = {};
