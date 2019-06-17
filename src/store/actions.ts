@@ -20,3 +20,8 @@ export const setTool = createAction(
   'SET_TOOL',
   action => (name: string, use: boolean) => action({ name: name, use: use })
 );
+
+export const addVisualObject = createAction(
+  'ADD_VISUALOBJECT',
+  action => (type: string) => action({ type: type })
+);

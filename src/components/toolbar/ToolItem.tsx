@@ -4,10 +4,12 @@ import { ITool } from './index';
 import './toolbar.css';
 import { DispatchType, StateType } from '../../types';
 import { setTool } from '../../store/actions';
+import { getToolState } from '../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    toolName: state.toolState.toolName
+    toolName: state.toolState.toolName,
+    toolState: getToolState(state, state.toolState.toolName)
   };
 };
 
@@ -35,11 +37,16 @@ class ToolItem extends Component<Props, State> {
   }
 
   private onClick = () => {
+    // 同步工具状态
+    this.setState({
+      isClicked: this.props.toolState
+    });
     const name = this.props.toolInfo.name;
     const use = !this.state.isClicked;
     this.props.activateTool(name, use);
+    // 同步点击状态
     this.setState({
-      isClicked: !this.state.isClicked
+      isClicked: use
     });
   };
 
@@ -49,7 +56,8 @@ class ToolItem extends Component<Props, State> {
       <div
         className={
           this.props.toolName === this.props.toolInfo.name &&
-          this.state.isClicked
+          this.state.isClicked &&
+          this.props.toolState
             ? 'toolbar-icon-clicked'
             : 'toolbar-icon-box'
         }

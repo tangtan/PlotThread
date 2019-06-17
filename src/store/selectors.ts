@@ -34,3 +34,22 @@ export const getTodosByVisibilityFilter = (
       return allTodos;
   }
 };
+
+export const getToolState = (state: StateType, name: string) => {
+  switch (name) {
+    case 'move':
+      return state.toolState.move;
+    case 'morph':
+      return state.toolState.morph;
+    case 'adjust':
+      return state.toolState.adjust;
+    case 'bend':
+      return state.toolState.bend;
+    case 'stroke':
+      return state.toolState.stroke;
+    case 'picture':
+      return state.toolState.picture;
+    default:
+      return false;
+  }
+};

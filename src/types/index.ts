@@ -9,6 +9,7 @@ export type StateType = {
   todos: TodosType;
   visibilityFilter: string;
   toolState: ToolStateType;
+  renderQueue: VisualObject[];
 };
 
 export type DispatchType = typeof store.dispatch;
@@ -38,4 +39,9 @@ export type ToolStateType = {
   bend: boolean;
   stroke: boolean;
   picture: boolean;
+};
+
+// Visual Object
+export type VisualObject = {
+  type: string;
 };
