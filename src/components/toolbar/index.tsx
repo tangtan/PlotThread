@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import ToolItem from './ToolItem';
 import './toolbar.css';
 
+// add tool icons
+import move from '../../assets/move.png';
+import morph from '../../assets/morph.png';
+import adjust from '../../assets/adjust.png';
+import bend from '../../assets/bend.png';
+import stroke from '../../assets/stroke.png';
+import picture from '../../assets/picture.png';
+
 type Props = {};
 
 type State = {
@@ -12,6 +20,7 @@ export interface ITool {
   name: string;
   type: string;
   url: string;
+  subTools: string[];
 }
 
 export default class ToolBar extends Component<Props, State> {
@@ -22,40 +31,46 @@ export default class ToolBar extends Component<Props, State> {
         {
           name: 'move',
           type: 'tool',
-          url: '../../assets/move.png'
-        },
-        {
-          name: 'morph',
-          type: 'tool',
-          url: '../../assets/morph.png'
-        },
-        {
-          name: 'adjust',
-          type: 'tool',
-          url: '../../assets/adjust.png'
+          url: move,
+          subTools: []
         },
         {
           name: 'bend',
           type: 'tool',
-          url: '../../assets/bend.png'
+          url: bend,
+          subTools: ['bend', 'scale']
+        },
+        {
+          name: 'morph',
+          type: 'tool',
+          url: morph,
+          subTools: ['twine', 'converge', 'separate']
+        },
+        {
+          name: 'adjust',
+          type: 'tool',
+          url: adjust,
+          subTools: ['whole', 'single']
         },
         {
           name: 'stroke',
           type: 'tool',
-          url: '../../assets/stroke.png'
+          url: stroke,
+          subTools: ['stroke', 'style']
         },
         {
           name: 'picture',
           type: 'tool',
-          url: '../../assets/picture.png'
+          url: picture,
+          subTools: []
         }
       ]
     };
   }
 
   render() {
-    const toolList = this.state.tools.map((tool: ITool) => (
-      <ToolItem toolInfo={tool} />
+    const toolList = this.state.tools.map((tool: ITool, i: number) => (
+      <ToolItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
 
     return (

@@ -11,6 +11,7 @@
   height: 500px;
   border-radius: 10px 0 0 10px;
   border: none;
+  overflow: hidden;
 }
 
 .toolbar-icons-wrapper {
@@ -20,6 +21,8 @@
   justify-content: space-between;
   width: 60px;
   height: 90%;
+  padding: 10px 0;
+  overflow: hidden;
 }
 
 .toolbar-icon-box {
@@ -29,13 +32,22 @@
   align-items: center;
   height: 50px;
   width: 50px;
-  background: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(52, 52, 52, 0.5);
+  background: #fff;
+  box-shadow: 0 2px 6px 0 rgba(52, 52, 52, 0.5);
   border-radius: 100px;
 }
 
-.toolbar-icon-box :active {
-  border: 1px solid rgba(53, 142, 209, 0.56) !important;
+.toolbar-icon-clicked {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56);
+  border-radius: 100px;
+  border: none;
 }
 
 .toolbar-icon-pic {
@@ -43,4 +55,16 @@
   flex-direction: column;
   width: 25px;
   height: 25px;
+}
+
+.sub-tools-wrapper {
+  position: absolute;
+  right: 75px;
+  width: 70px;
+  height: auto;
+  background: #3e3d3e88;
+  border-radius: 6px;
+  color: white;
+  font-size: 15px;
+  text-align: center;
 }
