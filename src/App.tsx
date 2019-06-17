@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TodoApp from './components/demo/TodoApp';
 import ZoomCanvas from './components/canvas/ZoomCanvas';
+import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
 import HitTest from './components/utils/HitTest';
 import PenCanvas from './components/canvas/DrawCanvas';
@@ -20,8 +21,7 @@ class App extends React.Component<Props, State> {
     return (
       <div className="t-app-root">
         <PenCanvas />
-        {/* <ZoomCanvas /> */}
-        {/* <TodoApp /> */}
+        <MenuBar />
         <HitTest />
         <ToolBar />
       </div>

@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 import MenuItem from './MenuItem';
+import './MenuBar.css';
+import file from '../../assets/file.png';
+import add from '../../assets/add.png';
+import save from '../../assets/save.png';
+import download from '../../assets/download.png';
+import play from '../../assets/play.png';
+import undo from '../../assets/undo.png';
+import redo from '../../assets/redo.png';
 
 type Props = {};
 
@@ -19,40 +27,40 @@ export default class MenuBar extends Component<Props, State> {
     this.state = {
       menus: [
         {
-          name: 'open',
+          name: 'file',
           type: 'menu',
-          url: ''
+          url: file
         },
         {
           name: 'add',
           type: 'menu',
-          url: ''
+          url: add
         },
         {
           name: 'save',
           type: 'menu',
-          url: ''
+          url: save
         },
         {
           name: 'download',
           type: 'menu',
-          url: ''
-        },
-        {
+          url: download
+        }
+        /*{
           name: 'play',
           type: 'menu',
-          url: ''
+          url: play
         },
         {
           name: 'undo',
           type: 'menu',
-          url: ''
+          url: undo
         },
         {
           name: 'redo',
           type: 'menu',
-          url: ''
-        }
+          url: redo
+        }*/
       ]
     };
   }
@@ -61,6 +69,10 @@ export default class MenuBar extends Component<Props, State> {
     const menuList = this.state.menus.map((menu: IMenu) => (
       <MenuItem menuInfo={menu} />
     ));
-    return <div className="menu-bar-wrapper">{menuList}</div>;
+    return (
+      <div className="menu-bar-wrapper">
+        <div className="menu-bar-icons-wrapper">{menuList}</div>
+      </div>
+    );
   }
 }
