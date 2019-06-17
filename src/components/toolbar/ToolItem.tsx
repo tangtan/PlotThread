@@ -5,7 +5,6 @@ import './toolbar.css';
 import { DispatchType, StateType } from '../../types';
 import { setTool } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
-import { Popover } from 'antd';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -53,23 +52,21 @@ class ToolItem extends Component<Props, State> {
 
   render() {
     return (
-      <Popover placement="topLeft">
-        <div
-          className={
-            this.props.toolName === this.props.toolInfo.name &&
-            this.state.isClicked
-              ? 'toolbar-icon-clicked'
-              : 'toolbar-icon-box'
-          }
-          onClick={this.onClick}
-        >
-          <img
-            className="toolbar-icon-pic"
-            src={this.props.toolInfo.url}
-            alt={this.props.toolInfo.name}
-          />
-        </div>
-      </Popover>
+      <div
+        className={
+          this.props.toolName === this.props.toolInfo.name &&
+          this.state.isClicked
+            ? 'toolbar-icon-box-clicked'
+            : 'toolbar-icon-box'
+        }
+        onClick={this.onClick}
+      >
+        <img
+          className="toolbar-icon-pic"
+          src={this.props.toolInfo.url}
+          alt={this.props.toolInfo.name}
+        />
+      </div>
     );
   }
 }

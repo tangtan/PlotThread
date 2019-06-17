@@ -19,7 +19,7 @@ class App extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="t-app-root">
+      <div className="App">
         <ToolCanvas />
         {/* <TodoApp /> */}
         <ShapeModal />
