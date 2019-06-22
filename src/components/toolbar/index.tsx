@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ToolItem from './ToolItem';
-import './toolbar.css';
+import './ToolBar.css';
 
 // add tool icons
 import move from '../../assets/move.png';
