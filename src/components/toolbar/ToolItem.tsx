@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ITool } from './index';
-import './toolbar.css';
+import './ToolBar.css';
 import { DispatchType, StateType } from '../../types';
 import { setTool } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
@@ -57,7 +57,7 @@ class ToolItem extends Component<Props, State> {
           this.props.toolName === this.props.toolInfo.name &&
           this.state.isClicked &&
           this.props.toolState
-            ? 'toolbar-icon-clicked'
+            ? 'toolbar-icon-box-clicked'
             : 'toolbar-icon-box'
         }
         onClick={this.onClick}
