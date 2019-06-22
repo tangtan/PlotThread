@@ -20,7 +20,7 @@ export default class MenuItem extends Component<Props, State> {
       <div className="menu-bar-icon-box">
         <img
           className="menu-bar-icon-pic"
-          src={this.props.menuInfo.url}
+          src={this.props.menuInfo.image}
           alt={this.props.menuInfo.name}
         />
       </div>

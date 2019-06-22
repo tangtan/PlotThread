@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import MenuItem from './MenuItem';
+import RadialMenu from 'react-radial-menu';
 import './MenuBar.css';
 
 import file from '../../assets/file.png';
 import add from '../../assets/add.png';
 import save from '../../assets/save.png';
 import download from '../../assets/download.png';
+
 import play from '../../assets/play.png';
 import undo from '../../assets/undo.png';
 import redo from '../../assets/redo.png';
@@ -13,66 +14,63 @@ import redo from '../../assets/redo.png';
 type Props = {};
 
 type State = {
+  center: IMenu;
   menus: IMenu[];
+  distance: number;
+  beginDeg: number;
+  endDeg: number;
 };
 
 export interface IMenu {
   name: string;
   type: string;
-  url: string;
+  image: string;
 }
 
 export default class MenuBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      center: {
+        name: 'add',
+        type: 'menu',
+        image: `url(${add})`
+      },
       menus: [
         {
           name: 'file',
           type: 'menu',
-          url: file
-        },
-        {
-          name: 'add',
-          type: 'menu',
-          url: add
+          image: `url(${file})`
         },
         {
           name: 'save',
           type: 'menu',
-          url: save
+          image: `url(${save})`
         },
         {
           name: 'download',
           type: 'menu',
-          url: download
+          image: `url(${download})`
         }
-        /*{
-          name: 'play',
-          type: 'menu',
-          url: play
-        },
-        {
-          name: 'undo',
-          type: 'menu',
-          url: undo
-        },
-        {
-          name: 'redo',
-          type: 'menu',
-          url: redo
-        }*/
-      ]
+      ],
+      distance: 50,
+      beginDeg: 0,
+      endDeg: 90
     };
   }
 
   render() {
-    const menuList = this.state.menus.map((menu: IMenu) => (
-      <MenuItem menuInfo={menu} />
-    ));
+    const { center, menus, distance, beginDeg, endDeg } = this.state;
     return (
-      <div className="menu-bar-wrapper">
-        <div className="menu-bar-icons-wrapper">{menuList}</div>
+      <div className={'menu-bar-wrapper'}>
+        <RadialMenu
+          items={menus}
+          center={center}
+          distance={distance}
+          itemsSize={distance}
+          beginDeg={beginDeg}
+          endDeg={endDeg}
+        />
       </div>
     );
   }
