@@ -27,6 +27,7 @@
     "react-radial-menu": "https://github.com/tangtan/react-radial-menu.git",
     "react-redux": "^7.0.3",
     "react-scripts": "3.0.1",
+    "story-flow": "file:../storyflowjs",
     "typesafe-actions": "^4.4.0",
     "typescript": "3.4.5"
   },
