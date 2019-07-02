@@ -2,6 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import VisibilityFilters from '../components/demo/VisibilityFilters';
+import { Path } from 'paper';
 
 export type ActionType = ActionType<typeof actions>;
 
@@ -44,4 +45,6 @@ export type ToolStateType = {
 // Visual Object
 export type VisualObject = {
   type: string;
+  mounted: boolean;
+  geometry: Path | Path.Circle | Path.Rectangle | null;
 };

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType, VisualObject } from '../../types';
+import { StateType, DispatchType } from '../../types';
 import ZoomCanvas from './ZoomCanvas';
-import { Path, Point, Size } from 'paper';
+import { storyflow } from 'story-flow';
+import { xml } from 'd3-fetch';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -18,69 +19,29 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
-  errorMsg: string;
+  storyXMLUrl: string;
 };
 
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      errorMsg: 'Incorrect render type'
+      storyXMLUrl: 'xml/busan.xml'
     };
   }
 
-  private drawCanvas = (renderQueue: VisualObject[]) => {
-    // renderQueue.forEach(renderObj => {
-    //   this.drawObject(renderObj.type);
-    // });
-    if (renderQueue.length > 0) {
-      const index = renderQueue.length - 1;
-      const renderObj = renderQueue[index];
-      this.drawObject(renderObj);
-    }
-  };
-
-  private drawObject = (renderObj: VisualObject) => {
-    switch (renderObj.type) {
-      case 'circle':
-        this.drawCircle(renderObj);
-        break;
-      case 'rectangle':
-        this.drawRectangle(renderObj);
-        break;
-      default:
-        break;
-    }
-  };
-
-  private drawCircle = (renderObj: VisualObject) => {
-    if (renderObj.type === 'circle') {
-      const center = new Point(100, 100);
-      const radius = 50;
-      const circle = new Path.Circle(center, radius);
-      circle.strokeColor = 'black';
-      circle.fillColor = 'white';
-    } else {
-      throw `${this.state.errorMsg} (${renderObj.type}).`;
-    }
-  };
-
-  private drawRectangle = (renderObj: VisualObject) => {
-    if (renderObj.type === 'rectangle') {
-      const anchor = new Point(50, 50);
-      const size = new Size(100, 100);
-      const rect = new Path.Rectangle(anchor, size);
-      rect.strokeColor = 'black';
-      rect.fillColor = 'white';
-    } else {
-      throw `${this.state.errorMsg} (${renderObj.type}).`;
-    }
-  };
-
-  componentDidUpdate() {
-    const renderQueue = this.props.renderQueue;
-    this.drawCanvas(renderQueue);
+  async componentDidMount() {
+    const xmlUrl = this.state.storyXMLUrl;
+    const xmlData = await xml(xmlUrl);
+    const storyFlower = storyflow();
+    const storyData = storyFlower.read(xmlData);
+    const generator = storyFlower.extent([[0, 0], [800, 500]]).lineWidth(3);
+    const storyLayout = generator(storyData);
+    const nodes = storyLayout.nodes;
+    console.log(nodes);
   }
+
+  componentDidUpdate() {}
 
   render() {
     return <ZoomCanvas />;
