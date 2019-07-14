@@ -22,6 +22,8 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 type State = {
   storyXMLUrl: string;
   strokes: Path[];
+  nodes: number[][][];
+  speed: number;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -29,7 +31,9 @@ class DrawCanvas extends Component<Props, State> {
     super(props);
     this.state = {
       storyXMLUrl: 'xml/busan.xml',
-      strokes: []
+      strokes: [],
+      nodes: [],
+      speed: 300
     };
   }
 
@@ -46,7 +50,27 @@ class DrawCanvas extends Component<Props, State> {
         node[1] /= 50;
         node[1] += 150;
       });
-      this.appearing(line, 200);
+    });
+    this.setState({
+      nodes: nodes
+    });
+    this.refresh();
+    document.addEventListener('keydown', e => {
+      if (e.keyCode == 13) {
+        this.refresh();
+      }
+    });
+  }
+
+  refresh() {
+    this.state.strokes.forEach(path => {
+      path.removeSegments();
+    });
+    this.setState({
+      strokes: []
+    });
+    this.state.nodes.forEach(line => {
+      this.appearing(line, this.state.speed);
     });
   }
 
