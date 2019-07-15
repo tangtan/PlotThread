@@ -114,6 +114,12 @@ class ToolCanvas extends Component<Props, State> {
               });
             }
             break;
+          case 'stroke':
+            this.setState({
+              focusPath: hitResult.item,
+              isMoveFocusPath: true
+            });
+            break;
           default:
             break;
         }
@@ -156,10 +162,10 @@ class ToolCanvas extends Component<Props, State> {
 
   componentDidMount() {
     // console.log(project);
-    view.onMouseDown = this.onMouseDown;
-    view.onMouseUp = this.onMouseUp;
-    view.onMouseMove = this.onMouseMove;
-    view.onMouseDrag = this.onMouseDrag;
+    // view.onMouseDown = this.onMouseDown;
+    // view.onMouseUp = this.onMouseUp;
+    // view.onMouseMove = this.onMouseMove;
+    // view.onMouseDrag = this.onMouseDrag;
   }
 
   render() {
