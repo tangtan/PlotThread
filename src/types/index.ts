@@ -2,6 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import VisibilityFilters from '../components/demo/VisibilityFilters';
+import { Path } from 'paper';
 
 export type ActionType = ActionType<typeof actions>;
 
@@ -9,6 +10,7 @@ export type StateType = {
   todos: TodosType;
   visibilityFilter: string;
   toolState: ToolStateType;
+  renderQueue: VisualObject[];
 };
 
 export type DispatchType = typeof store.dispatch;
@@ -38,4 +40,18 @@ export type ToolStateType = {
   bend: boolean;
   stroke: boolean;
   picture: boolean;
+};
+
+export type IHitOption = {
+  segments?: boolean;
+  stroke?: boolean;
+  fill?: boolean;
+  tolerance?: number;
+};
+
+// Visual Object
+export type VisualObject = {
+  type: string;
+  mounted: boolean;
+  geometry: Path | Path.Circle | Path.Rectangle | null;
 };

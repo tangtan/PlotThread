@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
+import 'antd/dist/antd.css';
 import TodoApp from './components/demo/TodoApp';
-import ZoomCanvas from './components/canvas/ZoomCanvas';
-import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
-import HitTest from './components/utils/HitTest';
-import PenCanvas from './components/canvas/DrawCanvas';
+import MenuBar from './components/menubar';
+import ShapeModal from './components/toolbar/tools/ShapeModal';
+import ToolCanvas from './components/canvas/ToolCanvas';
+import DrawCanvas from './components/canvas/DrawCanvas';
 
 type Props = {};
 
@@ -19,10 +20,11 @@ class App extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="t-app-root">
-        <PenCanvas />
-        <MenuBar />
-        <HitTest />
+      <div className="App">
+        {/* <MenuBar /> */}
+        {/* <ToolCanvas /> */}
+        <DrawCanvas />
+        <ShapeModal />
         <ToolBar />
       </div>
     );

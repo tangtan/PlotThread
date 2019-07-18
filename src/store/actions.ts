@@ -1,4 +1,5 @@
 import { createAction, action } from 'typesafe-actions';
+import { VisualObject } from '../types';
 
 let nextTodoId: number = 0;
 
@@ -16,7 +17,14 @@ export const setFilter = createAction(
   action => (filter: string) => action({ filter: filter })
 );
 
+// Tool Module
 export const setTool = createAction(
   'SET_TOOL',
   action => (name: string, use: boolean) => action({ name: name, use: use })
+);
+
+// Render Module
+export const addVisualObject = createAction(
+  'ADD_VISUALOBJECT',
+  action => (type: string) => action({ type: type })
 );
