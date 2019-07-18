@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { MouseEvent, Path, view, project, Item, Segment } from 'paper';
+import { MouseEvent, Path, view, project, Item, Segment, Color } from 'paper';
 import DrawCanvas from './DrawCanvas';
 import { StateType } from '../../types';
 
@@ -16,6 +16,9 @@ const mapStateToProps = (state: StateType) => {
     )
   };
 };
+
+const black = new Color(0, 0, 0);
+const white = new Color(255, 255, 255);
 
 type Props = {} & ReturnType<typeof mapStateToProps>;
 
@@ -68,7 +71,8 @@ class ToolCanvas extends Component<Props, State> {
   private onStrokeMouseDown = (e: MouseEvent) => {
     if (this.props.strokeState) {
       const _stroke = new Path();
-      _stroke.strokeColor = 'black';
+      // _stroke.strokeColor = 'black';
+      _stroke.strokeColor = new Color(0, 0, 0);
       this.setState({
         strokes: [...this.state.strokes, _stroke],
         currStroke: _stroke
@@ -78,7 +82,9 @@ class ToolCanvas extends Component<Props, State> {
 
   private onStrokeMouseDrag = (e: MouseEvent) => {
     if (this.state.currStroke && this.props.strokeState) {
-      this.state.currStroke.add(e.point);
+      if (e.point) {
+        this.state.currStroke.add(e.point);
+      }
     }
   };
 
@@ -88,51 +94,57 @@ class ToolCanvas extends Component<Props, State> {
         center: e.point,
         radius: 10
       });
-      circle.strokeColor = 'black';
-      circle.fillColor = 'white';
+      circle.strokeColor = black;
+      circle.fillColor = white;
     }
   };
 
   private onHitTestDown = (e: MouseEvent) => {
     if (this.props.freeMode) {
-      const hitResult = project.hitTest(e.point, hitOption);
-      if (hitResult) {
-        switch (hitResult.type) {
-          case 'fill':
-            this.setState({
-              focusPath: hitResult.item,
-              isMoveFocusPath: true
-            });
-            break;
-          case 'segment':
-            if (e.modifiers.shift) {
-              hitResult.segment.remove();
-            } else {
+      if (e.point && project) {
+        const hitResult = project.hitTest(e.point, hitOption);
+        if (hitResult) {
+          switch (hitResult.type) {
+            case 'fill':
               this.setState({
-                focusSegment: hitResult.segment,
-                isMoveFocusPath: false
+                focusPath: hitResult.item,
+                isMoveFocusPath: true
               });
-            }
-            break;
-          case 'stroke':
-            this.setState({
-              focusPath: hitResult.item,
-              isMoveFocusPath: true
-            });
-            break;
-          default:
-            break;
+              break;
+            case 'segment':
+              if (e.modifiers.shift) {
+                if (hitResult.segment) {
+                  hitResult.segment.remove();
+                }
+              } else {
+                this.setState({
+                  focusSegment: hitResult.segment,
+                  isMoveFocusPath: false
+                });
+              }
+              break;
+            case 'stroke':
+              this.setState({
+                focusPath: hitResult.item,
+                isMoveFocusPath: true
+              });
+              break;
+            default:
+              break;
+          }
         }
       }
     }
   };
 
   private onHitTestMove = (e: MouseEvent) => {
-    if (this.props.freeMode) {
+    if (this.props.freeMode && project) {
       project.activeLayer.selected = false;
-      const hitResult = project.hitTest(e.point, hitOption);
-      if (hitResult && hitResult.item) {
-        hitResult.item.selected = true;
+      if (e.point) {
+        const hitResult = project.hitTest(e.point, hitOption);
+        if (hitResult && hitResult.item) {
+          hitResult.item.selected = true;
+        }
       }
     }
   };
@@ -148,16 +160,16 @@ class ToolCanvas extends Component<Props, State> {
   };
 
   private onHitTestDrag = (e: MouseEvent) => {
-    if (this.props.freeMode) {
-      if (this.state.focusPath && this.state.isMoveFocusPath) {
-        this.state.focusPath.position.x += e.delta.x;
-        this.state.focusPath.position.y += e.delta.y;
-      }
-      if (this.state.focusSegment && !this.state.isMoveFocusPath) {
-        this.state.focusSegment.point.x += e.delta.x;
-        this.state.focusSegment.point.y += e.delta.y;
-      }
-    }
+    // if (this.props.freeMode) {
+    //   if (this.state.focusPath && this.state.isMoveFocusPath) {
+    //     this.state.focusPath.position.x += e.delta.x;
+    //     this.state.focusPath.position.y += e.delta.y;
+    //   }
+    //   if (this.state.focusSegment && !this.state.isMoveFocusPath) {
+    //     this.state.focusSegment.point.x += e.delta.x;
+    //     this.state.focusSegment.point.y += e.delta.y;
+    //   }
+    // }
   };
 
   componentDidMount() {

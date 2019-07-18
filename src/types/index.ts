@@ -42,6 +42,13 @@ export type ToolStateType = {
   picture: boolean;
 };
 
+export type IHitOption = {
+  segments?: boolean;
+  stroke?: boolean;
+  fill?: boolean;
+  tolerance?: number;
+};
+
 // Visual Object
 export type VisualObject = {
   type: string;

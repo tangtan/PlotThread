@@ -36,6 +36,7 @@
 }
 
 .toolbar-icon-box:hover {
+  /* background: #f0efef99; */
   box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56);
 }
 
@@ -46,7 +47,7 @@
   align-items: center;
   height: 50px;
   width: 50px;
-  background: #fff;
+  background: #f0efef99;
   box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56);
   border-radius: 100px;
   border: none;

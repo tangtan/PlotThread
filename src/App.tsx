@@ -5,8 +5,8 @@ import TodoApp from './components/demo/TodoApp';
 import ToolBar from './components/toolbar';
 import MenuBar from './components/menubar';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
-import HitTest from './components/utils/HitTest';
 import ToolCanvas from './components/canvas/ToolCanvas';
+import DrawCanvas from './components/canvas/DrawCanvas';
 
 type Props = {};
 
@@ -21,10 +21,10 @@ class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="App">
-        <MenuBar />
-        <ToolCanvas />
+        {/* <MenuBar /> */}
+        {/* <ToolCanvas /> */}
+        <DrawCanvas />
         <ShapeModal />
-        {/* <HitTest /> */}
         <ToolBar />
       </div>
     );

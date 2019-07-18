@@ -1,5 +1,6 @@
 import { ActionType, VisualObject } from '../../../types';
 import { Point, Path, Size } from 'paper';
+import { ColorSet } from '../../../utils/color';
 
 const initialState: VisualObject[] = [];
 
@@ -21,8 +22,8 @@ const drawCircle = (type: string) => {
     const center = new Point(100, 100);
     const radius = 50;
     const circle = new Path.Circle(center, radius);
-    circle.strokeColor = 'black';
-    circle.fillColor = 'white';
+    circle.strokeColor = ColorSet.black;
+    circle.fillColor = ColorSet.white;
     return circle;
   } else {
     throw `${errorMsg} (${type}).`;
@@ -34,8 +35,8 @@ const drawRectangle = (type: string) => {
     const anchor = new Point(50, 50);
     const size = new Size(100, 100);
     const rect = new Path.Rectangle(anchor, size);
-    rect.strokeColor = 'black';
-    rect.fillColor = 'white';
+    rect.strokeColor = ColorSet.black;
+    rect.fillColor = ColorSet.white;
     return rect;
   } else {
     throw `${errorMsg} (${type}).`;
