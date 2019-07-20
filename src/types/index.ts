@@ -55,3 +55,10 @@ export type VisualObject = {
   mounted: boolean;
   geometry: Path | Path.Circle | Path.Rectangle | null;
 };
+
+// Storyline
+export type StoryNode = number[];
+export type StorySegment = StoryNode[];
+// TODO: export type StoryLine = StorySegment[];
+export type StoryLine = StoryNode[];
+export type StoryName = string;
