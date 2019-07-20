@@ -50,16 +50,16 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 
 type State = {
   storyXMLUrl: string;
-  storyFlower: any;
+  storyLayouter: any;
   strokes: Path[];
   nodes: number[][][];
   names: string[];
   strokeWidth: number;
   duration: number;
-  sortUtil: SortUtil;
-  straightenUtil: StraightenUtil;
-  shapeUtil: ShapeUtil;
-  compressUtil: CompressUtil;
+  sortUtil: SortUtil | null;
+  straightenUtil: StraightenUtil | null;
+  shapeUtil: ShapeUtil | null;
+  compressUtil: CompressUtil | null;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -67,33 +67,37 @@ class DrawCanvas extends Component<Props, State> {
     super(props);
     this.state = {
       storyXMLUrl: 'xml/JurassicPark.xml',
-      storyFlower: null,
+      storyLayouter: null,
       strokes: [],
       nodes: [],
       names: [],
       strokeWidth: 1,
       duration: 1000,
-      sortUtil: new SortUtil(hitOption),
-      straightenUtil: new StraightenUtil(hitOption),
-      shapeUtil: new ShapeUtil(hitShapeOption),
-      compressUtil: new CompressUtil(hitOption)
+      sortUtil: null,
+      straightenUtil: null,
+      compressUtil: null,
+      shapeUtil: null
     };
   }
 
-  // init strokes
+  // init
   async componentDidMount() {
     const xmlUrl = this.state.storyXMLUrl;
     const xmlData = await xml(xmlUrl);
-    const storyFlower = new iStoryline();
-    storyFlower.readFile(xmlData);
+    const storyLayouter = new iStoryline();
+    storyLayouter.readFile(xmlData);
+    const graph = storyLayouter.layout([], [], []);
+    storyLayouter.extent(100, 300, 1250);
+    const nodes = graph.nodes;
+    const names = graph.names;
     this.setState({
-      storyFlower: storyFlower
-    });
-    const graph = storyFlower.layout([], [], []);
-    storyFlower.extent(100, 300, 1250);
-    this.setState({
-      nodes: graph.nodes,
-      names: graph.names
+      storyLayouter: storyLayouter,
+      nodes: nodes,
+      names: names,
+      sortUtil: new SortUtil(hitOption, nodes, names),
+      straightenUtil: new StraightenUtil(hitOption, nodes, names),
+      shapeUtil: new ShapeUtil(hitShapeOption, nodes, names),
+      compressUtil: new CompressUtil(hitOption, nodes, names)
     });
     graph.nodes.forEach((line: number[][], index: number) => {
       const pathStr = this.drawSmoothPath(line);
@@ -111,75 +115,86 @@ class DrawCanvas extends Component<Props, State> {
     view.onMouseDrag = this.onMouseDrag;
   }
 
-  private restore = () => {
-    this.state.sortUtil.restore();
-    this.state.straightenUtil.restore();
-    this.state.compressUtil.restore();
-  };
-
   private onMouseDown = (e: paper.MouseEvent) => {
-    if (this.props.sortState) {
+    if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.down(e);
     }
-    if (this.props.compressState) {
+    if (this.props.compressState && this.state.compressUtil) {
       this.state.compressUtil.down(e);
     }
-    if (this.props.straightenState) {
+    if (this.props.straightenState && this.state.straightenUtil) {
       this.state.straightenUtil.down(e);
     }
-    if (this.props.freeMode) {
+    if (this.props.freeMode && this.state.shapeUtil) {
       this.state.shapeUtil.down(e);
     }
   };
 
   private onMouseUp = (e: paper.MouseEvent) => {
-    const nodes = this.state.nodes;
-    const names = this.state.names;
-    if (this.props.sortState) {
-      this.state.sortUtil.up(e, nodes, names);
+    if (this.props.sortState && this.state.sortUtil) {
+      this.state.sortUtil.up(e);
       this.refresh();
     }
-    if (this.props.compressState) {
+    if (this.props.compressState && this.state.compressUtil) {
       this.state.compressUtil.up(e);
+      this.refresh();
     }
-    if (this.props.straightenState) {
+    if (this.props.straightenState && this.state.straightenUtil) {
       this.state.straightenUtil.up(e);
       this.refresh();
     }
-    if (this.props.freeMode) {
+    if (this.props.freeMode && this.state.shapeUtil) {
       this.state.shapeUtil.up(e);
     }
   };
 
   private onMouseMove = (e: paper.MouseEvent) => {
-    if (this.props.freeMode) {
+    if (this.props.freeMode && this.state.shapeUtil) {
       this.state.shapeUtil.move(e);
     }
   };
 
   private onMouseDrag = (e: paper.MouseEvent) => {
-    if (this.props.sortState) {
+    if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.drag(e);
     }
-    if (this.props.compressState) {
+    if (this.props.compressState && this.state.compressUtil) {
       this.state.compressUtil.drag(e);
     }
-    if (this.props.straightenState) {
+    if (this.props.straightenState && this.state.straightenUtil) {
       this.state.straightenUtil.drag(e);
     }
-    if (this.props.freeMode) {
+    if (this.props.freeMode && this.state.shapeUtil) {
       this.state.shapeUtil.drag(e);
     }
   };
 
+  translateCompressInfo(compressInfo: any[][]) {
+    let _compressInfo = compressInfo.map(item => [
+      this.state.storyLayouter.index2Time(item[0], item[1]),
+      this.state.storyLayouter.index2Time(item[2], item[3]),
+      item[4]
+    ]);
+    return _compressInfo;
+  }
+
   async refresh() {
-    const graph = this.state.storyFlower.layout(
-      this.state.sortUtil.orderInfo,
-      this.state.straightenUtil.straightenInfo,
-      []
+    const orderInfo = this.state.sortUtil ? this.state.sortUtil.orderInfo : [];
+    const straightenInfo = this.state.straightenUtil
+      ? this.state.straightenUtil.straightenInfo
+      : [];
+    const compressInfo = this.state.compressUtil
+      ? this.state.compressUtil.compressInfo
+      : [];
+    const _compressInfo = this.translateCompressInfo(compressInfo);
+    console.log(_compressInfo);
+    const graph = this.state.storyLayouter.layout(
+      orderInfo,
+      straightenInfo,
+      _compressInfo
     );
     // scale nodes
-    this.state.storyFlower.extent(100, 300, 1250);
+    this.state.storyLayouter.extent(100, 300, 1250);
     const nodes: number[][][] = graph.nodes;
     const names: string[] = graph.names;
     this.setState({
@@ -222,37 +237,6 @@ class DrawCanvas extends Component<Props, State> {
   drawInitialPathStr(points: number[][]) {
     return `M ${points[0][0]} ${points[0][1]} `;
   }
-
-  // TODO: fix bug
-  // appearing(line: number[][], speed: number, name: string) {
-  //   const path = new Path();
-  //   path.name = name;
-  //   path.strokeColor = 'black';
-  //   path.strokeWidth = this.state.strokeWidth;
-  //   this.setState({
-  //     strokes: [...this.state.strokes, path]
-  //   });
-  //   let x = line[0][0];
-  //   let pos = 1;
-  //   path.onFrame = e => {
-  //     x += e.delta * speed;
-  //     if (x > line[pos][0]) {
-  //       path.add(line[pos]);
-  //       pos++;
-  //     }
-  //     if (pos >= line.length) {
-  //       path.onFrame = () => {};
-  //       return;
-  //     }
-  //     const start_x = line[pos - 1][0];
-  //     const start_y = line[pos - 1][1];
-  //     const end_x = line[pos][0];
-  //     const end_y = line[pos][1];
-  //     const y =
-  //       start_y + ((end_y - start_y) * (x - start_x)) / (end_x - start_x);
-  //     path.add([x, y]);
-  //   };
-  // }
 
   render() {
     return <ZoomCanvas />;

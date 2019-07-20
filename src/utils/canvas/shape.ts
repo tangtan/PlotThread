@@ -1,13 +1,13 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption } from '../../types';
+import { IHitOption, StoryLine, StoryName } from '../../types';
 import paper, { Segment, project, Matrix } from 'paper';
 
 export default class ShapeUtil extends BaseMouseUtil {
   isMoveShape: boolean;
   isMoveSegment: boolean;
   selectSegment: Segment | null;
-  constructor(hitOption: IHitOption) {
-    super(hitOption);
+  constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
+    super(hitOption, nodes, names);
     this.isMoveShape = false;
     this.isMoveSegment = false;
     this.selectSegment = null;
@@ -35,6 +35,7 @@ export default class ShapeUtil extends BaseMouseUtil {
               this.selectSegment = hitRes.segment;
               this.isMoveSegment = true;
             }
+            break;
           default:
             break;
         }

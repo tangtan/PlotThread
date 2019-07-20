@@ -1,12 +1,12 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption } from '../../types';
+import { IHitOption, StoryLine, StoryName } from '../../types';
 import paper, { Path, Point, project } from 'paper';
 import { ColorSet } from '../color';
 
 export default class StraightenUtil extends BaseMouseUtil {
   straightenInfo: any[][];
-  constructor(hitOption: IHitOption) {
-    super(hitOption);
+  constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
+    super(hitOption, nodes, names);
     this.straightenInfo = [];
   }
 
