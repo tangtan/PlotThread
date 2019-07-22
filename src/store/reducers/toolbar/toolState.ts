@@ -2,12 +2,13 @@ import { ActionType, ToolStateType } from '../../../types';
 
 const initialState: ToolStateType = {
   toolName: '',
-  move: false,
-  morph: false,
-  adjust: false,
+  addLine: false,
+  group: false,
+  sort: false,
   bend: false,
-  stroke: false,
-  picture: false
+  scale: false,
+  reshape: false,
+  move: false
 };
 
 export default (state = initialState, action: ActionType) => {
@@ -17,12 +18,13 @@ export default (state = initialState, action: ActionType) => {
       return {
         ...state,
         toolName: name,
-        move: name === 'move' ? use : false,
-        morph: name === 'morph' ? use : false,
-        adjust: name === 'adjust' ? use : false,
-        bend: name === 'bend' ? use : false,
-        stroke: name === 'stroke' ? use : false,
-        picture: name === 'picture' ? use : false
+        addLine: name === 'AddLine' ? use : false,
+        group: name === 'Group' ? use : false,
+        sort: name === 'Sort' ? use : false,
+        bend: name === 'Bend' ? use : false,
+        scale: name === 'Scale' ? use : false,
+        reshape: name === 'Reshape' ? use : false,
+        move: name === 'Move' ? use : false
       };
     }
     default:

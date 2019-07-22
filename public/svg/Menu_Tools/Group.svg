@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="71px" height="54px" viewBox="0 0 71 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-10.000000, -20.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="88" height="88"></rect>
+            <g id="分组-5" transform="translate(12.000000, 22.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="4">
+                <path d="M0,0.786613333 C16.9621864,-1.61068444 28.3279965,1.47155556 34.0974303,10.0333333 C39.8668642,18.5951111 50.8343874,22.3622933 67,21.33488" id="路径-11"></path>
+                <path d="M0,31.2744 C16.9621864,30.4381333 28.3279965,31.5133333 34.0974303,34.5 C39.8668642,37.4866667 50.8343874,38.8008 67,38.4424" id="路径-11" transform="translate(33.500000, 34.750000) scale(1, -1) translate(-33.500000, -34.750000) "></path>
+                <path d="M0,27.8240711 C16.9621864,25.3126163 28.3279965,28.5416296 34.0974303,37.5111111 C39.8668642,46.4805926 50.8343874,50.4271644 67,49.3508267" id="路径-11"></path>
+            </g>
+        </g>
+    </g>
+</svg>

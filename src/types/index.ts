@@ -34,12 +34,20 @@ export type ByIdsType = {
 // Tool State
 export type ToolStateType = {
   toolName: string;
-  move: boolean;
-  morph: boolean;
-  adjust: boolean;
+  addLine: boolean;
+  group: boolean;
+  sort: boolean;
   bend: boolean;
-  stroke: boolean;
-  picture: boolean;
+  scale: boolean;
+  reshape: boolean;
+  move: boolean;
+};
+
+export type ITool = {
+  name: string;
+  type: string;
+  url: string;
+  subTools: ITool[];
 };
 
 export type IHitOption = {

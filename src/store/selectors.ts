@@ -37,18 +37,20 @@ export const getTodosByVisibilityFilter = (
 
 export const getToolState = (state: StateType, name: string) => {
   switch (name) {
-    case 'move':
-      return state.toolState.move;
-    case 'morph':
-      return state.toolState.morph;
-    case 'adjust':
-      return state.toolState.adjust;
-    case 'bend':
+    case 'AddLine':
+      return state.toolState.addLine;
+    case 'Group':
+      return state.toolState.group;
+    case 'Sort':
+      return state.toolState.sort;
+    case 'Bend':
       return state.toolState.bend;
-    case 'stroke':
-      return state.toolState.stroke;
-    case 'picture':
-      return state.toolState.picture;
+    case 'Scale':
+      return state.toolState.scale;
+    case 'Reshape':
+      return state.toolState.reshape;
+    case 'Move':
+      return state.toolState.move;
     default:
       return false;
   }

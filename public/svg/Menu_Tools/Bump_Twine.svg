@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="28px" viewBox="0 0 64 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Bump_Twine</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bump_Twine" transform="translate(-1.000000, -18.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="64" height="64"></rect>
+            <path d="M3,42.1468716 C7.91000506,42.1468716 9.83990834,21.6615385 19.2574956,21.6615385 C28.6750829,21.6615385 31.8434564,43.8153846 42.4784376,43.8153846 C53.1134187,43.8153846 54.0597009,21.6615385 62.0769231,21.6615385" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M3.93772894,43.8153846 C8.8202126,43.8153846 10.1327055,20.7384615 19.4975056,20.7384615 C28.8623058,20.7384615 34.013667,42.0152767 42.5882903,42.0152767 C51.1629137,42.0152767 54.1046388,20.7384615 62.0769231,20.7384615" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(33.007326, 32.276923) scale(1, -1) translate(-33.007326, -32.276923) "></path>
+        </g>
+    </g>
+</svg>

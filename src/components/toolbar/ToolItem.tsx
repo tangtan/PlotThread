@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ITool } from './index';
+import { ITool } from '../../types';
 import './ToolBar.css';
 import { DispatchType, StateType } from '../../types';
 import { setTool } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
+import ReactSVG from 'react-svg';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -51,6 +52,15 @@ class ToolItem extends Component<Props, State> {
   };
 
   render() {
+    const imgIcon = (
+      <img
+        className="toolbar-icon-img"
+        src={this.props.toolInfo.url}
+        alt={this.props.toolInfo.name}
+      />
+    );
+
+    const svgIcon = <ReactSVG src={this.props.toolInfo.url} />;
     return (
       <div
         className={
@@ -62,11 +72,7 @@ class ToolItem extends Component<Props, State> {
         }
         onClick={this.onClick}
       >
-        <img
-          className="toolbar-icon-pic"
-          src={this.props.toolInfo.url}
-          alt={this.props.toolInfo.name}
-        />
+        {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
       </div>
     );
   }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="58px" height="58px" viewBox="0 0 58 58" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Scale</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="24.3797468" y="23.8734177" width="39.9873418" height="39.9873418"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-2" y="-2" width="43.9873418" height="43.9873418">
+            <rect x="22.3797468" y="21.8734177" width="43.9873418" height="43.9873418" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Scale" transform="translate(-15.000000, -15.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="88" height="88"></rect>
+            <polyline id="路径-30" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(63.431532, 24.962551) scale(-1, 1) translate(-63.431532, -24.962551) " points="56.164557 32.2035826 56.164557 17.721519 70.6985062 17.721519"></polyline>
+            <polyline id="路径-30" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(24.469506, 62.899260) scale(-1, 1) rotate(-180.000000) translate(-24.469506, -62.899260) " points="17.2025316 70.1402914 17.2025316 55.6582278 31.7364809 55.6582278"></polyline>
+            <path d="M24.3797468,61.796545 L35.9312831,50.4489123" id="路径-31" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M51.0379747,36.1636336 L62.589511,24.8160009" id="路径-31" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <use id="矩形" stroke="#FFFFFF" mask="url(#mask-2)" stroke-width="4" stroke-dasharray="5" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

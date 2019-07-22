@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="58px" height="58px" viewBox="0 0 58 58" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Save</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Save" transform="translate(-16.000000, -15.000000)" fill-rule="nonzero">
+            <rect id="矩形-copy-45" x="0" y="0" width="88" height="88"></rect>
+            <path d="M71.828,34 L55,17.172 C54.2500291,16.4218025 53.2327793,16.0002265 52.172,16 L21,16 C18.790861,16 17,17.790861 17,20 L17,68 C17,70.209139 18.790861,72 21,72 L69,72 C71.209139,72 73,70.209139 73,68 L73,36.828 C72.9997735,35.7672207 72.5781975,34.7499709 71.828,34 Z M29,20 L32,20 L32,30 L29,30 L29,20 Z M36,20 L45,20 L45,30 L36,30 L36,20 Z M29,68 L29,56 L61,56 L61,68 L29,68 Z M69,68 L65,68 L65,54 C65,52.8954305 64.1045695,52 63,52 L27,52 C25.8954305,52 25,52.8954305 25,54 L25,68 L21,68 L21,20 L25,20 L25,32 C25,33.1045695 25.8954305,34 27,34 L47,34 C48.1045695,34 49,33.1045695 49,32 L49,20 L52.172,20 L69,36.828 L69,68 Z" id="形状" stroke="#FFFFFF" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

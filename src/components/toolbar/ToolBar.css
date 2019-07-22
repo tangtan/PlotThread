@@ -1,28 +1,3 @@
-.toolbar-wrapper {
-  position: absolute;
-  top: 120px;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #f0efef99;
-  width: 74px;
-  height: 500px;
-  border-radius: 10px 0 0 10px;
-  border: none;
-}
-
-.toolbar-icons-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 60px;
-  height: 90%;
-  padding: 10px 0;
-}
-
 .toolbar-icon-box {
   display: flex;
   flex-direction: column;
@@ -30,14 +5,12 @@
   align-items: center;
   height: 50px;
   width: 50px;
-  background: #fff;
-  box-shadow: 0 2px 6px 0 rgba(52, 52, 52, 0.5);
-  border-radius: 100px;
+  /* box-shadow: 0 2px 6px 0 rgba(52, 52, 52, 0.5); */
 }
 
 .toolbar-icon-box:hover {
-  /* background: #f0efef99; */
-  box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56);
+  background: #f0efef99;
+  /* box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56); */
 }
 
 .toolbar-icon-box-clicked {
@@ -47,27 +20,16 @@
   align-items: center;
   height: 50px;
   width: 50px;
-  background: #f0efef99;
-  box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56);
-  border-radius: 100px;
-  border: none;
+  background: #2073ee88;
 }
 
-.toolbar-icon-pic {
+.toolbar-icon-img {
   display: flex;
   flex-direction: column;
   width: 25px;
   height: 25px;
 }
 
-.sub-tools-wrapper {
-  position: absolute;
-  right: 75px;
-  width: 70px;
-  height: auto;
-  background: #3e3d3e88;
-  border-radius: 6px;
-  color: white;
-  font-size: 15px;
-  text-align: center;
+svg {
+  width: 35px;
 }

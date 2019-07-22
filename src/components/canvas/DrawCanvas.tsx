@@ -14,14 +14,13 @@ import CompressUtil from '../../utils/canvas/compress';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    compressState: state.toolState.bend,
-    sortState: state.toolState.morph,
-    straightenState: state.toolState.adjust,
+    compressState: state.toolState.scale,
+    sortState: state.toolState.sort,
+    straightenState: state.toolState.bend,
     freeMode: !(
       state.toolState.move ||
-      state.toolState.morph ||
-      state.toolState.stroke ||
-      state.toolState.adjust ||
+      state.toolState.scale ||
+      state.toolState.sort ||
       state.toolState.bend
     )
   };

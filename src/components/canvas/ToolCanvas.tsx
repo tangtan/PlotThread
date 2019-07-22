@@ -7,12 +7,12 @@ import { StateType } from '../../types';
 const mapStateToProps = (state: StateType) => {
   return {
     // toolState: state.toolState
-    morphState: state.toolState.morph,
-    strokeState: state.toolState.stroke,
+    morphState: state.toolState.scale,
+    strokeState: state.toolState.scale,
     freeMode: !(
       state.toolState.move ||
-      state.toolState.morph ||
-      state.toolState.stroke
+      state.toolState.bend ||
+      state.toolState.scale
     )
   };
 };

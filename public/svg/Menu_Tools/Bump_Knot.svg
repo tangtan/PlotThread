@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="26px" viewBox="0 0 64 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Bump_Knot</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bump_Knot" transform="translate(-1.000000, -17.000000)">
+            <rect id="矩形" fill-rule="nonzero" x="0" y="0" width="64" height="64"></rect>
+            <g id="分组-34" transform="translate(3.000000, 19.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="4">
+                <path d="M0,4.44029396 C21.0807162,3.12383148 32.4754268,5.28490831 34.1841162,10.923525 C36.7471541,19.3814469 25.8462895,25.3557171 21.2870581,18.9331046 C16.7278188,12.510492 21.6019983,5.16955949 27.3583396,3.6 C33.1146809,2.03044121 43.3162723,2.87073516 54.7166792,2.94259308" id="Stroke-1"></path>
+                <path d="M0,21.4341553 L5.71464176,21.4341018 C26.4591188,21.4462863 38.7096798,19.3834632 40.9488636,11.3106908 C43.4077962,2.44567356 32.1595127,-2.75746187 27.6002813,3.97160349 C23.041042,10.7006602 28.0552389,17.7390132 33.8115802,19.3834632 C39.5679216,21.0279126 48.9509366,21.4341018 59.267271,21.4341553" id="Stroke-1"></path>
+            </g>
+        </g>
+    </g>
+</svg>

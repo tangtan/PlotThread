@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="57px" height="28px" viewBox="0 0 57 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Bump_Collide</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bump_Collide" transform="translate(-4.000000, -20.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="64" height="64"></rect>
+            <path d="M6,22 C12.8045721,22 17.7911973,22 20.9598757,22 C25.7128932,22 27.0414994,37.3786109 32.3030545,37.3786109 C37.5646095,37.3786109 36.9325233,22 41.9741504,22 C45.3352351,22 50.8792213,22 58.6061089,22" id="路径-4-copy" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M6,30 C12.8045721,30 17.7911973,30 20.9598757,30 C25.7128932,30 27.0414994,45.3786109 32.3030545,45.3786109 C37.5646095,45.3786109 36.9325233,30 41.9741504,30 C45.3352351,30 50.8792213,30 58.6061089,30" id="路径-4-copy-2" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(32.303054, 37.689305) scale(1, -1) translate(-32.303054, -37.689305) "></path>
+        </g>
+    </g>
+</svg>
