@@ -3,7 +3,7 @@ import { IHitOption, StoryLine, StoryName } from '../../types';
 import paper, { Path } from 'paper';
 import { ColorSet } from '../color';
 
-export default class CompressUtil extends BaseMouseUtil {
+export default class ScaleUtil extends BaseMouseUtil {
   compressInfo: any[][];
   constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
     super(hitOption, nodes, names);

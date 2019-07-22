@@ -6,19 +6,23 @@ import ZoomCanvas from './ZoomCanvas';
 import { iStoryline } from 'story-flow';
 import { xml } from 'd3-fetch';
 import { ColorSet } from '../../utils/color';
+import AddLineUtil from '../../utils/canvas/addline';
+import GroupUtil from '../../utils/canvas/group';
 import SortUtil from '../../utils/canvas/sort';
-import StraightenUtil from '../../utils/canvas/straighten';
-import ShapeUtil from '../../utils/canvas/shape';
-import CompressUtil from '../../utils/canvas/compress';
+import BendUtil from '../../utils/canvas/bend';
+import MoveUtil from '../../utils/canvas/move';
+import ScaleUtil from '../../utils/canvas/scale';
 
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    compressState: state.toolState.scale,
+    addLineState: state.toolState.addLine,
+    scaleState: state.toolState.scale,
     sortState: state.toolState.sort,
-    straightenState: state.toolState.bend,
+    bendState: state.toolState.bend,
     freeMode: !(
       state.toolState.move ||
+      state.toolState.addLine ||
       state.toolState.scale ||
       state.toolState.sort ||
       state.toolState.bend
@@ -55,27 +59,29 @@ type State = {
   names: string[];
   strokeWidth: number;
   duration: number;
+  addLineUtil: AddLineUtil | null;
   sortUtil: SortUtil | null;
-  straightenUtil: StraightenUtil | null;
-  shapeUtil: ShapeUtil | null;
-  compressUtil: CompressUtil | null;
+  bendUtil: BendUtil | null;
+  moveUtil: MoveUtil | null;
+  scaleUtil: ScaleUtil | null;
 };
 
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      storyXMLUrl: 'xml/JurassicPark.xml',
+      storyXMLUrl: 'xml/StarWars.xml',
       storyLayouter: null,
       strokes: [],
       nodes: [],
       names: [],
       strokeWidth: 1,
       duration: 1000,
+      addLineUtil: null,
       sortUtil: null,
-      straightenUtil: null,
-      compressUtil: null,
-      shapeUtil: null
+      bendUtil: null,
+      scaleUtil: null,
+      moveUtil: null
     };
   }
 
@@ -93,10 +99,11 @@ class DrawCanvas extends Component<Props, State> {
       storyLayouter: storyLayouter,
       nodes: nodes,
       names: names,
+      addLineUtil: new AddLineUtil(hitOption, nodes, names),
       sortUtil: new SortUtil(hitOption, nodes, names),
-      straightenUtil: new StraightenUtil(hitOption, nodes, names),
-      shapeUtil: new ShapeUtil(hitShapeOption, nodes, names),
-      compressUtil: new CompressUtil(hitOption, nodes, names)
+      bendUtil: new BendUtil(hitOption, nodes, names),
+      moveUtil: new MoveUtil(hitShapeOption, nodes, names),
+      scaleUtil: new ScaleUtil(hitOption, nodes, names)
     });
     graph.nodes.forEach((line: number[][], index: number) => {
       const pathStr = this.drawSmoothPath(line);
@@ -118,14 +125,17 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.down(e);
     }
-    if (this.props.compressState && this.state.compressUtil) {
-      this.state.compressUtil.down(e);
+    if (this.props.scaleState && this.state.scaleUtil) {
+      this.state.scaleUtil.down(e);
     }
-    if (this.props.straightenState && this.state.straightenUtil) {
-      this.state.straightenUtil.down(e);
+    if (this.props.bendState && this.state.bendUtil) {
+      this.state.bendUtil.down(e);
     }
-    if (this.props.freeMode && this.state.shapeUtil) {
-      this.state.shapeUtil.down(e);
+    if (this.props.freeMode && this.state.moveUtil) {
+      this.state.moveUtil.down(e);
+    }
+    if (this.props.addLineState && this.state.addLineUtil) {
+      this.state.addLineUtil.down(e);
     }
   };
 
@@ -134,22 +144,26 @@ class DrawCanvas extends Component<Props, State> {
       this.state.sortUtil.up(e);
       this.refresh();
     }
-    if (this.props.compressState && this.state.compressUtil) {
-      this.state.compressUtil.up(e);
+    if (this.props.scaleState && this.state.scaleUtil) {
+      this.state.scaleUtil.up(e);
       this.refresh();
     }
-    if (this.props.straightenState && this.state.straightenUtil) {
-      this.state.straightenUtil.up(e);
+    if (this.props.bendState && this.state.bendUtil) {
+      this.state.bendUtil.up(e);
       this.refresh();
     }
-    if (this.props.freeMode && this.state.shapeUtil) {
-      this.state.shapeUtil.up(e);
+    if (this.props.freeMode && this.state.moveUtil) {
+      this.state.moveUtil.up(e);
+    }
+    if (this.props.addLineState && this.state.addLineUtil) {
+      this.state.addLineUtil.up(e);
+      this.refresh();
     }
   };
 
   private onMouseMove = (e: paper.MouseEvent) => {
-    if (this.props.freeMode && this.state.shapeUtil) {
-      this.state.shapeUtil.move(e);
+    if (this.props.freeMode && this.state.moveUtil) {
+      this.state.moveUtil.move(e);
     }
   };
 
@@ -157,14 +171,17 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.drag(e);
     }
-    if (this.props.compressState && this.state.compressUtil) {
-      this.state.compressUtil.drag(e);
+    if (this.props.scaleState && this.state.scaleUtil) {
+      this.state.scaleUtil.drag(e);
     }
-    if (this.props.straightenState && this.state.straightenUtil) {
-      this.state.straightenUtil.drag(e);
+    if (this.props.bendState && this.state.bendUtil) {
+      this.state.bendUtil.drag(e);
     }
-    if (this.props.freeMode && this.state.shapeUtil) {
-      this.state.shapeUtil.drag(e);
+    if (this.props.freeMode && this.state.moveUtil) {
+      this.state.moveUtil.drag(e);
+    }
+    if (this.props.addLineState && this.state.addLineUtil) {
+      this.state.addLineUtil.drag(e);
     }
   };
 
@@ -179,14 +196,20 @@ class DrawCanvas extends Component<Props, State> {
 
   async refresh() {
     const orderInfo = this.state.sortUtil ? this.state.sortUtil.orderInfo : [];
-    const straightenInfo = this.state.straightenUtil
-      ? this.state.straightenUtil.straightenInfo
+    const straightenInfo = this.state.bendUtil
+      ? this.state.bendUtil.straightenInfo
       : [];
-    const compressInfo = this.state.compressUtil
-      ? this.state.compressUtil.compressInfo
+    const compressInfo = this.state.scaleUtil
+      ? this.state.scaleUtil.compressInfo
       : [];
     const _compressInfo = this.translateCompressInfo(compressInfo);
-    console.log(_compressInfo);
+    const characterInfo = this.state.addLineUtil
+      ? this.state.addLineUtil.characterInfo
+      : [];
+    characterInfo.forEach(item => {
+      console.log(item[0], item[1], item[2]);
+      this.state.storyLayouter.addCharacter(item[0], item[1], item[2]);
+    });
     const graph = this.state.storyLayouter.layout(
       orderInfo,
       straightenInfo,

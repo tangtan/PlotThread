@@ -3,7 +3,7 @@ import { IHitOption, StoryLine, StoryName } from '../../types';
 import paper, { Path, Point, project } from 'paper';
 import { ColorSet } from '../color';
 
-export default class StraightenUtil extends BaseMouseUtil {
+export default class BendUtil extends BaseMouseUtil {
   straightenInfo: any[][];
   constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
     super(hitOption, nodes, names);

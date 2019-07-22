@@ -2,7 +2,7 @@ import { BaseMouseUtil } from '../util';
 import { IHitOption, StoryLine, StoryName } from '../../types';
 import paper, { Segment, project, Matrix } from 'paper';
 
-export default class ShapeUtil extends BaseMouseUtil {
+export default class MoveUtil extends BaseMouseUtil {
   isMoveShape: boolean;
   isMoveSegment: boolean;
   selectSegment: Segment | null;
