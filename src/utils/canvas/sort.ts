@@ -22,7 +22,7 @@ export default class SortUtil extends BaseMouseUtil {
       const y = e.point.y;
       if (x && y) {
         const beforeName = this.storyStore.getStoryLineNameByPosition(x, y);
-        if (beforeName && name !== beforeName) {
+        if (beforeName && name && name !== beforeName) {
           this.orderInfo.push([beforeName, name]);
         }
       }

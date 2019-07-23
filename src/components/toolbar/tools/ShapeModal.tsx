@@ -7,13 +7,13 @@ import { getToolState } from '../../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    isVisible: getToolState(state, 'picture')
+    isVisible: getToolState(state, 'SymbolStar')
   };
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
-    closeModal: () => dispatch(setTool('picture', false)),
+    closeModal: () => dispatch(setTool('SymbolStar', false)),
     addShapeToRenderQueue: (type: string) => dispatch(addVisualObject(type))
   };
 };
