@@ -154,7 +154,52 @@ class App extends React.Component<Props, State> {
           subTools: []
         }
       ],
-      groupTools: []
+      groupTools: [
+        {
+          name: 'Bump',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Bump.svg',
+          subTools: [
+            {
+              name: 'BumpCollide',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Bump_Collide.svg',
+              subTools: []
+            },
+            {
+              name: 'BumpKnot',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Bump_Knot.svg',
+              subTools: []
+            },
+            {
+              name: 'BumpTwine',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Bump_Twine.svg',
+              subTools: []
+            }
+          ]
+        },
+        {
+          name: 'MergeSplit',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Merge.svg',
+          subTools: [
+            {
+              name: 'Merge',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Merge.svg',
+              subTools: []
+            },
+            {
+              name: 'Split',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Split.svg',
+              subTools: []
+            }
+          ]
+        }
+      ]
     };
   }
 
@@ -163,6 +208,7 @@ class App extends React.Component<Props, State> {
     return (
       <div className="App">
         <MenuBar tools={lineTools} />
+        <MenuBar centerX={450} tools={groupTools} />
         <DrawCanvas />
         <ShapeModal />
         <ToolBar

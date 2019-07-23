@@ -100,10 +100,10 @@ class MenuBar extends Component<Props, State> {
     return (
       <ThemeProvider theme={theme}>
         <PieMenu
-          centerX={centerX || '150px'}
-          centerY={centerY || '150px'}
-          centerRadius={centerRadius || '30px'}
-          radius={radius || '100px'}
+          centerX={`${centerX || 150}px`}
+          centerY={`${centerY || 150}px`}
+          centerRadius={`${centerRadius || 30}px`}
+          radius={`${radius || 100}px`}
           Center={Center}
         >
           {option === 0 ? MainMenu : SubMenus[option - 1]}
