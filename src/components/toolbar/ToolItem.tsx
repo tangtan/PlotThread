@@ -4,13 +4,13 @@ import { ITool } from '../../types';
 import './ToolBar.css';
 import { DispatchType, StateType } from '../../types';
 import { setTool } from '../../store/actions';
-import { getToolState } from '../../store/selectors';
+import { getToolState, getToolName } from '../../store/selectors';
 import ReactSVG from 'react-svg';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    toolName: state.toolState.toolName,
-    toolState: getToolState(state, state.toolState.toolName)
+    toolName: getToolName(state),
+    toolState: getToolState(state, state.toolState.toolName) as boolean
   };
 };
 

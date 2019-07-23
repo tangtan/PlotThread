@@ -36,22 +36,31 @@ export const getTodosByVisibilityFilter = (
 };
 
 export const getToolState = (state: StateType, name: string) => {
-  switch (name) {
-    case 'AddLine':
-      return state.toolState.addLine;
-    case 'Group':
-      return state.toolState.group;
-    case 'Sort':
-      return state.toolState.sort;
-    case 'Bend':
-      return state.toolState.bend;
-    case 'Scale':
-      return state.toolState.scale;
-    case 'Reshape':
-      return state.toolState.reshape;
-    case 'Move':
-      return state.toolState.move;
-    default:
-      return false;
+  // switch (name) {
+  //   case 'AddLine':
+  //     return state.toolState.addLine;
+  //   case 'Group':
+  //     return state.toolState.group;
+  //   case 'Sort':
+  //     return state.toolState.sort;
+  //   case 'Bend':
+  //     return state.toolState.bend;
+  //   case 'Scale':
+  //     return state.toolState.scale;
+  //   case 'Reshape':
+  //     return state.toolState.reshape;
+  //   case 'Move':
+  //     return state.toolState.move;
+  //   default:
+  //     return false;
+  // }
+  const { toolName, toolMap } = state.toolState;
+  if (name === 'FreeMode') {
+    return toolName.length === 0 ? true : !toolMap.get(toolName);
   }
+  return toolMap.has(name) ? toolMap.get(name) : false;
+};
+
+export const getToolName = (state: StateType) => {
+  return state.toolState.toolName;
 };

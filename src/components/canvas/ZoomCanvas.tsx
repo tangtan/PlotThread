@@ -4,10 +4,12 @@ import paper, { view, Point } from 'paper';
 import * as d3Zoom from 'd3-zoom';
 import { select, event } from 'd3-selection';
 import { StateType } from '../../types';
+import { getToolState } from '../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    toolState: state.toolState
+    // toolState: state.toolState
+    zoomState: getToolState(state, 'Move') as boolean
   };
 };
 
@@ -44,7 +46,7 @@ class ZoomCanvas extends Component<Props, State> {
     function zoomedCanvas(this: HTMLCanvasElement, d: CanvasDatum) {
       const e = event as d3Zoom.D3ZoomEvent<HTMLCanvasElement, any>;
       // console.log(e.transform.x, e.transform.y, e.transform.k, view.zoom);
-      if (this && self.props.toolState.move) {
+      if (this && self.props.zoomState) {
         // pan
         const _transformX = e.transform.x - self.state.transformX;
         const _transformY = e.transform.y - self.state.transformY;
@@ -70,7 +72,8 @@ class ZoomCanvas extends Component<Props, State> {
       .scaleExtent([1 / 2, 8])
       .on('zoom', zoomedCanvas)
       .filter(() => {
-        return self.props.toolState.move;
+        // return self.props.toolState.move;
+        return self.props.zoomState;
       });
 
     if (canvas) {

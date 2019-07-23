@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Path, view } from 'paper';
 import { StateType, DispatchType } from '../../types';
+import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 import { iStoryline } from 'story-flow';
 import { xml } from 'd3-fetch';
@@ -16,17 +17,11 @@ import ScaleUtil from '../../utils/canvas/scale';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    addLineState: state.toolState.addLine,
-    scaleState: state.toolState.scale,
-    sortState: state.toolState.sort,
-    bendState: state.toolState.bend,
-    freeMode: !(
-      state.toolState.move ||
-      state.toolState.addLine ||
-      state.toolState.scale ||
-      state.toolState.sort ||
-      state.toolState.bend
-    )
+    addLineState: getToolState(state, 'AddLine'),
+    scaleState: getToolState(state, 'Scale'),
+    sortState: getToolState(state, 'Sort'),
+    bendState: getToolState(state, 'Bend'),
+    freeMode: getToolState(state, 'FreeMode')
   };
 };
 

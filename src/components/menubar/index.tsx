@@ -1,76 +1,119 @@
 import React, { Component } from 'react';
-import RadialMenu from 'react-radial-menu';
-import './MenuBar.css';
+import { connect } from 'react-redux';
+import PieMenu, { PieCenter, Slice } from 'react-pie-menu';
+import { ITool } from '../../types';
+import { ThemeProvider } from 'styled-components';
+import * as styles from './index.style';
+import { setTool } from '../../store/actions';
+import { DispatchType } from '../../types';
+import ReactSVG from 'react-svg';
 
-import file from '../../assets/file.png';
-import add from '../../assets/add.png';
-import save from '../../assets/save.png';
-import download from '../../assets/download.png';
-import play from '../../assets/play.png';
-import undo from '../../assets/undo.png';
-import redo from '../../assets/redo.png';
-
-type Props = {};
-
-type State = {
-  center: IMenu;
-  menus: IMenu[];
-  distance: number;
-  beginDeg: number;
-  endDeg: number;
+const mapDispatchToProps = (dispatch: DispatchType) => {
+  return {
+    activateTool: (name: string) => dispatch(setTool(name, true))
+  };
 };
 
-export interface IMenu {
-  name: string;
-  type: string;
-  image: string;
-}
+const theme = {
+  pieMenu: {
+    container: styles.container,
+    center: styles.center
+  },
+  slice: {
+    container: styles.slice
+  }
+};
 
-export default class MenuBar extends Component<Props, State> {
+type Props = {
+  centerX?: number;
+  centerY?: number;
+  radius?: number;
+  centerRadius?: number;
+  tools: ITool[];
+} & ReturnType<typeof mapDispatchToProps>;
+
+type State = {
+  center: ITool;
+  option: number; // menu id
+  toolName: string;
+};
+
+class MenuBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      option: 0,
+      toolName: '',
       center: {
-        name: 'add',
-        type: 'menu',
-        image: `url(${add})`
-      },
-      menus: [
-        {
-          name: 'file',
-          type: 'menu',
-          image: `url(${file})`
-        },
-        {
-          name: 'save',
-          type: 'menu',
-          image: `url(${save})`
-        },
-        {
-          name: 'download',
-          type: 'menu',
-          image: `url(${download})`
-        }
-      ],
-      distance: 50,
-      beginDeg: 0,
-      endDeg: 90
+        name: 'MenuCollapse',
+        type: 'svg',
+        url: 'svg/Menu_Tools/PieMenu_Collapse.svg',
+        subTools: []
+      }
     };
   }
 
+  goBack = () => {
+    const { option } = this.state;
+    if (option === 0) return;
+    this.setState({ option: 0 });
+  };
+
   render() {
-    const { center, menus, distance, beginDeg, endDeg } = this.state;
+    const { state, props } = this;
+    const { centerX, centerY, radius, centerRadius, tools } = props;
+    const { center, option } = state;
+    const Center = (props: Props) => (
+      <PieCenter {...props} onClick={this.goBack}>
+        {option !== 0 && <ReactSVG src={center.url} />}
+      </PieCenter>
+    );
+    const MainMenu = (
+      <React.Fragment key={'submenu-0'}>
+        {tools.map((item, i) => (
+          <Slice
+            key={`${item.name}-${i}`}
+            onSelect={() => {
+              this.setState({ option: i + 1 });
+            }}
+          >
+            <ReactSVG src={item.url} />
+          </Slice>
+        ))}
+      </React.Fragment>
+    );
+    const subMenus = tools.map(tool => tool.subTools);
+    const SubMenus = subMenus.map((menu, i) => (
+      <React.Fragment key={`submenu-${i + 1}`}>
+        {menu.map(item => (
+          <Slice
+            key={`${item.name}-${i}`}
+            onSelect={() => {
+              this.props.activateTool(item.name);
+            }}
+          >
+            <ReactSVG src={item.url} />
+          </Slice>
+        ))}
+      </React.Fragment>
+    ));
     return (
-      <div className={'menu-bar-wrapper'}>
-        <RadialMenu
-          items={menus}
-          center={center}
-          distance={distance}
-          itemsSize={distance}
-          beginDeg={beginDeg}
-          endDeg={endDeg}
-        />
-      </div>
+      <ThemeProvider theme={theme}>
+        <PieMenu
+          centerX={centerX || '150px'}
+          centerY={centerY || '150px'}
+          centerRadius={centerRadius || '30px'}
+          radius={radius || '100px'}
+          Center={Center}
+        >
+          {option === 0 ? MainMenu : SubMenus[option - 1]}
+        </PieMenu>
+      </ThemeProvider>
     );
   }
 }
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(MenuBar);
