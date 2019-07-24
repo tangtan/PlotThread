@@ -4,6 +4,7 @@ import { StateType, DispatchType } from '../../../types';
 import { Modal, Upload, Icon } from 'antd';
 import { setTool, addVisualObject } from '../../../store/actions';
 import { getToolState } from '../../../store/selectors';
+import './UploadModal.css';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -23,13 +24,15 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 
 type State = {
   radioVal: string;
+  fileList: any[];
 };
 
 class ShapeModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      radioVal: 'circle'
+      radioVal: 'circle',
+      fileList: []
     };
   }
 
@@ -58,14 +61,23 @@ class ShapeModal extends Component<Props, State> {
       </div>
     );
     return (
-      <div className="shape-modal-wrapper">
+      <div className="upload-modal-wrapper">
         <Modal
           title="Upload Shapes"
           visible={this.props.isVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <Upload listType="picture-card">{uploadButton}</Upload>
+          <Upload
+            listType="picture-card"
+            beforeUpload={() => {
+              return false;
+            }}
+            defaultFileList={this.state.fileList}
+            className="upload-modal"
+          >
+            {uploadButton}
+          </Upload>
         </Modal>
       </div>
     );

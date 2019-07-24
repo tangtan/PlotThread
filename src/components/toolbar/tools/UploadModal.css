@@ -1,0 +1,6 @@
+.upload-modal svg {
+  width: auto;
+}
+.upload-modal .ant-upload-list-item-actions .anticon-eye-o {
+  display: none;
+}
