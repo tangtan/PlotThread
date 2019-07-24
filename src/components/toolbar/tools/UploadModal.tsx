@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../types';
 import { Modal, Upload, Icon } from 'antd';
-import { setTool, addVisualObject } from '../../../store/actions';
+import { setTool, addVisualArray } from '../../../store/actions';
 import { getToolState } from '../../../store/selectors';
 import './UploadModal.css';
+import { RcFile } from 'antd/lib/upload/interface';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -15,7 +16,7 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     closeModal: () => dispatch(setTool('SymbolPic', false)),
-    addShapeToRenderQueue: (type: string) => dispatch(addVisualObject(type))
+    addShapeToRenderQueue: (array: string[]) => dispatch(addVisualArray(array))
   };
 };
 
@@ -23,23 +24,19 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
-  radioVal: string;
-  fileList: any[];
+  fileList: string[];
 };
 
 class ShapeModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      radioVal: 'circle',
       fileList: []
     };
   }
 
   private handleOk = () => {
-    // TODO: 完善 visual object 类型定义
-    const visualObjType = this.state.radioVal;
-    this.props.addShapeToRenderQueue(visualObjType);
+    this.props.addShapeToRenderQueue(this.state.fileList);
     this.props.closeModal();
   };
 
@@ -47,10 +44,16 @@ class ShapeModal extends Component<Props, State> {
     this.props.closeModal();
   };
 
-  private handleChange = (e: any) => {
-    this.setState({
-      radioVal: e.target.value
-    });
+  private handleUpload = (file: RcFile) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const value = reader.result as string;
+      this.setState({
+        fileList: [...this.state.fileList, value]
+      });
+    };
+    return false;
   };
 
   render() {
@@ -70,11 +73,9 @@ class ShapeModal extends Component<Props, State> {
         >
           <Upload
             listType="picture-card"
-            beforeUpload={() => {
-              return false;
-            }}
-            defaultFileList={this.state.fileList}
+            beforeUpload={this.handleUpload}
             className="upload-modal"
+            multiple={true}
           >
             {uploadButton}
           </Upload>

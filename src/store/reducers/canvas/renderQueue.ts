@@ -1,5 +1,5 @@
 import { ActionType, VisualObject } from '../../../types';
-import { Point, Path, Size } from 'paper';
+import { Point, Path, Size, Raster } from 'paper';
 import { ColorSet } from '../../../utils/color';
 
 const initialState: VisualObject[] = [];
@@ -13,6 +13,9 @@ const drawVisualObject = (type: string) => {
     case 'rectangle':
       return drawRectangle(type);
     default:
+      if (type.startsWith('data:image')) {
+        return drawRaster(type);
+      }
       return null;
   }
 };
@@ -43,17 +46,37 @@ const drawRectangle = (type: string) => {
   }
 };
 
+const drawRaster = (type: string) => {
+  const raster = new Raster(type);
+  return raster;
+};
+
 export default (state = initialState, action: ActionType) => {
+  const newState = [...state];
   switch (action.type) {
     case 'ADD_VISUALOBJECT':
       const { type } = action.payload;
-      const newState = [...state];
       const visualObj: VisualObject = {
         type: type,
         mounted: true,
         geometry: drawVisualObject(type)
       };
       newState.push(visualObj);
+      return newState;
+    case 'ADD_VISUALARRAY':
+      const { array } = action.payload;
+      array.forEach((type, index) => {
+        const object = drawVisualObject(type);
+        if (object) {
+          object.position = new Point(100 + 100 * index, 100);
+        }
+        const visualObj: VisualObject = {
+          type: type,
+          mounted: true,
+          geometry: object
+        };
+        newState.push(visualObj);
+      });
       return newState;
     default:
       return state;

@@ -2,7 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import VisibilityFilters from '../components/demo/VisibilityFilters';
-import { Path } from 'paper';
+import { Path, Raster } from 'paper';
 
 export type ActionType = ActionType<typeof actions>;
 
@@ -68,7 +68,7 @@ export type IHitOption = {
 export type VisualObject = {
   type: string;
   mounted: boolean;
-  geometry: Path | Path.Circle | Path.Rectangle | null;
+  geometry: Path | Path.Circle | Path.Rectangle | Raster | null;
 };
 
 // Storyline

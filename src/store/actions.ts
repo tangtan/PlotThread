@@ -28,3 +28,7 @@ export const addVisualObject = createAction(
   'ADD_VISUALOBJECT',
   action => (type: string) => action({ type: type })
 );
+export const addVisualArray = createAction(
+  'ADD_VISUALARRAY',
+  action => (array: string[]) => action({ array: array })
+);
