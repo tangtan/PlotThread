@@ -1,5 +1,6 @@
 import { createAction, action } from 'typesafe-actions';
 import { VisualObject } from '../types';
+import { Path, MouseEvent } from 'paper';
 
 let nextTodoId: number = 0;
 
@@ -23,12 +24,22 @@ export const setTool = createAction(
   action => (name: string, use: boolean) => action({ name: name, use: use })
 );
 
+export const setObject = createAction('SET_OBJECT', action => (e: MouseEvent) =>
+  action({ e: e })
+);
+
 // Render Module
 export const addVisualObject = createAction(
   'ADD_VISUALOBJECT',
   action => (type: string) => action({ type: type })
 );
+
 export const addVisualArray = createAction(
   'ADD_VISUALARRAY',
   action => (array: string[]) => action({ array: array })
+);
+
+export const addStoryLines = createAction(
+  'ADD_STORYLINES',
+  action => (strokes: Path[]) => action({ strokes: strokes })
 );

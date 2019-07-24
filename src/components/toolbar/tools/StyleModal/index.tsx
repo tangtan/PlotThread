@@ -4,11 +4,13 @@ import { StateType, DispatchType } from '../../../../types';
 import { getToolState } from '../../../../store/selectors';
 import { setTool } from '../../../../store/actions';
 import { SketchPicker, SliderPicker } from 'react-color';
+import { Color, Path } from 'paper';
 import './StyleModal.css';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    strokeStyleState: getToolState(state, 'StrokeStyle')
+    strokeStyleState: getToolState(state, 'StrokeStyle'),
+    selectedObj: state.selectedObj
   };
 };
 
@@ -48,6 +50,17 @@ class StyleModal extends Component<Props, State> {
 
   handleChangeComplete = (color: any) => {
     this.setState({ background: color.hex });
+    if (this.props.selectedObj.mounted) {
+      const objPath = this.props.selectedObj.geometry as Path;
+      const rgb = color.rgb;
+      console.log(color, rgb, objPath);
+      objPath.strokeColor = new Color(
+        rgb.r / 255,
+        rgb.g / 255,
+        rgb.b / 255,
+        rgb.a
+      );
+    }
     this.props.closeStyleTool();
   };
 

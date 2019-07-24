@@ -11,6 +11,7 @@ export type StateType = {
   visibilityFilter: string;
   toolState: ToolStateType;
   renderQueue: VisualObject[];
+  selectedObj: VisualObject;
 };
 
 export type DispatchType = typeof store.dispatch;

@@ -27,6 +27,7 @@ const drawCircle = (type: string) => {
     const circle = new Path.Circle(center, radius);
     circle.strokeColor = ColorSet.black;
     circle.fillColor = ColorSet.white;
+    circle.name = `circle-${circle.id}`;
     return circle;
   } else {
     throw `${errorMsg} (${type}).`;
@@ -40,6 +41,7 @@ const drawRectangle = (type: string) => {
     const rect = new Path.Rectangle(anchor, size);
     rect.strokeColor = ColorSet.black;
     rect.fillColor = ColorSet.white;
+    rect.name = `rectangle-${rect.id}`;
     return rect;
   } else {
     throw `${errorMsg} (${type}).`;
@@ -48,6 +50,7 @@ const drawRectangle = (type: string) => {
 
 const drawRaster = (type: string) => {
   const raster = new Raster(type);
+  raster.name = `image-${raster.id}`;
   return raster;
 };
 
@@ -56,12 +59,16 @@ export default (state = initialState, action: ActionType) => {
   switch (action.type) {
     case 'ADD_VISUALOBJECT':
       const { type } = action.payload;
-      const visualObj: VisualObject = {
-        type: type,
-        mounted: true,
-        geometry: drawVisualObject(type)
-      };
-      newState.push(visualObj);
+      const object = drawVisualObject(type);
+      if (object) {
+        const visualObj: VisualObject = {
+          type: type,
+          mounted: true,
+          geometry: object
+        };
+        object.data = visualObj;
+        newState.push(visualObj);
+      }
       return newState;
     case 'ADD_VISUALARRAY':
       const { array } = action.payload;
@@ -69,16 +76,42 @@ export default (state = initialState, action: ActionType) => {
         const object = drawVisualObject(type);
         if (object) {
           object.position = new Point(100 + 100 * index, 100);
+          const visualObj: VisualObject = {
+            type: 'image',
+            mounted: true,
+            geometry: object
+          };
+          object.data = visualObj;
+          newState.push(visualObj);
         }
-        const visualObj: VisualObject = {
-          type: type,
-          mounted: true,
-          geometry: object
-        };
-        newState.push(visualObj);
+      });
+      return newState;
+    case 'ADD_STORYLINES':
+      const { strokes } = action.payload;
+      strokes.forEach(stroke => {
+        const name = stroke.name;
+        if (name && !isInRenderQueue(name, newState)) {
+          const visualObj: VisualObject = {
+            type: 'storyline',
+            mounted: true,
+            geometry: stroke
+          };
+          stroke.data = visualObj;
+          newState.push(visualObj);
+        }
       });
       return newState;
     default:
       return state;
   }
+};
+
+const isInRenderQueue = (name: string, visualObjs: VisualObject[]) => {
+  let flag = false;
+  visualObjs.forEach(obj => {
+    if (obj.geometry && obj.geometry.name === name) {
+      flag = true;
+    }
+  });
+  return flag;
 };

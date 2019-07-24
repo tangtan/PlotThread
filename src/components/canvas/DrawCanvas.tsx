@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { view, project } from 'paper';
+import { view, project, Path } from 'paper';
 import { StateType, DispatchType } from '../../types';
+import { addStoryLines, setObject } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 import { iStoryline } from 'story-flow';
@@ -18,6 +19,7 @@ import ScaleUtil from '../../utils/canvas/scale';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
+    selectedObj: state.selectedObj,
     addLineState: getToolState(state, 'AddLine'),
     scaleState: getToolState(state, 'Scale'),
     sortState: getToolState(state, 'Sort'),
@@ -27,7 +29,10 @@ const mapStateToProps = (state: StateType) => {
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {};
+  return {
+    addStoryLines: (strokes: Path[]) => dispatch(addStoryLines(strokes)),
+    setSelectedObj: (e: paper.MouseEvent) => dispatch(setObject(e))
+  };
 };
 
 const hitOption = {
@@ -88,7 +93,8 @@ class DrawCanvas extends Component<Props, State> {
     storyLayouter.extent(100, 300, 1250);
     const names = graph.names;
     const nodes = graph.nodes;
-    this.state.storyDrawer.initGraph(graph);
+    const strokes = this.state.storyDrawer.initGraph(graph);
+    this.props.addStoryLines(strokes);
     this.setState({
       storyLayouter: storyLayouter,
       addLineUtil: new AddLineUtil(hitOption, nodes, names),
@@ -132,6 +138,7 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.up(e);
+      this.props.setSelectedObj(e);
     }
     if (this.props.addLineState && this.state.addLineUtil) {
       this.state.addLineUtil.up(e);
@@ -202,7 +209,8 @@ class DrawCanvas extends Component<Props, State> {
     );
     // scale nodes
     this.state.storyLayouter.extent(100, 300, 1250);
-    this.state.storyDrawer.updateGraph(graph);
+    const strokes = this.state.storyDrawer.updateGraph(graph);
+    this.props.addStoryLines(strokes);
   }
 
   render() {

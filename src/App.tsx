@@ -60,7 +60,7 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Move',
+          name: 'Zoom',
           type: 'svg',
           url: 'svg/Menu_Left/Move.svg',
           subTools: []

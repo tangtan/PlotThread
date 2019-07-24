@@ -8,8 +8,7 @@ import { getToolState } from '../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    // toolState: state.toolState
-    zoomState: getToolState(state, 'Move') as boolean
+    zoomState: getToolState(state, 'Zoom') as boolean
   };
 };
 
@@ -39,7 +38,6 @@ class ZoomCanvas extends Component<Props, State> {
 
   componentDidMount() {
     const canvas = select<HTMLCanvasElement, any>('canvas');
-    // const ctx = canvas.node()!.getContext("2d");
 
     const self = this;
 
@@ -72,7 +70,6 @@ class ZoomCanvas extends Component<Props, State> {
       .scaleExtent([1 / 2, 8])
       .on('zoom', zoomedCanvas)
       .filter(() => {
-        // return self.props.toolState.move;
         return self.props.zoomState;
       });
 
