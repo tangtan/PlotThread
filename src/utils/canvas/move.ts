@@ -24,6 +24,12 @@ export default class MoveUtil extends BaseMouseUtil {
             this.selectSegment = null;
             this.isMoveSegment = false;
             break;
+          case 'pixel':
+            this.selectPath = hitRes.item;
+            this.isMoveShape = true;
+            this.selectSegment = null;
+            this.isMoveSegment = false;
+            break;
           case 'segment':
             if (e.modifiers.shift) {
               if (hitRes.segment) {
