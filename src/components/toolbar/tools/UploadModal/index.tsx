@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType } from '../../../types';
+import { StateType, DispatchType } from '../../../../types';
 import { Modal, Upload, Icon } from 'antd';
-import { setTool, addVisualArray } from '../../../store/actions';
-import { getToolState } from '../../../store/selectors';
+import { setTool, addVisualArray } from '../../../../store/actions';
+import { getToolState } from '../../../../store/selectors';
 import './UploadModal.css';
 import { RcFile } from 'antd/lib/upload/interface';
 
