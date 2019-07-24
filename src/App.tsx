@@ -3,9 +3,10 @@ import './App.css';
 import 'antd/dist/antd.css';
 import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
+import DrawCanvas from './components/canvas/DrawCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
-import DrawCanvas from './components/canvas/DrawCanvas';
+import StyleModal from './components/toolbar/tools/StyleModal';
 import { ITool } from './types';
 
 type Props = {};
@@ -114,6 +115,12 @@ class App extends React.Component<Props, State> {
               type: 'svg',
               url: 'svg/Menu_Tools/Stroke_Zigzag.svg',
               subTools: []
+            },
+            {
+              name: 'StrokeStyle',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Symbol_Dead.svg',
+              subTools: []
             }
           ]
         },
@@ -132,12 +139,6 @@ class App extends React.Component<Props, State> {
               name: 'SymbolAppear',
               type: 'svg',
               url: 'svg/Menu_Tools/Symbol_Appear.svg',
-              subTools: []
-            },
-            {
-              name: 'SymbolDead',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Symbol_Dead.svg',
               subTools: []
             },
             {
@@ -213,6 +214,7 @@ class App extends React.Component<Props, State> {
         <DrawCanvas />
         <ShapeModal />
         <UploadModal />
+        <StyleModal />
         <ToolBar
           Top={0}
           Left={400}
