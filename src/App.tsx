@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
+import UploadModal from './components/toolbar/tools/UploadModal';
 import DrawCanvas from './components/canvas/DrawCanvas';
 import { ITool } from './types';
 
@@ -211,6 +212,7 @@ class App extends React.Component<Props, State> {
         <MenuBar centerX={450} tools={groupTools} />
         <DrawCanvas />
         <ShapeModal />
+        <UploadModal />
         <ToolBar
           Top={0}
           Left={400}
