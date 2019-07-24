@@ -35,19 +35,6 @@ export type ByIdsType = {
 export type ToolStateType = {
   toolName: string; // 辅助判断 FreeMode
   toolMap: Map<string, boolean>; // 动态储存工具状态
-  // addLine: boolean;
-  // group: boolean;
-  // sort: boolean;
-  // bend: boolean;
-  // scale: boolean;
-  // reshape: boolean;
-  // move: boolean; // zoom
-  // // strokeDash: boolean;
-  // // strokeZigzag: boolean;
-  // // symbolPic: boolean;
-  // // symbolAppear: boolean;
-  // // symbolDead: boolean;
-  // // symbolStar: boolean;
 };
 
 export type ITool = {
@@ -77,3 +64,10 @@ export type StorySegment = StoryNode[];
 // TODO: export type StoryLine = StorySegment[];
 export type StoryLine = StoryNode[];
 export type StoryName = string;
+export type StoryGraph = {
+  names: StoryName[];
+  nodes: StorySegment[];
+  renderNodes?: StoryLine[];
+  smoothNodes?: StoryLine[];
+  sketchNodes?: StoryLine[];
+};

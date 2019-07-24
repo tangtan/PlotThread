@@ -31,7 +31,6 @@ export default class AddLineUtil extends BaseMouseUtil {
 
   // draw a horizontal line
   drag(e: paper.MouseEvent) {
-    console.log(e.point);
     if (e.point && this.currPath) {
       this.currPath.add(e.point);
     }
