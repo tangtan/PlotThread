@@ -184,17 +184,24 @@ class DrawCanvas extends Component<Props, State> {
     const characterInfo = this.state.addLineUtil
       ? this.state.addLineUtil.characterInfo
       : [];
-    characterInfo.forEach(item => {
-      this.state.storyLayouter.addCharacter(item[0], item[1], item[2]);
-    });
-    const graph = this.state.storyLayouter.layout(
+    // characterInfo.forEach(item => {
+    //   this.state.storyLayouter.smartAddLine(item[0], item[1], item[2]);
+    // });
+    // 注意在这个readFile后，storyLayouter被保存了，每次addLine的记录也被保存，因此只需add新的线
+    const newCharacterIndex = characterInfo.length - 1;
+    const newCharacter = characterInfo[newCharacterIndex];
+    this.state.storyLayouter.smartAddLine(
+      newCharacter[0],
+      newCharacter[1],
+      newCharacter[2]
+    );
+    let graph = this.state.storyLayouter.layout(
       orderInfo,
       straightenInfo,
       _compressInfo
     );
     // scale nodes
     this.state.storyLayouter.extent(100, 300, 1250);
-    console.log(graph.nodes);
     this.state.storyDrawer.updateGraph(graph);
   }
 
