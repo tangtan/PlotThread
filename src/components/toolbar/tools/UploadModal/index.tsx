@@ -5,7 +5,7 @@ import { Modal, Upload, Icon } from 'antd';
 import { setTool, addVisualArray } from '../../../../store/actions';
 import { getToolState } from '../../../../store/selectors';
 import './UploadModal.css';
-import { RcFile } from 'antd/lib/upload/interface';
+import { RcFile, UploadFile } from 'antd/lib/upload/interface';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -24,7 +24,7 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
-  fileList: string[];
+  fileList: UploadFile[];
 };
 
 class UploadModal extends Component<Props, State> {
@@ -36,11 +36,23 @@ class UploadModal extends Component<Props, State> {
   }
 
   private handleOk = () => {
-    this.props.addShapeToRenderQueue(this.state.fileList);
+    const list: string[] = [];
+    this.state.fileList.forEach(file => {
+      if (file.url) {
+        list.push(file.url);
+      }
+    });
+    this.props.addShapeToRenderQueue(list);
+    this.setState({
+      fileList: []
+    });
     this.props.closeModal();
   };
 
   private handleCancel = () => {
+    this.setState({
+      fileList: []
+    });
     this.props.closeModal();
   };
 
@@ -49,10 +61,23 @@ class UploadModal extends Component<Props, State> {
     reader.readAsDataURL(file);
     reader.onload = () => {
       const value = reader.result as string;
+      const upload = file as UploadFile;
+      upload.url = value;
       this.setState({
-        fileList: [...this.state.fileList, value]
+        fileList: [...this.state.fileList, upload]
       });
     };
+    return false;
+  };
+
+  private handleRemove = (file: UploadFile) => {
+    const index = this.state.fileList.indexOf(file);
+    this.setState({
+      fileList: [
+        ...this.state.fileList.slice(0, index),
+        ...this.state.fileList.slice(index + 1)
+      ]
+    });
     return false;
   };
 
@@ -76,6 +101,9 @@ class UploadModal extends Component<Props, State> {
             beforeUpload={this.handleUpload}
             className="upload-modal"
             multiple={true}
+            showUploadList={{ showRemoveIcon: true, showPreviewIcon: false }}
+            fileList={this.state.fileList}
+            onRemove={this.handleRemove}
           >
             {uploadButton}
           </Upload>
