@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { view, project, Path } from 'paper';
+import { view, project, Path, Point } from 'paper';
 import { StateType, DispatchType } from '../../types';
 import { addStoryLines, setObject } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
@@ -31,7 +31,8 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addStoryLines: (strokes: Path[]) => dispatch(addStoryLines(strokes)),
-    setSelectedObj: (e: paper.MouseEvent) => dispatch(setObject(e))
+    setSelectedObj: (e: paper.MouseEvent) =>
+      dispatch(setObject(e.point || new Point(-100, -100)))
   };
 };
 

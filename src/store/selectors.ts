@@ -1,6 +1,7 @@
 import { VISIBILITY_FILTERS } from '../components/demo/constants';
 import { StateType } from '../types';
 
+// demos
 export const getTodosState = (state: StateType) => state.todos;
 
 export const getTodoList = (state: StateType) =>
@@ -35,25 +36,8 @@ export const getTodosByVisibilityFilter = (
   }
 };
 
+// toolbar module
 export const getToolState = (state: StateType, name: string) => {
-  // switch (name) {
-  //   case 'AddLine':
-  //     return state.toolState.addLine;
-  //   case 'Group':
-  //     return state.toolState.group;
-  //   case 'Sort':
-  //     return state.toolState.sort;
-  //   case 'Bend':
-  //     return state.toolState.bend;
-  //   case 'Scale':
-  //     return state.toolState.scale;
-  //   case 'Reshape':
-  //     return state.toolState.reshape;
-  //   case 'Move':
-  //     return state.toolState.move;
-  //   default:
-  //     return false;
-  // }
   const { toolName, toolMap } = state.toolState;
   if (name === 'FreeMode') {
     return toolName.length === 0 ? true : !toolMap.get(toolName);
@@ -63,4 +47,36 @@ export const getToolState = (state: StateType, name: string) => {
 
 export const getToolName = (state: StateType) => {
   return state.toolState.toolName;
+};
+
+// selectedObj module
+export const getSelectedObjMountState = (state: StateType) => {
+  return state.selectedObj.mounted;
+};
+
+export const getSelectedObjGeometry = (state: StateType) => {
+  const { mounted, geometry } = state.selectedObj;
+  return mounted ? geometry : null;
+};
+
+export const getSelectedObjStrokeColor = (state: StateType) => {
+  const { mounted, type, geometry } = state.selectedObj;
+  if (type === 'image') {
+    return null;
+  }
+  if (mounted && geometry) {
+    return geometry.strokeColor;
+  }
+  return null;
+};
+
+export const getSelectedObjFillColor = (state: StateType) => {
+  const { mounted, type, geometry } = state.selectedObj;
+  if (type === 'image') {
+    return null;
+  }
+  if (mounted && geometry) {
+    return geometry.fillColor;
+  }
+  return null;
 };

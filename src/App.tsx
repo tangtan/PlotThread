@@ -136,7 +136,7 @@ class App extends React.Component<Props, State> {
               subTools: []
             },
             {
-              name: 'SymbolAppear',
+              name: 'FillStyle',
               type: 'svg',
               url: 'svg/Menu_Tools/Symbol_Appear.svg',
               subTools: []

@@ -1,6 +1,6 @@
 import { createAction, action } from 'typesafe-actions';
 import { VisualObject } from '../types';
-import { Path, MouseEvent } from 'paper';
+import { Path, Color, Point } from 'paper';
 
 let nextTodoId: number = 0;
 
@@ -24,8 +24,19 @@ export const setTool = createAction(
   action => (name: string, use: boolean) => action({ name: name, use: use })
 );
 
-export const setObject = createAction('SET_OBJECT', action => (e: MouseEvent) =>
-  action({ e: e })
+// SelectedObj Module
+export const setObject = createAction('SET_OBJECT', action => (point: Point) =>
+  action({ point: point })
+);
+
+export const setObjectStrokeColor = createAction(
+  'SET_OBJECTSTROKECOLOR',
+  action => (color: Color) => action({ color: color })
+);
+
+export const setObjectFillColor = createAction(
+  'SET_OBJECTFILLCOLOR',
+  action => (color: Color) => action({ color: color })
 );
 
 // Render Module

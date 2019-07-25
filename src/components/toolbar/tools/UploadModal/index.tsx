@@ -27,7 +27,7 @@ type State = {
   fileList: string[];
 };
 
-class ShapeModal extends Component<Props, State> {
+class UploadModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -88,4 +88,4 @@ class ShapeModal extends Component<Props, State> {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ShapeModal);
+)(UploadModal);
