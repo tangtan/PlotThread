@@ -54,6 +54,10 @@ export const getSelectedObjMountState = (state: StateType) => {
   return state.selectedObj.mounted;
 };
 
+export const getSelectedObjType = (state: StateType) => {
+  return state.selectedObj.type;
+};
+
 export const getSelectedObjGeometry = (state: StateType) => {
   const { mounted, geometry } = state.selectedObj;
   return mounted ? geometry : null;

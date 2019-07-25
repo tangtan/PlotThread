@@ -5,8 +5,12 @@ import { ITool } from '../../types';
 import { ThemeProvider } from 'styled-components';
 import * as styles from './index.style';
 import { setTool } from '../../store/actions';
-import { DispatchType } from '../../types';
+import { StateType, DispatchType } from '../../types';
 import ReactSVG from 'react-svg';
+
+const mapStateToProps = (state: StateType) => {
+  return {};
+};
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
@@ -25,18 +29,51 @@ const theme = {
 };
 
 type Props = {
+  mounted: boolean;
   centerX?: number;
   centerY?: number;
   radius?: number;
   centerRadius?: number;
   tools: ITool[];
-} & ReturnType<typeof mapDispatchToProps>;
+} & ReturnType<typeof mapDispatchToProps> &
+  ReturnType<typeof mapStateToProps>;
 
 type State = {
   center: ITool;
   option: number; // menu id
   toolName: string;
 };
+
+function MenuPanel(props: any) {
+  const {
+    mounted,
+    theme,
+    centerX,
+    centerY,
+    centerRadius,
+    radius,
+    Center,
+    option,
+    MainMenu,
+    SubMenus
+  } = props;
+  if (!mounted) {
+    return null;
+  }
+  return (
+    <ThemeProvider theme={theme}>
+      <PieMenu
+        centerX={`${centerX || 150}px`}
+        centerY={`${centerY || 150}px`}
+        centerRadius={`${centerRadius || 30}px`}
+        radius={`${radius || 100}px`}
+        Center={Center}
+      >
+        {option === 0 ? MainMenu : SubMenus[option - 1]}
+      </PieMenu>
+    </ThemeProvider>
+  );
+}
 
 class MenuBar extends Component<Props, State> {
   constructor(props: Props) {
@@ -53,7 +90,7 @@ class MenuBar extends Component<Props, State> {
     };
   }
 
-  goBack = () => {
+  goBack = (e: any) => {
     const { option } = this.state;
     if (option === 0) return;
     this.setState({ option: 0 });
@@ -61,7 +98,7 @@ class MenuBar extends Component<Props, State> {
 
   render() {
     const { state, props } = this;
-    const { centerX, centerY, radius, centerRadius, tools } = props;
+    const { centerX, centerY, radius, centerRadius, tools, mounted } = props;
     const { center, option } = state;
     const Center = (props: Props) => (
       <PieCenter {...props} onClick={this.goBack}>
@@ -97,23 +134,43 @@ class MenuBar extends Component<Props, State> {
         ))}
       </React.Fragment>
     ));
+    // return (
+    //   <ThemeProvider theme={theme}>
+    //     <PieMenu
+    //       centerX={`${centerX || 150}px`}
+    //       centerY={`${centerY || 150}px`}
+    //       centerRadius={`${centerRadius || 30}px`}
+    //       radius={`${radius || 100}px`}
+    //       Center={Center}
+    //     >
+    //       {option === 0 ? MainMenu : SubMenus[option - 1]}
+    //     </PieMenu>
+    //   </ThemeProvider>
+    // );
     return (
-      <ThemeProvider theme={theme}>
-        <PieMenu
-          centerX={`${centerX || 150}px`}
-          centerY={`${centerY || 150}px`}
-          centerRadius={`${centerRadius || 30}px`}
-          radius={`${radius || 100}px`}
+      <div
+        onMouseUp={(e: any) => e.stopPropagation()}
+        onMouseMove={(e: any) => e.stopPropagation()}
+        onMouseDown={(e: any) => e.stopPropagation()}
+      >
+        <MenuPanel
+          mounted={mounted}
+          centerX={centerX}
+          centerY={centerY}
+          centerRadius={centerRadius}
+          radius={radius}
           Center={Center}
-        >
-          {option === 0 ? MainMenu : SubMenus[option - 1]}
-        </PieMenu>
-      </ThemeProvider>
+          option={option}
+          MainMenu={MainMenu}
+          SubMenus={SubMenus}
+          theme={theme}
+        />
+      </div>
     );
   }
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(MenuBar);

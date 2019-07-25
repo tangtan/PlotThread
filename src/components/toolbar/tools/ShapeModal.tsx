@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../types';
 import { Modal, Radio } from 'antd';
-import { setTool, addVisualObject } from '../../../store/actions';
+import { setTool, setObject, addVisualObject } from '../../../store/actions';
 import { getToolState } from '../../../store/selectors';
+import { Point } from 'paper';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -14,7 +15,8 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     closeModal: () => dispatch(setTool('SymbolStar', false)),
-    addShapeToRenderQueue: (type: string) => dispatch(addVisualObject(type))
+    addShapeToRenderQueue: (type: string) => dispatch(addVisualObject(type)),
+    closeObject: () => dispatch(setObject(new Point(-100, -100)))
   };
 };
 
@@ -38,10 +40,12 @@ class ShapeModal extends Component<Props, State> {
     const visualObjType = this.state.radioVal;
     this.props.addShapeToRenderQueue(visualObjType);
     this.props.closeModal();
+    this.props.closeObject();
   };
 
   private handleCancel = () => {
     this.props.closeModal();
+    this.props.closeObject();
   };
 
   private handleChange = (e: any) => {

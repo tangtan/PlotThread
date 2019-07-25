@@ -1,4 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import {
+  getToolState,
+  getSelectedObjMountState,
+  getSelectedObjType
+} from './store/selectors';
 import './App.css';
 import 'antd/dist/antd.css';
 import MenuBar from './components/menubar';
@@ -7,11 +13,22 @@ import DrawCanvas from './components/canvas/DrawCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import StyleModal from './components/toolbar/tools/StyleModal';
-import { ITool } from './types';
+import { ITool, StateType } from './types';
 
-type Props = {};
+const mapStateToProps = (state: StateType) => {
+  return {
+    lineToolState:
+      getSelectedObjMountState(state) && getSelectedObjType(state) !== 'image',
+    groupToolState: getToolState(state, 'Back') || false,
+    freeMode: getToolState(state, 'FreeMode')
+  };
+};
+
+type Props = {} & ReturnType<typeof mapStateToProps>;
 
 type State = {
+  mouseX: number;
+  mouseY: number;
   leftTools: ITool[];
   topTools: ITool[];
   lineTools: ITool[];
@@ -22,6 +39,8 @@ class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      mouseX: 0,
+      mouseY: 0,
       leftTools: [
         {
           name: 'AddLine',
@@ -205,12 +224,39 @@ class App extends React.Component<Props, State> {
     };
   }
 
+  handleMousePos = (e: any) => {
+    if (this.props.freeMode) {
+      this.setState({
+        mouseX: e.clientX,
+        mouseY: e.clientY
+      });
+    }
+  };
+
   render() {
-    const { topTools, leftTools, lineTools, groupTools } = this.state;
+    const {
+      topTools,
+      leftTools,
+      lineTools,
+      groupTools,
+      mouseX,
+      mouseY
+    } = this.state;
+    const { lineToolState, groupToolState } = this.props;
     return (
-      <div className="App">
-        <MenuBar tools={lineTools} />
-        <MenuBar centerX={450} tools={groupTools} />
+      <div className="App" onDoubleClick={this.handleMousePos}>
+        <MenuBar
+          mounted={lineToolState}
+          centerX={mouseX}
+          centerY={mouseY}
+          tools={lineTools}
+        />
+        <MenuBar
+          mounted={groupToolState}
+          centerX={mouseX}
+          centerY={mouseY}
+          tools={groupTools}
+        />
         <DrawCanvas />
         <ShapeModal />
         <UploadModal />
@@ -228,4 +274,7 @@ class App extends React.Component<Props, State> {
   }
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  null
+)(App);

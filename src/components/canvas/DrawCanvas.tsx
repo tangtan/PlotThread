@@ -86,6 +86,7 @@ class DrawCanvas extends Component<Props, State> {
     view.onMouseUp = this.onMouseUp;
     view.onMouseMove = this.onMouseMove;
     view.onMouseDrag = this.onMouseDrag;
+    view.onDoubleClick = this.onMouseClick;
     const xmlUrl = this.state.storyXMLUrl;
     const xmlData = await xml(xmlUrl);
     const storyLayouter = new iStoryline();
@@ -139,11 +140,16 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.up(e);
-      this.props.setSelectedObj(e);
     }
     if (this.props.addLineState && this.state.addLineUtil) {
       this.state.addLineUtil.up(e);
       this.refresh();
+    }
+  };
+
+  private onMouseClick = (e: paper.MouseEvent) => {
+    if (this.props.freeMode) {
+      this.props.setSelectedObj(e);
     }
   };
 
