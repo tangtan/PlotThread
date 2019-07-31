@@ -186,7 +186,7 @@ class DrawCanvas extends Component<Props, State> {
     return _compressInfo;
   }
 
-  async refresh() {
+  refresh() {
     const orderInfo = this.state.sortUtil ? this.state.sortUtil.orderInfo : [];
     const straightenInfo = this.state.bendUtil
       ? this.state.bendUtil.straightenInfo

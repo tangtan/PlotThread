@@ -71,4 +71,5 @@ export type StoryGraph = {
   renderNodes?: StoryLine[];
   smoothNodes?: StoryLine[];
   sketchNodes?: StoryLine[];
+  hitTest?: any;
 };
