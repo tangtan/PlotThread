@@ -28,7 +28,11 @@ export default (state = initialState, action: ActionType) => {
           return initialState;
         }
         const newState = hitItem.data as VisualObject;
-        return newState;
+        if (hitItem.data.mounted) {
+          return newState;
+        } else if (hitItem.parent) {
+          return hitItem.parent.data as VisualObject;
+        }
       }
       return state;
     case 'SET_OBJECTSTROKECOLOR':
