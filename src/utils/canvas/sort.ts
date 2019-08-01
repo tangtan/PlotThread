@@ -1,5 +1,5 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
+import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
@@ -24,8 +24,8 @@ export default class SortUtil extends BaseMouseUtil {
       const name = this.selectPath.name as string;
       const x = e.point.x;
       const y = e.point.y;
-      if (x && y) {
-        const beforeName = this.getStoryLineNameByPosition(x, y);
+      if (x && y && this.storyStore) {
+        const beforeName = this.storyStore.getStorylineName(x, y);
         if (beforeName && name && name !== beforeName) {
           this.orderInfo.push([beforeName, name]);
         }
@@ -49,9 +49,5 @@ export default class SortUtil extends BaseMouseUtil {
         this.currPath = path;
       }
     }
-  }
-
-  getStoryLineNameByPosition(x: any, y: any) {
-    return 'TT';
   }
 }

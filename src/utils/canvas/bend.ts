@@ -1,5 +1,5 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
+import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point, project } from 'paper';
 import { ColorSet } from '../color';
 
@@ -31,10 +31,20 @@ export default class BendUtil extends BaseMouseUtil {
       }
     } else {
       super.mouseUp(e);
-      if (this.selectPath) {
+      if (
+        this.selectPath &&
+        this.endPosition &&
+        this.startPosition &&
+        this.storyStore
+      ) {
         const name = this.selectPath.name;
-        // TODO
-        this.straightenInfo.push([name, 0, 1000]);
+        const startX = this.startPosition.x as number;
+        const startY = this.startPosition.y as number;
+        const startTime = this.storyStore.getStoryTimeSpan(startX, startY);
+        const endX = this.endPosition.x as number;
+        const endY = this.endPosition.y as number;
+        const endTime = this.storyStore.getStoryTimeSpan(endX, endY);
+        this.straightenInfo.push([name, startTime, endTime]);
         this.selectPath.strokeColor = ColorSet.black;
       }
     }

@@ -21,17 +21,15 @@ export default class ScaleUtil extends BaseMouseUtil {
   up(e: paper.MouseEvent) {
     if (!this.selectPath) {
       super.mouseUp(e);
-      if (this.endPosition && this.startPosition) {
-        const x0 = this.startPosition.x as number;
-        const x1 = this.endPosition.x as number;
-        const y0 = this.startPosition.y as number;
-        const y1 = this.endPosition.y as number;
-        const res = this.getStoryLineNameNodeRangeWithRectangle(x0, y0, x1, y1);
-        // if (res.length > 0) {
-        //   const deltaY = y1 - y0;
-        //   res.push(deltaY);
-        //   this.compressInfo.push(res);
-        // }
+      if (this.endPosition && this.startPosition && this.storyStore) {
+        const startX = this.startPosition.x as number;
+        const startY = this.startPosition.y as number;
+        const startTime = this.storyStore.getStoryTimeSpan(startX, startY);
+        const endX = this.endPosition.x as number;
+        const endY = this.endPosition.y as number;
+        const endTime = this.storyStore.getStoryTimeSpan(endX, endY);
+        const deltaY = Math.abs(endY - startY);
+        this.compressInfo.push([startTime, endTime, deltaY]);
       }
     }
   }
@@ -50,9 +48,5 @@ export default class ScaleUtil extends BaseMouseUtil {
         this.currPath.opacity = 0.5;
       }
     }
-  }
-
-  getStoryLineNameNodeRangeWithRectangle(x0: any, y0: any, x1: any, y1: any) {
-    return [];
   }
 }

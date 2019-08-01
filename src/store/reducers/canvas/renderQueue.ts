@@ -97,6 +97,7 @@ export default (state = initialState, action: ActionType) => {
             mounted: true,
             geometry: strokeGroup
           };
+          strokeGroup.name = name;
           strokeGroup.data = visualObj;
           newState.push(visualObj);
         }
