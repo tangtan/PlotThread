@@ -1,5 +1,5 @@
 import { ActionType, VisualObject } from '../../../types';
-import { Point, Path, Size, Raster } from 'paper';
+import { Point, Path, Size, Raster, Group } from 'paper';
 import { ColorSet } from '../../../utils/color';
 
 const initialState: VisualObject[] = [];
@@ -89,14 +89,15 @@ export default (state = initialState, action: ActionType) => {
     case 'ADD_STORYLINES':
       const { strokes } = action.payload;
       strokes.forEach(stroke => {
-        const name = stroke.name;
+        const name = stroke[0].name;
+        const strokeGroup = new Group(stroke);
         if (name && !isInRenderQueue(name, newState)) {
           const visualObj: VisualObject = {
             type: 'storyline',
             mounted: true,
-            geometry: stroke
+            geometry: strokeGroup
           };
-          stroke.data = visualObj;
+          strokeGroup.data = visualObj;
           newState.push(visualObj);
         }
       });

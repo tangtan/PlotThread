@@ -1,6 +1,14 @@
 import paper, { Path, Item, Point, project } from 'paper';
-import { IHitOption, StoryLine, StoryNode, StoryName } from '../types';
+import {
+  IHitOption,
+  StoryLine,
+  StorySegment,
+  StoryNode,
+  StoryName,
+  StoryGraph
+} from '../types';
 import { BLACK } from './color';
+import { StoryStore } from './hitTest';
 
 export class BaseMouseUtil {
   startPosition: Point | null;
@@ -12,14 +20,18 @@ export class BaseMouseUtil {
   // paper hitTest option
   hitOption: IHitOption;
   // storyline hitTest
-  storyStore: StoryStore;
-  constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
+  storyStore: StoryStore | null;
+  constructor(hitOption: IHitOption) {
     this.startPosition = null;
     this.endPosition = null;
     this.selectPath = null;
     this.currPath = null;
+    this.storyStore = null;
     this.hitOption = hitOption;
-    this.storyStore = new StoryStore(nodes, names);
+  }
+
+  updateStoryStore(graph: StoryGraph) {
+    this.storyStore = new StoryStore(graph);
   }
 
   restore() {
@@ -61,10 +73,10 @@ export class BaseMouseUtil {
 }
 
 // StoryLine HitTest
-export class StoryStore {
-  nodes: StoryLine[];
+export class StoryStoreTemp {
+  nodes: StorySegment[];
   names: StoryName[];
-  constructor(nodes: StoryLine[], names: StoryName[]) {
+  constructor(nodes: StorySegment[], names: StoryName[]) {
     this.nodes = nodes;
     this.names = names;
   }

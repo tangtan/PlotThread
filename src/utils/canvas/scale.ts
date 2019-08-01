@@ -1,13 +1,17 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption, StoryLine, StoryName } from '../../types';
+import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
 import paper, { Path } from 'paper';
 import { ColorSet } from '../color';
 
 export default class ScaleUtil extends BaseMouseUtil {
   compressInfo: any[][];
-  constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
-    super(hitOption, nodes, names);
+  constructor(hitOption: IHitOption) {
+    super(hitOption);
     this.compressInfo = [];
+  }
+
+  updateStoryStore(graph: StoryGraph) {
+    super.updateStoryStore(graph);
   }
 
   down(e: paper.MouseEvent) {
@@ -22,17 +26,12 @@ export default class ScaleUtil extends BaseMouseUtil {
         const x1 = this.endPosition.x as number;
         const y0 = this.startPosition.y as number;
         const y1 = this.endPosition.y as number;
-        const res = this.storyStore.getStoryLineNameNodeRangeWithRectangle(
-          x0,
-          y0,
-          x1,
-          y1
-        );
-        if (res.length > 0) {
-          const deltaY = y1 - y0;
-          res.push(deltaY);
-          this.compressInfo.push(res);
-        }
+        const res = this.getStoryLineNameNodeRangeWithRectangle(x0, y0, x1, y1);
+        // if (res.length > 0) {
+        //   const deltaY = y1 - y0;
+        //   res.push(deltaY);
+        //   this.compressInfo.push(res);
+        // }
       }
     }
   }
@@ -51,5 +50,9 @@ export default class ScaleUtil extends BaseMouseUtil {
         this.currPath.opacity = 0.5;
       }
     }
+  }
+
+  getStoryLineNameNodeRangeWithRectangle(x0: any, y0: any, x1: any, y1: any) {
+    return [];
   }
 }

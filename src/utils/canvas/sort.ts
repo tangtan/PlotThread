@@ -1,13 +1,17 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption, StoryLine, StoryName } from '../../types';
+import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
 export default class SortUtil extends BaseMouseUtil {
   orderInfo: string[][];
-  constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
-    super(hitOption, nodes, names);
+  constructor(hitOption: IHitOption) {
+    super(hitOption);
     this.orderInfo = [];
+  }
+
+  updateStoryStore(graph: StoryGraph) {
+    super.updateStoryStore(graph);
   }
 
   down(e: paper.MouseEvent) {
@@ -21,7 +25,7 @@ export default class SortUtil extends BaseMouseUtil {
       const x = e.point.x;
       const y = e.point.y;
       if (x && y) {
-        const beforeName = this.storyStore.getStoryLineNameByPosition(x, y);
+        const beforeName = this.getStoryLineNameByPosition(x, y);
         if (beforeName && name && name !== beforeName) {
           this.orderInfo.push([beforeName, name]);
         }
@@ -45,5 +49,9 @@ export default class SortUtil extends BaseMouseUtil {
         this.currPath = path;
       }
     }
+  }
+
+  getStoryLineNameByPosition(x: any, y: any) {
+    return 'TT';
   }
 }

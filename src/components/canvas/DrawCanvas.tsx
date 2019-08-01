@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { view, project, Path, Point } from 'paper';
-import { StateType, DispatchType } from '../../types';
+import { StateType, DispatchType, PathGroup, StoryGraph } from '../../types';
 import { addStoryLines, setObject } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
@@ -30,7 +30,7 @@ const mapStateToProps = (state: StateType) => {
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
-    addStoryLines: (strokes: Path[]) => dispatch(addStoryLines(strokes)),
+    addStoryLines: (strokes: PathGroup[]) => dispatch(addStoryLines(strokes)),
     setSelectedObj: (e: paper.MouseEvent) =>
       dispatch(setObject(e.point || new Point(-100, -100)))
   };
@@ -57,11 +57,11 @@ type State = {
   storyXMLUrl: string;
   storyLayouter: any;
   storyDrawer: StoryDrawer;
-  addLineUtil: AddLineUtil | null;
-  sortUtil: SortUtil | null;
-  bendUtil: BendUtil | null;
-  moveUtil: MoveUtil | null;
-  scaleUtil: ScaleUtil | null;
+  addLineUtil: AddLineUtil;
+  sortUtil: SortUtil;
+  bendUtil: BendUtil;
+  moveUtil: MoveUtil;
+  scaleUtil: ScaleUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -71,11 +71,11 @@ class DrawCanvas extends Component<Props, State> {
       storyXMLUrl: 'xml/StarWars.xml',
       storyDrawer: new StoryDrawer(),
       storyLayouter: null,
-      addLineUtil: null,
-      sortUtil: null,
-      bendUtil: null,
-      scaleUtil: null,
-      moveUtil: null
+      addLineUtil: new AddLineUtil(hitOption),
+      sortUtil: new SortUtil(hitOption),
+      bendUtil: new BendUtil(hitOption),
+      scaleUtil: new ScaleUtil(hitOption),
+      moveUtil: new MoveUtil(hitShapeOption)
     };
   }
 
@@ -92,20 +92,23 @@ class DrawCanvas extends Component<Props, State> {
     const storyLayouter = new iStoryline();
     storyLayouter.readFile(xmlData);
     const graph = storyLayouter.layout([], [], []);
+    console.log(graph);
     storyLayouter.extent(100, 300, 1250);
-    const names = graph.names;
-    const nodes = graph.nodes;
     const strokes = this.state.storyDrawer.initGraph(graph);
+    this.updateUtils(graph);
     this.props.addStoryLines(strokes);
     this.setState({
-      storyLayouter: storyLayouter,
-      addLineUtil: new AddLineUtil(hitOption, nodes, names),
-      sortUtil: new SortUtil(hitOption, nodes, names),
-      bendUtil: new BendUtil(hitOption, nodes, names),
-      moveUtil: new MoveUtil(hitShapeOption, nodes, names),
-      scaleUtil: new ScaleUtil(hitOption, nodes, names)
+      storyLayouter: storyLayouter
     });
   }
+
+  private updateUtils = (graph: StoryGraph) => {
+    this.state.addLineUtil.updateStoryStore(graph);
+    this.state.sortUtil.updateStoryStore(graph);
+    this.state.bendUtil.updateStoryStore(graph);
+    this.state.moveUtil.updateStoryStore(graph);
+    this.state.scaleUtil.updateStoryStore(graph);
+  };
 
   private onMouseDown = (e: paper.MouseEvent) => {
     if (this.props.sortState && this.state.sortUtil) {
@@ -216,6 +219,7 @@ class DrawCanvas extends Component<Props, State> {
     );
     // scale nodes
     this.state.storyLayouter.extent(100, 300, 1250);
+    this.updateUtils(graph);
     const strokes = this.state.storyDrawer.updateGraph(graph);
     this.props.addStoryLines(strokes);
   }

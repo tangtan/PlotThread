@@ -2,7 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import VisibilityFilters from '../components/demo/VisibilityFilters';
-import { Path, Raster } from 'paper';
+import { Path, Raster, Group } from 'paper';
 
 export type ActionType = ActionType<typeof actions>;
 
@@ -56,14 +56,14 @@ export type IHitOption = {
 export type VisualObject = {
   type: string;
   mounted: boolean;
-  geometry: Path | Path.Circle | Path.Rectangle | Raster | null;
+  geometry: Path | Path.Circle | Path.Rectangle | Raster | Group | null;
 };
 
 // Storyline
 export type StoryNode = number[];
 export type StorySegment = StoryNode[];
-// TODO: export type StoryLine = StorySegment[];
-export type StoryLine = StoryNode[];
+export type StoryLine = StorySegment[];
+// export type StoryLine = StoryNode[];
 export type StoryName = string;
 export type StoryGraph = {
   names: StoryName[];
@@ -73,3 +73,4 @@ export type StoryGraph = {
   sketchNodes?: StoryLine[];
   hitTest?: any;
 };
+export type PathGroup = Path[];

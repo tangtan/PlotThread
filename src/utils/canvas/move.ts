@@ -1,16 +1,20 @@
 import { BaseMouseUtil } from '../util';
-import { IHitOption, StoryLine, StoryName } from '../../types';
+import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
 import paper, { Segment, project, Matrix } from 'paper';
 
 export default class MoveUtil extends BaseMouseUtil {
   isMoveShape: boolean;
   isMoveSegment: boolean;
   selectSegment: Segment | null;
-  constructor(hitOption: IHitOption, nodes: StoryLine[], names: StoryName[]) {
-    super(hitOption, nodes, names);
+  constructor(hitOption: IHitOption) {
+    super(hitOption);
     this.isMoveShape = false;
     this.isMoveSegment = false;
     this.selectSegment = null;
+  }
+
+  updateStoryStore(graph: StoryGraph) {
+    super.updateStoryStore(graph);
   }
 
   down(e: paper.MouseEvent) {

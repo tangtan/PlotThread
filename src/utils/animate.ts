@@ -1,10 +1,16 @@
 import { Path, Matrix, Point } from 'paper';
-import { StoryName, StoryLine, StorySegment, StoryGraph } from '../types';
+import {
+  StoryName,
+  StoryLine,
+  StorySegment,
+  StoryGraph,
+  PathGroup
+} from '../types';
 import { ColorSet } from './color';
 
 export default class StoryDrawer {
   // TODO: using a group of paths to draw storyline
-  storyStrokes: Path[];
+  storyStrokes: PathGroup[];
   names: StoryName[];
   nodes: StorySegment[];
   renderNodes: StoryLine[];
@@ -30,9 +36,30 @@ export default class StoryDrawer {
   }
 
   // TODO: using Storyline[]
-  draw() {
-    this.storyStrokes = this.nodes.map((line: StorySegment, i: number) =>
-      this.drawStorySegment(this.names[i], line)
+  draw(type = 'render') {
+    let nodes = this.renderNodes; // default case
+    switch (type) {
+      case 'render':
+        nodes = this.renderNodes;
+        break;
+      case 'smooth':
+        nodes = this.smoothNodes;
+        break;
+      case 'sketch':
+        nodes = this.sketchNodes;
+        break;
+      default:
+        nodes = this.renderNodes;
+        break;
+    }
+    this.storyStrokes = nodes.map((storyline, i) =>
+      this.drawStoryline(this.names[i], storyline)
+    );
+  }
+
+  drawStoryline(name: StoryName, storyline: StoryLine) {
+    return storyline.map(storySegment =>
+      this.drawStorySegment(name, storySegment)
     );
   }
 
@@ -80,14 +107,36 @@ export default class StoryDrawer {
     return this.storyStrokes;
   }
 
-  update() {
-    this.storyStrokes = this.nodes.map((line, i) =>
-      this.updateStorySegment(this.names[i], line)
+  update(type = 'render') {
+    let nodes = this.renderNodes; // default case
+    switch (type) {
+      case 'render':
+        nodes = this.renderNodes;
+        break;
+      case 'smooth':
+        nodes = this.smoothNodes;
+        break;
+      case 'sketch':
+        nodes = this.sketchNodes;
+        break;
+      default:
+        nodes = this.renderNodes;
+        break;
+    }
+    this.storyStrokes = nodes.map((storyline, i) =>
+      this.updateStoryline(this.names[i], storyline)
+    );
+    return this.storyStrokes;
+  }
+
+  updateStoryline(name: StoryName, storyline: StoryLine) {
+    return storyline.map((storySegment, i) =>
+      this.updateStorySegment(name, i, storySegment)
     );
   }
 
-  updateStorySegment(name: StoryName, line: StorySegment) {
-    const path = this.getStoryStrokeByName(name);
+  updateStorySegment(name: StoryName, index: number, line: StorySegment) {
+    const path = this.getStoryStrokeByName(name, index);
     if (path) {
       const newPathStr = this.getSmoothPathStr(line);
       const pathTo = new Path(newPathStr);
@@ -102,10 +151,13 @@ export default class StoryDrawer {
     return path;
   }
 
-  getStoryStrokeByName(name: StoryName): Path | null {
+  getStoryStrokeByName(name: StoryName, index: number): Path | null {
     for (let i = 0, len = this.storyStrokes.length; i < len; i++) {
       const stroke = this.storyStrokes[i];
-      if (stroke.name === name) return stroke;
+      const strokeName = stroke[0].name;
+      if (strokeName === name && index < stroke.length) {
+        return stroke[index];
+      }
     }
     return null;
   }

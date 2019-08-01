@@ -1,5 +1,5 @@
 import { createAction, action } from 'typesafe-actions';
-import { VisualObject } from '../types';
+import { PathGroup } from '../types';
 import { Path, Color, Point } from 'paper';
 
 let nextTodoId: number = 0;
@@ -52,5 +52,5 @@ export const addVisualArray = createAction(
 
 export const addStoryLines = createAction(
   'ADD_STORYLINES',
-  action => (strokes: Path[]) => action({ strokes: strokes })
+  action => (strokes: PathGroup[]) => action({ strokes: strokes })
 );
