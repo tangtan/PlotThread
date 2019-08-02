@@ -60,4 +60,10 @@ export class StoryStore {
   getCharacters(x: number | string, y: number | string) {
     return this.hitTest.getCharacters(x, y);
   }
+  getCharacterX(name: string, time: number) {
+    return this.hitTest.getCharacterX(name, time);
+  }
+  getCharacterY(name: string, time: number) {
+    return this.hitTest.getCharacterY(name, time);
+  }
 }

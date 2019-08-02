@@ -1,8 +1,8 @@
-import { BaseMouseUtil } from '../util';
-import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
+import { StoryUtil } from '../util';
+import { IHitOption, StoryGraph } from '../../types';
 import paper, { Segment, project, Matrix } from 'paper';
 
-export default class MoveUtil extends BaseMouseUtil {
+export default class MoveUtil extends StoryUtil {
   isMoveShape: boolean;
   isMoveSegment: boolean;
   selectSegment: Segment | null;

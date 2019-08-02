@@ -1,9 +1,9 @@
-import { BaseMouseUtil } from '../util';
+import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
-export default class SortUtil extends BaseMouseUtil {
+export default class SortUtil extends StoryUtil {
   orderInfo: string[][];
   constructor(hitOption: IHitOption) {
     super(hitOption);

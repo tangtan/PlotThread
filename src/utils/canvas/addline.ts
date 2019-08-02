@@ -1,9 +1,9 @@
-import { BaseMouseUtil } from '../util';
+import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Color } from 'paper';
 import { ColorSet } from '../color';
 
-export default class AddLineUtil extends BaseMouseUtil {
+export default class AddLineUtil extends StoryUtil {
   characterInfo: any[][];
   strokeWidth: number;
   strokeColor: Color;
@@ -26,14 +26,9 @@ export default class AddLineUtil extends BaseMouseUtil {
   // TODO: add name
   up(e: paper.MouseEvent) {
     super.mouseUp(e);
-    if (this.storyStore && this.startPosition && this.endPosition) {
-      const startX = this.startPosition.x as number;
-      const startY = this.startPosition.y as number;
-      const startTime = this.storyStore.getStoryTimeSpan(startX, startY)[0];
-      const endX = this.endPosition.x as number;
-      const endY = this.endPosition.y as number;
-      const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[1];
-      console.log(startTime, endTime);
+    const startTime = this.getStartTime();
+    const endTime = this.getEndTime();
+    if (startTime > -1 && endTime > -1) {
       const id = Math.ceil(Math.random() * 100);
       this.characterInfo.push([`storyline-${id}`, startTime, endTime]);
     }

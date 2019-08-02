@@ -1,9 +1,9 @@
-import { BaseMouseUtil } from '../util';
+import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
-import paper, { Path, Point, project } from 'paper';
+import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
-export default class BendUtil extends BaseMouseUtil {
+export default class BendUtil extends StoryUtil {
   straightenInfo: any[][];
   constructor(hitOption: IHitOption) {
     super(hitOption);
@@ -21,37 +21,24 @@ export default class BendUtil extends BaseMouseUtil {
   }
 
   up(e: paper.MouseEvent) {
-    if (!this.selectPath && project && e.point) {
-      const hitRes = project.hitTest(e.point, this.hitOption);
-      if (hitRes) {
-        this.selectPath = hitRes.item;
-        if (this.selectPath) {
-          this.selectPath.strokeColor = ColorSet.red;
-        }
+    if (this.selectPath) {
+      super.mouseUp(e);
+      const name = this.selectPath.name;
+      const startTime = this.getStartTime();
+      const endTime = this.getEndTime();
+      if (startTime > -1 && endTime > -1) {
+        this.straightenInfo.push([name, startTime, endTime]);
+        this.selectPath.selected = false;
+        this.selectPath = null;
       }
     } else {
-      super.mouseUp(e);
-      if (
-        this.selectPath &&
-        this.endPosition &&
-        this.startPosition &&
-        this.storyStore
-      ) {
-        const name = this.selectPath.name;
-        const startX = this.startPosition.x as number;
-        const startY = this.startPosition.y as number;
-        const startTime = this.storyStore.getStoryTimeSpan(startX, startY);
-        const endX = this.endPosition.x as number;
-        const endY = this.endPosition.y as number;
-        const endTime = this.storyStore.getStoryTimeSpan(endX, endY);
-        this.straightenInfo.push([name, startTime, endTime]);
-        this.selectPath.strokeColor = ColorSet.black;
-      }
+      super.mouseDown(e);
     }
   }
 
   drag(e: paper.MouseEvent) {
     if (this.selectPath) {
+      this.selectPath.selected = true;
       super.mouseDrag(e);
       if (this.startPosition && this.endPosition) {
         this.currPath = new Path.Line(

@@ -1,9 +1,9 @@
-import { BaseMouseUtil } from '../util';
-import { IHitOption, StorySegment, StoryName, StoryGraph } from '../../types';
+import { StoryUtil } from '../util';
+import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
-export default class GroupUtil extends BaseMouseUtil {
+export default class GroupUtil extends StoryUtil {
   groupInfo: any[][];
   strokeWidth: number;
   circleRadius: number;
@@ -36,6 +36,9 @@ export default class GroupUtil extends BaseMouseUtil {
       const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[1];
       const minY = Math.min(startY, endY);
       const maxY = Math.max(startY, endY);
+      const name = this.storyStore.graph.names[0];
+      const nameY = this.storyStore.getCharacterY(name, startTime);
+      console.log(minY, nameY, maxY, name);
     }
   }
 
