@@ -21,6 +21,7 @@ const mapStateToProps = (state: StateType) => {
     renderQueue: state.renderQueue,
     selectedObj: state.selectedObj,
     addLineState: getToolState(state, 'AddLine'),
+    groupState: getToolState(state, 'Group'),
     scaleState: getToolState(state, 'Scale'),
     sortState: getToolState(state, 'Sort'),
     bendState: getToolState(state, 'Bend'),
@@ -58,6 +59,7 @@ type State = {
   storyLayouter: any;
   storyDrawer: StoryDrawer;
   addLineUtil: AddLineUtil;
+  groupUtil: GroupUtil;
   sortUtil: SortUtil;
   bendUtil: BendUtil;
   moveUtil: MoveUtil;
@@ -72,6 +74,7 @@ class DrawCanvas extends Component<Props, State> {
       storyLayouter: null,
       storyDrawer: new StoryDrawer(),
       addLineUtil: new AddLineUtil(hitOption),
+      groupUtil: new GroupUtil(hitOption),
       sortUtil: new SortUtil(hitOption),
       bendUtil: new BendUtil(hitOption),
       scaleUtil: new ScaleUtil(hitOption),
@@ -119,6 +122,7 @@ class DrawCanvas extends Component<Props, State> {
 
   private updateUtils = (graph: StoryGraph) => {
     this.state.addLineUtil.updateStoryStore(graph);
+    this.state.groupUtil.updateStoryStore(graph);
     this.state.sortUtil.updateStoryStore(graph);
     this.state.bendUtil.updateStoryStore(graph);
     this.state.moveUtil.updateStoryStore(graph);
@@ -133,7 +137,7 @@ class DrawCanvas extends Component<Props, State> {
     characterInfo.forEach(info => {
       const [name, startTime, endTime] = info;
       if (nameList.indexOf(name) === -1 && this.state.storyLayouter) {
-        this.state.storyLayouter.smartAddLine(name, startTime, endTime);
+        this.state.storyLayouter.addCharacter(name, startTime, endTime);
       }
     });
   };
@@ -141,6 +145,9 @@ class DrawCanvas extends Component<Props, State> {
   private onMouseDown = (e: paper.MouseEvent) => {
     if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.down(e);
+    }
+    if (this.props.groupState && this.state.groupUtil) {
+      this.state.groupUtil.down(e);
     }
     if (this.props.scaleState && this.state.scaleUtil) {
       this.state.scaleUtil.down(e);
@@ -157,9 +164,8 @@ class DrawCanvas extends Component<Props, State> {
   };
 
   private onMouseUp = (e: paper.MouseEvent) => {
-    if (this.props.sortState && this.state.sortUtil) {
-      this.state.sortUtil.up(e);
-      this.refresh();
+    if (this.props.groupState && this.state.groupUtil) {
+      this.state.groupUtil.up(e);
     }
     if (this.props.scaleState && this.state.scaleUtil) {
       this.state.scaleUtil.up(e);
@@ -175,6 +181,10 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.addLineState && this.state.addLineUtil) {
       this.state.addLineUtil.up(e);
       this.addCharacter();
+      this.refresh();
+    }
+    if (this.props.sortState && this.state.sortUtil) {
+      this.state.sortUtil.up(e);
       this.refresh();
     }
   };
@@ -206,6 +216,9 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.addLineState && this.state.addLineUtil) {
       this.state.addLineUtil.drag(e);
+    }
+    if (this.props.groupState && this.state.groupUtil) {
+      this.state.groupUtil.drag(e);
     }
   };
 
