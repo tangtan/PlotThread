@@ -142,6 +142,14 @@ class DrawCanvas extends Component<Props, State> {
     });
   };
 
+  private addGroup = () => {
+    const groupInfo = this.state.groupUtil.groupInfo;
+    groupInfo.forEach(info => {
+      const [charArr, sTime, eTime] = info;
+      this.state.storyLayouter.changeSession(charArr, sTime, eTime);
+    });
+  };
+
   private onMouseDown = (e: paper.MouseEvent) => {
     if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.down(e);
@@ -166,6 +174,8 @@ class DrawCanvas extends Component<Props, State> {
   private onMouseUp = (e: paper.MouseEvent) => {
     if (this.props.groupState && this.state.groupUtil) {
       this.state.groupUtil.up(e);
+      this.addGroup();
+      this.refresh();
     }
     if (this.props.scaleState && this.state.scaleUtil) {
       this.state.scaleUtil.up(e);

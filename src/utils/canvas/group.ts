@@ -27,19 +27,42 @@ export default class GroupUtil extends StoryUtil {
       return;
     }
     super.mouseUp(e);
-    if (this.endPosition && this.startPosition && this.storyStore) {
-      const startX = this.startPosition.x as number;
-      const startY = this.startPosition.y as number;
-      const startTime = this.storyStore.getStoryTimeSpan(startX, startY)[0];
-      const endX = this.endPosition.x as number;
-      const endY = this.endPosition.y as number;
-      const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[1];
-      const minY = Math.min(startY, endY);
-      const maxY = Math.max(startY, endY);
-      const name = this.storyStore.graph.names[0];
-      const nameY = this.storyStore.getCharacterY(name, startTime);
-      console.log(minY, nameY, maxY, name);
+    if (this.storyStore) {
+      const sTime = this.getStartTime();
+      const eTime = this.getEndTime();
+      if (sTime > -1 && eTime > -1) {
+        const charArr = this.storyStore.names.filter(name =>
+          this.isInCurrPath(name, sTime, eTime)
+        );
+        this.groupInfo.push([charArr, sTime, eTime]);
+        console.log(charArr, sTime, eTime);
+      }
     }
+  }
+
+  isInCurrPath(name: string, sTime: number, eTime: number) {
+    let flag = false;
+    if (sTime < 0) {
+      return flag;
+    }
+    if (eTime < 0) {
+      return flag;
+    }
+    if (this.endPosition && this.startPosition && this.storyStore) {
+      const startY = this.startPosition.y as number;
+      const endY = this.endPosition.y as number;
+      const storyStore = this.storyStore;
+      const sTmpY = storyStore.getCharacterY(name, sTime);
+      const eTmpY = storyStore.getCharacterY(name, eTime);
+      console.log(name, sTmpY, eTmpY, startY, endY);
+      if ((sTmpY - startY) * (sTmpY - endY) < 0) {
+        flag = true;
+      }
+      if ((eTmpY - startY) * (eTmpY - endY) < 0) {
+        flag = true;
+      }
+    }
+    return flag;
   }
 
   drag(e: paper.MouseEvent) {

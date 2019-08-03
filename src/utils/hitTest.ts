@@ -1,11 +1,16 @@
-import { StoryGraph } from '../types';
+import { StoryGraph, StoryName } from '../types';
 
 export class StoryStore {
   graph: StoryGraph;
+  names: StoryName[];
   hitTest: any;
   constructor(graph: StoryGraph) {
     this.graph = graph;
+    this.names = graph.names;
     this.hitTest = graph.hitTest;
+  }
+  getCharactersNum() {
+    return this.names.length;
   }
   getStoryNodeX(
     storyNodeID: string,
