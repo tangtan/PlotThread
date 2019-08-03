@@ -1,4 +1,4 @@
-import { BaseMouseUtil, StoryUtil } from '../util';
+import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point, Color } from 'paper';
 import { ColorSet } from '../color';
