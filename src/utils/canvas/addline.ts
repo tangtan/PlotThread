@@ -20,7 +20,7 @@ export default class AddLineUtil extends StoryUtil {
 
   down(e: paper.MouseEvent) {
     super.mouseDown(e);
-    this.createPath();
+    this.createCurrPath();
   }
 
   // TODO: add name
@@ -41,7 +41,7 @@ export default class AddLineUtil extends StoryUtil {
     }
   }
 
-  createPath() {
+  createCurrPath() {
     if (this.currPath) {
       this.currPath.remove();
     }

@@ -49,11 +49,11 @@ export default class ScaleUtil extends StoryUtil {
     }
     super.mouseDrag(e);
     if (this.startPosition && this.endPosition) {
-      this.createPath(this.startPosition, this.endPosition);
+      this.createCurrPath(this.startPosition, this.endPosition);
     }
   }
 
-  createPath(sPoint: Point, ePoint: Point) {
+  createCurrPath(sPoint: Point, ePoint: Point) {
     this.currPath = new Path.Rectangle(sPoint, ePoint);
     this.currPath.strokeColor = this.strokeColor;
     this.currPath.strokeWidth = this.strokeWidth;

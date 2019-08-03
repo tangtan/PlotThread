@@ -52,7 +52,7 @@ export default class GroupUtil extends StoryUtil {
         ((this.startPosition.x || 0) + (this.endPosition.x || 0)) / 2;
       const circleY =
         ((this.startPosition.y || 0) + (this.endPosition.y || 0)) / 2;
-      this.createPath(circleX, circleY);
+      this.createCurrPath(circleX, circleY);
       if (this.currPath) {
         const deltaX = (this.endPosition.x || 2) - (this.startPosition.x || 0);
         const deltaY = (this.endPosition.y || 2) - (this.startPosition.y || 0);
@@ -63,7 +63,7 @@ export default class GroupUtil extends StoryUtil {
     }
   }
 
-  createPath(mouseX: number, mouseY: number) {
+  createCurrPath(mouseX: number, mouseY: number) {
     const circleR = this.circleRadius;
     const circleX = mouseX + circleR;
     const circleY = mouseY + circleR;
