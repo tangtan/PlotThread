@@ -11,6 +11,7 @@ import { ColorSet } from './color';
 export default class StoryDrawer {
   // TODO: using a group of paths to draw storyline
   storyStrokes: PathGroup[];
+  type: string;
   names: StoryName[];
   nodes: StorySegment[];
   renderNodes: StoryLine[];
@@ -18,6 +19,7 @@ export default class StoryDrawer {
   sketchNodes: StoryLine[];
   constructor() {
     this.storyStrokes = [];
+    this.type = 'sketch';
     this.names = [];
     this.nodes = [];
     this.renderNodes = [];
@@ -26,12 +28,13 @@ export default class StoryDrawer {
   }
 
   initGraph(graph: StoryGraph) {
+    let type = this.type;
     this.names = graph.names;
     this.nodes = graph.nodes;
     this.renderNodes = graph.renderNodes || [];
     this.smoothNodes = graph.smoothNodes || [];
     this.sketchNodes = graph.sketchNodes || [];
-    this.draw();
+    this.draw(type);
     return this.storyStrokes;
   }
 
@@ -53,20 +56,23 @@ export default class StoryDrawer {
         break;
     }
     this.storyStrokes = nodes.map((storyline, i) =>
-      this.drawStoryline(this.names[i], storyline)
+      this.drawStoryline(this.names[i], storyline, type)
     );
   }
 
-  drawStoryline(name: StoryName, storyline: StoryLine) {
+  drawStoryline(name: StoryName, storyline: StoryLine, type: string) {
     return storyline.map(storySegment =>
-      this.drawStorySegment(name, storySegment)
+      this.drawStorySegment(name, storySegment, type)
     );
   }
 
   // TODO: draw with a group of paths
-  drawStorySegment(name: StoryName, line: StorySegment) {
-    const pathStr = this.getSmoothPathStr(line);
+  drawStorySegment(name: StoryName, line: StorySegment, type: string) {
+    const pathStr = DrawUtil.getPathStr(type, line);
     const path = new Path(pathStr);
+    if (type === 'sketch') {
+      path.simplify();
+    }
     path.name = name;
     path.strokeCap = 'round';
     path.strokeJoin = 'round';
@@ -75,34 +81,14 @@ export default class StoryDrawer {
     return path;
   }
 
-  getSmoothPathStr(line: StorySegment) {
-    let points = line;
-    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
-    let i, len;
-    for (i = 1, len = points.length; i < len - 1; i += 2) {
-      const rPoint = points[i];
-      const lPoint = points[i + 1];
-      const middleX = (rPoint[0] + lPoint[0]) / 2;
-      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
-      if (rPoint[1] !== lPoint[1]) {
-        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${
-          lPoint[0]
-        } ${lPoint[1]} `;
-      } else {
-        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
-      }
-    }
-    pathStr += `L ${points[i][0]} ${points[i][1]}`;
-    return pathStr;
-  }
-
   updateGraph(graph: StoryGraph) {
+    let type = this.type;
     this.names = graph.names;
     this.nodes = graph.nodes;
     this.renderNodes = graph.renderNodes || [];
     this.smoothNodes = graph.smoothNodes || [];
     this.sketchNodes = graph.sketchNodes || [];
-    this.update();
+    this.update(type);
     // console.log(project);
     return this.storyStrokes;
   }
@@ -124,27 +110,35 @@ export default class StoryDrawer {
         break;
     }
     this.storyStrokes = nodes.map((storyline, i) =>
-      this.updateStoryline(this.names[i], storyline)
+      this.updateStoryline(this.names[i], storyline, type)
     );
     return this.storyStrokes;
   }
 
-  updateStoryline(name: StoryName, storyline: StoryLine) {
+  updateStoryline(name: StoryName, storyline: StoryLine, type: string) {
     return storyline.map((storySegment, i) =>
-      this.updateStorySegment(name, i, storySegment)
+      this.updateStorySegment(name, i, storySegment, type)
     );
   }
 
-  updateStorySegment(name: StoryName, index: number, line: StorySegment) {
+  updateStorySegment(
+    name: StoryName,
+    index: number,
+    line: StorySegment,
+    type: string
+  ) {
     const path = this.getStoryStrokeByName(name, index);
     if (path) {
-      const newPathStr = this.getSmoothPathStr(line);
+      const newPathStr = DrawUtil.getPathStr(type, line);
       const pathTo = new Path(newPathStr);
+      if (type === 'sketch') {
+        pathTo.simplify();
+      }
       TweenUtil.TweenBetweenTwoPath(path, pathTo);
       // IMPORTANT: remove temp animation paths
       pathTo.remove();
     } else {
-      const newPath = this.drawStorySegment(name, line);
+      const newPath = this.drawStorySegment(name, line, type);
       TweenUtil.TweenFromFirstSegment(newPath);
       return newPath;
     }
@@ -160,6 +154,47 @@ export default class StoryDrawer {
       }
     }
     return null;
+  }
+}
+
+class DrawUtil {
+  constructor() {}
+
+  static getPathStr(type: string, line: StorySegment) {
+    return type === 'sketch'
+      ? this.getSketchPathStr(line)
+      : this.getSmoothPathStr(line);
+  }
+
+  static getSketchPathStr(line: StorySegment) {
+    let points = line;
+    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
+    let i, len;
+    for (i = 1, len = points.length; i < len; i++) {
+      pathStr += `L ${points[i][0]} ${points[i][1]}`;
+    }
+    return pathStr;
+  }
+
+  static getSmoothPathStr(line: StorySegment) {
+    let points = line;
+    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
+    let i, len;
+    for (i = 1, len = points.length; i < len - 1; i += 2) {
+      const rPoint = points[i];
+      const lPoint = points[i + 1];
+      const middleX = (rPoint[0] + lPoint[0]) / 2;
+      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
+      if (rPoint[1] !== lPoint[1]) {
+        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${
+          lPoint[0]
+        } ${lPoint[1]} `;
+      } else {
+        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
+      }
+    }
+    pathStr += `L ${points[i][0]} ${points[i][1]}`;
+    return pathStr;
   }
 }
 
