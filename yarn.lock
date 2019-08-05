@@ -4552,6 +4552,7 @@ etag@~1.8.1:
 eve@~0.5.1:
   version "0.5.4"
   resolved "https://registry.npm.taobao.org/eve/download/eve-0.5.4.tgz#67d080b9725291d7e389e34c26860dd97f1debaa"
+  integrity sha1-Z9CAuXJSkdfjieNMJoYN2X8d66o=
 
 event-emitter@~0.3.5:
   version "0.3.5"
@@ -10168,6 +10169,7 @@ snapdragon@^0.8.1:
 snapsvg@^0.5.1:
   version "0.5.1"
   resolved "https://registry.npm.taobao.org/snapsvg/download/snapsvg-0.5.1.tgz#0caf52c79189a290746fc446cc5e863f6bdddfe3"
+  integrity sha1-DK9Sx5GJopB0b8RGzF6GP2vd3+M=
   dependencies:
     eve "~0.5.1"
 

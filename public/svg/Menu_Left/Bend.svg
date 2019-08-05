@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="89px" height="89px" viewBox="0 0 89 89" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Bend</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Bend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 1.000000)">
+            <rect id="矩形" x="0" y="0" width="88" height="88"></rect>
+            <path d="M15.0685129,44.610735 C20.569539,44.610735 23.3827895,44.610735 27.2238904,44.610735 C32.9855416,44.610735 35.6781961,61.6464919 44.4917829,61.6464919 C53.3053696,61.6464919 54.0189564,44.610735 62.5063441,44.610735 C68.1646026,44.610735 70.7289635,44.610735 73.9150529,44.610735" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M14.8804017,29.4772727 C18.0963929,29.4772727 22.7674564,29.4772727 28.8935923,29.4772727 C38.0827959,29.4772727 37.8279265,45.6443659 44.677006,45.6443659 C51.5260856,45.6443659 49.9274296,29.4772727 60.4604199,29.4772727 C67.4824133,29.4772727 71.9045872,29.4772727 73.7269417,29.4772727" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+        </g>
+    </g>
+</svg>

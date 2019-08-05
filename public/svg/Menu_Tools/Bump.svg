@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="84px" height="56px" viewBox="0 0 84 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
-    <title>Bump</title>
+    <title>Useful</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Bump" transform="translate(-2.000000, -15.000000)" fill-rule="nonzero">
-            <rect id="矩形" x="0" y="0" width="88" height="88"></rect>
-            <g id="分组-22-copy" transform="translate(4.000000, 17.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="4">
-                <path d="M0,42.6793263 C5.30650985,42.6793263 5.51680878,28 15.6949082,28 C25.8730077,28 31.3458804,52 40.6651791,52 C49.9844777,52 53.3075467,28 61.9721953,28 C70.6368439,28 73.1764666,42.6793263 80,42.6793263" id="路径-3"></path>
-                <path d="M0,31.3495397 C5.30650985,31.3495397 5.51680878,0 15.6949082,3.91337127e-14 C25.8730077,7.82674254e-14 31.3458804,46 40.6651791,46 C49.9844777,46 53.3075467,0 61.9721953,0 C70.6368439,0 73.1764666,31.3495397 80,31.3495397" id="路径-3" transform="translate(40.000000, 23.000000) scale(1, -1) translate(-40.000000, -23.000000) "></path>
+    <g id="Useful" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bump" transform="translate(8.000000, 8.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="72" height="72"></rect>
+            <g id="分组-22-copy" transform="translate(3.272727, 13.909091)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="4">
+                <path d="M0,34.9194488 C4.34168988,34.9194488 4.51375264,22.9090909 12.8412885,22.9090909 C21.1688244,22.9090909 25.6466294,42.5454545 33.2715101,42.5454545 C40.8963909,42.5454545 43.6152655,22.9090909 50.7045235,22.9090909 C57.7937814,22.9090909 59.8716545,34.9194488 65.4545455,34.9194488" id="路径-3"></path>
+                <path d="M0,25.6496234 C4.34168988,25.6496234 4.51375264,0 12.8412885,3.20184922e-14 C21.1688244,6.40369844e-14 25.6466294,37.6363636 33.2715101,37.6363636 C40.8963909,37.6363636 43.6152655,0 50.7045235,0 C57.7937814,0 59.8716545,25.6496234 65.4545455,25.6496234" id="路径-3" transform="translate(32.727273, 18.818182) scale(1, -1) translate(-32.727273, -18.818182) "></path>
             </g>
         </g>
     </g>

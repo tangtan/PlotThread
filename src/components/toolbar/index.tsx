@@ -57,7 +57,7 @@ export default class ToolBar extends Component<Props, State> {
         ToolListWrapperRight = this.props.Hidden ? -65 : this.props.Right;
         break;
       case 'top':
-        width = `calc(100vw - ${this.props.Left}px)`;
+        width = `calc(150vw - ${this.props.Left}px)`;
         height = '60px';
         ToolListWrapperTop = this.props.Hidden ? -65 : this.props.Top;
         break;
@@ -94,16 +94,20 @@ export default class ToolBar extends Component<Props, State> {
       bottom: ${ToolListWrapperBottom}px;
       width: ${width === '60px' ? width : ''};
       height: ${height === '60px' ? height : ''};
-      padding: 5px;
+      padding: ${this.props.Direction === 'vertical'
+        ? '20px 5px 20px 5px'
+        : '4px 20px 4px 20px'};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
         ? 'row'
         : 'column'};
       align-items: 'center';
       justify-content: 'space-between';
-      background: #111;
+      background: #535663;
       opacity: 0.7;
-      border-radius: 5px;
+      border-radius: ${this.props.Direction === 'vertical'
+        ? '0 5px 5px 0'
+        : '0 0 5px 5px'};
     `;
     const toolList = this.props.Tools.map((tool: ITool, i: number) => (
       <ToolItem key={`tool-item-${i}`} toolInfo={tool} />

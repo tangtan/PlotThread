@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="58px" height="58px" viewBox="0 0 58 58" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="89px" height="89px" viewBox="0 0 89 89" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
     <title>Save</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Save" transform="translate(-16.000000, -15.000000)" fill-rule="nonzero">
-            <rect id="矩形-copy-45" x="0" y="0" width="88" height="88"></rect>
-            <path d="M71.828,34 L55,17.172 C54.2500291,16.4218025 53.2327793,16.0002265 52.172,16 L21,16 C18.790861,16 17,17.790861 17,20 L17,68 C17,70.209139 18.790861,72 21,72 L69,72 C71.209139,72 73,70.209139 73,68 L73,36.828 C72.9997735,35.7672207 72.5781975,34.7499709 71.828,34 Z M29,20 L32,20 L32,30 L29,30 L29,20 Z M36,20 L45,20 L45,30 L36,30 L36,20 Z M29,68 L29,56 L61,56 L61,68 L29,68 Z M69,68 L65,68 L65,54 C65,52.8954305 64.1045695,52 63,52 L27,52 C25.8954305,52 25,52.8954305 25,54 L25,68 L21,68 L21,20 L25,20 L25,32 C25,33.1045695 25.8954305,34 27,34 L47,34 C48.1045695,34 49,33.1045695 49,32 L49,20 L52.172,20 L69,36.828 L69,68 Z" id="形状" stroke="#FFFFFF" fill="#FFFFFF"></path>
+    <g id="Save" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon_baocun" transform="translate(17.000000, 17.000000)" fill="#FFFFFF" fill-rule="nonzero" stroke="#FFFFFF">
+            <path d="M54.828,18 L38,1.172 C37.2500291,0.421802501 36.2327793,0.000226549622 35.172,0 L4,0 C1.790861,-8.8817842e-16 0,1.790861 0,4 L0,52 C0,54.209139 1.790861,56 4,56 L52,56 C54.209139,56 56,54.209139 56,52 L56,20.828 C55.9997735,19.7672207 55.5781975,18.7499709 54.828,18 Z M12,4 L15,4 L15,14 L12,14 L12,4 Z M19,4 L28,4 L28,14 L19,14 L19,4 Z M12,52 L12,40 L44,40 L44,52 L12,52 Z M52,52 L48,52 L48,38 C48,36.8954305 47.1045695,36 46,36 L10,36 C8.8954305,36 8,36.8954305 8,38 L8,52 L4,52 L4,4 L8,4 L8,16 C8,17.1045695 8.8954305,18 10,18 L30,18 C31.1045695,18 32,17.1045695 32,16 L32,4 L35.172,4 L52,20.828 L52,52 Z" id="形状"></path>
         </g>
     </g>
 </svg>

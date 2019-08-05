@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="85px" height="50px" viewBox="0 0 85 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
-    <title>Bend</title>
+    <title>Useful</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Bend" transform="translate(-2.000000, -25.000000)" fill-rule="nonzero">
-            <rect id="矩形" x="0" y="0" width="88" height="88"></rect>
-            <path d="M4.78698725,43.5106383 C12.2318436,43.5106383 18.5534637,43.5106383 23.7518473,43.5106383 C31.5494227,43.5106383 33.9099417,72.4698756 44.6071977,72.4698756 C55.3044538,72.4698756 54.9865861,43.5106383 66.473058,43.5106383 C74.130706,43.5106383 80.1154894,43.5106383 84.4274082,43.5106383" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
-            <path d="M4.57259182,27 C8.92497852,27 15.2465985,27 23.5374519,27 C35.9737319,27 37.2189233,54.8672029 44.8980572,54.8672029 C52.5771912,54.8672029 52.0037587,27 66.2586626,27 C75.7619319,27 81.7467153,27 84.2130128,27" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+    <g id="Useful" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bend" transform="translate(9.000000, 9.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="70" height="70"></rect>
+            <path d="M3.80783076,34.610735 C9.72987562,34.610735 14.758437,34.610735 18.8935149,34.610735 C25.0961317,34.610735 26.9738172,57.6464919 35.4829982,57.6464919 C43.9921791,57.6464919 43.7393299,34.610735 52.8762962,34.610735 C58.967607,34.610735 63.7282302,34.610735 67.1581656,34.610735" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M3.63728895,21.4772727 C7.09941473,21.4772727 12.1279761,21.4772727 18.7229731,21.4772727 C28.6154685,21.4772727 29.6059617,43.6443659 35.7143637,43.6443659 C41.8227657,43.6443659 41.3666262,21.4772727 52.7057544,21.4772727 C60.2651731,21.4772727 65.0257962,21.4772727 66.9876238,21.4772727" id="路径-3" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
         </g>
     </g>
 </svg>

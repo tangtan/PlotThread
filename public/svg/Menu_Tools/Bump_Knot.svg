@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="64px" height="26px" viewBox="0 0 64 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
-    <title>Bump_Knot</title>
+    <title>Useful Copy 4</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Bump_Knot" transform="translate(-1.000000, -17.000000)">
-            <rect id="矩形" fill-rule="nonzero" x="0" y="0" width="64" height="64"></rect>
-            <g id="分组-34" transform="translate(3.000000, 19.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="4">
-                <path d="M0,4.44029396 C21.0807162,3.12383148 32.4754268,5.28490831 34.1841162,10.923525 C36.7471541,19.3814469 25.8462895,25.3557171 21.2870581,18.9331046 C16.7278188,12.510492 21.6019983,5.16955949 27.3583396,3.6 C33.1146809,2.03044121 43.3162723,2.87073516 54.7166792,2.94259308" id="Stroke-1"></path>
-                <path d="M0,21.4341553 L5.71464176,21.4341018 C26.4591188,21.4462863 38.7096798,19.3834632 40.9488636,11.3106908 C43.4077962,2.44567356 32.1595127,-2.75746187 27.6002813,3.97160349 C23.041042,10.7006602 28.0552389,17.7390132 33.8115802,19.3834632 C39.5679216,21.0279126 48.9509366,21.4341018 59.267271,21.4341553" id="Stroke-1"></path>
+    <g id="Useful-Copy-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bump_Knot" transform="translate(10.000000, 10.000000)">
+            <rect id="矩形" fill-rule="nonzero" x="0" y="0" width="68" height="68"></rect>
+            <g id="分组-34" transform="translate(3.187500, 20.187500)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="4">
+                <path d="M0,4.71781233 C22.3982609,3.31907095 34.505141,5.61521508 36.3206234,11.6062453 C39.0438513,20.5927873 27.4616826,26.9404495 22.6174993,20.1164236 C17.7733075,13.2923978 22.9521232,5.49265696 29.0682358,3.825 C35.1843485,2.15734378 46.0235393,3.05015611 58.1364717,3.12650515" id="Stroke-1"></path>
+                <path d="M0,22.77379 L6.07180687,22.7737331 C28.1128137,22.7866792 41.1290348,20.5949296 43.5081676,12.0176089 C46.1207835,2.59852816 34.1694822,-2.92980324 29.3252989,4.21982871 C24.4811071,11.3694515 29.8086914,18.8477015 35.924804,20.5949296 C42.0409167,22.3421572 52.0103702,22.7737331 62.9714754,22.77379" id="Stroke-1"></path>
             </g>
         </g>
     </g>

@@ -1,25 +1,27 @@
 import { css } from 'styled-components';
 
 export const container = css`
-  border: 20px solid #ecd3ee;
+  border: none;
 `;
 
 export const center = css`
-  background: #ecd3ee;
+  background: white;
   &:not(:empty):hover {
     cursor: pointer;
   }
   > svg {
     position: relative;
-    top: calc(50% - 20px);
-    left: calc(50% - 20px);
+    bottom: calc(50% - 20px);
+    right: calc(50% - 20px);
   }
 `;
 
 export const slice = css`
   cursor: pointer;
   color: grey;
-  background: radial-gradient(transparent 30px, #eee3ef 30px);
+  opacity: 0.78;
+  background: #535663;
+  box-shadow: 0 2px 7px 0 rgba(131, 131, 131, 0.5);
   &[filled='true'] {
     color: black;
   }

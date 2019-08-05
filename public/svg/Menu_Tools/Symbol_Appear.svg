@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="55px" height="55px" viewBox="0 0 55 55" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
-    <title>Symbol_Appear</title>
+    <title>Useful</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Symbol_Appear" transform="translate(28.000000, 26.000000) scale(-1, 1) rotate(-270.000000) translate(-28.000000, -26.000000) translate(-4.000000, -6.000000)" fill-rule="nonzero">
-            <rect id="矩形" x="0" y="0" width="64" height="64"></rect>
-            <path d="M18,13 L25,21.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
-            <path d="M8,31.8797871 L19,31.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
-            <path d="M48,31.8797871 L59,31.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
-            <path d="M29,51.8797871 L40,51.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(34.000000, 52.000000) rotate(-90.000000) translate(-34.000000, -52.000000) "></path>
-            <path d="M29,11.8797871 L40,11.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(34.000000, 12.000000) rotate(-90.000000) translate(-34.000000, -12.000000) "></path>
-            <path d="M42,13 L49,21.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(45.500000, 17.439894) scale(-1, 1) translate(-45.500000, -17.439894) "></path>
-            <path d="M18,41.8797871 L25,50.7595743" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(21.500000, 46.319681) scale(1, -1) translate(-21.500000, -46.319681) "></path>
-            <path d="M42,42 L49,50.8797871" id="路径-32" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(45.500000, 46.439894) scale(-1, -1) translate(-45.500000, -46.439894) "></path>
+    <g id="Useful" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Symbol_Appear" transform="translate(44.000000, 44.000000) scale(-1, 1) rotate(-270.000000) translate(-44.000000, -44.000000) translate(9.000000, 9.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="70" height="70"></rect>
+            <path d="M19.6875,14.21875 L27.34375,23.9310172" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round"></path>
+            <path d="M8.75,34.8685172 L20.78125,34.8685172" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round"></path>
+            <path d="M52.5,34.8685172 L64.53125,34.8685172" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round"></path>
+            <path d="M31.71875,56.7435172 L43.75,56.7435172" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round" transform="translate(37.187500, 56.875000) rotate(-90.000000) translate(-37.187500, -56.875000) "></path>
+            <path d="M31.71875,12.9935172 L43.75,12.9935172" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round" transform="translate(37.187500, 13.125000) rotate(-90.000000) translate(-37.187500, -13.125000) "></path>
+            <path d="M45.9375,14.21875 L53.59375,23.9310172" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round" transform="translate(49.765625, 19.074884) scale(-1, 1) translate(-49.765625, -19.074884) "></path>
+            <path d="M19.6875,45.8060172 L27.34375,55.5182844" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round" transform="translate(23.515625, 50.662151) scale(1, -1) translate(-23.515625, -50.662151) "></path>
+            <path d="M45.9375,45.9375 L53.59375,55.6497672" id="路径-32" stroke="#FFFFFF" stroke-width="4.375" stroke-linecap="round" transform="translate(49.765625, 50.793634) scale(-1, -1) translate(-49.765625, -50.793634) "></path>
         </g>
     </g>
 </svg>

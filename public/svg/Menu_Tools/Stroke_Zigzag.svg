@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="57px" height="15px" viewBox="0 0 57 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
-    <title>Stroke_Zigzag</title>
+    <title>Useful</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Stroke_Zigzag" transform="translate(-3.000000, -25.000000)" fill-rule="nonzero">
-            <rect id="矩形" x="0" y="0" width="64" height="64"></rect>
-            <polyline stroke="#FFFFFF" stroke-width="3" stroke-linecap="square" points="5.14204545 37.6938776 12.2496108 37.6938776 12.2496108 27 20.2450948 27 20.2450948 37.6938776 28.6201639 37.6938776 28.6201639 27 36.8190607 27 36.8190607 37.6938776 43.6658739 37.6938776 43.6658739 27 50.5099678 27 50.5099678 37.6938776 58.1420455 37.6938776"></polyline>
+    <g id="Useful" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Stroke_Zigzag" transform="translate(6.000000, 6.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="76" height="76"></rect>
+            <polyline stroke="#FFFFFF" stroke-width="3" stroke-linecap="square" points="6.10617898 44.7614796 14.5464128 44.7614796 14.5464128 32.0625 24.04105 32.0625 24.04105 44.7614796 33.9864446 44.7614796 33.9864446 32.0625 43.7226346 32.0625 43.7226346 44.7614796 51.8532252 44.7614796 51.8532252 32.0625 59.9805868 32.0625 59.9805868 44.7614796 69.043679 44.7614796"></polyline>
         </g>
     </g>
 </svg>

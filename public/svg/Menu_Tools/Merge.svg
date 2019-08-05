@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="55px" viewBox="0 0 48 55" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
-    <title>Merge</title>
+    <title>Useful Copy 2</title>
     <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Merge" transform="translate(23.000000, 27.000000) scale(-1, 1) translate(-23.000000, -27.000000) translate(-9.000000, -5.000000)" fill-rule="nonzero">
-            <rect id="矩形" x="0" y="0" width="64" height="64"></rect>
-            <path d="M9,35.332933 C22.1775151,33.8608109 31.0127875,37.2706249 35.5058174,45.5623749 C39.9988472,53.854125 45.8302414,58 53,58" id="路径-11" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
-            <path d="M9,7.33293299 C22.1775151,5.8608109 31.0127875,9.27062488 35.5058174,17.5623749 C39.9988472,25.854125 45.8302414,30 53,30" id="路径-11" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(31.000000, 18.500000) scale(1, -1) translate(-31.000000, -18.500000) "></path>
+    <g id="Useful-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Merge" transform="translate(44.000000, 44.000000) scale(-1, 1) translate(-44.000000, -44.000000) translate(9.000000, 9.000000)" fill-rule="nonzero">
+            <rect id="矩形" x="0" y="0" width="70" height="70"></rect>
+            <path d="M9.84375,38.6453955 C24.2566571,37.0352619 33.9202364,40.764746 38.8344878,49.8338476 C43.7487392,58.9029492 50.1268266,63.4375 57.96875,63.4375" id="路径-11" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M9.84375,8.02039546 C24.2566571,6.41026193 33.9202364,10.139746 38.8344878,19.2088476 C43.7487392,28.2779492 50.1268266,32.8125 57.96875,32.8125" id="路径-11" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" transform="translate(33.906250, 20.234375) scale(1, -1) translate(-33.906250, -20.234375) "></path>
         </g>
     </g>
 </svg>

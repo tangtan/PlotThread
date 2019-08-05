@@ -45,25 +45,25 @@ class App extends React.Component<Props, State> {
         {
           name: 'AddLine',
           type: 'svg',
-          url: 'svg/Menu_Left/AddLine.svg',
+          url: 'svg/Menu_Left/Add.svg',
           subTools: []
         },
         {
           name: 'Group',
           type: 'svg',
-          url: 'svg/Menu_Left/Scissors.svg',
+          url: 'svg/Menu_Left/Group.svg',
           subTools: []
         },
         {
           name: 'Sort',
           type: 'svg',
-          url: 'svg/Menu_Tools/Group.svg',
+          url: 'svg/Menu_Left/Sort.svg',
           subTools: []
         },
         {
           name: 'Bend',
           type: 'svg',
-          url: 'svg/Menu_Tools/Bend.svg',
+          url: 'svg/Menu_Left/Bend.svg',
           subTools: []
         },
         {
@@ -75,7 +75,7 @@ class App extends React.Component<Props, State> {
         {
           name: 'Reshape',
           type: 'svg',
-          url: 'svg/Menu_Left/Adjust_Global.svg',
+          url: 'svg/Menu_Left/Adjust.svg',
           subTools: []
         },
         {
@@ -107,7 +107,7 @@ class App extends React.Component<Props, State> {
         {
           name: 'Back',
           type: 'svg',
-          url: 'svg/Menu_Top/Back.svg',
+          url: 'svg/Menu_Top/Backward.svg',
           subTools: []
         },
         {
@@ -136,9 +136,15 @@ class App extends React.Component<Props, State> {
               subTools: []
             },
             {
-              name: 'StrokeStyle',
+              name: 'StrokeZigzag2',
               type: 'svg',
-              url: 'svg/Menu_Tools/Symbol_Dead.svg',
+              url: 'svg/Menu_Tools/Stroke_Zigzag2.svg',
+              subTools: []
+            },
+            {
+              name: 'StrokeCurve',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Stroke_Curve.svg',
               subTools: []
             }
           ]
