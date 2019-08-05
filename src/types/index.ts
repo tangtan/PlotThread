@@ -73,4 +73,4 @@ export type StoryGraph = {
   sketchNodes?: StoryLine[];
   hitTest?: any;
 };
-export type PathGroup = Path[];
+export type PathGroup = Path[][];

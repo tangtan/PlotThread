@@ -89,8 +89,11 @@ export default (state = initialState, action: ActionType) => {
     case 'ADD_STORYLINES':
       const { strokes } = action.payload;
       strokes.forEach(stroke => {
-        const name = stroke[0].name;
-        const strokeGroup = new Group(stroke);
+        const name = stroke[0][0].name;
+        const strokeGroup = new Group();
+        stroke.forEach(paths => {
+          strokeGroup.addChildren(paths);
+        });
         if (name && !isInRenderQueue(name, newState)) {
           const visualObj: VisualObject = {
             type: 'storyline',

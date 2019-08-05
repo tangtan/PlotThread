@@ -81,7 +81,7 @@ export default class StoryDrawer {
     path.strokeJoin = 'round';
     path.strokeColor = ColorSet.black;
     path.strokeWidth = 1;
-    return path;
+    return [path];
   }
 
   updateGraph(graph: StoryGraph) {
@@ -130,28 +130,32 @@ export default class StoryDrawer {
     line: StorySegment,
     type: string
   ) {
-    const path = this.getStoryStrokeByName(name, index);
-    if (path) {
-      const newPathStr = DrawUtil.getPathStr(type, line);
-      const pathTo = new Path(newPathStr);
-      if (type === 'sketch') {
-        pathTo.simplify();
-      }
-      TweenUtil.TweenBetweenTwoPath(path, pathTo);
-      // IMPORTANT: remove temp animation paths
-      pathTo.remove();
+    const paths = this.getStoryStrokeByName(name, index);
+    if (paths) {
+      paths.forEach(path => {
+        const newPathStr = DrawUtil.getPathStr(type, line);
+        const pathTo = new Path(newPathStr);
+        if (type === 'sketch') {
+          pathTo.simplify();
+        }
+        TweenUtil.TweenBetweenTwoPath(path, pathTo);
+        // IMPORTANT: remove temp animation paths
+        pathTo.remove();
+      });
     } else {
-      const newPath = this.drawStorySegment(name, line, type);
-      TweenUtil.TweenFromFirstSegment(newPath);
-      return newPath;
+      const newPaths = this.drawStorySegment(name, line, type);
+      newPaths.forEach(path => {
+        TweenUtil.TweenFromFirstSegment(path);
+      });
+      return newPaths;
     }
-    return path;
+    return paths;
   }
 
-  getStoryStrokeByName(name: StoryName, index: number): Path | null {
+  getStoryStrokeByName(name: StoryName, index: number): Path[] | null {
     for (let i = 0, len = this.storyStrokes.length; i < len; i++) {
       const stroke = this.storyStrokes[i];
-      const strokeName = stroke[0].name;
+      const strokeName = stroke[0][0].name;
       if (strokeName === name && index < stroke.length) {
         return stroke[index];
       }
