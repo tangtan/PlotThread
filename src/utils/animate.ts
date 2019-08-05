@@ -1,4 +1,4 @@
-import { Path, Matrix, Point } from 'paper';
+import { Path, Matrix, Point, Group } from 'paper';
 import {
   StoryName,
   StoryLine,
@@ -17,6 +17,7 @@ export default class StoryDrawer {
   renderNodes: StoryLine[];
   smoothNodes: StoryLine[];
   sketchNodes: StoryLine[];
+  segment: { [key: string]: pathSegment[] };
   constructor() {
     this.storyStrokes = [];
     this.type = 'sketch';
@@ -25,6 +26,7 @@ export default class StoryDrawer {
     this.renderNodes = [];
     this.smoothNodes = [];
     this.sketchNodes = [];
+    this.segment = {};
   }
 
   initGraph(graph: StoryGraph) {
@@ -34,6 +36,7 @@ export default class StoryDrawer {
     this.renderNodes = graph.renderNodes || [];
     this.smoothNodes = graph.smoothNodes || [];
     this.sketchNodes = graph.sketchNodes || [];
+    this.segment = {};
     this.draw(type);
     return this.storyStrokes;
   }
@@ -240,4 +243,36 @@ class TweenUtil {
     TweenUtil.TweenBetweenTwoPath(path, pathTo, duration);
     pathTo.remove();
   }
+}
+
+class pathSegment {
+  start: number;
+  end: number;
+  constructor(start: number = 0, end: number = 0) {
+    this.start = start;
+    this.end = end;
+  }
+  public draw = (path: Path) => {};
+}
+
+class strokePathSegment extends pathSegment {
+  width: number;
+  constructor(start: number = 0, end: number = 0, width: number) {
+    super(start, end);
+    this.width = width;
+  }
+  public draw = (path: Path) => {
+    path.strokeWidth = this.width;
+  };
+}
+
+class dashPathSegment extends pathSegment {
+  dashArray: number[];
+  constructor(start: number = 0, end: number = 0, dashArray: number[]) {
+    super(start, end);
+    this.dashArray = dashArray;
+  }
+  public draw = (path: Path) => {
+    path.dashArray = this.dashArray;
+  };
 }
