@@ -73,4 +73,16 @@ export type StoryGraph = {
   sketchNodes?: StoryLine[];
   hitTest?: any;
 };
-export type PathGroup = Path[][];
+export type PathGroup = Path[];
+
+export class PathStyleSegment {
+  name: string;
+  left: number;
+  right: number;
+  constructor(name: string, left: number, right: number) {
+    this.name = name;
+    this.left = left;
+    this.right = right;
+  }
+  public draw = (path: Path) => {};
+}

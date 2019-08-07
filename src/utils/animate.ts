@@ -1,4 +1,4 @@
-import { Path, Matrix, Point, Group } from 'paper';
+import { Path, Matrix, Point, Group, Style } from 'paper';
 import {
   StoryName,
   StoryLine,
@@ -7,6 +7,7 @@ import {
   PathGroup
 } from '../types';
 import { ColorSet } from './color';
+import { StyleUtil } from './strokestyle';
 
 export default class StoryDrawer {
   // TODO: using a group of paths to draw storyline
@@ -17,7 +18,7 @@ export default class StoryDrawer {
   renderNodes: StoryLine[];
   smoothNodes: StoryLine[];
   sketchNodes: StoryLine[];
-  segment: { [key: string]: pathSegment[] };
+  styleUtil: StyleUtil | null;
   constructor() {
     this.storyStrokes = [];
     this.type = 'sketch';
@@ -26,7 +27,7 @@ export default class StoryDrawer {
     this.renderNodes = [];
     this.smoothNodes = [];
     this.sketchNodes = [];
-    this.segment = {};
+    this.styleUtil = null;
   }
 
   initGraph(graph: StoryGraph) {
@@ -36,7 +37,6 @@ export default class StoryDrawer {
     this.renderNodes = graph.renderNodes || [];
     this.smoothNodes = graph.smoothNodes || [];
     this.sketchNodes = graph.sketchNodes || [];
-    this.segment = {};
     this.draw(type);
     return this.storyStrokes;
   }
@@ -58,9 +58,16 @@ export default class StoryDrawer {
         nodes = this.renderNodes;
         break;
     }
-    this.storyStrokes = nodes.map((storyline, i) =>
+    if (this.styleUtil) {
+      this.styleUtil.convert(nodes, this.names);
+    }
+    const storyStrokes = nodes.map((storyline, i) =>
       this.drawStoryline(this.names[i], storyline, type)
     );
+    if (this.styleUtil) {
+      this.styleUtil.draw(storyStrokes, this.names);
+    }
+    this.storyStrokes = storyStrokes;
   }
 
   drawStoryline(name: StoryName, storyline: StoryLine, type: string) {
@@ -81,7 +88,7 @@ export default class StoryDrawer {
     path.strokeJoin = 'round';
     path.strokeColor = ColorSet.black;
     path.strokeWidth = 1;
-    return [path];
+    return path;
   }
 
   updateGraph(graph: StoryGraph) {
@@ -112,9 +119,16 @@ export default class StoryDrawer {
         nodes = this.renderNodes;
         break;
     }
-    this.storyStrokes = nodes.map((storyline, i) =>
+    if (this.styleUtil) {
+      this.styleUtil.convert(nodes, this.names);
+    }
+    const storyStrokes = nodes.map((storyline, i) =>
       this.updateStoryline(this.names[i], storyline, type)
     );
+    if (this.styleUtil) {
+      this.styleUtil.draw(storyStrokes, this.names);
+    }
+    this.storyStrokes = storyStrokes;
     return this.storyStrokes;
   }
 
@@ -130,32 +144,28 @@ export default class StoryDrawer {
     line: StorySegment,
     type: string
   ) {
-    const paths = this.getStoryStrokeByName(name, index);
-    if (paths) {
-      paths.forEach(path => {
-        const newPathStr = DrawUtil.getPathStr(type, line);
-        const pathTo = new Path(newPathStr);
-        if (type === 'sketch') {
-          pathTo.simplify();
-        }
-        TweenUtil.TweenBetweenTwoPath(path, pathTo);
-        // IMPORTANT: remove temp animation paths
-        pathTo.remove();
-      });
+    const path = this.getStoryStrokeByName(name, index);
+    if (path) {
+      const newPathStr = DrawUtil.getPathStr(type, line);
+      const pathTo = new Path(newPathStr);
+      if (type === 'sketch') {
+        pathTo.simplify();
+      }
+      TweenUtil.TweenBetweenTwoPath(path, pathTo);
+      // IMPORTANT: remove temp animation paths
+      pathTo.remove();
+      return path;
     } else {
-      const newPaths = this.drawStorySegment(name, line, type);
-      newPaths.forEach(path => {
-        TweenUtil.TweenFromFirstSegment(path);
-      });
-      return newPaths;
+      const newPath = this.drawStorySegment(name, line, type);
+      TweenUtil.TweenFromFirstSegment(newPath);
+      return newPath;
     }
-    return paths;
   }
 
-  getStoryStrokeByName(name: StoryName, index: number): Path[] | null {
+  getStoryStrokeByName(name: StoryName, index: number): Path | null {
     for (let i = 0, len = this.storyStrokes.length; i < len; i++) {
       const stroke = this.storyStrokes[i];
-      const strokeName = stroke[0][0].name;
+      const strokeName = stroke[0].name;
       if (strokeName === name && index < stroke.length) {
         return stroke[index];
       }
@@ -247,36 +257,4 @@ class TweenUtil {
     TweenUtil.TweenBetweenTwoPath(path, pathTo, duration);
     pathTo.remove();
   }
-}
-
-class pathSegment {
-  start: number;
-  end: number;
-  constructor(start: number = 0, end: number = 0) {
-    this.start = start;
-    this.end = end;
-  }
-  public draw = (path: Path) => {};
-}
-
-class strokePathSegment extends pathSegment {
-  width: number;
-  constructor(start: number = 0, end: number = 0, width: number) {
-    super(start, end);
-    this.width = width;
-  }
-  public draw = (path: Path) => {
-    path.strokeWidth = this.width;
-  };
-}
-
-class dashPathSegment extends pathSegment {
-  dashArray: number[];
-  constructor(start: number = 0, end: number = 0, dashArray: number[]) {
-    super(start, end);
-    this.dashArray = dashArray;
-  }
-  public draw = (path: Path) => {
-    path.dashArray = this.dashArray;
-  };
 }
