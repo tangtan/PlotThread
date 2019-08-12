@@ -7,7 +7,7 @@ import {
   PathGroup
 } from '../types';
 import { ColorSet } from './color';
-import { StyleUtil } from './strokestyle';
+import StrokeStyle from './strokestyle';
 
 export default class StoryDrawer {
   // TODO: using a group of paths to draw storyline
@@ -18,7 +18,7 @@ export default class StoryDrawer {
   renderNodes: StoryLine[];
   smoothNodes: StoryLine[];
   sketchNodes: StoryLine[];
-  styleUtil: StyleUtil | null;
+  styleUtil: StrokeStyle | null;
   constructor() {
     this.storyStrokes = [];
     this.type = 'sketch';

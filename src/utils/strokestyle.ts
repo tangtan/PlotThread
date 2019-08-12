@@ -5,7 +5,7 @@ import {
   PathGroup,
   StorySegment
 } from '../types';
-export class StyleUtil {
+export default class StrokeStyle {
   styles: PathStyleSegment[];
   stylesIndex: number[];
   constructor() {
@@ -52,9 +52,9 @@ export class StyleUtil {
             path[0][0] < style.left &&
             style.right < path[path.length - 1][0]
           ) {
-            line.push(StyleUtil.cut(path, path[0][0], style.left));
-            line.push(StyleUtil.cut(path, style.right, path[path.length][0]));
-            line[key] = StyleUtil.cut(path, style.left, style.right);
+            line.push(StrokeStyle.cut(path, path[0][0], style.left));
+            line.push(StrokeStyle.cut(path, style.right, path[path.length][0]));
+            line[key] = StrokeStyle.cut(path, style.left, style.right);
             this.stylesIndex[styleIndex] = key;
             break;
           }
