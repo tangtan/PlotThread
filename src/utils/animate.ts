@@ -21,7 +21,7 @@ export default class StoryDrawer {
   styleUtil: StrokeStyle | null;
   constructor() {
     this.storyStrokes = [];
-    this.type = 'sketch';
+    this.type = 'render';
     this.names = [];
     this.nodes = [];
     this.renderNodes = [];

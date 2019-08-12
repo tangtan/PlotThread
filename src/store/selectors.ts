@@ -69,6 +69,11 @@ export const getSelectedObjStrokeColor = (state: StateType) => {
     return null;
   }
   if (mounted && geometry) {
+    // If geometry is group
+    if (geometry.children && geometry.children.length > 0) {
+      return geometry.children[0].strokeColor;
+    }
+    // otherwise, geometry is path
     return geometry.strokeColor;
   }
   return null;
@@ -80,6 +85,9 @@ export const getSelectedObjFillColor = (state: StateType) => {
     return null;
   }
   if (mounted && geometry) {
+    if (geometry.children && geometry.children.length > 0) {
+      return geometry.children[0].strokeColor;
+    }
     return geometry.fillColor;
   }
   return null;

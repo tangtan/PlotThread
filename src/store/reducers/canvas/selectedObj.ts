@@ -41,6 +41,10 @@ export default (state = initialState, action: ActionType) => {
       if (type === 'image') {
         return state;
       }
+      // If geometry is group
+      if (geometry && geometry.children && geometry.children.length > 0) {
+        geometry.children[0].strokeColor = color;
+      }
       if (mounted && geometry) {
         geometry.strokeColor = color;
       }
@@ -50,6 +54,10 @@ export default (state = initialState, action: ActionType) => {
       const { mounted, type, geometry } = state;
       if (type === 'image') {
         return state;
+      }
+      // If geometry is group
+      if (geometry && geometry.children && geometry.children.length > 0) {
+        geometry.children[0].fillColor = color;
       }
       if (mounted && geometry) {
         geometry.fillColor = color;

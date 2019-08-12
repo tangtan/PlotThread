@@ -161,7 +161,7 @@ class App extends React.Component<Props, State> {
               subTools: []
             },
             {
-              name: 'FillStyle',
+              name: 'StrokeStyle',
               type: 'svg',
               url: 'svg/Menu_Tools/Symbol_Appear.svg',
               subTools: []
