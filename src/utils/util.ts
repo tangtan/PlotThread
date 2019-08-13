@@ -87,3 +87,67 @@ export class StoryUtil extends BaseMouseUtil {
     return endTime;
   }
 }
+
+export class DoubleSelectUtil extends BaseMouseUtil {
+  secondSelectPath: Item | null;
+  constructor(hitOption: IHitOption) {
+    super(hitOption);
+    this.secondSelectPath = null;
+  }
+  restore() {
+    if (this.selectPath) {
+      this.selectPath.strokeColor = BLACK;
+      this.selectPath = null;
+    }
+    if (this.secondSelectPath) {
+      this.secondSelectPath.strokeColor = BLACK;
+      this.secondSelectPath = null;
+    }
+    if (this.currPath) {
+      this.currPath.remove();
+      this.currPath = null;
+    }
+  }
+  status() {
+    if (this.selectPath && this.secondSelectPath) {
+      return true;
+    }
+    return false;
+  }
+  addPath(e: paper.MouseEvent) {
+    if (e.point && project && !this.status()) {
+      const hitResult = project.hitTest(e.point, this.hitOption);
+      if (hitResult) {
+        if (!this.selectPath) {
+          this.selectPath = hitResult.item;
+        } else {
+          this.secondSelectPath = hitResult.item;
+        }
+      }
+    }
+  }
+  down(e: paper.MouseEvent) {
+    this.restore();
+    this.startPosition = e.point;
+    this.currPath = new Path();
+    if (e.point) {
+      this.currPath.add(e.point);
+    }
+    this.addPath(e);
+  }
+  drag(e: paper.MouseEvent) {
+    this.endPosition = e.point;
+    if (this.currPath && e.point) {
+      this.currPath.add(e.point);
+    }
+    this.addPath(e);
+  }
+  up(e: paper.MouseEvent) {
+    this.endPosition = e.point;
+    if (this.currPath) {
+      this.currPath.remove();
+      this.currPath = null;
+    }
+    this.addPath(e);
+  }
+}

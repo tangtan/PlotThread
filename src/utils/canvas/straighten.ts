@@ -3,7 +3,7 @@ import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
-export default class BendUtil extends StoryUtil {
+export default class StraightenUtil extends StoryUtil {
   straightenInfo: any[][];
   constructor(hitOption: IHitOption) {
     super(hitOption);

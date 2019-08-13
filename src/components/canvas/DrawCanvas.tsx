@@ -12,7 +12,7 @@ import StoryDrawer from '../../utils/animate';
 import AddLineUtil from '../../utils/canvas/addline';
 import GroupUtil from '../../utils/canvas/group';
 import SortUtil from '../../utils/canvas/sort';
-import BendUtil from '../../utils/canvas/bend';
+import StraightenUtil from '../../utils/canvas/straighten';
 import MoveUtil from '../../utils/canvas/move';
 import CompressUtil from '../../utils/canvas/compress';
 
@@ -61,7 +61,7 @@ type State = {
   addLineUtil: AddLineUtil;
   groupUtil: GroupUtil;
   sortUtil: SortUtil;
-  bendUtil: BendUtil;
+  straightenUtil: StraightenUtil;
   moveUtil: MoveUtil;
   compressUtil: CompressUtil;
 };
@@ -76,7 +76,7 @@ class DrawCanvas extends Component<Props, State> {
       addLineUtil: new AddLineUtil(hitOption),
       groupUtil: new GroupUtil(hitOption),
       sortUtil: new SortUtil(hitOption),
-      bendUtil: new BendUtil(hitOption),
+      straightenUtil: new StraightenUtil(hitOption),
       compressUtil: new CompressUtil(hitOption),
       moveUtil: new MoveUtil(hitShapeOption)
     };
@@ -106,7 +106,7 @@ class DrawCanvas extends Component<Props, State> {
 
   refresh() {
     const orderInfo = this.state.sortUtil.orderInfo;
-    const straightenInfo = this.state.bendUtil.straightenInfo;
+    const straightenInfo = this.state.straightenUtil.straightenInfo;
     const compressInfo = this.state.compressUtil.compressInfo;
     let graph = this.state.storyLayouter.layout(
       orderInfo,
@@ -124,7 +124,7 @@ class DrawCanvas extends Component<Props, State> {
     this.state.addLineUtil.updateStoryStore(graph);
     this.state.groupUtil.updateStoryStore(graph);
     this.state.sortUtil.updateStoryStore(graph);
-    this.state.bendUtil.updateStoryStore(graph);
+    this.state.straightenUtil.updateStoryStore(graph);
     this.state.moveUtil.updateStoryStore(graph);
     this.state.compressUtil.updateStoryStore(graph);
   };
@@ -160,8 +160,8 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.scaleState && this.state.compressUtil) {
       this.state.compressUtil.down(e);
     }
-    if (this.props.bendState && this.state.bendUtil) {
-      this.state.bendUtil.down(e);
+    if (this.props.bendState && this.state.straightenUtil) {
+      this.state.straightenUtil.down(e);
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.down(e);
@@ -181,8 +181,8 @@ class DrawCanvas extends Component<Props, State> {
       this.state.compressUtil.up(e);
       this.refresh();
     }
-    if (this.props.bendState && this.state.bendUtil) {
-      this.state.bendUtil.up(e);
+    if (this.props.bendState && this.state.straightenUtil) {
+      this.state.straightenUtil.up(e);
       this.refresh();
     }
     if (this.props.freeMode && this.state.moveUtil) {
@@ -218,8 +218,8 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.scaleState && this.state.compressUtil) {
       this.state.compressUtil.drag(e);
     }
-    if (this.props.bendState && this.state.bendUtil) {
-      this.state.bendUtil.drag(e);
+    if (this.props.bendState && this.state.straightenUtil) {
+      this.state.straightenUtil.drag(e);
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.drag(e);
