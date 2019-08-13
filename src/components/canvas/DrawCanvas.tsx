@@ -14,7 +14,7 @@ import GroupUtil from '../../utils/canvas/group';
 import SortUtil from '../../utils/canvas/sort';
 import BendUtil from '../../utils/canvas/bend';
 import MoveUtil from '../../utils/canvas/move';
-import ScaleUtil from '../../utils/canvas/scale';
+import CompressUtil from '../../utils/canvas/compress';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -63,7 +63,7 @@ type State = {
   sortUtil: SortUtil;
   bendUtil: BendUtil;
   moveUtil: MoveUtil;
-  scaleUtil: ScaleUtil;
+  compressUtil: CompressUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -77,7 +77,7 @@ class DrawCanvas extends Component<Props, State> {
       groupUtil: new GroupUtil(hitOption),
       sortUtil: new SortUtil(hitOption),
       bendUtil: new BendUtil(hitOption),
-      scaleUtil: new ScaleUtil(hitOption),
+      compressUtil: new CompressUtil(hitOption),
       moveUtil: new MoveUtil(hitShapeOption)
     };
   }
@@ -107,7 +107,7 @@ class DrawCanvas extends Component<Props, State> {
   refresh() {
     const orderInfo = this.state.sortUtil.orderInfo;
     const straightenInfo = this.state.bendUtil.straightenInfo;
-    const compressInfo = this.state.scaleUtil.compressInfo;
+    const compressInfo = this.state.compressUtil.compressInfo;
     let graph = this.state.storyLayouter.layout(
       orderInfo,
       straightenInfo,
@@ -126,7 +126,7 @@ class DrawCanvas extends Component<Props, State> {
     this.state.sortUtil.updateStoryStore(graph);
     this.state.bendUtil.updateStoryStore(graph);
     this.state.moveUtil.updateStoryStore(graph);
-    this.state.scaleUtil.updateStoryStore(graph);
+    this.state.compressUtil.updateStoryStore(graph);
   };
 
   private addCharacter = () => {
@@ -157,8 +157,8 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.groupState && this.state.groupUtil) {
       this.state.groupUtil.down(e);
     }
-    if (this.props.scaleState && this.state.scaleUtil) {
-      this.state.scaleUtil.down(e);
+    if (this.props.scaleState && this.state.compressUtil) {
+      this.state.compressUtil.down(e);
     }
     if (this.props.bendState && this.state.bendUtil) {
       this.state.bendUtil.down(e);
@@ -177,8 +177,8 @@ class DrawCanvas extends Component<Props, State> {
       this.addGroup();
       this.refresh();
     }
-    if (this.props.scaleState && this.state.scaleUtil) {
-      this.state.scaleUtil.up(e);
+    if (this.props.scaleState && this.state.compressUtil) {
+      this.state.compressUtil.up(e);
       this.refresh();
     }
     if (this.props.bendState && this.state.bendUtil) {
@@ -215,8 +215,8 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.sortState && this.state.sortUtil) {
       this.state.sortUtil.drag(e);
     }
-    if (this.props.scaleState && this.state.scaleUtil) {
-      this.state.scaleUtil.drag(e);
+    if (this.props.scaleState && this.state.compressUtil) {
+      this.state.compressUtil.drag(e);
     }
     if (this.props.bendState && this.state.bendUtil) {
       this.state.bendUtil.drag(e);

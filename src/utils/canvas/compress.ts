@@ -3,7 +3,7 @@ import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point, Color } from 'paper';
 import { ColorSet } from '../color';
 
-export default class ScaleUtil extends StoryUtil {
+export default class CompressUtil extends StoryUtil {
   compressInfo: any[][];
   strokeWidth: number;
   strokeColor: Color;
