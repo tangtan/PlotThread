@@ -7,7 +7,6 @@ import {
   PathGroup
 } from '../types';
 import { ColorSet } from './color';
-import StrokeStyle from './strokestyle';
 
 export default class StoryDrawer {
   // TODO: using a group of paths to draw storyline
@@ -18,7 +17,6 @@ export default class StoryDrawer {
   renderNodes: StoryLine[];
   smoothNodes: StoryLine[];
   sketchNodes: StoryLine[];
-  styleUtil: StrokeStyle | null;
   constructor() {
     this.storyStrokes = [];
     this.type = 'render';
@@ -27,7 +25,6 @@ export default class StoryDrawer {
     this.renderNodes = [];
     this.smoothNodes = [];
     this.sketchNodes = [];
-    this.styleUtil = null;
   }
 
   initGraph(graph: StoryGraph) {
@@ -58,15 +55,9 @@ export default class StoryDrawer {
         nodes = this.renderNodes;
         break;
     }
-    if (this.styleUtil) {
-      this.styleUtil.convert(nodes, this.names);
-    }
     const storyStrokes = nodes.map((storyline, i) =>
       this.drawStoryline(this.names[i], storyline, type)
     );
-    if (this.styleUtil) {
-      this.styleUtil.draw(storyStrokes, this.names);
-    }
     this.storyStrokes = storyStrokes;
   }
 
@@ -119,15 +110,9 @@ export default class StoryDrawer {
         nodes = this.renderNodes;
         break;
     }
-    if (this.styleUtil) {
-      this.styleUtil.convert(nodes, this.names);
-    }
     const storyStrokes = nodes.map((storyline, i) =>
       this.updateStoryline(this.names[i], storyline, type)
     );
-    if (this.styleUtil) {
-      this.styleUtil.draw(storyStrokes, this.names);
-    }
     this.storyStrokes = storyStrokes;
     return this.storyStrokes;
   }

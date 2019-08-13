@@ -9,15 +9,12 @@ import { iStoryline } from 'story-flow';
 import { xml } from 'd3-fetch';
 import { ColorSet } from '../../utils/color';
 import StoryDrawer from '../../utils/animate';
-import StrokeStyle from '../../utils/strokestyle';
 import AddLineUtil from '../../utils/canvas/addline';
 import GroupUtil from '../../utils/canvas/group';
 import SortUtil from '../../utils/canvas/sort';
 import BendUtil from '../../utils/canvas/bend';
 import MoveUtil from '../../utils/canvas/move';
 import ScaleUtil from '../../utils/canvas/scale';
-import WidthUtil from '../../utils/canvas/width';
-import DashUtil from '../../utils/canvas/dash';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -67,9 +64,6 @@ type State = {
   bendUtil: BendUtil;
   moveUtil: MoveUtil;
   scaleUtil: ScaleUtil;
-  strokeStyle: StrokeStyle;
-  widthUtil: WidthUtil;
-  dashUtil: DashUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -84,14 +78,8 @@ class DrawCanvas extends Component<Props, State> {
       sortUtil: new SortUtil(hitOption),
       bendUtil: new BendUtil(hitOption),
       scaleUtil: new ScaleUtil(hitOption),
-      moveUtil: new MoveUtil(hitShapeOption),
-      strokeStyle: new StrokeStyle(),
-      widthUtil: new WidthUtil(hitOption),
-      dashUtil: new DashUtil(hitOption)
+      moveUtil: new MoveUtil(hitShapeOption)
     };
-    this.state.storyDrawer.styleUtil = this.state.strokeStyle;
-    this.state.widthUtil.strokeStyle = this.state.strokeStyle;
-    this.state.dashUtil.strokeStyle = this.state.strokeStyle;
   }
 
   // init
