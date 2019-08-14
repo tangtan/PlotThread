@@ -96,11 +96,11 @@ export class DoubleSelectUtil extends BaseMouseUtil {
   }
   restore() {
     if (this.selectPath) {
-      this.selectPath.strokeColor = BLACK;
+      this.selectPath.selected = false;
       this.selectPath = null;
     }
     if (this.secondSelectPath) {
-      this.secondSelectPath.strokeColor = BLACK;
+      this.secondSelectPath.selected = false;
       this.secondSelectPath = null;
     }
     if (this.currPath) {
@@ -114,40 +114,19 @@ export class DoubleSelectUtil extends BaseMouseUtil {
     }
     return false;
   }
-  addPath(e: paper.MouseEvent) {
-    if (e.point && project && !this.status()) {
+  up(e: paper.MouseEvent) {
+    if (project && e.point) {
       const hitResult = project.hitTest(e.point, this.hitOption);
       if (hitResult) {
-        if (!this.selectPath) {
-          this.selectPath = hitResult.item;
-        } else {
-          this.secondSelectPath = hitResult.item;
+        if (!this.status() && hitResult.item) {
+          hitResult.item.selected = true;
+          if (!this.selectPath) {
+            this.selectPath = hitResult.item;
+          } else if (this.selectPath != hitResult.item) {
+            this.secondSelectPath = hitResult.item;
+          }
         }
       }
     }
-  }
-  down(e: paper.MouseEvent) {
-    this.restore();
-    this.startPosition = e.point;
-    this.currPath = new Path();
-    if (e.point) {
-      this.currPath.add(e.point);
-    }
-    this.addPath(e);
-  }
-  drag(e: paper.MouseEvent) {
-    this.endPosition = e.point;
-    if (this.currPath && e.point) {
-      this.currPath.add(e.point);
-    }
-    this.addPath(e);
-  }
-  up(e: paper.MouseEvent) {
-    this.endPosition = e.point;
-    if (this.currPath) {
-      this.currPath.remove();
-      this.currPath = null;
-    }
-    this.addPath(e);
   }
 }

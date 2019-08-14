@@ -15,6 +15,7 @@ import SortUtil from '../../utils/canvas/sort';
 import StraightenUtil from '../../utils/canvas/straighten';
 import MoveUtil from '../../utils/canvas/move';
 import CompressUtil from '../../utils/canvas/compress';
+import MergeUtil from '../../utils/canvas/merge';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -64,6 +65,7 @@ type State = {
   straightenUtil: StraightenUtil;
   moveUtil: MoveUtil;
   compressUtil: CompressUtil;
+  mergeUtil: MergeUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -78,6 +80,7 @@ class DrawCanvas extends Component<Props, State> {
       sortUtil: new SortUtil(hitOption),
       straightenUtil: new StraightenUtil(hitOption),
       compressUtil: new CompressUtil(hitOption),
+      mergeUtil: new MergeUtil(hitOption),
       moveUtil: new MoveUtil(hitShapeOption)
     };
   }
@@ -161,7 +164,8 @@ class DrawCanvas extends Component<Props, State> {
       this.state.compressUtil.down(e);
     }
     if (this.props.bendState && this.state.straightenUtil) {
-      this.state.straightenUtil.down(e);
+      // this.state.straightenUtil.down(e);
+      this.state.mergeUtil.down(e);
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.down(e);
@@ -182,8 +186,9 @@ class DrawCanvas extends Component<Props, State> {
       this.refresh();
     }
     if (this.props.bendState && this.state.straightenUtil) {
-      this.state.straightenUtil.up(e);
-      this.refresh();
+      // this.state.straightenUtil.up(e);
+      // this.refresh();
+      this.state.mergeUtil.up(e);
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.up(e);
@@ -219,7 +224,8 @@ class DrawCanvas extends Component<Props, State> {
       this.state.compressUtil.drag(e);
     }
     if (this.props.bendState && this.state.straightenUtil) {
-      this.state.straightenUtil.drag(e);
+      // this.state.straightenUtil.drag(e);
+      this.state.mergeUtil.drag(e);
     }
     if (this.props.freeMode && this.state.moveUtil) {
       this.state.moveUtil.drag(e);
