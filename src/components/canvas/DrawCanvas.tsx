@@ -16,6 +16,10 @@ import StraightenUtil from '../../utils/canvas/straighten';
 import CompressUtil from '../../utils/canvas/compress';
 import MergeUtil from '../../utils/canvas/merge';
 import SplitUtil from '../../utils/canvas/split';
+import TwinUtil from '../../utils/canvas/twin';
+import KnotUtil from '../../utils/canvas/knot';
+import CollideUtil from '../../utils/canvas/collide';
+import BendUtil from '../../utils/canvas/bend';
 import MoveUtil from '../../utils/canvas/move';
 
 const mapStateToProps = (state: StateType) => {
@@ -67,6 +71,10 @@ type State = {
   compressUtil: CompressUtil;
   mergeUtil: MergeUtil;
   splitUtil: SplitUtil;
+  twinUtil: TwinUtil;
+  knotUtil: KnotUtil;
+  collideUtil: CollideUtil;
+  bendUtil: BendUtil;
   moveUtil: MoveUtil;
 };
 
@@ -84,6 +92,10 @@ class DrawCanvas extends Component<Props, State> {
       compressUtil: new CompressUtil(hitOption),
       mergeUtil: new MergeUtil(hitOption),
       splitUtil: new SplitUtil(hitOption),
+      twinUtil: new TwinUtil(hitOption),
+      knotUtil: new KnotUtil(hitOption),
+      collideUtil: new CollideUtil(hitOption),
+      bendUtil: new BendUtil(hitOption),
       moveUtil: new MoveUtil(hitShapeOption)
     };
   }

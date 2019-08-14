@@ -1,12 +1,12 @@
 import { StoryUtil, DoubleSelectUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
-export default class SplitUtil extends StoryUtil {
+export default class CollideUtil extends StoryUtil {
   select: DoubleSelectUtil;
-  splitInfo: [string, string, number][];
+  collideInfo: [string, string, number][];
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.select = new DoubleSelectUtil(hitOption);
-    this.splitInfo = [];
+    this.collideInfo = [];
   }
   up(e: paper.MouseEvent) {
     if (this.select.status()) {
@@ -15,7 +15,7 @@ export default class SplitUtil extends StoryUtil {
         const second_name = this.select.secondSelectPath.name;
         const x = e.point.x;
         if (first_name && second_name && x) {
-          this.splitInfo.push([first_name, second_name, x]);
+          this.collideInfo.push([first_name, second_name, x]);
         }
         this.select.restore();
       }
