@@ -24,7 +24,9 @@ const drawCircle = (type: string) => {
   if (type === 'circle') {
     const center = new Point(100, 100);
     const radius = 50;
-    const circle = new Path.Circle(center, radius);
+    const circle = new Path.Circle(new Point(0, 0), radius);
+    circle.applyMatrix = false;
+    circle.translate(center);
     circle.strokeColor = ColorSet.black;
     circle.fillColor = ColorSet.white;
     circle.name = `circle-${circle.id}`;
@@ -36,9 +38,11 @@ const drawCircle = (type: string) => {
 
 const drawRectangle = (type: string) => {
   if (type === 'rectangle') {
-    const anchor = new Point(50, 50);
+    const anchor = new Point(100, 100);
     const size = new Size(100, 100);
-    const rect = new Path.Rectangle(anchor, size);
+    const rect = new Path.Rectangle(new Point(-50, -50), size);
+    rect.applyMatrix = false;
+    rect.translate(anchor);
     rect.strokeColor = ColorSet.black;
     rect.fillColor = ColorSet.white;
     rect.name = `rectangle-${rect.id}`;

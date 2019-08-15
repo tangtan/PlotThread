@@ -145,11 +145,16 @@ export default class MoveUtil extends StoryUtil {
       const hitRes = project.hitTest(e.point, this.hitOption);
       if (hitRes && hitRes.item) {
         hitRes.item.selected = true;
-        if (hitRes.item instanceof Raster) {
-          const raster = hitRes.item;
-          if (raster.position) {
-            this.rotateShape = this.createRotateShape(raster.position);
-            this.selectPath = raster;
+        const name = hitRes.item.name;
+        if (
+          hitRes.item instanceof Raster ||
+          (name &&
+            (name.startsWith('circle-') || name.startsWith('rectangle-')))
+        ) {
+          const item = hitRes.item;
+          if (item.position) {
+            this.rotateShape = this.createRotateShape(item.position);
+            this.selectPath = item;
           }
         }
       }
@@ -202,13 +207,16 @@ export default class MoveUtil extends StoryUtil {
               this.rotateShape = this.createRotateShape(center, delta);
             }
             if (this.matrix && delta.x && delta.y) {
-              const mat = new Matrix();
               let angle = (Math.atan(-delta.x / delta.y) / Math.PI) * 180;
               if (delta.y > 0) {
                 angle += 180;
               }
+              // if (this.selectPath instanceof Raster){
+              const mat = new Matrix();
               mat.rotate(angle, new Point(0, 0));
               this.selectPath.matrix = mat.prepend(this.matrix);
+              // }
+              // else{}
             }
           }
         } else {
