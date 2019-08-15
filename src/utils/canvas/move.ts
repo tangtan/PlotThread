@@ -58,6 +58,7 @@ export default class MoveUtil extends StoryUtil {
   down(e: paper.MouseEvent) {
     if (project && e.point) {
       const hitRes = project.hitTest(e.point, this.hitOption);
+      console.log(hitRes);
       if (hitRes) {
         switch (hitRes.type) {
           case 'fill':
@@ -116,15 +117,44 @@ export default class MoveUtil extends StoryUtil {
             this.isMoveSegment = false;
             break;
           case 'segment':
-            if (e.modifiers.shift) {
+            if (
+              hitRes.item &&
+              hitRes.item.parent == this.rotateShape &&
+              this.selectPath &&
+              this.selectPath.matrix
+            ) {
+              this.matrix = this.selectPath.matrix.clone();
+              this.isRotate = true;
+              this.selectSegment = null;
+              this.isMoveSegment = false;
+              this.isMoveShape = true;
+            } else if (e.modifiers.shift) {
               if (hitRes.segment) {
                 hitRes.segment.remove();
               }
             } else {
-              this.selectPath = null;
-              this.isMoveShape = false;
-              this.selectSegment = hitRes.segment;
-              this.isMoveSegment = true;
+              // this.selectPath = null;
+              // this.isMoveShape = false;
+              // this.selectSegment = hitRes.segment;
+              // this.isMoveSegment = true;
+              const path = hitRes.item;
+              if (path && path.name) {
+                const name = path.name;
+                if (
+                  name.startsWith('circle-') ||
+                  name.startsWith('rectangle-')
+                ) {
+                  this.selectPath = path;
+                  this.isMoveShape = true;
+                  this.isMoveSegment = false;
+                  this.selectSegment = null;
+                  this.startPosition = e.point;
+                  this.isScale = true;
+                  if (path.matrix) {
+                    this.matrix = path.matrix.clone();
+                  }
+                }
+              }
             }
             break;
           default:
@@ -184,16 +214,12 @@ export default class MoveUtil extends StoryUtil {
               .divide(this.startPosition.subtract(this.selectPath.position));
             if (scale.x && scale.y && this.matrix) {
               const mat = this.matrix.clone();
-              if (
-                mat.a != null &&
-                mat.b != null &&
-                mat.c != null &&
-                mat.d != null
-              ) {
-                mat.a *= scale.x;
-                mat.c *= scale.x;
-                mat.b *= scale.y;
-                mat.d *= scale.y;
+              if (scale.x == Infinity || scale.x == -Infinity) {
+                mat.scale(scale.y);
+              } else if (scale.y == Infinity || scale.y == -Infinity) {
+                mat.scale(scale.x);
+              } else {
+                mat.scale(scale.x, scale.y);
               }
               this.selectPath.matrix = mat;
             }
@@ -211,12 +237,9 @@ export default class MoveUtil extends StoryUtil {
               if (delta.y > 0) {
                 angle += 180;
               }
-              // if (this.selectPath instanceof Raster){
               const mat = new Matrix();
               mat.rotate(angle, new Point(0, 0));
               this.selectPath.matrix = mat.prepend(this.matrix);
-              // }
-              // else{}
             }
           }
         } else {

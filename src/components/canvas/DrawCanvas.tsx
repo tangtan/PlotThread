@@ -51,7 +51,7 @@ const hitOption = {
 };
 
 const hitShapeOption = {
-  segments: false,
+  segments: true,
   stroke: true,
   fill: true,
   tolerance: 5
