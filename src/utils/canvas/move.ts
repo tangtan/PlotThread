@@ -1,16 +1,21 @@
 import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
-import paper, { Segment, project, Matrix } from 'paper';
+import { Segment, project, Matrix, Point, HitResult, Raster } from 'paper';
 
 export default class MoveUtil extends StoryUtil {
   isMoveShape: boolean;
   isMoveSegment: boolean;
   selectSegment: Segment | null;
+  isScale: boolean;
+  matrix: Matrix | null;
+  static deltaPixel = 3;
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.isMoveShape = false;
     this.isMoveSegment = false;
+    this.isScale = false;
     this.selectSegment = null;
+    this.matrix = null;
   }
 
   updateStoryStore(graph: StoryGraph) {
@@ -30,6 +35,36 @@ export default class MoveUtil extends StoryUtil {
             break;
           case 'pixel':
             this.selectPath = hitRes.item;
+            const val = (i: number, j: number) => {
+              if (project && e.point && e.point.x && e.point.y) {
+                const point = new Point(
+                  e.point.x + i * MoveUtil.deltaPixel,
+                  e.point.y + j * MoveUtil.deltaPixel
+                );
+                return project.hitTest(point, this.hitOption);
+              }
+              return null;
+            };
+            const res = [val(-1, -1), val(1, -1), val(-1, 1), val(1, 1)];
+            let ant = 0;
+            let result: HitResult | null = null;
+            for (let i = 0; i < res.length; ++i) {
+              if (res[i]) {
+                ant++;
+                result = res[i];
+              }
+            }
+            if (ant == 1) {
+              if (result) {
+                this.isScale = true;
+                this.startPosition = e.point;
+                if (this.selectPath && this.selectPath.matrix) {
+                  this.matrix = this.selectPath.matrix.clone();
+                }
+              }
+            } else {
+              this.isScale = false;
+            }
             this.isMoveShape = true;
             this.selectSegment = null;
             this.isMoveSegment = false;
@@ -68,12 +103,26 @@ export default class MoveUtil extends StoryUtil {
     this.selectSegment = null;
     this.isMoveShape = false;
     this.isMoveSegment = false;
+    this.isScale = false;
   }
 
   drag(e: paper.MouseEvent) {
     if (this.selectPath && this.isMoveShape) {
-      if (e.delta) {
-        this.selectPath.translate(e.delta);
+      if (e.delta && e.point) {
+        if (this.isScale) {
+          if (this.startPosition && this.selectPath.position) {
+            const matrix = this.selectPath.matrix;
+            const scale = e.point
+              .subtract(this.selectPath.position)
+              .divide(this.startPosition.subtract(this.selectPath.position));
+            if (scale.x && scale.y && matrix && this.matrix) {
+              const mat = new Matrix(scale.x, 0, 0, scale.y, 0, 0);
+              this.selectPath.matrix = mat.prepend(this.matrix);
+            }
+          }
+        } else {
+          this.selectPath.translate(e.delta);
+        }
       }
     }
     if (this.selectSegment && this.isMoveSegment) {

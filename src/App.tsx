@@ -251,7 +251,7 @@ class App extends React.Component<Props, State> {
     const { lineToolState, groupToolState } = this.props;
     return (
       <div className="App" onDoubleClick={this.handleMousePos}>
-        <MenuBar mounted={true} centerX={0} centerY={0} tools={lineTools} />
+        <MenuBar mounted={true} centerX={300} centerY={0} tools={lineTools} />
         <MenuBar
           mounted={groupToolState}
           centerX={mouseX}
