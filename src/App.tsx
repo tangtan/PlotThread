@@ -61,13 +61,13 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Bend',
+          name: 'Straighten',
           type: 'svg',
           url: 'svg/Menu_Left/Bend.svg',
           subTools: []
         },
         {
-          name: 'Scale',
+          name: 'Compress',
           type: 'svg',
           url: 'svg/Menu_Left/Scale.svg',
           subTools: []
@@ -179,6 +179,50 @@ class App extends React.Component<Props, State> {
           type: 'svg',
           url: 'svg/Menu_Tools/Text.svg',
           subTools: []
+        },
+        {
+          name: 'Bump',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Bump.svg',
+          subTools: [
+            {
+              name: 'Collide',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Bump_Collide.svg',
+              subTools: []
+            },
+            {
+              name: 'Knot',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Bump_Knot.svg',
+              subTools: []
+            },
+            {
+              name: 'Twine',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Bump_Twine.svg',
+              subTools: []
+            }
+          ]
+        },
+        {
+          name: 'MergeSplit',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Merge.svg',
+          subTools: [
+            {
+              name: 'Merge',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Merge.svg',
+              subTools: []
+            },
+            {
+              name: 'Split',
+              type: 'svg',
+              url: 'svg/Menu_Tools/Split.svg',
+              subTools: []
+            }
+          ]
         }
       ],
       groupTools: [
@@ -252,12 +296,12 @@ class App extends React.Component<Props, State> {
     return (
       <div className="App" onDoubleClick={this.handleMousePos}>
         <MenuBar mounted={true} centerX={300} centerY={0} tools={lineTools} />
-        <MenuBar
+        {/* <MenuBar
           mounted={groupToolState}
           centerX={mouseX}
           centerY={mouseY}
           tools={groupTools}
-        />
+        /> */}
         <DrawCanvas />
         <ShapeModal />
         <UploadModal />
