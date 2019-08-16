@@ -34,6 +34,9 @@ export default class StraightenUtil extends StoryUtil {
     } else {
       super.mouseDown(e);
     }
+    if (this.selectPath) {
+      this.selectPath.selected = true;
+    }
   }
 
   drag(e: paper.MouseEvent) {

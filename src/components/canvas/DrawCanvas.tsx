@@ -138,15 +138,7 @@ class DrawCanvas extends Component<Props, State> {
     });
   }
 
-  refresh() {
-    const orderInfo = this.state.sortUtil.orderInfo;
-    const straightenInfo = this.state.straightenUtil.straightenInfo;
-    const compressInfo = this.state.compressUtil.compressInfo;
-    let graph = this.state.storyLayouter.layout(
-      orderInfo,
-      straightenInfo,
-      compressInfo
-    );
+  refresh(graph: StoryGraph) {
     // scale nodes
     this.state.storyLayouter.extent(100, 300, 1250);
     this.updateUtils(graph);
@@ -175,20 +167,22 @@ class DrawCanvas extends Component<Props, State> {
       vObj.geometry ? vObj.geometry.name : ''
     );
     const characterInfo = this.state.addLineUtil.characterInfo;
-    characterInfo.forEach(info => {
-      const [name, startTime, endTime] = info;
-      if (nameList.indexOf(name) === -1 && this.state.storyLayouter) {
-        this.state.storyLayouter.addCharacter(name, startTime, endTime);
-      }
-    });
+    return this.state.storyLayouter.addCharacter(characterInfo);
+    // characterInfo.forEach(info => {
+    //   const [name, startTime, endTime] = info;
+    //   if (nameList.indexOf(name) === -1 && this.state.storyLayouter) {
+    //     this.state.storyLayouter.addCharacter(name, startTime, endTime);
+    //   }
+    // });
   };
 
   private addGroup = () => {
     const groupInfo = this.state.groupUtil.groupInfo;
-    groupInfo.forEach(info => {
-      const [charArr, sTime, eTime] = info;
-      this.state.storyLayouter.changeSession(charArr, sTime, eTime);
-    });
+    return this.state.storyLayouter.changeSession(groupInfo);
+    // groupInfo.forEach(info => {
+    //   const [charArr, sTime, eTime] = info;
+    //   this.state.storyLayouter.changeSession(charArr, sTime, eTime);
+    // });
   };
 
   private onMouseDown = (e: paper.MouseEvent) => {
@@ -227,49 +221,70 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.addLineState) {
       this.state.addLineUtil.up(e);
-      this.addCharacter();
-      this.refresh();
+      const graph = this.addCharacter();
+      this.refresh(graph);
     }
     if (this.props.groupState) {
       this.state.groupUtil.up(e);
-      this.addGroup();
-      this.refresh();
+      const graph = this.addGroup();
+      this.refresh(graph);
     }
     if (this.props.sortState) {
       this.state.sortUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.order(
+        this.state.sortUtil.orderInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.compressState) {
       this.state.compressUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.compress(
+        this.state.compressUtil.compressInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.straightenState) {
       this.state.straightenUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.straighten(
+        this.state.straightenUtil.straightenInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.bendState) {
       this.state.bendUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.bend(this.state.bendUtil.bendInfo);
+      this.refresh(graph);
     }
     if (this.props.mergeState) {
       this.state.mergeUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.merge(
+        this.state.mergeUtil.mergeInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.splitState) {
       this.state.splitUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.split(
+        this.state.splitUtil.splitInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.collideState) {
       this.state.collideUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.collide(
+        this.state.collideUtil.collideInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.twineState) {
       this.state.twinUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.twin(this.state.twinUtil.twinInfo);
+      this.refresh(graph);
     }
     if (this.props.knotState) {
-      this.state.twinUtil.up(e);
-      this.refresh();
+      this.state.knotUtil.up(e);
+      const graph = this.state.storyLayouter.knot(this.state.knotUtil.knotInfo);
+      this.refresh(graph);
     }
   };
 

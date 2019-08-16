@@ -22,7 +22,7 @@ export class BaseMouseUtil {
 
   restore() {
     if (this.selectPath) {
-      this.selectPath.strokeColor = BLACK;
+      this.selectPath.selected = false;
       this.selectPath = null;
     }
     if (this.currPath) {
