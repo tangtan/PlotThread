@@ -226,11 +226,17 @@ export default class MoveUtil extends StoryUtil {
             const scale = lineTo.divide(lineFrom);
             if (scale.x && scale.y && this.matrix) {
               const mat = new Matrix();
-              if (scale.x == Infinity || scale.x == -Infinity) {
-                scale.x = 1;
-              }
-              if (scale.y == Infinity || scale.y == -Infinity) {
-                scale.y = 1;
+              if (
+                this.selectPath.name &&
+                this.selectPath.name.startsWith('circle-')
+              ) {
+                if (lineFrom.x != null && lineFrom.y != null) {
+                  if (Math.abs(lineFrom.x) > Math.abs(lineFrom.y)) {
+                    scale.y = scale.x;
+                  } else {
+                    scale.x = scale.y;
+                  }
+                }
               }
               mat.scale(scale.x, scale.y);
               this.selectPath.matrix = mat.prepend(this.matrix);
