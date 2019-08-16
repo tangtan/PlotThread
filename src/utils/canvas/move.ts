@@ -209,9 +209,21 @@ export default class MoveUtil extends StoryUtil {
       if (e.delta && e.point) {
         if (this.isScale) {
           if (this.startPosition && this.selectPath.position) {
-            const scale = e.point
-              .subtract(this.selectPath.position)
-              .divide(this.startPosition.subtract(this.selectPath.position));
+            let lineTo = e.point.subtract(this.selectPath.position);
+            let lineFrom = this.startPosition.subtract(
+              this.selectPath.position
+            );
+            if (this.selectPath.rotation) {
+              lineTo = lineTo.rotate(
+                -this.selectPath.rotation,
+                new Point(0, 0)
+              );
+              lineFrom = lineFrom.rotate(
+                -this.selectPath.rotation,
+                new Point(0, 0)
+              );
+            }
+            const scale = lineTo.divide(lineFrom);
             if (scale.x && scale.y && this.matrix) {
               const mat = new Matrix();
               if (scale.x == Infinity || scale.x == -Infinity) {
@@ -220,14 +232,8 @@ export default class MoveUtil extends StoryUtil {
               if (scale.y == Infinity || scale.y == -Infinity) {
                 scale.y = 1;
               }
-              if (this.matrix.tx != null && this.matrix.ty != null) {
-                mat.scale(
-                  scale.x,
-                  scale.y,
-                  new Point(this.matrix.tx, this.matrix.ty)
-                );
-              }
-              this.selectPath.matrix = mat.append(this.matrix);
+              mat.scale(scale.x, scale.y);
+              this.selectPath.matrix = mat.prepend(this.matrix);
             }
           }
         } else if (this.isRotate) {
