@@ -1,5 +1,6 @@
 import { createAction, action } from 'typesafe-actions';
-import { VisualObject } from '../types';
+import { PathGroup } from '../types';
+import { Path, Color, Point } from 'paper';
 
 let nextTodoId: number = 0;
 
@@ -23,8 +24,33 @@ export const setTool = createAction(
   action => (name: string, use: boolean) => action({ name: name, use: use })
 );
 
+// SelectedObj Module
+export const setObject = createAction('SET_OBJECT', action => (point: Point) =>
+  action({ point: point })
+);
+
+export const setObjectStrokeColor = createAction(
+  'SET_OBJECTSTROKECOLOR',
+  action => (color: Color) => action({ color: color })
+);
+
+export const setObjectFillColor = createAction(
+  'SET_OBJECTFILLCOLOR',
+  action => (color: Color) => action({ color: color })
+);
+
 // Render Module
 export const addVisualObject = createAction(
   'ADD_VISUALOBJECT',
   action => (type: string) => action({ type: type })
+);
+
+export const addVisualArray = createAction(
+  'ADD_VISUALARRAY',
+  action => (array: string[]) => action({ array: array })
+);
+
+export const addStoryLines = createAction(
+  'ADD_STORYLINES',
+  action => (strokes: PathGroup[]) => action({ strokes: strokes })
 );

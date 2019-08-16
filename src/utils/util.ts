@@ -1,6 +1,7 @@
 import paper, { Path, Item, Point, project } from 'paper';
-import { IHitOption } from '../types';
+import { IHitOption, StoryGraph } from '../types';
 import { BLACK } from './color';
+import { StoryStore } from './hitTest';
 
 export class BaseMouseUtil {
   startPosition: Point | null;
@@ -21,7 +22,7 @@ export class BaseMouseUtil {
 
   restore() {
     if (this.selectPath) {
-      this.selectPath.strokeColor = BLACK;
+      this.selectPath.selected = false;
       this.selectPath = null;
     }
     if (this.currPath) {
@@ -55,71 +56,77 @@ export class BaseMouseUtil {
       this.currPath = null;
     }
   }
-
-  findStorylineByPosition(
-    nodes: number[][][],
-    names: string[],
-    x: number,
-    y: number
-  ) {
-    let min_y = -1;
-    let res = -1;
-    nodes.forEach((line, index) => {
-      line.forEach((node, pos) => {
-        if (node[0] >= x && pos > 0 && line[pos - 1][0] < x) {
-          const start_x = line[pos - 1][0];
-          const start_y = line[pos - 1][1];
-          const end_x = line[pos][0];
-          const end_y = line[pos][1];
-          const pos_y =
-            start_y + ((end_y - start_y) * (x - start_x)) / (end_x - start_x);
-          if ((min_y == -1 || pos_y > min_y) && pos_y < y) {
-            min_y = pos_y;
-            res = index;
-          }
-        }
-      });
-    });
-    return res === -1 ? '' : names[res];
-  }
-
-  findTimespanByPosition(nodes: number[][][], x: number, y: number) {}
 }
 
-export class StoryStore {
-  nodes: number[][][];
-  names: string[];
-  constructor(nodes: number[][][], names: string[]) {
-    this.nodes = nodes;
-    this.names = names;
+export class StoryUtil extends BaseMouseUtil {
+  storyStore: StoryStore | null;
+  constructor(hitOption: IHitOption) {
+    super(hitOption);
+    this.storyStore = null;
   }
 
-  getIndexByPosition(x: number, y: number) {
-    let min_y = -1;
-    let res = -1;
-    this.nodes.forEach((line, index) => {
-      line.forEach((node, pos) => {
-        if (node[0] >= x && pos > 0 && line[pos - 1][0] < x) {
-          const start_x = line[pos - 1][0];
-          const start_y = line[pos - 1][1];
-          const end_x = line[pos][0];
-          const end_y = line[pos][1];
-          const pos_y =
-            start_y + ((end_y - start_y) * (x - start_x)) / (end_x - start_x);
-          if ((min_y == -1 || pos_y > min_y) && pos_y < y) {
-            min_y = pos_y;
-            res = index;
+  updateStoryStore(graph: StoryGraph) {
+    this.storyStore = new StoryStore(graph);
+  }
+
+  getStartTime() {
+    if (!this.startPosition) return -1;
+    if (!this.storyStore) return -1;
+    const startX = this.startPosition.x as number;
+    const startY = this.startPosition.y as number;
+    const startTime = this.storyStore.getStoryTimeSpan(startX, startY)[0];
+    return startTime;
+  }
+
+  getEndTime() {
+    if (!this.endPosition) return -1;
+    if (!this.storyStore) return -1;
+    const endX = this.endPosition.x as number;
+    const endY = this.endPosition.y as number;
+    const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[1];
+    return endTime;
+  }
+}
+
+export class DoubleSelectUtil extends BaseMouseUtil {
+  secondSelectPath: Item | null;
+  constructor(hitOption: IHitOption) {
+    super(hitOption);
+    this.secondSelectPath = null;
+  }
+  restore() {
+    if (this.selectPath) {
+      this.selectPath.selected = false;
+      this.selectPath = null;
+    }
+    if (this.secondSelectPath) {
+      this.secondSelectPath.selected = false;
+      this.secondSelectPath = null;
+    }
+    if (this.currPath) {
+      this.currPath.remove();
+      this.currPath = null;
+    }
+  }
+  status() {
+    if (this.selectPath && this.secondSelectPath) {
+      return true;
+    }
+    return false;
+  }
+  up(e: paper.MouseEvent) {
+    if (project && e.point) {
+      const hitResult = project.hitTest(e.point, this.hitOption);
+      if (hitResult) {
+        if (!this.status() && hitResult.item) {
+          hitResult.item.selected = true;
+          if (!this.selectPath) {
+            this.selectPath = hitResult.item;
+          } else if (this.selectPath != hitResult.item) {
+            this.secondSelectPath = hitResult.item;
           }
         }
-      });
-    });
-    return res;
-  }
-
-  getTimespanByPosition(x: number, y: number) {}
-
-  getStorylineNameByPosition(x: number, y: number) {
-    const index = this.getIndexByPosition(x, y);
-    return index === -1 ? '' : this.names[index];
+      }
+    }
   }
 }

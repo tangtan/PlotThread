@@ -2,7 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import VisibilityFilters from '../components/demo/VisibilityFilters';
-import { Path } from 'paper';
+import { Path, Raster, Group } from 'paper';
 
 export type ActionType = ActionType<typeof actions>;
 
@@ -11,6 +11,7 @@ export type StateType = {
   visibilityFilter: string;
   toolState: ToolStateType;
   renderQueue: VisualObject[];
+  selectedObj: VisualObject;
 };
 
 export type DispatchType = typeof store.dispatch;
@@ -33,13 +34,15 @@ export type ByIdsType = {
 
 // Tool State
 export type ToolStateType = {
-  toolName: string;
-  move: boolean;
-  morph: boolean;
-  adjust: boolean;
-  bend: boolean;
-  stroke: boolean;
-  picture: boolean;
+  toolName: string; // 辅助判断 FreeMode
+  toolMap: Map<string, boolean>; // 动态储存工具状态
+};
+
+export type ITool = {
+  name: string;
+  type: string;
+  url: string;
+  subTools: ITool[];
 };
 
 export type IHitOption = {
@@ -53,5 +56,33 @@ export type IHitOption = {
 export type VisualObject = {
   type: string;
   mounted: boolean;
-  geometry: Path | Path.Circle | Path.Rectangle | null;
+  geometry: Path | Path.Circle | Path.Rectangle | Raster | Group | null;
 };
+
+// Storyline
+export type StoryNode = number[];
+export type StorySegment = StoryNode[];
+export type StoryLine = StorySegment[];
+// export type StoryLine = StoryNode[];
+export type StoryName = string;
+export type StoryGraph = {
+  names: StoryName[];
+  nodes: StorySegment[];
+  renderNodes?: StoryLine[];
+  smoothNodes?: StoryLine[];
+  sketchNodes?: StoryLine[];
+  hitTest?: any;
+};
+export type PathGroup = Path[];
+
+export class PathStyleSegment {
+  name: string;
+  left: number;
+  right: number;
+  constructor(name: string, left: number, right: number) {
+    this.name = name;
+    this.left = left;
+    this.right = right;
+  }
+  public draw = (path: Path) => {};
+}

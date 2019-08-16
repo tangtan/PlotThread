@@ -1,34 +1,57 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Path, view } from 'paper';
-import { StateType, DispatchType } from '../../types';
+import { view, project, Point } from 'paper';
+import { StateType, DispatchType, PathGroup, StoryGraph } from '../../types';
+import { addStoryLines, setObject } from '../../store/actions';
+import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 import { iStoryline } from 'story-flow';
 import { xml } from 'd3-fetch';
-import { ColorSet } from '../../utils/color';
-import SortUtil from '../../utils/canvas/sort';
-import StraightenUtil from '../../utils/canvas/straighten';
-import ShapeUtil from '../../utils/canvas/shape';
+import StoryDrawer from '../../utils/animate';
+// Layout Utils
+import MoveUtil from '../../utils/canvas/move';
+import AddLineUtil from '../../utils/canvas/addline';
+import GroupUtil from '../../utils/canvas/group';
 import CompressUtil from '../../utils/canvas/compress';
+import SortUtil from '../../utils/canvas/sort';
+import BendUtil from '../../utils/canvas/bend';
+import StraightenUtil from '../../utils/canvas/straighten';
+// Relationship/Group Utils
+import MergeUtil from '../../utils/canvas/merge';
+import SplitUtil from '../../utils/canvas/split';
+import CollideUtil from '../../utils/canvas/collide';
+import TwinUtil from '../../utils/canvas/twin';
+import KnotUtil from '../../utils/canvas/knot';
+// Line Utils
 
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    compressState: state.toolState.bend,
-    sortState: state.toolState.morph,
-    straightenState: state.toolState.adjust,
-    freeMode: !(
-      state.toolState.move ||
-      state.toolState.morph ||
-      state.toolState.stroke ||
-      state.toolState.adjust ||
-      state.toolState.bend
-    )
+    selectedObj: state.selectedObj,
+    // Layout Utils
+    freeMode: getToolState(state, 'FreeMode'),
+    addLineState: getToolState(state, 'AddLine'),
+    groupState: getToolState(state, 'Group'),
+    compressState: getToolState(state, 'Compress'),
+    sortState: getToolState(state, 'Sort'),
+    bendState: getToolState(state, 'Forward'), //TODO
+    straightenState: getToolState(state, 'Straighten'),
+    // Relationship/Group Utils
+    mergeState: getToolState(state, 'Merge'),
+    splitState: getToolState(state, 'Split'),
+    collideState: getToolState(state, 'Collide'),
+    twineState: getToolState(state, 'Twine'),
+    knotState: getToolState(state, 'Knot')
+    // Line Utils
   };
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {};
+  return {
+    addStoryLines: (strokes: PathGroup[]) => dispatch(addStoryLines(strokes)),
+    setSelectedObj: (e: paper.MouseEvent) =>
+      dispatch(setObject(e.point || new Point(-100, -100)))
+  };
 };
 
 const hitOption = {
@@ -50,74 +73,128 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 
 type State = {
   storyXMLUrl: string;
-  storyFlower: any;
-  strokes: Path[];
-  nodes: number[][][];
-  names: string[];
-  strokeWidth: number;
-  duration: number;
+  storyLayouter: any;
+  storyDrawer: StoryDrawer;
+  // Please strictly follow the util order
+  // Layout Utils
+  moveUtil: MoveUtil;
+  addLineUtil: AddLineUtil;
+  groupUtil: GroupUtil;
   sortUtil: SortUtil;
-  straightenUtil: StraightenUtil;
-  shapeUtil: ShapeUtil;
   compressUtil: CompressUtil;
+  bendUtil: BendUtil;
+  straightenUtil: StraightenUtil;
+  // Relationship/Group Utils
+  mergeUtil: MergeUtil;
+  splitUtil: SplitUtil;
+  collideUtil: CollideUtil;
+  twinUtil: TwinUtil;
+  knotUtil: KnotUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      storyXMLUrl: 'xml/JurassicPark.xml',
-      storyFlower: null,
-      strokes: [],
-      nodes: [],
-      names: [],
-      strokeWidth: 1,
-      duration: 1000,
+      storyXMLUrl: 'xml/StarWars.xml',
+      storyLayouter: null,
+      storyDrawer: new StoryDrawer(),
+      // Layout Utils
+      moveUtil: new MoveUtil(hitShapeOption),
+      addLineUtil: new AddLineUtil(hitOption),
+      groupUtil: new GroupUtil(hitOption),
       sortUtil: new SortUtil(hitOption),
+      compressUtil: new CompressUtil(hitOption),
       straightenUtil: new StraightenUtil(hitOption),
-      shapeUtil: new ShapeUtil(hitShapeOption),
-      compressUtil: new CompressUtil(hitOption)
+      bendUtil: new BendUtil(hitOption),
+      // Relationship/Group Utils
+      mergeUtil: new MergeUtil(hitOption),
+      splitUtil: new SplitUtil(hitOption),
+      collideUtil: new CollideUtil(hitOption),
+      twinUtil: new TwinUtil(hitOption),
+      knotUtil: new KnotUtil(hitOption)
     };
   }
 
-  // init strokes
+  // init
   async componentDidMount() {
-    const xmlUrl = this.state.storyXMLUrl;
-    const xmlData = await xml(xmlUrl);
-    const storyFlower = new iStoryline();
-    storyFlower.readFile(xmlData);
-    this.setState({
-      storyFlower: storyFlower
-    });
-    const graph = storyFlower.layout([], [], []);
-    storyFlower.extent(100, 300, 1250);
-    this.setState({
-      nodes: graph.nodes,
-      names: graph.names
-    });
-    graph.nodes.forEach((line: number[][], index: number) => {
-      const pathStr = this.drawSmoothPath(line);
-      const path = new Path(pathStr);
-      path.name = graph.names[index];
-      path.strokeColor = ColorSet.black;
-      path.strokeWidth = this.state.strokeWidth;
-      this.setState({
-        strokes: [...this.state.strokes, path]
-      });
-    });
+    console.log(project);
     view.onMouseDown = this.onMouseDown;
     view.onMouseUp = this.onMouseUp;
     view.onMouseMove = this.onMouseMove;
     view.onMouseDrag = this.onMouseDrag;
+    view.onDoubleClick = this.onMouseClick;
+    const xmlUrl = this.state.storyXMLUrl;
+    const xmlData = await xml(xmlUrl);
+    const storyLayouter = new iStoryline();
+    storyLayouter.readXMLFile(xmlData);
+    const graph = storyLayouter.layout([], [], []);
+    storyLayouter.extent(100, 300, 1250);
+    const strokes = this.state.storyDrawer.initGraph(graph);
+    this.updateUtils(graph);
+    this.props.addStoryLines(strokes);
+    this.setState({
+      storyLayouter: storyLayouter
+    });
   }
 
-  private restore = () => {
-    this.state.sortUtil.restore();
-    this.state.straightenUtil.restore();
-    this.state.compressUtil.restore();
+  refresh(graph: StoryGraph) {
+    // scale nodes
+    this.state.storyLayouter.extent(100, 300, 1250);
+    this.updateUtils(graph);
+    const strokes = this.state.storyDrawer.updateGraph(graph);
+    this.props.addStoryLines(strokes);
+  }
+
+  private updateUtils = (graph: StoryGraph) => {
+    // Layout Utils
+    this.state.moveUtil.updateStoryStore(graph);
+    this.state.addLineUtil.updateStoryStore(graph);
+    this.state.groupUtil.updateStoryStore(graph);
+    this.state.sortUtil.updateStoryStore(graph);
+    this.state.straightenUtil.updateStoryStore(graph);
+    this.state.compressUtil.updateStoryStore(graph);
+    // Relationship/Group Utils
+    this.state.mergeUtil.updateStoryStore(graph);
+    this.state.splitUtil.updateStoryStore(graph);
+    this.state.collideUtil.updateStoryStore(graph);
+    this.state.twinUtil.updateStoryStore(graph);
+    this.state.knotUtil.updateStoryStore(graph);
+  };
+
+  private addCharacter = () => {
+    const nameList = this.props.renderQueue.map(vObj =>
+      vObj.geometry ? vObj.geometry.name : ''
+    );
+    const characterInfo = this.state.addLineUtil.characterInfo;
+    return this.state.storyLayouter.addCharacter(characterInfo);
+    // characterInfo.forEach(info => {
+    //   const [name, startTime, endTime] = info;
+    //   if (nameList.indexOf(name) === -1 && this.state.storyLayouter) {
+    //     this.state.storyLayouter.addCharacter(name, startTime, endTime);
+    //   }
+    // });
+  };
+
+  private addGroup = () => {
+    const groupInfo = this.state.groupUtil.groupInfo;
+    return this.state.storyLayouter.changeSession(groupInfo);
+    // groupInfo.forEach(info => {
+    //   const [charArr, sTime, eTime] = info;
+    //   this.state.storyLayouter.changeSession(charArr, sTime, eTime);
+    // });
   };
 
   private onMouseDown = (e: paper.MouseEvent) => {
+    if (this.props.freeMode) {
+      this.state.moveUtil.down(e);
+    }
+    if (this.props.addLineState) {
+      this.state.addLineUtil.down(e);
+    }
+    if (this.props.groupState) {
+      this.state.groupUtil.down(e);
+    }
     if (this.props.sortState) {
       this.state.sortUtil.down(e);
     }
@@ -127,37 +204,112 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.straightenState) {
       this.state.straightenUtil.down(e);
     }
-    if (this.props.freeMode) {
-      this.state.shapeUtil.down(e);
+    if (this.props.bendState) {
+      this.state.bendUtil.down(e);
+    }
+    if (this.props.mergeState) {
+      this.state.mergeUtil.down(e);
+    }
+    if (this.props.twineState) {
+      this.state.twinUtil.down(e);
     }
   };
 
   private onMouseUp = (e: paper.MouseEvent) => {
-    const nodes = this.state.nodes;
-    const names = this.state.names;
+    if (this.props.freeMode) {
+      this.state.moveUtil.up(e);
+    }
+    if (this.props.addLineState) {
+      this.state.addLineUtil.up(e);
+      const graph = this.addCharacter();
+      this.refresh(graph);
+    }
+    if (this.props.groupState) {
+      this.state.groupUtil.up(e);
+      const graph = this.addGroup();
+      this.refresh(graph);
+    }
     if (this.props.sortState) {
-      this.state.sortUtil.up(e, nodes, names);
-      this.refresh();
+      this.state.sortUtil.up(e);
+      const graph = this.state.storyLayouter.order(
+        this.state.sortUtil.orderInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.compressState) {
       this.state.compressUtil.up(e);
+      const graph = this.state.storyLayouter.compress(
+        this.state.compressUtil.compressInfo
+      );
+      this.refresh(graph);
     }
     if (this.props.straightenState) {
       this.state.straightenUtil.up(e);
-      this.refresh();
+      const graph = this.state.storyLayouter.straighten(
+        this.state.straightenUtil.straightenInfo
+      );
+      this.refresh(graph);
     }
+    if (this.props.bendState) {
+      this.state.bendUtil.up(e);
+      const graph = this.state.storyLayouter.bend(this.state.bendUtil.bendInfo);
+      this.refresh(graph);
+    }
+    if (this.props.mergeState) {
+      this.state.mergeUtil.up(e);
+      const graph = this.state.storyLayouter.merge(
+        this.state.mergeUtil.mergeInfo
+      );
+      this.refresh(graph);
+    }
+    if (this.props.splitState) {
+      this.state.splitUtil.up(e);
+      const graph = this.state.storyLayouter.split(
+        this.state.splitUtil.splitInfo
+      );
+      this.refresh(graph);
+    }
+    if (this.props.collideState) {
+      this.state.collideUtil.up(e);
+      const graph = this.state.storyLayouter.collide(
+        this.state.collideUtil.collideInfo
+      );
+      this.refresh(graph);
+    }
+    if (this.props.twineState) {
+      this.state.twinUtil.up(e);
+      const graph = this.state.storyLayouter.twin(this.state.twinUtil.twinInfo);
+      this.refresh(graph);
+    }
+    if (this.props.knotState) {
+      this.state.knotUtil.up(e);
+      const graph = this.state.storyLayouter.knot(this.state.knotUtil.knotInfo);
+      this.refresh(graph);
+    }
+  };
+
+  private onMouseClick = (e: paper.MouseEvent) => {
     if (this.props.freeMode) {
-      this.state.shapeUtil.up(e);
+      this.props.setSelectedObj(e);
     }
   };
 
   private onMouseMove = (e: paper.MouseEvent) => {
     if (this.props.freeMode) {
-      this.state.shapeUtil.move(e);
+      this.state.moveUtil.move(e);
     }
   };
 
   private onMouseDrag = (e: paper.MouseEvent) => {
+    if (this.props.freeMode) {
+      this.state.moveUtil.drag(e);
+    }
+    if (this.props.addLineState) {
+      this.state.addLineUtil.drag(e);
+    }
+    if (this.props.groupState) {
+      this.state.groupUtil.drag(e);
+    }
     if (this.props.sortState) {
       this.state.sortUtil.drag(e);
     }
@@ -167,92 +319,16 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.straightenState) {
       this.state.straightenUtil.drag(e);
     }
-    if (this.props.freeMode) {
-      this.state.shapeUtil.drag(e);
+    if (this.props.bendState) {
+      this.state.bendUtil.drag(e);
+    }
+    if (this.props.mergeState) {
+      this.state.mergeUtil.drag(e);
+    }
+    if (this.props.twineState) {
+      this.state.twinUtil.drag(e);
     }
   };
-
-  async refresh() {
-    const graph = this.state.storyFlower.layout(
-      this.state.sortUtil.orderInfo,
-      this.state.straightenUtil.straightenInfo,
-      []
-    );
-    // scale nodes
-    this.state.storyFlower.extent(100, 300, 1250);
-    const nodes: number[][][] = graph.nodes;
-    const names: string[] = graph.names;
-    this.setState({
-      nodes: nodes,
-      names: names
-    });
-    nodes.forEach((line, index) => {
-      const pathStr = this.drawSmoothPath(line);
-      const pathTo = new Path(pathStr);
-      pathTo.set({ insert: false });
-      const path = this.state.strokes[index];
-      const pathFrom = path.clone({ insert: false }) as Path;
-      const duration = this.state.duration;
-      path.tween(duration).onUpdate = (e: any) => {
-        path.interpolate(pathFrom, pathTo, e.factor);
-      };
-    });
-  }
-
-  drawSmoothPath(points: number[][]) {
-    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
-    let i, len;
-    for (i = 1, len = points.length; i < len - 1; i += 2) {
-      const rPoint = points[i];
-      const lPoint = points[i + 1];
-      const middleX = (rPoint[0] + lPoint[0]) / 2;
-      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
-      if (rPoint[1] !== lPoint[1]) {
-        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${
-          lPoint[0]
-        } ${lPoint[1]} `;
-      } else {
-        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
-      }
-    }
-    pathStr += `L ${points[i][0]} ${points[i][1]}`;
-    return pathStr;
-  }
-
-  drawInitialPathStr(points: number[][]) {
-    return `M ${points[0][0]} ${points[0][1]} `;
-  }
-
-  // TODO: fix bug
-  // appearing(line: number[][], speed: number, name: string) {
-  //   const path = new Path();
-  //   path.name = name;
-  //   path.strokeColor = 'black';
-  //   path.strokeWidth = this.state.strokeWidth;
-  //   this.setState({
-  //     strokes: [...this.state.strokes, path]
-  //   });
-  //   let x = line[0][0];
-  //   let pos = 1;
-  //   path.onFrame = e => {
-  //     x += e.delta * speed;
-  //     if (x > line[pos][0]) {
-  //       path.add(line[pos]);
-  //       pos++;
-  //     }
-  //     if (pos >= line.length) {
-  //       path.onFrame = () => {};
-  //       return;
-  //     }
-  //     const start_x = line[pos - 1][0];
-  //     const start_y = line[pos - 1][1];
-  //     const end_x = line[pos][0];
-  //     const end_y = line[pos][1];
-  //     const y =
-  //       start_y + ((end_y - start_y) * (x - start_x)) / (end_x - start_x);
-  //     path.add([x, y]);
-  //   };
-  // }
 
   render() {
     return <ZoomCanvas />;

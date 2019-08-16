@@ -1,13 +1,17 @@
-import { BaseMouseUtil } from '../util';
-import { IHitOption } from '../../types';
-import paper, { Path, Point, project } from 'paper';
+import { StoryUtil } from '../util';
+import { IHitOption, StoryGraph } from '../../types';
+import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../color';
 
-export default class StraightenUtil extends BaseMouseUtil {
+export default class StraightenUtil extends StoryUtil {
   straightenInfo: any[][];
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.straightenInfo = [];
+  }
+
+  updateStoryStore(graph: StoryGraph) {
+    super.updateStoryStore(graph);
   }
 
   down(e: paper.MouseEvent) {
@@ -17,27 +21,27 @@ export default class StraightenUtil extends BaseMouseUtil {
   }
 
   up(e: paper.MouseEvent) {
-    if (!this.selectPath && project && e.point) {
-      const hitRes = project.hitTest(e.point, this.hitOption);
-      if (hitRes) {
-        this.selectPath = hitRes.item;
-        if (this.selectPath) {
-          this.selectPath.strokeColor = ColorSet.red;
-        }
+    if (this.selectPath) {
+      super.mouseUp(e);
+      const name = this.selectPath.name;
+      const startTime = this.getStartTime();
+      const endTime = this.getEndTime();
+      if (startTime > -1 && endTime > -1) {
+        this.straightenInfo.push([name, startTime, endTime]);
+        this.selectPath.selected = false;
+        this.selectPath = null;
       }
     } else {
-      super.mouseUp(e);
-      if (this.selectPath) {
-        const name = this.selectPath.name;
-        // TODO
-        this.straightenInfo.push([name, 0, 1000]);
-        this.selectPath.strokeColor = ColorSet.black;
-      }
+      super.mouseDown(e);
+    }
+    if (this.selectPath) {
+      this.selectPath.selected = true;
     }
   }
 
   drag(e: paper.MouseEvent) {
     if (this.selectPath) {
+      this.selectPath.selected = true;
       super.mouseDrag(e);
       if (this.startPosition && this.endPosition) {
         this.currPath = new Path.Line(

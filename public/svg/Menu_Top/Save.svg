@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="89px" height="89px" viewBox="0 0 89 89" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Save</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Save" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon_baocun" transform="translate(17.000000, 17.000000)" fill="#FFFFFF" fill-rule="nonzero" stroke="#FFFFFF">
+            <path d="M54.828,18 L38,1.172 C37.2500291,0.421802501 36.2327793,0.000226549622 35.172,0 L4,0 C1.790861,-8.8817842e-16 0,1.790861 0,4 L0,52 C0,54.209139 1.790861,56 4,56 L52,56 C54.209139,56 56,54.209139 56,52 L56,20.828 C55.9997735,19.7672207 55.5781975,18.7499709 54.828,18 Z M12,4 L15,4 L15,14 L12,14 L12,4 Z M19,4 L28,4 L28,14 L19,14 L19,4 Z M12,52 L12,40 L44,40 L44,52 L12,52 Z M52,52 L48,52 L48,38 C48,36.8954305 47.1045695,36 46,36 L10,36 C8.8954305,36 8,36.8954305 8,38 L8,52 L4,52 L4,4 L8,4 L8,16 C8,17.1045695 8.8954305,18 10,18 L30,18 C31.1045695,18 32,17.1045695 32,16 L32,4 L35.172,4 L52,20.828 L52,52 Z" id="形状"></path>
+        </g>
+    </g>
+</svg>
