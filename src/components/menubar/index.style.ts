@@ -6,6 +6,9 @@ export const container = css`
 
 export const center = css`
   background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &:not(:empty):hover {
     cursor: pointer;
   }
