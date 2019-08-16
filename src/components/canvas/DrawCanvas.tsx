@@ -127,7 +127,7 @@ class DrawCanvas extends Component<Props, State> {
     const xmlUrl = this.state.storyXMLUrl;
     const xmlData = await xml(xmlUrl);
     const storyLayouter = new iStoryline();
-    storyLayouter.readFile(xmlData);
+    storyLayouter.readXMLFile(xmlData);
     const graph = storyLayouter.layout([], [], []);
     storyLayouter.extent(100, 300, 1250);
     const strokes = this.state.storyDrawer.initGraph(graph);
