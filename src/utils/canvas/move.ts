@@ -213,15 +213,21 @@ export default class MoveUtil extends StoryUtil {
               .subtract(this.selectPath.position)
               .divide(this.startPosition.subtract(this.selectPath.position));
             if (scale.x && scale.y && this.matrix) {
-              const mat = this.matrix.clone();
+              const mat = new Matrix();
               if (scale.x == Infinity || scale.x == -Infinity) {
-                mat.scale(scale.y);
-              } else if (scale.y == Infinity || scale.y == -Infinity) {
-                mat.scale(scale.x);
-              } else {
-                mat.scale(scale.x, scale.y);
+                scale.x = 1;
               }
-              this.selectPath.matrix = mat;
+              if (scale.y == Infinity || scale.y == -Infinity) {
+                scale.y = 1;
+              }
+              if (this.matrix.tx != null && this.matrix.ty != null) {
+                mat.scale(
+                  scale.x,
+                  scale.y,
+                  new Point(this.matrix.tx, this.matrix.ty)
+                );
+              }
+              this.selectPath.matrix = mat.append(this.matrix);
             }
           }
         } else if (this.isRotate) {
@@ -237,9 +243,13 @@ export default class MoveUtil extends StoryUtil {
               if (delta.y > 0) {
                 angle += 180;
               }
-              const mat = new Matrix();
-              mat.rotate(angle, new Point(0, 0));
-              this.selectPath.matrix = mat.prepend(this.matrix);
+              console.log(this.matrix);
+              let mat = new Matrix();
+              if (this.matrix.tx != null && this.matrix.ty != null) {
+                mat.rotate(angle, new Point(this.matrix.tx, this.matrix.ty));
+              }
+              mat.append(this.matrix);
+              this.selectPath.matrix = mat;
             }
           }
         } else {
