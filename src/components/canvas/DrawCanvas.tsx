@@ -278,7 +278,9 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.twineState) {
       this.state.twinUtil.up(e);
-      const graph = this.state.storyLayouter.twin(this.state.twinUtil.twinInfo);
+      const graph = this.state.storyLayouter.twine(
+        this.state.twinUtil.twinInfo
+      );
       this.refresh(graph);
     }
     if (this.props.knotState) {
