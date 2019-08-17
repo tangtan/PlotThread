@@ -9,6 +9,7 @@ export const center = css`
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 2px 7px 0 rgba(131, 131, 131, 0.5);
   &:not(:empty):hover {
     cursor: pointer;
   }

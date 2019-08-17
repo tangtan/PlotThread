@@ -57,7 +57,7 @@ export default class ToolBar extends Component<Props, State> {
         ToolListWrapperRight = this.props.Hidden ? -65 : this.props.Right;
         break;
       case 'top':
-        width = `calc(100vw - ${this.props.Left}px)`;
+        width = `calc(150vw - ${this.props.Left}px)`;
         height = '60px';
         ToolListWrapperTop = this.props.Hidden ? -65 : this.props.Top;
         break;

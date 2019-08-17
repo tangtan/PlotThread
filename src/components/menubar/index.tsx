@@ -30,8 +30,10 @@ const theme = {
 
 type Props = {
   mounted: boolean;
-  centerX?: number;
-  centerY?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  bottom?: number;
   radius?: number;
   centerRadius?: number;
   tools: ITool[];
@@ -42,14 +44,13 @@ type State = {
   center: ITool;
   option: number; // menu id
   toolName: string;
+  expandUrl: string;
 };
 
 function MenuPanel(props: any) {
   const {
     mounted,
     theme,
-    centerX,
-    centerY,
     centerRadius,
     radius,
     Center,
@@ -63,13 +64,11 @@ function MenuPanel(props: any) {
   return (
     <ThemeProvider theme={theme}>
       <PieMenu
-        centerX={`${centerX || 150}px`}
-        centerY={`${centerY || 150}px`}
         centerRadius={`${centerRadius || 30}px`}
         radius={`${radius || 100}px`}
         Center={Center}
       >
-        {option === 0 ? MainMenu : SubMenus[option - 1]}
+        {option != -1 && (option === 0 ? MainMenu : SubMenus[option - 1])}
       </PieMenu>
     </ThemeProvider>
   );
@@ -79,14 +78,15 @@ class MenuBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      option: 0,
+      option: -1,
       toolName: '',
       center: {
         name: 'MenuCollapse',
         type: 'svg',
         url: 'svg/Menu_Tools/PieMenu_Collapse.svg',
         subTools: []
-      }
+      },
+      expandUrl: 'svg/Menu_Tools/PieMenu_Expand.svg'
     };
   }
 
@@ -98,11 +98,21 @@ class MenuBar extends Component<Props, State> {
 
   render() {
     const { state, props } = this;
-    const { centerX, centerY, radius, centerRadius, tools, mounted } = props;
+    const {
+      left,
+      right,
+      top,
+      bottom,
+      radius,
+      centerRadius,
+      tools,
+      mounted
+    } = props;
     const { center, option } = state;
     const Center = (props: Props) => (
       <PieCenter {...props} onClick={this.goBack}>
-        {option !== 0 && <ReactSVG src={center.url} />}
+        {option != -1 && option !== 0 && <ReactSVG src={center.url} />}
+        {option == -1 && <ReactSVG src={this.state.expandUrl} />}
       </PieCenter>
     );
     const MainMenu = (
@@ -127,6 +137,9 @@ class MenuBar extends Component<Props, State> {
             key={`${item.name}-${i}`}
             onSelect={() => {
               this.props.activateTool(item.name);
+              this.setState({
+                option: -1
+              });
             }}
           >
             <ReactSVG src={item.url} />
@@ -147,16 +160,22 @@ class MenuBar extends Component<Props, State> {
     //     </PieMenu>
     //   </ThemeProvider>
     // );
+    const style: React.CSSProperties = {
+      position: 'absolute',
+      left: left,
+      right: right,
+      top: top,
+      bottom: bottom
+    };
     return (
       <div
         onMouseUp={(e: any) => e.stopPropagation()}
         onMouseMove={(e: any) => e.stopPropagation()}
         onMouseDown={(e: any) => e.stopPropagation()}
+        style={style}
       >
         <MenuPanel
           mounted={mounted}
-          centerX={centerX}
-          centerY={centerY}
           centerRadius={centerRadius}
           radius={radius}
           Center={Center}
