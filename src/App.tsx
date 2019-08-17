@@ -130,19 +130,19 @@ class App extends React.Component<Props, State> {
               subTools: []
             },
             {
-              name: 'StrokeZigzag',
+              name: 'StrokeWidth',
               type: 'svg',
               url: 'svg/Menu_Tools/Stroke_Zigzag.svg',
               subTools: []
             },
             {
-              name: 'StrokeZigzag2',
+              name: 'StrokeZigzag',
               type: 'svg',
               url: 'svg/Menu_Tools/Stroke_Zigzag2.svg',
               subTools: []
             },
             {
-              name: 'StrokeCurve',
+              name: 'StrokeWave',
               type: 'svg',
               url: 'svg/Menu_Tools/Stroke_Curve.svg',
               subTools: []

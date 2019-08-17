@@ -1,4 +1,4 @@
-import { ActionType, VisualObject } from '../../../types';
+import { ActionType, VisualObject, PathGroup } from '../../../types';
 import { Point, Path, Size, Raster, Group } from 'paper';
 import { ColorSet } from '../../../utils/color';
 
@@ -96,7 +96,7 @@ export default (state = initialState, action: ActionType) => {
         const name = stroke[0].name;
         const strokeGroup = new Group();
         strokeGroup.addChildren(stroke);
-        if (name && !isInRenderQueue(name, newState)) {
+        if (name) {
           const visualObj: VisualObject = {
             type: 'storyline',
             mounted: true,
@@ -104,7 +104,7 @@ export default (state = initialState, action: ActionType) => {
           };
           strokeGroup.name = name;
           strokeGroup.data = visualObj;
-          newState.push(visualObj);
+          return addInRenderQueue(name, newState, visualObj);
         }
       });
       return newState;
@@ -113,12 +113,21 @@ export default (state = initialState, action: ActionType) => {
   }
 };
 
-const isInRenderQueue = (name: string, visualObjs: VisualObject[]) => {
+const addInRenderQueue = (
+  name: string,
+  visualObjs: VisualObject[],
+  visualObj: VisualObject
+) => {
   let flag = false;
   visualObjs.forEach(obj => {
     if (obj.geometry && obj.geometry.name === name) {
+      obj.geometry.remove();
+      obj.geometry = visualObj.geometry;
       flag = true;
     }
   });
-  return flag;
+  if (!flag) {
+    visualObjs.push(visualObj);
+  }
+  return visualObjs;
 };

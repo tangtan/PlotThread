@@ -4555,12 +4555,7 @@ etag@~1.8.1:
 
 eve@~0.5.1:
   version "0.5.4"
-<<<<<<< HEAD
   resolved "https://registry.yarnpkg.com/eve/-/eve-0.5.4.tgz#67d080b9725291d7e389e34c26860dd97f1debaa"
-=======
-  resolved "https://registry.npm.taobao.org/eve/download/eve-0.5.4.tgz#67d080b9725291d7e389e34c26860dd97f1debaa"
-  integrity sha1-Z9CAuXJSkdfjieNMJoYN2X8d66o=
->>>>>>> Changed the layout of the menu
 
 event-emitter@~0.3.5:
   version "0.3.5"
@@ -10186,12 +10181,7 @@ snapdragon@^0.8.1:
 
 snapsvg@^0.5.1:
   version "0.5.1"
-<<<<<<< HEAD
   resolved "https://registry.yarnpkg.com/snapsvg/-/snapsvg-0.5.1.tgz#0caf52c79189a290746fc446cc5e863f6bdddfe3"
-=======
-  resolved "https://registry.npm.taobao.org/snapsvg/download/snapsvg-0.5.1.tgz#0caf52c79189a290746fc446cc5e863f6bdddfe3"
-  integrity sha1-DK9Sx5GJopB0b8RGzF6GP2vd3+M=
->>>>>>> Changed the layout of the menu
   dependencies:
     eve "~0.5.1"
 
@@ -10380,7 +10370,7 @@ stealthy-require@^1.1.1:
   resolved "https://registry.npm.taobao.org/stealthy-require/download/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
 "story-flow@file:../storyflowjs":
-  version "0.3.6"
+  version "0.3.7"
   dependencies:
     babel-core "^6.25.0"
     babel-loader "^7.1.1"

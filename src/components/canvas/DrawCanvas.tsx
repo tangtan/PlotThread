@@ -23,6 +23,7 @@ import CollideUtil from '../../utils/canvas/collide';
 import TwinUtil from '../../utils/canvas/twin';
 import KnotUtil from '../../utils/canvas/knot';
 // Line Utils
+import StrokeUtil from '../../utils/canvas/stroke';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -41,8 +42,12 @@ const mapStateToProps = (state: StateType) => {
     splitState: getToolState(state, 'Split'),
     collideState: getToolState(state, 'Collide'),
     twineState: getToolState(state, 'Twine'),
-    knotState: getToolState(state, 'Knot')
+    knotState: getToolState(state, 'Knot'),
     // Line Utils
+    strokeDashState: getToolState(state, 'StrokeDash'),
+    strokeWidthState: getToolState(state, 'StrokeWidth'),
+    strokeZigzagState: getToolState(state, 'StrokeZigzag'),
+    strokeWaveState: getToolState(state, 'StrokeWave')
   };
 };
 
@@ -90,6 +95,8 @@ type State = {
   collideUtil: CollideUtil;
   twinUtil: TwinUtil;
   knotUtil: KnotUtil;
+  // Line Utils
+  strokeUtil: StrokeUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -112,7 +119,9 @@ class DrawCanvas extends Component<Props, State> {
       splitUtil: new SplitUtil(hitOption),
       collideUtil: new CollideUtil(hitOption),
       twinUtil: new TwinUtil(hitOption),
-      knotUtil: new KnotUtil(hitOption)
+      knotUtil: new KnotUtil(hitOption),
+      // Line Utils
+      strokeUtil: new StrokeUtil(hitOption)
     };
   }
 
@@ -146,6 +155,32 @@ class DrawCanvas extends Component<Props, State> {
     this.props.addStoryLines(strokes);
   }
 
+  // TODO: refactor
+  refreshStyle(graph: StoryGraph, styleSegments: any[][]) {
+    this.refresh(graph);
+    // console.log(graph, styleSegments);
+    styleSegments.forEach(config => {
+      const [name, segmentID, style] = config;
+      this.props.renderQueue.forEach(vObj => {
+        if (vObj.geometry && vObj.geometry.name === name) {
+          if (vObj.geometry.children) {
+            // debugger;
+            const strokePath = vObj.geometry.children[segmentID];
+            switch (style) {
+              case 'dash':
+                strokePath.dashArray = [10, 4];
+                break;
+              case 'width':
+                strokePath.strokeWidth = 10;
+              default:
+                break;
+            }
+          }
+        }
+      });
+    });
+  }
+
   private updateUtils = (graph: StoryGraph) => {
     // Layout Utils
     this.state.moveUtil.updateStoryStore(graph);
@@ -160,29 +195,8 @@ class DrawCanvas extends Component<Props, State> {
     this.state.collideUtil.updateStoryStore(graph);
     this.state.twinUtil.updateStoryStore(graph);
     this.state.knotUtil.updateStoryStore(graph);
-  };
-
-  private addCharacter = () => {
-    const nameList = this.props.renderQueue.map(vObj =>
-      vObj.geometry ? vObj.geometry.name : ''
-    );
-    const characterInfo = this.state.addLineUtil.characterInfo;
-    return this.state.storyLayouter.addCharacter(characterInfo);
-    // characterInfo.forEach(info => {
-    //   const [name, startTime, endTime] = info;
-    //   if (nameList.indexOf(name) === -1 && this.state.storyLayouter) {
-    //     this.state.storyLayouter.addCharacter(name, startTime, endTime);
-    //   }
-    // });
-  };
-
-  private addGroup = () => {
-    const groupInfo = this.state.groupUtil.groupInfo;
-    return this.state.storyLayouter.changeSession(groupInfo);
-    // groupInfo.forEach(info => {
-    //   const [charArr, sTime, eTime] = info;
-    //   this.state.storyLayouter.changeSession(charArr, sTime, eTime);
-    // });
+    // Line Utils
+    this.state.strokeUtil.updateStoryStore(graph);
   };
 
   private onMouseDown = (e: paper.MouseEvent) => {
@@ -213,6 +227,14 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.twineState) {
       this.state.twinUtil.down(e);
     }
+    if (
+      this.props.strokeDashState ||
+      this.props.strokeWidthState ||
+      this.props.strokeZigzagState ||
+      this.props.strokeWaveState
+    ) {
+      this.state.strokeUtil.down(e);
+    }
   };
 
   private onMouseUp = (e: paper.MouseEvent) => {
@@ -221,12 +243,16 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.addLineState) {
       this.state.addLineUtil.up(e);
-      const graph = this.addCharacter();
+      const graph = this.state.storyLayouter.addCharacter(
+        this.state.addLineUtil.characterInfo
+      );
       this.refresh(graph);
     }
     if (this.props.groupState) {
       this.state.groupUtil.up(e);
-      const graph = this.addGroup();
+      const graph = this.state.storyLayouter.changeSession(
+        this.state.groupUtil.groupInfo
+      );
       this.refresh(graph);
     }
     if (this.props.sortState) {
@@ -288,6 +314,42 @@ class DrawCanvas extends Component<Props, State> {
       const graph = this.state.storyLayouter.knot(this.state.knotUtil.knotInfo);
       this.refresh(graph);
     }
+    if (this.props.strokeDashState) {
+      this.state.strokeUtil.up(e, 'dash');
+      if (this.state.strokeUtil.isReady) {
+        const [graph, styleSegments] = this.state.storyLayouter.divide(
+          this.state.strokeUtil.divideInfo
+        );
+        this.refreshStyle(graph, styleSegments);
+      }
+    }
+    if (this.props.strokeWidthState) {
+      this.state.strokeUtil.up(e, 'width');
+      if (this.state.strokeUtil.isReady) {
+        const [graph, styleSegments] = this.state.storyLayouter.divide(
+          this.state.strokeUtil.divideInfo
+        );
+        this.refreshStyle(graph, styleSegments);
+      }
+    }
+    if (this.props.strokeZigzagState) {
+      this.state.strokeUtil.up(e, 'ZigZag');
+      if (this.state.strokeUtil.isReady) {
+        const [graph, styleSegments] = this.state.storyLayouter.divide(
+          this.state.strokeUtil.divideInfo
+        );
+        this.refreshStyle(graph, styleSegments);
+      }
+    }
+    if (this.props.strokeWaveState) {
+      this.state.strokeUtil.up(e, 'SinWave');
+      if (this.state.strokeUtil.isReady) {
+        const [graph, styleSegments] = this.state.storyLayouter.divide(
+          this.state.strokeUtil.divideInfo
+        );
+        this.refreshStyle(graph, styleSegments);
+      }
+    }
   };
 
   private onMouseClick = (e: paper.MouseEvent) => {
@@ -329,6 +391,14 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.twineState) {
       this.state.twinUtil.drag(e);
+    }
+    if (
+      this.props.strokeDashState ||
+      this.props.strokeWidthState ||
+      this.props.strokeZigzagState ||
+      this.props.strokeWaveState
+    ) {
+      this.state.strokeUtil.drag(e);
     }
   };
 

@@ -19,7 +19,7 @@ export default class StoryDrawer {
   sketchNodes: StoryLine[];
   constructor() {
     this.storyStrokes = [];
-    this.type = 'render';
+    this.type = 'sketch';
     this.names = [];
     this.nodes = [];
     this.renderNodes = [];
