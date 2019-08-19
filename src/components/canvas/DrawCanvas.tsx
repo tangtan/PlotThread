@@ -167,10 +167,10 @@ class DrawCanvas extends Component<Props, State> {
             // debugger;
             const strokePath = vObj.geometry.children[segmentID];
             switch (style) {
-              case 'dash':
+              case 'Dash':
                 strokePath.dashArray = [10, 4];
                 break;
-              case 'width':
+              case 'Width':
                 strokePath.strokeWidth = 10;
               default:
                 break;
@@ -188,6 +188,7 @@ class DrawCanvas extends Component<Props, State> {
     this.state.groupUtil.updateStoryStore(graph);
     this.state.sortUtil.updateStoryStore(graph);
     this.state.straightenUtil.updateStoryStore(graph);
+    this.state.bendUtil.updateStoryStore(graph);
     this.state.compressUtil.updateStoryStore(graph);
     // Relationship/Group Utils
     this.state.mergeUtil.updateStoryStore(graph);
@@ -224,8 +225,14 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.mergeState) {
       this.state.mergeUtil.down(e);
     }
+    if (this.props.collideState) {
+      this.state.collideUtil.down(e);
+    }
     if (this.props.twineState) {
       this.state.twinUtil.down(e);
+    }
+    if (this.props.knotState) {
+      this.state.knotUtil.down(e);
     }
     if (
       this.props.strokeDashState ||
@@ -271,22 +278,30 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.straightenState) {
       this.state.straightenUtil.up(e);
-      const graph = this.state.storyLayouter.straighten(
-        this.state.straightenUtil.straightenInfo
-      );
-      this.refresh(graph);
+      if (this.state.straightenUtil.status) {
+        const graph = this.state.storyLayouter.straighten(
+          this.state.straightenUtil.straightenInfo
+        );
+        this.refresh(graph);
+      }
     }
     if (this.props.bendState) {
       this.state.bendUtil.up(e);
-      const graph = this.state.storyLayouter.bend(this.state.bendUtil.bendInfo);
-      this.refresh(graph);
+      if (this.state.bendUtil.status) {
+        const graph = this.state.storyLayouter.bend(
+          this.state.bendUtil.bendInfo
+        );
+        this.refresh(graph);
+      }
     }
     if (this.props.mergeState) {
       this.state.mergeUtil.up(e);
-      const graph = this.state.storyLayouter.merge(
-        this.state.mergeUtil.mergeInfo
-      );
-      this.refresh(graph);
+      if (this.state.mergeUtil.status) {
+        const graph = this.state.storyLayouter.merge(
+          this.state.mergeUtil.mergeInfo
+        );
+        this.refresh(graph);
+      }
     }
     if (this.props.splitState) {
       this.state.splitUtil.up(e);
@@ -297,26 +312,34 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.collideState) {
       this.state.collideUtil.up(e);
-      const graph = this.state.storyLayouter.collide(
-        this.state.collideUtil.collideInfo
-      );
-      this.refresh(graph);
+      if (this.state.collideUtil.status) {
+        const graph = this.state.storyLayouter.collide(
+          this.state.collideUtil.collideInfo
+        );
+        this.refresh(graph);
+      }
     }
     if (this.props.twineState) {
       this.state.twinUtil.up(e);
-      const graph = this.state.storyLayouter.twine(
-        this.state.twinUtil.twinInfo
-      );
-      this.refresh(graph);
+      if (this.state.twinUtil.status) {
+        const graph = this.state.storyLayouter.twine(
+          this.state.twinUtil.twinInfo
+        );
+        this.refresh(graph);
+      }
     }
     if (this.props.knotState) {
       this.state.knotUtil.up(e);
-      const graph = this.state.storyLayouter.knot(this.state.knotUtil.knotInfo);
-      this.refresh(graph);
+      if (this.state.knotUtil.status) {
+        const graph = this.state.storyLayouter.knot(
+          this.state.knotUtil.knotInfo
+        );
+        this.refresh(graph);
+      }
     }
     if (this.props.strokeDashState) {
-      this.state.strokeUtil.up(e, 'dash');
-      if (this.state.strokeUtil.isReady) {
+      this.state.strokeUtil.up(e, 'Dash');
+      if (this.state.strokeUtil.status) {
         const [graph, styleSegments] = this.state.storyLayouter.divide(
           this.state.strokeUtil.divideInfo
         );
@@ -324,8 +347,8 @@ class DrawCanvas extends Component<Props, State> {
       }
     }
     if (this.props.strokeWidthState) {
-      this.state.strokeUtil.up(e, 'width');
-      if (this.state.strokeUtil.isReady) {
+      this.state.strokeUtil.up(e, 'Width');
+      if (this.state.strokeUtil.status) {
         const [graph, styleSegments] = this.state.storyLayouter.divide(
           this.state.strokeUtil.divideInfo
         );
@@ -334,7 +357,7 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.strokeZigzagState) {
       this.state.strokeUtil.up(e, 'ZigZag');
-      if (this.state.strokeUtil.isReady) {
+      if (this.state.strokeUtil.status) {
         const [graph, styleSegments] = this.state.storyLayouter.divide(
           this.state.strokeUtil.divideInfo
         );
@@ -343,7 +366,7 @@ class DrawCanvas extends Component<Props, State> {
     }
     if (this.props.strokeWaveState) {
       this.state.strokeUtil.up(e, 'SinWave');
-      if (this.state.strokeUtil.isReady) {
+      if (this.state.strokeUtil.status) {
         const [graph, styleSegments] = this.state.storyLayouter.divide(
           this.state.strokeUtil.divideInfo
         );
@@ -389,8 +412,14 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.mergeState) {
       this.state.mergeUtil.drag(e);
     }
+    if (this.props.collideState) {
+      this.state.collideUtil.drag(e);
+    }
     if (this.props.twineState) {
       this.state.twinUtil.drag(e);
+    }
+    if (this.props.knotState) {
+      this.state.knotUtil.drag(e);
     }
     if (
       this.props.strokeDashState ||

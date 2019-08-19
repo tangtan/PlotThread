@@ -58,7 +58,7 @@ export default class MoveUtil extends StoryUtil {
   down(e: paper.MouseEvent) {
     if (project && e.point) {
       const hitRes = project.hitTest(e.point, this.hitOption);
-      console.log(hitRes);
+      // console.log(hitRes);
       if (hitRes) {
         switch (hitRes.type) {
           case 'fill':

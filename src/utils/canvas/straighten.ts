@@ -5,9 +5,11 @@ import { ColorSet } from '../color';
 
 export default class StraightenUtil extends StoryUtil {
   straightenInfo: any[][];
+  status: boolean;
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.straightenInfo = [];
+    this.status = false;
   }
 
   updateStoryStore(graph: StoryGraph) {
@@ -31,8 +33,10 @@ export default class StraightenUtil extends StoryUtil {
         this.selectPath.selected = false;
         this.selectPath = null;
       }
+      this.status = true;
     } else {
       super.mouseDown(e);
+      this.status = false;
     }
     if (this.selectPath) {
       this.selectPath.selected = true;

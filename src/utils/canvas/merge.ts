@@ -5,10 +5,12 @@ import { BLUE } from '../color';
 export default class MergeUtil extends StoryUtil {
   select: DoubleSelectUtil;
   mergeInfo: [string, string, number, number][];
+  status: boolean;
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.select = new DoubleSelectUtil(hitOption);
     this.mergeInfo = [];
+    this.status = false;
   }
   down(e: paper.MouseEvent) {
     if (this.select.status()) {
@@ -44,13 +46,16 @@ export default class MergeUtil extends StoryUtil {
         const end = this.endPosition.x;
         const first_name = this.select.selectPath.name;
         const second_name = this.select.secondSelectPath.name;
+        // console.log(first_name, second_name, start, end);
         if (start && end && first_name && second_name) {
           this.mergeInfo.push([first_name, second_name, start, end]);
         }
         this.select.restore();
+        this.status = true;
       }
     } else {
       this.select.up(e);
+      this.status = false;
     }
   }
 }

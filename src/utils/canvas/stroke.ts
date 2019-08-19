@@ -5,11 +5,11 @@ import { ColorSet } from '../color';
 
 export default class StrokeUtil extends StoryUtil {
   divideInfo: any[][];
-  isReady: boolean;
+  status: boolean;
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.divideInfo = [];
-    this.isReady = false;
+    this.status = false;
   }
 
   updateStoryStore(graph: StoryGraph) {
@@ -34,10 +34,10 @@ export default class StrokeUtil extends StoryUtil {
         this.selectPath.selected = false;
         this.selectPath = null;
       }
-      this.isReady = true;
+      this.status = true;
     } else {
       super.mouseDown(e);
-      this.isReady = false;
+      this.status = false;
     }
     if (this.selectPath) {
       this.selectPath.selected = true;
