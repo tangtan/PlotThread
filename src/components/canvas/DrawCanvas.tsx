@@ -325,6 +325,7 @@ class DrawCanvas extends Component<Props, State> {
         const graph = this.state.storyLayouter.twine(
           this.state.twinUtil.twinInfo
         );
+        console.log(graph);
         this.refresh(graph);
       }
     }

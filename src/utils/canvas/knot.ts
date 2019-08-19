@@ -4,7 +4,7 @@ import { Path } from 'paper';
 import { BLUE } from '../color';
 export default class KnotUtil extends StoryUtil {
   select: DoubleSelectUtil;
-  knotInfo: [string, string, number, number][];
+  knotInfo: any[][];
   status: boolean;
   constructor(hitOption: IHitOption) {
     super(hitOption);
@@ -42,13 +42,14 @@ export default class KnotUtil extends StoryUtil {
         this.startPosition &&
         this.endPosition
       ) {
-        const start = this.startPosition.x;
-        const end = this.endPosition.x;
+        const start = this.getStartTime();
+        const end = this.getEndTime();
         const first_name = this.select.selectPath.name;
         const second_name = this.select.secondSelectPath.name;
-        // console.log(first_name, second_name, start, end);
+        console.log(first_name, second_name, start, end);
         if (start && end && first_name && second_name) {
-          this.knotInfo.push([first_name, second_name, start, end]);
+          const names = [first_name, second_name];
+          this.knotInfo.push([names, start, end, 'Knot']);
         }
         this.select.restore();
         this.status = true;
