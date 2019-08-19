@@ -8028,8 +8028,8 @@ pnp-webpack-plugin@1.2.1:
     ts-pnp "^1.0.0"
 
 portfinder@^1.0.9:
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.21.tgz#60e1397b95ac170749db70034ece306b9a27e324"
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.22.tgz#abd10a488b5696e98ee25c60731f8ae0b76f8ddd"
   dependencies:
     async "^1.5.2"
     debug "^2.2.0"
@@ -10370,7 +10370,7 @@ stealthy-require@^1.1.1:
   resolved "https://registry.npm.taobao.org/stealthy-require/download/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
 "story-flow@file:../storyflowjs":
-  version "0.3.7"
+  version "0.3.10"
   dependencies:
     babel-core "^6.25.0"
     babel-loader "^7.1.1"
