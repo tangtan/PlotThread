@@ -49,7 +49,7 @@ export default class CollideUtil extends StoryUtil {
         console.log(first_name, second_name, start, end);
         if (start && end && first_name && second_name) {
           const names = [first_name, second_name];
-          this.collideInfo.push([names, start, end, 'Colide']);
+          this.collideInfo.push([names, start, end, 'Collide']);
         }
         this.select.restore();
         this.status = true;
