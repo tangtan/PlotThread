@@ -1,13 +1,11 @@
-import { StoryGraph, StoryName } from '../types';
+import { StoryName } from '../types';
 
 export class StoryStore {
-  graph: StoryGraph;
+  graph: any;
   names: StoryName[];
-  hitTest: any;
-  constructor(graph: StoryGraph) {
+  constructor(graph: any) {
     this.graph = graph;
     this.names = graph.names;
-    this.hitTest = graph.hitTest;
   }
   getCharactersNum() {
     return this.names.length;
@@ -17,58 +15,58 @@ export class StoryStore {
     storySegmentID: string,
     storylineID: string
   ) {
-    return this.hitTest.getStoryNodeX(storyNodeID, storySegmentID, storylineID);
+    return this.graph.getStoryNodeX(storyNodeID, storySegmentID, storylineID);
   }
   getStoryNodeY(
     storyNodeID: string,
     storySegmentID: string,
     storylineID: string
   ) {
-    return this.hitTest.getStoryNodeY(storyNodeID, storySegmentID, storylineID);
+    return this.graph.getStoryNodeY(storyNodeID, storySegmentID, storylineID);
   }
   getStoryNodeID(x: number, y: number) {
-    return this.hitTest.getStoryNodeID(x, y);
+    return this.graph.getStoryNodeID(x, y);
   }
   getStorySegment(
     storylineID: number | string,
     storySegmentID: number | string
   ) {
-    return this.hitTest.getStorySegment(storylineID, storySegmentID);
+    return this.graph.getStorySegment(storylineID, storySegmentID);
   }
   getStoryline(x: number | string, y: number | string) {
-    return this.hitTest.getStoryline(x, y);
+    return this.graph.getStoryline(x, y);
   }
   getStorylineSmooth(x: number | string, y: number | string) {
-    return this.hitTest.getStorylineSmooth(x, y);
+    return this.graph.getStorylineSmooth(x, y);
   }
   getStorylineSketch(x: number | string, y: number | string) {
-    return this.hitTest.getStorylineSketch(x, y);
+    return this.graph.getStorylineSketch(x, y);
   }
   getStorylineName(x: number | string, y: number | string) {
-    return this.hitTest.getStorylineName(x, y);
+    return this.graph.getStorylineName(x, y);
   }
   getStorylineID(x: number | string, y: number | string) {
-    return this.hitTest.getStorylineID(x, y);
+    return this.graph.getStorylineID(x, y);
   }
   getStoryTimeSpan(x: number | string, y: number | string) {
-    return this.hitTest.getStoryTimeSpan(x, y);
+    return this.graph.getStoryTimeSpan(x, y);
   }
   getLocationColor(x: number | string, y: number | string) {
-    return this.hitTest.getLocationColor(x, y);
+    return this.graph.getLocationColor(x, y);
   }
   getLocationID(x: number | string, y: number | string) {
-    return this.hitTest.getLocationID(x, y);
+    return this.graph.getLocationID(x, y);
   }
   getLocationName(x: number | string, y: number | string) {
-    return this.hitTest.getLocationName(x, y);
+    return this.graph.getLocationName(x, y);
   }
   getCharacters(x: number | string, y: number | string) {
-    return this.hitTest.getCharacters(x, y);
+    return this.graph.getCharacters(x, y);
   }
   getCharacterX(name: string, time: number) {
-    return this.hitTest.getCharacterX(name, time);
+    return this.graph.getCharacterX(name, time);
   }
   getCharacterY(name: string, time: number) {
-    return this.hitTest.getCharacterY(name, time);
+    return this.graph.getCharacterY(name, time);
   }
 }
