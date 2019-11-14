@@ -1,10 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  getToolState,
-  getSelectedObjMountState,
-  getSelectedObjType
-} from './store/selectors';
+import { getToolState } from './store/selectors';
 import './App.css';
 import 'antd/dist/antd.css';
 import MenuBar from './components/menubar';
@@ -17,8 +13,6 @@ import { ITool, StateType } from './types';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    lineToolState:
-      getSelectedObjMountState(state) && getSelectedObjType(state) !== 'image',
     groupToolState: getToolState(state, 'Back') || false,
     freeMode: getToolState(state, 'FreeMode')
   };
@@ -292,7 +286,6 @@ class App extends React.Component<Props, State> {
       mouseX,
       mouseY
     } = this.state;
-    const { lineToolState, groupToolState } = this.props;
     return (
       <div className="App" onDoubleClick={this.handleMousePos}>
         <MenuBar mounted={true} right={100} bottom={100} tools={lineTools} />

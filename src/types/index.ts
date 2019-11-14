@@ -8,7 +8,6 @@ export type ActionType = ActionType<typeof actions>;
 export type StateType = {
   toolState: ToolStateType;
   renderQueue: VisualObject[];
-  selectedObj: VisualObject;
 };
 
 export type DispatchType = typeof store.dispatch;
@@ -34,11 +33,7 @@ export type IHitOption = {
 };
 
 // Visual Object
-export type VisualObject = {
-  type: string;
-  mounted: boolean;
-  geometry: Path | Path.Circle | Path.Rectangle | Raster | Group | null;
-};
+export type VisualObject = Group;
 
 // Storyline
 export type StoryNode = number[];

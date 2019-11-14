@@ -3,37 +3,25 @@ import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../../types';
 import {
   getToolState,
-  getSelectedObjMountState,
-  getSelectedObjStrokeColor,
-  getSelectedObjFillColor
+  getSelectedVisualObjects
 } from '../../../../store/selectors';
-import {
-  setTool,
-  setObject,
-  setObjectFillColor,
-  setObjectStrokeColor
-} from '../../../../store/actions';
+import { setTool } from '../../../../store/actions';
 import { SketchPicker } from 'react-color';
-import { Color, Point } from 'paper';
+import { Color, project } from 'paper';
 import './StyleModal.css';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    objectMounted: getSelectedObjMountState(state),
+    selectedItems: getSelectedVisualObjects(state),
     strokeStyleState: getToolState(state, 'StrokeStyle'),
-    fillStyleState: getToolState(state, 'FillStyle'),
-    strokeColor: getSelectedObjStrokeColor(state),
-    fillColor: getSelectedObjFillColor(state)
+    fillStyleState: getToolState(state, 'FillStyle')
   };
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
-    closeObject: () => dispatch(setObject(new Point(-100, -100))),
     closeStrokeStyleTool: () => dispatch(setTool('StrokeStyle', false)),
-    closeFillStyleTool: () => dispatch(setTool('FillStyle', false)),
-    setFillColor: (color: Color) => dispatch(setObjectFillColor(color)),
-    setStrokeColor: (color: Color) => dispatch(setObjectStrokeColor(color))
+    closeFillStyleTool: () => dispatch(setTool('FillStyle', false))
   };
 };
 
@@ -43,25 +31,87 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 type State = {};
 
 function ColorPicker(props: any) {
-  const { color, fillStyleState, strokeStyleState, objectMounted } = props;
-  if ((!strokeStyleState && !fillStyleState) || !objectMounted) {
+  const {
+    selectedItems,
+    fillStyleState,
+    strokeStyleState,
+    onChangeComplete
+  } = props;
+  if (!strokeStyleState && !fillStyleState) {
     return null;
   }
-  // TODO: support other types
-  let color255 = { r: 0, g: 0, b: 0 };
-  switch (color.type) {
+  // Obtain the color of the selected items
+  let _selectedItems = correctSelectedItems(selectedItems);
+  let selectedColor = pickColorFromSelectedItems(
+    _selectedItems,
+    strokeStyleState,
+    fillStyleState
+  );
+  // TODO: support other types, such as hsl
+  let color255 = { r: 0, g: 0, b: 0, a: 1 };
+  switch (selectedColor.type) {
     case 'rgb':
-      const [r, g, b] = color.components;
+      const [r, g, b] = selectedColor.components;
       color255.r = Math.round(r * 255);
       color255.g = Math.round(g * 255);
       color255.b = Math.round(b * 255);
+      color255.a = selectedColor.alpha || 1;
       break;
     default:
       break;
   }
-  return (
-    <SketchPicker color={color255} onChangeComplete={props.onChangeComplete} />
-  );
+  return <SketchPicker color={color255} onChangeComplete={onChangeComplete} />;
+}
+
+function pickColorFromSelectedItems(
+  items: any[],
+  strokeColor: boolean,
+  fillColor: boolean
+) {
+  const defaultColor = new Color(0, 0, 0, 1);
+  if (items.length === 0) {
+    return defaultColor;
+  }
+  let color;
+  if (strokeColor) {
+    color = BSFSearch(items, 'strokeColor');
+  }
+  if (fillColor) {
+    color = BSFSearch(items, 'fillColor');
+  }
+  return color || defaultColor;
+}
+
+function DSFSearch(node: any, style = 'fillColor') {
+  const color = style === 'fillColor' ? node.fillColor : node.strokeColor;
+  if (color) return color;
+  node.children.forEach((_node: any) => {
+    const _color = DSFSearch(_node, style);
+    if (_color) return _color;
+  });
+  return color;
+}
+
+function BSFSearch(nodes: any[], style = 'fillColor'): Color | undefined {
+  if (nodes.length === 0) return undefined;
+  const firstNode = nodes.shift();
+  const color =
+    style === 'fillColor' ? firstNode.fillColor : firstNode.strokeColor;
+  if (color) return color;
+  if (firstNode.children) {
+    nodes.push(...firstNode.children);
+  }
+  return BSFSearch(nodes, style);
+}
+
+// TODO: fix up global bug for missing selectedItems in selector.ts
+function correctSelectedItems(selectedGroups: any[]) {
+  const selectedItems = project
+    ? project.selectedItems.filter(item => item.className === 'Group')
+    : selectedGroups;
+  return selectedGroups.length > selectedItems.length
+    ? selectedGroups
+    : selectedItems;
 }
 
 class StyleModal extends Component<Props, State> {
@@ -73,43 +123,28 @@ class StyleModal extends Component<Props, State> {
   handleChangeComplete = (color: any) => {
     const { r, g, b, a } = color.rgb;
     const newColor = new Color(r / 255, g / 255, b / 255, a);
-    const {
-      strokeStyleState,
-      strokeColor,
-      fillStyleState,
-      fillColor
-    } = this.props;
-    if (strokeStyleState && strokeColor) {
-      this.props.setStrokeColor(newColor);
+    const { strokeStyleState, fillStyleState, selectedItems } = this.props;
+    const _selectedItems = correctSelectedItems(selectedItems);
+    if (strokeStyleState) {
+      _selectedItems.forEach(item => (item.strokeColor = newColor));
       this.props.closeStrokeStyleTool();
     }
-    if (fillStyleState && fillColor) {
-      this.props.setFillColor(newColor);
+    if (fillStyleState) {
+      _selectedItems.forEach(item => (item.fillColor = newColor));
       this.props.closeFillStyleTool();
     }
-    this.props.closeObject();
+    // this.props.closeObject();
   };
 
   render() {
-    const {
-      strokeStyleState,
-      fillStyleState,
-      strokeColor,
-      fillColor,
-      objectMounted
-    } = this.props;
-    const color = strokeStyleState
-      ? strokeColor
-      : fillStyleState
-      ? fillColor
-      : null;
+    const { selectedItems, strokeStyleState, fillStyleState } = this.props;
+    console.log('1', selectedItems);
     return (
       <div className="style-modal">
         <ColorPicker
-          color={color}
-          objectMounted={objectMounted}
-          fillStyleState={fillStyleState}
+          selectedItems={selectedItems}
           strokeStyleState={strokeStyleState}
+          fillStyleState={fillStyleState}
           onChangeComplete={this.handleChangeComplete}
         />
       </div>

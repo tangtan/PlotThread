@@ -51,13 +51,7 @@ export default (state = initialState, action: ActionType) => {
       const { type, cfg } = action.payload;
       const object = drawVisualObject(type, cfg);
       if (object) {
-        const visualObj: VisualObject = {
-          type: type,
-          mounted: true,
-          geometry: object
-        };
-        // object.data = visualObj;
-        newState.push(visualObj);
+        newState.push(object);
       }
       return newState;
     case 'ADD_VISUALARRAY':
@@ -65,14 +59,7 @@ export default (state = initialState, action: ActionType) => {
       array.forEach((type, index) => {
         const object = drawVisualObject(type, cfgs[index]);
         if (object) {
-          // object.position = new Point(100 + 100 * index, 100);
-          const visualObj: VisualObject = {
-            type: 'image',
-            mounted: true,
-            geometry: object
-          };
-          // object.data = visualObj;
-          newState.push(visualObj);
+          newState.push(object);
         }
       });
       return newState;

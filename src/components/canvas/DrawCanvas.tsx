@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { project, Point } from 'paper';
+import { project } from 'paper';
 import { StateType, DispatchType } from '../../types';
-import { setObject, addVisualObject } from '../../store/actions';
+import { addVisualObject } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 import { iStoryline } from 'iStoryline';
@@ -10,7 +10,6 @@ import { iStoryline } from 'iStoryline';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    selectedObj: state.selectedObj,
     // Layout Utils
     freeMode: getToolState(state, 'FreeMode'),
     addLineState: getToolState(state, 'AddLine'),
@@ -36,9 +35,7 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
-      dispatch(addVisualObject(type, cfg)),
-    setSelectedObj: (e: paper.MouseEvent) =>
-      dispatch(setObject(e.point || new Point(-100, -100)))
+      dispatch(addVisualObject(type, cfg))
   };
 };
 

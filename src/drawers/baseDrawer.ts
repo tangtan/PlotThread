@@ -31,13 +31,14 @@ export default class BaseDrawer {
       compoundGroup.selected = true;
     });
     compoundGroup.on('mouseleave', () => {
-      compoundGroup.selected = false;
+      // compoundGroup.selected = false;
     });
     compoundGroup.on('mousedrag', (e: any) => {
       if (!isCreating) {
         compoundGroup.translate(e.delta);
       }
     });
+    return compoundGroup;
   }
 
   _drawVisualObjects(
