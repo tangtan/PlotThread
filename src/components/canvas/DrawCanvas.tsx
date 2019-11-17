@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { project } from 'paper';
+import { project, view } from 'paper';
 import { StateType, DispatchType } from '../../types';
 import { addVisualObject } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
@@ -84,6 +84,16 @@ class DrawCanvas extends Component<Props, State> {
         storylineName: name,
         storylinePath: path
       });
+    });
+    view.on('click', (e: any) => {
+      if (project) {
+        project.deselectAll();
+        this.props.renderQueue.forEach(item => {
+          item.data.isTransforming = false;
+          item.data.selectionBounds.visible = false;
+          // if(item.data.selectionBounds) item.data.selectionBounds.remove();
+        });
+      }
     });
   }
 

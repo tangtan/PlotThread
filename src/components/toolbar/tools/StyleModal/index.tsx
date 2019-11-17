@@ -138,7 +138,6 @@ class StyleModal extends Component<Props, State> {
 
   render() {
     const { selectedItems, strokeStyleState, fillStyleState } = this.props;
-    console.log('1', selectedItems);
     return (
       <div className="style-modal">
         <ColorPicker

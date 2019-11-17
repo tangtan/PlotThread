@@ -12,6 +12,8 @@ export const BLUE = new Color(0, 0, 1);
 
 export const GREY = new Color(0.5, 0.5, 0.5);
 
+export const SELECT = new Color(0, 0.616, 0.925);
+
 export const ColorSet = {
   black: BLACK,
   white: WHITE,
@@ -28,6 +30,7 @@ export class ColorPicker {
   static green: Color = GREEN;
   static blue: Color = BLUE;
   static grey: Color = GREY;
+  static select: Color = SELECT;
 
   constructor() {}
 

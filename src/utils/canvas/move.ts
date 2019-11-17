@@ -1,5 +1,5 @@
-import { StoryUtil } from '../util';
-import { IHitOption, StoryGraph } from '../../types';
+import { BaseMouseUtil } from '../util';
+import { IHitOption } from '../../types';
 import {
   Segment,
   project,
@@ -12,7 +12,7 @@ import {
 } from 'paper';
 import { BLACK } from '../color';
 
-export default class MoveUtil extends StoryUtil {
+export default class MoveUtil extends BaseMouseUtil {
   isMoveShape: boolean;
   isMoveSegment: boolean;
   selectSegment: Segment | null;
@@ -30,10 +30,6 @@ export default class MoveUtil extends StoryUtil {
     this.selectSegment = null;
     this.matrix = null;
     this.rotateShape = null;
-  }
-
-  updateStoryStore(graph: StoryGraph) {
-    super.updateStoryStore(graph);
   }
 
   createRotateShape(center: Point, point: Point = new Point(0, -15)) {
