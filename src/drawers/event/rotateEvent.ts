@@ -1,18 +1,13 @@
-import paper, { Group, Shape, Point, Path } from 'paper';
-import { ColorPicker } from '../../utils/color';
+import paper, { Group } from 'paper';
 import MoveEvent from './moveEvent';
 
 export default class RotateEvent extends MoveEvent {
-  anchorPointSize: number;
   rotation: number;
-  isFirstRotate: boolean;
+  degree: number;
   constructor(visualObj: Group) {
     super(visualObj);
-    this.anchorPointSize = 6;
-    this.rotation = 0;
-    this.isFirstRotate = true;
-    this.onMouseDragRotate();
-    this.onMouseUpRotate();
+    this.rotation = -90; // 相对x轴偏移角度
+    this.degree = 0; // 相对初始位置偏移角度
   }
 
   get visualObjBounds() {
@@ -23,13 +18,16 @@ export default class RotateEvent extends MoveEvent {
     return this.visualObj.data.selectionBounds;
   }
 
+  set selectionBounds(bounds: Group) {
+    this.visualObj.data.selectionBounds = bounds;
+  }
+
   get rotateAnchor() {
     return this.visualObj.data.selectionBounds.children[1];
   }
 
   click(e: any) {
     super.click(e);
-    // console.log(this.selectionBounds, this.isTransforming);
     if (this.selectionBounds) {
       this.selectionBounds.visible = this.isTransforming;
     }
@@ -39,29 +37,17 @@ export default class RotateEvent extends MoveEvent {
     if (!this.rotateAnchor) return;
     this.rotateAnchor.onMouseDrag = (e: paper.MouseEvent) => {
       if (e.point && this.visualObjBounds) {
+        // 获取旋转中心
         const center = this.visualObjBounds.center || this.defaultPoint;
+        // 计算旋转偏移量
         const theta = e.point.subtract(center).angle || 0;
-        const rotation = this.isFirstRotate ? -90 : this.rotation;
-        const deltaTheta = theta - rotation;
-        // console.log(this.visualObj.applyMatrix, rotation, deltaTheta, theta);
+        const deltaTheta = theta - this.rotation;
         this.visualObj.rotate(deltaTheta, center);
+        // 记录初始旋转量
         this.rotation = theta;
-        this.isFirstRotate = false;
-        if (this.selectionBounds) {
-          this.selectionBounds.visible = false;
-          this.selectionBounds.rotate(deltaTheta, center);
-        }
-      }
-    };
-  }
-
-  onMouseUpRotate() {
-    if (!this.rotateAnchor) return;
-    this.rotateAnchor.onMouseUp = () => {
-      if (this.selectionBounds && this.isTransforming) {
-        // this.selectionBounds.remove();
-        // this.selectionBounds = this.createSelectionBounds();
-        this.selectionBounds.visible = true;
+        // 记录旋转积累量
+        this.degree += deltaTheta;
+        if (this.selectionBounds) this.selectionBounds.visible = false;
       }
     };
   }

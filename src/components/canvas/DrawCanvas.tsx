@@ -91,7 +91,6 @@ class DrawCanvas extends Component<Props, State> {
         this.props.renderQueue.forEach(item => {
           item.data.isTransforming = false;
           item.data.selectionBounds.visible = false;
-          // if(item.data.selectionBounds) item.data.selectionBounds.remove();
         });
       }
     });
