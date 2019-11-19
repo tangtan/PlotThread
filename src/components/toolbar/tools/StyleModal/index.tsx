@@ -7,7 +7,7 @@ import {
 } from '../../../../store/selectors';
 import { setTool } from '../../../../store/actions';
 import { SketchPicker } from 'react-color';
-import { Color, project } from 'paper';
+import { Color, Group } from 'paper';
 import './StyleModal.css';
 
 const mapStateToProps = (state: StateType) => {
@@ -41,7 +41,7 @@ function ColorPicker(props: any) {
     return null;
   }
   // Obtain the color of the selected items
-  let _selectedItems = correctSelectedItems(selectedItems);
+  let _selectedItems = selectedItems.map((item: Group) => item);
   let selectedColor = pickColorFromSelectedItems(
     _selectedItems,
     strokeStyleState,
@@ -75,6 +75,7 @@ function pickColorFromSelectedItems(
   let color;
   if (strokeColor) {
     color = BSFSearch(items, 'strokeColor');
+    console.log(color);
   }
   if (fillColor) {
     color = BSFSearch(items, 'fillColor');
@@ -92,6 +93,7 @@ function DSFSearch(node: any, style = 'fillColor') {
   return color;
 }
 
+// 会破坏原数组，最好用一个域外变量来记录队列
 function BSFSearch(nodes: any[], style = 'fillColor'): Color | undefined {
   if (nodes.length === 0) return undefined;
   const firstNode = nodes.shift();
@@ -104,16 +106,6 @@ function BSFSearch(nodes: any[], style = 'fillColor'): Color | undefined {
   return BSFSearch(nodes, style);
 }
 
-// TODO: fix up global bug for missing selectedItems in selector.ts
-function correctSelectedItems(selectedGroups: any[]) {
-  const selectedItems = project
-    ? project.selectedItems.filter(item => item.className === 'Group')
-    : selectedGroups;
-  return selectedGroups.length > selectedItems.length
-    ? selectedGroups
-    : selectedItems;
-}
-
 class StyleModal extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -124,16 +116,14 @@ class StyleModal extends Component<Props, State> {
     const { r, g, b, a } = color.rgb;
     const newColor = new Color(r / 255, g / 255, b / 255, a);
     const { strokeStyleState, fillStyleState, selectedItems } = this.props;
-    const _selectedItems = correctSelectedItems(selectedItems);
     if (strokeStyleState) {
-      _selectedItems.forEach(item => (item.strokeColor = newColor));
+      selectedItems.forEach(item => (item.strokeColor = newColor));
       this.props.closeStrokeStyleTool();
     }
     if (fillStyleState) {
-      _selectedItems.forEach(item => (item.fillColor = newColor));
+      selectedItems.forEach(item => (item.fillColor = newColor));
       this.props.closeFillStyleTool();
     }
-    // this.props.closeObject();
   };
 
   render() {

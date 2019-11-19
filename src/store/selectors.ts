@@ -1,4 +1,5 @@
 import { StateType } from '../types';
+import { project } from 'paper';
 
 // toolbar module
 export const getToolState = (state: StateType, name: string) => {
@@ -13,7 +14,17 @@ export const getToolName = (state: StateType) => {
   return state.toolState.toolName;
 };
 
-// get selected visual objects
+// get selected (isTransforming === true) visual objects
 export const getSelectedVisualObjects = (state: StateType) => {
-  return state.renderQueue.filter(item => item.selected === true);
+  const selectedGroups = state.renderQueue.filter(
+    item => item.data.isTransforming === true
+  );
+  if (!project) return selectedGroups;
+  if (!project.activeLayer.children) return selectedGroups;
+  const selectedItems = project.activeLayer.children.filter(
+    item => item.data.isTransforming === true
+  );
+  return selectedGroups.length < selectedItems.length
+    ? selectedItems
+    : selectedGroups;
 };

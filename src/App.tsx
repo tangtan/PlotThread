@@ -13,7 +13,6 @@ import { ITool, StateType } from './types';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    groupToolState: getToolState(state, 'Back') || false,
     freeMode: getToolState(state, 'FreeMode')
   };
 };
@@ -26,7 +25,6 @@ type State = {
   leftTools: ITool[];
   topTools: ITool[];
   lineTools: ITool[];
-  groupTools: ITool[];
 };
 
 class App extends React.Component<Props, State> {
@@ -73,6 +71,24 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
+          name: 'SymbolPic',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Symbol_Add Pic.svg',
+          subTools: []
+        },
+        {
+          name: 'SymbolStar',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Symbols.svg',
+          subTools: []
+        },
+        {
+          name: 'Text',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Text.svg',
+          subTools: []
+        },
+        {
           name: 'Zoom',
           type: 'svg',
           url: 'svg/Menu_Left/Move.svg',
@@ -109,6 +125,18 @@ class App extends React.Component<Props, State> {
           type: 'svg',
           url: 'svg/Menu_Top/Forward.svg',
           subTools: []
+        },
+        {
+          name: 'StrokeStyle',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Symbol_Appear.svg',
+          subTools: []
+        },
+        {
+          name: 'FillStyle',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Symbol_Star.svg',
+          subTools: []
         }
       ],
       lineTools: [
@@ -144,37 +172,6 @@ class App extends React.Component<Props, State> {
           ]
         },
         {
-          name: 'Symbol',
-          type: 'svg',
-          url: 'svg/Menu_Tools/Symbols.svg',
-          subTools: [
-            {
-              name: 'SymbolPic',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Symbol_Add Pic.svg',
-              subTools: []
-            },
-            {
-              name: 'StrokeStyle',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Symbol_Appear.svg',
-              subTools: []
-            },
-            {
-              name: 'SymbolStar',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Symbol_Star.svg',
-              subTools: []
-            }
-          ]
-        },
-        {
-          name: 'Text',
-          type: 'svg',
-          url: 'svg/Menu_Tools/Text.svg',
-          subTools: []
-        },
-        {
           name: 'Bump',
           type: 'svg',
           url: 'svg/Menu_Tools/Bump.svg',
@@ -196,60 +193,7 @@ class App extends React.Component<Props, State> {
               type: 'svg',
               url: 'svg/Menu_Tools/Bump_Twine.svg',
               subTools: []
-            }
-          ]
-        },
-        {
-          name: 'MergeSplit',
-          type: 'svg',
-          url: 'svg/Menu_Tools/Merge.svg',
-          subTools: [
-            {
-              name: 'Merge',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Merge.svg',
-              subTools: []
             },
-            {
-              name: 'Split',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Split.svg',
-              subTools: []
-            }
-          ]
-        }
-      ],
-      groupTools: [
-        {
-          name: 'Bump',
-          type: 'svg',
-          url: 'svg/Menu_Tools/Bump.svg',
-          subTools: [
-            {
-              name: 'BumpCollide',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Bump_Collide.svg',
-              subTools: []
-            },
-            {
-              name: 'BumpKnot',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Bump_Knot.svg',
-              subTools: []
-            },
-            {
-              name: 'BumpTwine',
-              type: 'svg',
-              url: 'svg/Menu_Tools/Bump_Twine.svg',
-              subTools: []
-            }
-          ]
-        },
-        {
-          name: 'MergeSplit',
-          type: 'svg',
-          url: 'svg/Menu_Tools/Merge.svg',
-          subTools: [
             {
               name: 'Merge',
               type: 'svg',
@@ -268,37 +212,12 @@ class App extends React.Component<Props, State> {
     };
   }
 
-  handleMousePos = (e: any) => {
-    if (this.props.freeMode) {
-      this.setState({
-        mouseX: e.clientX,
-        mouseY: e.clientY
-      });
-    }
-  };
-
   render() {
-    const {
-      topTools,
-      leftTools,
-      lineTools,
-      groupTools,
-      mouseX,
-      mouseY
-    } = this.state;
+    const { topTools, leftTools, lineTools } = this.state;
     return (
-      <div className="App" onDoubleClick={this.handleMousePos}>
-        <MenuBar mounted={true} right={100} bottom={100} tools={lineTools} />
-        {/* <MenuBar
-          mounted={groupToolState}
-          centerX={mouseX}
-          centerY={mouseY}
-          tools={groupTools}
-        /> */}
+      <div className="App">
         <DrawCanvas />
-        <ShapeModal />
-        <UploadModal />
-        <StyleModal />
+        <MenuBar mounted={true} right={100} bottom={100} tools={lineTools} />
         <ToolBar
           Top={0}
           Left={400}
@@ -306,7 +225,10 @@ class App extends React.Component<Props, State> {
           Direction={'horizontal'}
           Tools={topTools}
         />
-        <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
+        <ToolBar Top={100} Left={0} Direction={'vertical'} Tools={leftTools} />
+        <ShapeModal />
+        <UploadModal />
+        <StyleModal />
       </div>
     );
   }
