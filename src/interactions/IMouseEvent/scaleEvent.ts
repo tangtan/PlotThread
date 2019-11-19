@@ -1,6 +1,6 @@
 import paper, { Group, Shape, Point } from 'paper';
 import RotateEvent from './rotateEvent';
-import { drawSelectionBounds } from '../baseDrawer';
+import { drawSelectionBounds } from '../../drawers/baseDrawer';
 
 export default class ScaleEvent extends RotateEvent {
   scaleFactorX: number;
@@ -198,9 +198,9 @@ export default class ScaleEvent extends RotateEvent {
           }
         }
         // 更新 selectionBounds
-        this.selectionBounds.remove();
         const bounds = this.initialVisualObjBounds;
         const { translatePoint, scaleFactorX, scaleFactorY, degree } = this;
+        this.selectionBounds.remove();
         this.selectionBounds = drawSelectionBounds(
           bounds,
           translatePoint,

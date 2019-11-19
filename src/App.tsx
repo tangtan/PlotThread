@@ -5,7 +5,7 @@ import './App.css';
 import 'antd/dist/antd.css';
 import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
-import DrawCanvas from './components/canvas/DrawCanvas';
+import ToolCanvas from './components/canvas/ToolCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import StyleModal from './components/toolbar/tools/StyleModal';
@@ -65,7 +65,7 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Reshape',
+          name: 'Adjust',
           type: 'svg',
           url: 'svg/Menu_Left/Adjust.svg',
           subTools: []
@@ -216,7 +216,7 @@ class App extends React.Component<Props, State> {
     const { topTools, leftTools, lineTools } = this.state;
     return (
       <div className="App">
-        <DrawCanvas />
+        <ToolCanvas />
         <MenuBar mounted={true} right={100} bottom={100} tools={lineTools} />
         <ToolBar
           Top={0}

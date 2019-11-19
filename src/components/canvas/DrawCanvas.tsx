@@ -3,32 +3,12 @@ import { connect } from 'react-redux';
 import { project, view } from 'paper';
 import { StateType, DispatchType } from '../../types';
 import { addVisualObject } from '../../store/actions';
-import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 import { iStoryline } from 'iStoryline';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    renderQueue: state.renderQueue,
-    // Layout Utils
-    freeMode: getToolState(state, 'FreeMode'),
-    addLineState: getToolState(state, 'AddLine'),
-    groupState: getToolState(state, 'Group'),
-    compressState: getToolState(state, 'Compress'),
-    sortState: getToolState(state, 'Sort'),
-    bendState: getToolState(state, 'Forward'), //TODO
-    straightenState: getToolState(state, 'Straighten'),
-    // Relationship/Group Utils
-    mergeState: getToolState(state, 'Merge'),
-    splitState: getToolState(state, 'Split'),
-    collideState: getToolState(state, 'Collide'),
-    twineState: getToolState(state, 'Twine'),
-    knotState: getToolState(state, 'Knot'),
-    // Line Utils
-    strokeDashState: getToolState(state, 'StrokeDash'),
-    strokeWidthState: getToolState(state, 'StrokeWidth'),
-    strokeZigzagState: getToolState(state, 'StrokeZigzag'),
-    strokeWaveState: getToolState(state, 'StrokeWave')
+    renderQueue: state.renderQueue
   };
 };
 
@@ -37,20 +17,6 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg))
   };
-};
-
-const hitOption = {
-  segments: false,
-  stroke: true,
-  fill: false,
-  tolerance: 5
-};
-
-const hitShapeOption = {
-  segments: true,
-  stroke: true,
-  fill: true,
-  tolerance: 5
 };
 
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -91,6 +57,7 @@ class DrawCanvas extends Component<Props, State> {
         this.props.renderQueue.forEach(item => {
           item.data.isTransforming = false;
           item.data.selectionBounds.visible = false;
+          // item.data.selectionBounds.remove();
         });
       }
     });

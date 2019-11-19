@@ -1,7 +1,6 @@
 import { Group, Color, Point, Path, Shape, Rectangle } from 'paper';
 import { ColorPicker } from '../utils/color';
 import { Coord } from '../utils/coord';
-import IMouseEvent from './IMouseEvent';
 
 const hitShapeOption = {
   segments: true,
@@ -43,33 +42,10 @@ export default class BaseDrawer {
       data: {
         isCreating: isCreating,
         isTransforming: false,
-        isDragging: false
+        isDragging: false,
+        selectionBounds: null
       }
     });
-    const bounds = compoundGroup.internalBounds as Rectangle;
-    compoundGroup.data.selectionBounds = drawSelectionBounds(bounds);
-    const mouseUtil = new IMouseEvent(compoundGroup);
-    compoundGroup.onMouseEnter = (e: any) => {
-      mouseUtil.enter(e);
-    };
-    compoundGroup.onMouseLeave = (e: any) => {
-      mouseUtil.leave(e);
-    };
-    compoundGroup.onMouseDown = (e: any) => {
-      mouseUtil.down(e);
-    };
-    compoundGroup.onMouseMove = (e: any) => {
-      mouseUtil.move(e);
-    };
-    compoundGroup.onMouseUp = (e: any) => {
-      mouseUtil.up(e);
-    };
-    compoundGroup.onMouseDrag = (e: any) => {
-      mouseUtil.drag(e);
-    };
-    compoundGroup.onClick = (e: any) => {
-      mouseUtil.click(e);
-    };
     return compoundGroup;
   }
 
