@@ -1,7 +1,7 @@
 import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Color } from 'paper';
-import { ColorSet } from '../color';
+import { ColorSet } from '../../utils/color';
 
 export default class AddLineUtil extends StoryUtil {
   characterInfo: any[][];

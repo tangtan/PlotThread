@@ -1,7 +1,7 @@
 import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
-import { ColorSet } from '../color';
+import { ColorSet } from '../../utils/color';
 
 export default class StraightenUtil extends StoryUtil {
   straightenInfo: any[][];

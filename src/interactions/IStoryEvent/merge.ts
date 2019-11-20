@@ -1,15 +1,15 @@
 import { StoryUtil, DoubleSelectUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import { Path } from 'paper';
-import { BLUE } from '../color';
-export default class KnotUtil extends StoryUtil {
+import { BLUE } from '../../utils/color';
+export default class MergeUtil extends StoryUtil {
   select: DoubleSelectUtil;
-  knotInfo: any[][];
+  mergeInfo: [string, string, number, number][];
   status: boolean;
   constructor(hitOption: IHitOption) {
     super(hitOption);
     this.select = new DoubleSelectUtil(hitOption);
-    this.knotInfo = [];
+    this.mergeInfo = [];
     this.status = false;
   }
   down(e: paper.MouseEvent) {
@@ -42,14 +42,13 @@ export default class KnotUtil extends StoryUtil {
         this.startPosition &&
         this.endPosition
       ) {
-        const start = this.getStartTime();
-        const end = this.getEndTime();
+        const start = this.startPosition.x;
+        const end = this.endPosition.x;
         const first_name = this.select.selectPath.name;
         const second_name = this.select.secondSelectPath.name;
-        console.log(first_name, second_name, start, end);
+        // console.log(first_name, second_name, start, end);
         if (start && end && first_name && second_name) {
-          const names = [first_name, second_name];
-          this.knotInfo.push([names, start, end, 'Knot']);
+          this.mergeInfo.push([first_name, second_name, start, end]);
         }
         this.select.restore();
         this.status = true;

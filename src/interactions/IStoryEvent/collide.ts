@@ -1,7 +1,7 @@
 import { StoryUtil, DoubleSelectUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import { Path } from 'paper';
-import { BLUE } from '../color';
+import { BLUE } from '../../utils/color';
 export default class CollideUtil extends StoryUtil {
   select: DoubleSelectUtil;
   collideInfo: any[][];

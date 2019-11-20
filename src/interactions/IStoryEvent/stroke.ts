@@ -1,14 +1,14 @@
 import { StoryUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
-import { ColorSet } from '../color';
+import { ColorSet } from '../../utils/color';
 
-export default class BendUtil extends StoryUtil {
-  bendInfo: any[][];
+export default class StrokeUtil extends StoryUtil {
+  divideInfo: any[][];
   status: boolean;
   constructor(hitOption: IHitOption) {
     super(hitOption);
-    this.bendInfo = [];
+    this.divideInfo = [];
     this.status = false;
   }
 
@@ -22,15 +22,15 @@ export default class BendUtil extends StoryUtil {
     }
   }
 
-  up(e: paper.MouseEvent) {
+  up(e: paper.MouseEvent, style: string) {
     if (this.selectPath) {
       super.mouseUp(e);
       const name = this.selectPath.name;
       const startTime = this.getStartTime();
-      // const endTime = this.getEndTime();
-      console.log(startTime, name);
-      if (startTime > -1) {
-        this.bendInfo.push([name, startTime]);
+      const endTime = this.getEndTime();
+      // console.log(name, startTime, endTime, style);
+      if (startTime > -1 && endTime > -1) {
+        this.divideInfo.push([name, startTime, endTime, style]);
         this.selectPath.selected = false;
         this.selectPath = null;
       }
@@ -51,7 +51,7 @@ export default class BendUtil extends StoryUtil {
       if (this.startPosition && this.endPosition) {
         this.currPath = new Path.Line(
           this.startPosition,
-          new Point([this.startPosition.x, this.endPosition.y])
+          new Point([this.endPosition.x, this.startPosition.y])
         );
         this.currPath.strokeColor = ColorSet.blue;
         this.currPath.strokeWidth = 2;

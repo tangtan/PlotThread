@@ -6,9 +6,9 @@ import DrawCanvas from './DrawCanvas';
 import { getToolState } from '../../store/selectors';
 import { Group } from 'paper';
 
-import PolylineTool from '../../interactions/polylineTool';
-import FreelineTool from '../../interactions/freelineTool';
-import TextTool from '../../interactions/textTool';
+import PolylineTool from '../../interactions/IDrawEvent/polylineTool';
+import FreelineTool from '../../interactions/IDrawEvent/freelineTool';
+import TextTool from '../../interactions/IDrawEvent/textTool';
 
 const mapStateToProps = (state: StateType) => {
   return {

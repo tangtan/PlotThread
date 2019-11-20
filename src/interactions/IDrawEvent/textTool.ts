@@ -1,6 +1,6 @@
 import paper, { Group, PointText } from 'paper';
 import { BaseTool, ToolCFG } from './baseTool';
-import TextDrawer from '../drawers/textDrawer';
+import TextDrawer from '../../drawers/textDrawer';
 
 export default class TextTool extends BaseTool {
   _groups: Group[];

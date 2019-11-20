@@ -1,4 +1,4 @@
-import { StoryName } from '../types';
+import { StoryName } from '../../types';
 
 export class StoryStore {
   graph: any;

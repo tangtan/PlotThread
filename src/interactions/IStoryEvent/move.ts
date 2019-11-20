@@ -10,7 +10,7 @@ import {
   Group,
   Path
 } from 'paper';
-import { BLACK } from '../color';
+import { BLACK } from '../../utils/color';
 
 export default class MoveUtil extends BaseMouseUtil {
   isMoveShape: boolean;

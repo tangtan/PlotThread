@@ -1,5 +1,5 @@
 import { BaseTool, ToolCFG } from './baseTool';
-import PathDrawer from '../drawers/pathDrawer';
+import PathDrawer from '../../drawers/pathDrawer';
 import paper, { Path, Group } from 'paper';
 
 export default class PolylineTool extends BaseTool {

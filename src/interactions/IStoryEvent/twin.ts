@@ -1,7 +1,7 @@
 import { StoryUtil, DoubleSelectUtil } from '../util';
 import { IHitOption, StoryGraph } from '../../types';
 import { Path } from 'paper';
-import { BLUE } from '../color';
+import { BLUE } from '../../utils/color';
 export default class TwinUtil extends StoryUtil {
   select: DoubleSelectUtil;
   twinInfo: any[][];

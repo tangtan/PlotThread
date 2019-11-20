@@ -1,6 +1,5 @@
 import paper, { Path, Item, Point, project } from 'paper';
-import { IHitOption, StoryGraph } from '../types';
-import { BLACK } from './color';
+import { IHitOption, StoryGraph } from '../../types';
 import { StoryStore } from './hitTest';
 
 export class BaseMouseUtil {
