@@ -26,6 +26,8 @@ const drawVisualObject = (type: string, cfg?: any) => {
     case 'text':
       const textDrawer = new TextDrawer(_cfg);
       return textDrawer.draw(type);
+    case 'freetext':
+      return _cfg as Group;
     case 'line':
       const pathDrawer = new PathDrawer(_cfg);
       return pathDrawer.draw(type);

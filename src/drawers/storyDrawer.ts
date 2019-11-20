@@ -1,4 +1,4 @@
-import { Path, Matrix, Point, Group, PointText, CompoundPath } from 'paper';
+import { Path, Matrix, Point, CompoundPath } from 'paper';
 import { StoryName, StoryLine, StorySegment } from '../types';
 import BaseDrawer from './baseDrawer';
 import TextDrawer from './textDrawer';
@@ -48,7 +48,7 @@ export default class StoryDrawer extends BaseDrawer {
     let cfg = this.cfg;
     cfg.defaultContent = name;
     const textDrawer = new TextDrawer(cfg);
-    const texts = textDrawer._drawVisualObjects('storyname', false, x0, y0);
+    const texts = textDrawer._drawVisualObjects('text', false, x0, y0);
     return texts;
   }
 }

@@ -26,7 +26,7 @@ export default class FreelineTool extends BaseTool {
 
   remove() {
     super.remove();
-    return this._group;
+    return [this._group];
   }
 
   _onMouseDrag(e: paper.ToolEvent) {

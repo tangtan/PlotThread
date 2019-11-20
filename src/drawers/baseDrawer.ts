@@ -2,13 +2,6 @@ import { Group, Color, Point, Path, Shape, Rectangle } from 'paper';
 import { ColorPicker } from '../utils/color';
 import { Coord } from '../utils/coord';
 
-const hitShapeOption = {
-  segments: true,
-  stroke: true,
-  fill: true,
-  tolerance: 5
-};
-
 // Default geometry params for selectionBounds
 const defaultPoint = new Point(0, 0);
 const anchorPointSize = 6;
@@ -43,10 +36,23 @@ export default class BaseDrawer {
         isCreating: isCreating,
         isTransforming: false,
         isDragging: false,
-        selectionBounds: null
+        selectionBounds: null,
+        type: type
       }
     });
+    compoundGroup.name = this._nameVisualObject(compoundGroup, type);
     return compoundGroup;
+  }
+
+  _nameVisualObject(visualObj: Group, type: string) {
+    const _type = type.startsWith('data:image') ? 'image' : type;
+    const defaultName = `${_type}-${visualObj.index}`;
+    switch (type) {
+      case 'storyline':
+        return visualObj.lastChild.name || defaultName;
+      default:
+        return defaultName;
+    }
   }
 
   _drawVisualObjects(

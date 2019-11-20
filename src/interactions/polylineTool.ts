@@ -26,7 +26,7 @@ export default class PolylineTool extends BaseTool {
 
   remove() {
     super.remove();
-    return this._group;
+    return [this._group];
   }
 
   _onMouseDown(e: paper.ToolEvent) {

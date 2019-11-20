@@ -7,7 +7,7 @@ import {
 } from '../../../../store/selectors';
 import { setTool } from '../../../../store/actions';
 import { SketchPicker } from 'react-color';
-import { Color, Group } from 'paper';
+import { Color, Group, Item } from 'paper';
 import './StyleModal.css';
 
 const mapStateToProps = (state: StateType) => {
@@ -117,14 +117,34 @@ class StyleModal extends Component<Props, State> {
     const newColor = new Color(r / 255, g / 255, b / 255, a);
     const { strokeStyleState, fillStyleState, selectedItems } = this.props;
     if (strokeStyleState) {
-      selectedItems.forEach(item => (item.strokeColor = newColor));
+      // selectedItems.forEach(item => (item.strokeColor = newColor));
+      selectedItems.forEach(item =>
+        this.changeItemColor(item, 'strokeColor', newColor)
+      );
       this.props.closeStrokeStyleTool();
     }
     if (fillStyleState) {
-      selectedItems.forEach(item => (item.fillColor = newColor));
+      // selectedItems.forEach(item => (item.fillColor = newColor));
+      selectedItems.forEach(item =>
+        this.changeItemColor(item, 'fillColor', newColor)
+      );
       this.props.closeFillStyleTool();
     }
   };
+
+  changeItemColor(item: Item, style: string, newColor: Color) {
+    switch (item.data.type) {
+      case 'text':
+      case 'freetext':
+        item.strokeColor = newColor;
+        item.fillColor = newColor;
+        break;
+      default:
+        if (style === 'fillColor') item.fillColor = newColor;
+        else item.strokeColor = newColor;
+        break;
+    }
+  }
 
   render() {
     const { selectedItems, strokeStyleState, fillStyleState } = this.props;

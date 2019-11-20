@@ -13,7 +13,7 @@ export default class TextDrawer extends BaseDrawer {
     this.fontSize = cfg.fontSize || 12;
     this.fontFamily = cfg.fontFamily || 'sans-serif';
     this.justification = cfg.justification || 'right';
-    this.defaultContent = cfg.defaultContent || 'iStoryline';
+    this.defaultContent = cfg.defaultContent || 'iStoryline1';
   }
 
   _drawVisualObjects(
@@ -26,7 +26,7 @@ export default class TextDrawer extends BaseDrawer {
     const _y0 = y0 || this.originPointY;
     return [
       new PointText({
-        point: isCreating ? [] : [_x0, _y0],
+        point: [_x0, _y0],
         content: isCreating ? '' : this.defaultContent,
         fillColor: this.fillColor,
         fontFamily: this.fontFamily,

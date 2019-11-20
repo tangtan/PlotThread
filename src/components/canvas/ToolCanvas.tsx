@@ -4,9 +4,11 @@ import { StateType, DispatchType } from '../../types';
 import { addVisualObject, setTool } from '../../store/actions';
 import DrawCanvas from './DrawCanvas';
 import { getToolState } from '../../store/selectors';
+import { Group } from 'paper';
 
 import PolylineTool from '../../interactions/polylineTool';
 import FreelineTool from '../../interactions/freelineTool';
+import TextTool from '../../interactions/textTool';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -29,7 +31,8 @@ const mapStateToProps = (state: StateType) => {
     strokeWidthState: getToolState(state, 'StrokeWidth'),
     strokeZigzagState: getToolState(state, 'StrokeZigzag'),
     strokeWaveState: getToolState(state, 'StrokeWave'),
-    adjustState: getToolState(state, 'Adjust')
+    adjustState: getToolState(state, 'Adjust'),
+    textState: getToolState(state, 'Text')
   };
 };
 
@@ -47,8 +50,6 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 type State = {};
 
 let toolStore = new Map();
-
-let toolStore1: PolylineTool | null = null;
 
 class ToolCanvas extends Component<Props, State> {
   constructor(props: Props) {
@@ -72,6 +73,7 @@ class ToolCanvas extends Component<Props, State> {
   componentDidUpdate() {
     this.updateTool('polyline', this.props.adjustState);
     this.updateTool('freeline', this.props.compressState);
+    this.updateTool('freetext', this.props.textState);
   }
 
   updateTool(type: string, toolState: boolean | undefined) {
@@ -84,8 +86,10 @@ class ToolCanvas extends Component<Props, State> {
       // Code works after pressing ESC button
       const toolItem = toolStore.get(type);
       if (toolItem) {
-        const _group = toolItem.remove();
-        if (_group) this.props.addVisualObject(type, _group);
+        const _groups = toolItem.remove();
+        _groups.forEach((_group: Group) =>
+          this.props.addVisualObject(type, _group)
+        );
       }
     }
   }
@@ -96,6 +100,8 @@ class ToolCanvas extends Component<Props, State> {
         return new PolylineTool();
       case 'freeline':
         return new FreelineTool();
+      case 'freetext':
+        return new TextTool();
       default:
         return null;
     }
