@@ -3,9 +3,11 @@ import { IHitOption, StoryGraph } from '../../types';
 import { StoryStore } from './hitTest';
 
 export class BaseMouseUtil {
+  // downPoint
   startPosition: Point | null;
+  // upPoint
   endPosition: Point | null;
-  // selected storyline
+  // the selected storyline
   selectPath: Item | null;
   // interaction paths
   currPath: Path | null;

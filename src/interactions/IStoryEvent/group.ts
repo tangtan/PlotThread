@@ -1,4 +1,4 @@
-import { StoryUtil } from '../util';
+import { StoryUtil } from './util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../../utils/color';
@@ -32,15 +32,14 @@ export default class GroupUtil extends StoryUtil {
       const eTime = this.getEndTime();
       if (sTime > -1 && eTime > -1) {
         const charArr = this.storyStore.names.filter(name =>
-          this.isInCurrPath(name, sTime, eTime)
+          this.isInSelectionRegion(name, sTime, eTime)
         );
-        this.groupInfo.push([charArr, sTime, eTime]);
         console.log(charArr, sTime, eTime);
       }
     }
   }
 
-  isInCurrPath(name: string, sTime: number, eTime: number) {
+  isInSelectionRegion(name: string, sTime: number, eTime: number) {
     let flag = false;
     if (sTime < 0) {
       return flag;
@@ -54,7 +53,7 @@ export default class GroupUtil extends StoryUtil {
       const storyStore = this.storyStore;
       const sTmpY = storyStore.getCharacterY(name, sTime);
       const eTmpY = storyStore.getCharacterY(name, eTime);
-      console.log(name, sTmpY, eTmpY, startY, endY);
+      // console.log(name, sTmpY, eTmpY, startY, endY);
       if ((sTmpY - startY) * (sTmpY - endY) < 0) {
         flag = true;
       }

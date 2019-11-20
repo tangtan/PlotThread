@@ -1,4 +1,4 @@
-import { StoryUtil } from '../util';
+import { StoryUtil } from './util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Color } from 'paper';
 import { ColorSet } from '../../utils/color';
@@ -29,8 +29,7 @@ export default class AddLineUtil extends StoryUtil {
     const startTime = this.getStartTime();
     const endTime = this.getEndTime();
     if (startTime > -1 && endTime > -1) {
-      const id = Math.ceil(Math.random() * 100);
-      this.characterInfo.push([`storyline-${id}`, startTime, endTime]);
+      console.log(startTime, endTime);
     }
   }
 

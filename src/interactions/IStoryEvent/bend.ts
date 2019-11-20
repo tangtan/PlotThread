@@ -1,4 +1,4 @@
-import { StoryUtil } from '../util';
+import { StoryUtil } from './util';
 import { IHitOption, StoryGraph } from '../../types';
 import paper, { Path, Point } from 'paper';
 import { ColorSet } from '../../utils/color';

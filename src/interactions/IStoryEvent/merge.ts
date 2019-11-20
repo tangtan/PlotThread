@@ -1,4 +1,4 @@
-import { StoryUtil, DoubleSelectUtil } from '../util';
+import { StoryUtil, DoubleSelectUtil } from './util';
 import { IHitOption, StoryGraph } from '../../types';
 import { Path } from 'paper';
 import { BLUE } from '../../utils/color';

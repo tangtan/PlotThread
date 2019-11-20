@@ -12,26 +12,8 @@ import TextTool from '../../interactions/IDrawEvent/textTool';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    // Layout Utils
-    freeMode: getToolState(state, 'FreeMode'),
-    addLineState: getToolState(state, 'AddLine'),
-    groupState: getToolState(state, 'Group'),
-    compressState: getToolState(state, 'Compress'),
-    sortState: getToolState(state, 'Sort'),
-    bendState: getToolState(state, 'Forward'), //TODO
-    straightenState: getToolState(state, 'Straighten'),
-    // Relationship/Group Utils
-    mergeState: getToolState(state, 'Merge'),
-    splitState: getToolState(state, 'Split'),
-    collideState: getToolState(state, 'Collide'),
-    twineState: getToolState(state, 'Twine'),
-    knotState: getToolState(state, 'Knot'),
-    // Line Utils
-    strokeDashState: getToolState(state, 'StrokeDash'),
-    strokeWidthState: getToolState(state, 'StrokeWidth'),
-    strokeZigzagState: getToolState(state, 'StrokeZigzag'),
-    strokeWaveState: getToolState(state, 'StrokeWave'),
     adjustState: getToolState(state, 'Adjust'),
+    freelineState: getToolState(state, 'StrokeWave'),
     textState: getToolState(state, 'Text')
   };
 };
@@ -72,7 +54,7 @@ class ToolCanvas extends Component<Props, State> {
 
   componentDidUpdate() {
     this.updateTool('polyline', this.props.adjustState);
-    this.updateTool('freeline', this.props.compressState);
+    this.updateTool('freeline', this.props.freelineState);
     this.updateTool('freetext', this.props.textState);
   }
 

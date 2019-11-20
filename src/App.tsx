@@ -53,7 +53,7 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Straighten',
+          name: 'Bend',
           type: 'svg',
           url: 'svg/Menu_Left/Bend.svg',
           subTools: []
@@ -62,6 +62,18 @@ class App extends React.Component<Props, State> {
           name: 'Compress',
           type: 'svg',
           url: 'svg/Menu_Left/Scale.svg',
+          subTools: []
+        },
+        {
+          name: 'StrokeDash',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Stroke_Dashed.svg',
+          subTools: []
+        },
+        {
+          name: 'Twine',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Bump_Twine.svg',
           subTools: []
         },
         {
@@ -80,6 +92,12 @@ class App extends React.Component<Props, State> {
           name: 'SymbolStar',
           type: 'svg',
           url: 'svg/Menu_Tools/Symbols.svg',
+          subTools: []
+        },
+        {
+          name: 'StrokeWave',
+          type: 'svg',
+          url: 'svg/Menu_Tools/Stroke_Curve.svg',
           subTools: []
         },
         {
@@ -217,7 +235,7 @@ class App extends React.Component<Props, State> {
     return (
       <div className="App">
         <ToolCanvas />
-        <MenuBar mounted={true} right={100} bottom={100} tools={lineTools} />
+        {/* <MenuBar mounted={true} right={100} bottom={100} tools={lineTools} /> */}
         <ToolBar
           Top={0}
           Left={400}
@@ -225,7 +243,7 @@ class App extends React.Component<Props, State> {
           Direction={'horizontal'}
           Tools={topTools}
         />
-        <ToolBar Top={100} Left={0} Direction={'vertical'} Tools={leftTools} />
+        <ToolBar Top={80} Left={0} Direction={'vertical'} Tools={leftTools} />
         <ShapeModal />
         <UploadModal />
         <StyleModal />
