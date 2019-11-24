@@ -7,19 +7,9 @@ import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 
 import { iStoryline } from 'iStoryline';
-import AddLineUtil from '../../interactions/IStoryEvent/addline';
-import GroupUtil from '../../interactions/IStoryEvent/group';
-import BendUtil from '../../interactions/IStoryEvent/bend';
-import CompressUtil from '../../interactions/IStoryEvent/compress';
-import CollideUtil from '../../interactions/IStoryEvent/collide';
-import StrokeUtil from '../../interactions/IStoryEvent/stroke';
-
-const hitOption = {
-  segments: true,
-  stroke: true,
-  fill: true,
-  tolerance: 5
-};
+import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
+import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
+import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -29,7 +19,8 @@ const mapStateToProps = (state: StateType) => {
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
     relateState: getToolState(state, 'Twine'),
-    stylishState: getToolState(state, 'StrokeDash')
+    stylishState: getToolState(state, 'StrokeDash'),
+    sortState: getToolState(state, 'Sort')
   };
 };
 
@@ -46,12 +37,12 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 type State = {
   storyXMLUrl: string;
   storyLayouter: any;
-  addLineUtil: AddLineUtil;
-  groupUtil: GroupUtil;
-  bendStraightenUtil: BendUtil;
-  compressExpandUtil: CompressUtil;
-  relateUtil: CollideUtil;
-  stylishUtil: StrokeUtil;
+  addLineUtil: SketchUtil;
+  groupUtil: CircleUtil;
+  compressUtil: CircleUtil;
+  bendUtil: BrushUtil;
+  relateUtil: BrushUtil;
+  stylishUtil: BrushUtil;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -60,12 +51,12 @@ class DrawCanvas extends Component<Props, State> {
     this.state = {
       storyXMLUrl: 'xml/StarWars.xml',
       storyLayouter: new iStoryline(),
-      addLineUtil: new AddLineUtil(hitOption),
-      groupUtil: new GroupUtil(hitOption),
-      bendStraightenUtil: new BendUtil(hitOption),
-      compressExpandUtil: new CompressUtil(hitOption),
-      relateUtil: new CollideUtil(hitOption),
-      stylishUtil: new StrokeUtil(hitOption)
+      addLineUtil: new SketchUtil('AddLine', 0),
+      groupUtil: new CircleUtil('Group', 0),
+      compressUtil: new CircleUtil('Compress', 0),
+      relateUtil: new BrushUtil('Relate', 2),
+      stylishUtil: new BrushUtil('Stylish', 1),
+      bendUtil: new BrushUtil('Bend', 1)
     };
   }
 
@@ -102,37 +93,55 @@ class DrawCanvas extends Component<Props, State> {
   updateUtils(graph: StoryGraph) {
     this.state.addLineUtil.updateStoryStore(graph);
     this.state.groupUtil.updateStoryStore(graph);
-    this.state.bendStraightenUtil.updateStoryStore(graph);
-    this.state.compressExpandUtil.updateStoryStore(graph);
+    this.state.compressUtil.updateStoryStore(graph);
     this.state.relateUtil.updateStoryStore(graph);
     this.state.stylishUtil.updateStoryStore(graph);
+    this.state.bendUtil.updateStoryStore(graph);
   }
 
   onMouseDown(e: paper.MouseEvent) {
     if (this.props.addLineState) this.state.addLineUtil.down(e);
     if (this.props.groupState) this.state.groupUtil.down(e);
-    if (this.props.bendState) this.state.bendStraightenUtil.down(e);
-    if (this.props.compressState) this.state.compressExpandUtil.down(e);
+    if (this.props.compressState) this.state.compressUtil.down(e);
     if (this.props.relateState) this.state.relateUtil.down(e);
     if (this.props.stylishState) this.state.stylishUtil.down(e);
+    if (this.props.bendState) this.state.bendUtil.down(e);
   }
 
   onMouseDrag(e: paper.MouseEvent) {
     if (this.props.addLineState) this.state.addLineUtil.drag(e);
     if (this.props.groupState) this.state.groupUtil.drag(e);
-    if (this.props.bendState) this.state.bendStraightenUtil.drag(e);
-    if (this.props.compressState) this.state.compressExpandUtil.drag(e);
+    if (this.props.compressState) this.state.compressUtil.drag(e);
     if (this.props.relateState) this.state.relateUtil.drag(e);
     if (this.props.stylishState) this.state.stylishUtil.drag(e);
+    if (this.props.bendState) this.state.bendUtil.drag(e);
   }
 
   onMouseUp(e: paper.MouseEvent) {
-    if (this.props.addLineState) this.state.addLineUtil.up(e);
-    if (this.props.groupState) this.state.groupUtil.up(e);
-    if (this.props.bendState) this.state.bendStraightenUtil.up(e);
-    if (this.props.compressState) this.state.compressExpandUtil.up(e);
-    if (this.props.relateState) this.state.relateUtil.up(e);
-    if (this.props.stylishState) this.state.stylishUtil.up(e, 'Dash');
+    if (this.props.addLineState) {
+      const param = this.state.addLineUtil.up(e);
+      console.log(param);
+    }
+    if (this.props.groupState) {
+      const param = this.state.groupUtil.up(e);
+      console.log(param);
+    }
+    if (this.props.compressState) {
+      const param = this.state.compressUtil.up(e);
+      console.log(param);
+    }
+    if (this.props.relateState) {
+      const param = this.state.relateUtil.up(e);
+      console.log(param);
+    }
+    if (this.props.stylishState) {
+      const param = this.state.stylishUtil.up(e);
+      console.log(param);
+    }
+    if (this.props.bendState) {
+      const param = this.state.bendUtil.up(e);
+      console.log(param);
+    }
   }
 
   onMouseClick(e: paper.MouseEvent) {

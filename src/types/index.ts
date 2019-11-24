@@ -44,10 +44,7 @@ export type StoryName = string;
 export type StoryGraph = {
   names: StoryName[];
   nodes: StorySegment[];
-  renderNodes?: StoryLine[];
-  smoothNodes?: StoryLine[];
-  sketchNodes?: StoryLine[];
-  hitTest?: any;
+  paths: StoryLine[];
 };
 export type PathGroup = Path[];
 
