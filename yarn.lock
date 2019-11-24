@@ -3105,13 +3105,19 @@ d3-interpolate@1:
   dependencies:
     d3-color "1"
 
+d3-interpolate@^1.2.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.4.0.tgz#526e79e2d80daa383f9e0c1c1c7dcc0f0583e987"
+  dependencies:
+    d3-color "1"
+
 d3-scale@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-3.2.0.tgz#4071896216b3173caccd944be209e73c8c244e5d"
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-3.2.1.tgz#da1684adce7261b4bc7a76fe193d887f0e909e69"
   dependencies:
     d3-array "1.2.0 - 2"
     d3-format "1"
-    d3-interpolate "1"
+    d3-interpolate "^1.2.0"
     d3-time "1"
     d3-time-format "2"
 
@@ -4722,7 +4728,7 @@ husky@^2.3.0:
     slash "^3.0.0"
 
 "iStoryline@file:../istoryline":
-  version "0.0.5"
+  version "0.0.1"
   dependencies:
     d3-fetch "^1.1.2"
     d3-scale "^3.2.0"

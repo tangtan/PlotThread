@@ -23,16 +23,11 @@ export default class CircleSelectionUtil extends StoryUtil {
       if (sPoint && ePoint && this.storyStore) {
         const sTime = this.getStartTime(sPoint);
         const eTime = this.getEndTime(ePoint);
-        const names = this.storyStore.names;
+        const names = this.storyStore.names.filter(name =>
+          this.isInSelectionRegion(name, sPoint, ePoint)
+        );
         super.mouseUp(e);
-        return {
-          names: names.filter(name =>
-            this.isInSelectionRegion(name, sPoint, ePoint)
-          ),
-          timeSpan: [sTime, eTime],
-          style: this.utilType,
-          param: {}
-        };
+        return [names, [sTime, eTime]];
       }
     }
     super.mouseUp(e);

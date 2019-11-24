@@ -63,19 +63,6 @@ class DrawCanvas extends Component<Props, State> {
   // init
   async componentDidMount() {
     console.log(project);
-    const { storyXMLUrl, storyLayouter } = this.state;
-    let graph = await storyLayouter.readFile(storyXMLUrl);
-    graph = storyLayouter.scale(100, 100, 800, 500, true);
-    graph = storyLayouter.space(10, 10);
-    this.updateUtils(graph);
-    console.log(graph);
-    graph.names.forEach((name: string, i: number) => {
-      const path = graph.paths[i];
-      this.props.addVisualObject('storyline', {
-        storylineName: name,
-        storylinePath: path
-      });
-    });
     view.onClick = (e: paper.MouseEvent) => {
       this.onMouseClick(e);
     };
@@ -88,6 +75,29 @@ class DrawCanvas extends Component<Props, State> {
     view.onMouseUp = (e: paper.MouseEvent) => {
       this.onMouseUp(e);
     };
+    const { storyXMLUrl, storyLayouter } = this.state;
+    let graph = await storyLayouter.readFile(storyXMLUrl);
+    // graph = storyLayouter.scale(100, 100, 800, 500, true);
+    graph = storyLayouter.space(10, 10);
+    console.log(graph);
+    this.drawStorylines(graph);
+  }
+
+  drawStorylines(graph: StoryGraph) {
+    // remove old graph
+    this.updateUtils(graph);
+    const storylines = this.props.renderQueue.filter(
+      item => item.data.type === 'storyline'
+    );
+    storylines.forEach(storyline => storyline.remove());
+    // draw new graph
+    graph.names.forEach((name: string, i: number) => {
+      const path = graph.paths[i];
+      this.props.addVisualObject('storyline', {
+        storylineName: name,
+        storylinePath: path
+      });
+    });
   }
 
   updateUtils(graph: StoryGraph) {
@@ -123,12 +133,14 @@ class DrawCanvas extends Component<Props, State> {
       console.log(param);
     }
     if (this.props.groupState) {
-      const param = this.state.groupUtil.up(e);
-      console.log(param);
+      const [names, span] = this.state.groupUtil.up(e);
+      const graph = this.state.storyLayouter.expand(names, span);
+      this.drawStorylines(graph);
     }
     if (this.props.compressState) {
-      const param = this.state.compressUtil.up(e);
-      console.log(param);
+      const [names, span] = this.state.compressUtil.up(e);
+      const graph = this.state.storyLayouter.compress(names, span);
+      this.drawStorylines(graph);
     }
     if (this.props.relateState) {
       const param = this.state.relateUtil.up(e);
@@ -139,8 +151,14 @@ class DrawCanvas extends Component<Props, State> {
       console.log(param);
     }
     if (this.props.bendState) {
-      const param = this.state.bendUtil.up(e);
-      console.log(param);
+      const [names, span] = this.state.bendUtil.up(e);
+      let graph;
+      if (span.length === 1) {
+        graph = this.state.storyLayouter.bend(names, span);
+      } else {
+        graph = this.state.storyLayouter.straighten(names, span);
+      }
+      this.drawStorylines(graph);
     }
   }
 
@@ -150,7 +168,6 @@ class DrawCanvas extends Component<Props, State> {
       this.props.renderQueue.forEach(item => {
         item.data.isTransforming = false;
         item.data.selectionBounds.visible = false;
-        // item.data.selectionBounds.remove();
       });
     }
   }

@@ -17,12 +17,8 @@ export default class SketchSelectionUtil extends StoryUtil {
     if (this._downPoint && this._dragPoint) {
       const sTime = this.getStartTime(this._downPoint);
       const eTime = this.getEndTime(this._dragPoint);
-      return {
-        names: this.selectedItems.map(item => item.name),
-        timeSpan: [sTime, eTime],
-        style: this.utilType,
-        param: {}
-      };
+      const names = this.selectedItems.map(item => item.name);
+      return [names, [sTime, eTime]];
     }
     return null;
   }

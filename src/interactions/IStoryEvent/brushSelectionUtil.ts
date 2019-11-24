@@ -17,12 +17,17 @@ export default class BrushSelectionUtil extends StoryUtil {
     if (this._downPoint && this._dragPoint) {
       const sTime = this.getStartTime(this._downPoint);
       const eTime = this.getEndTime(this._dragPoint);
-      return {
-        names: this.selectedItems.map(item => item.name),
-        timeSpan: [sTime, eTime],
-        style: this.utilType,
-        param: {}
-      };
+      const names = this.selectedItems.map(item => item.name);
+      const x1 = this._downPoint.x || 0;
+      const y1 = this._downPoint.y || 0;
+      const x2 = this._dragPoint.x || 0;
+      const y2 = this._dragPoint.y || 0;
+      const thresK = 2.5;
+      if (y2 - y1 > thresK * (x2 - x1)) {
+        return [names, [sTime]]; // Bend
+      } else {
+        return [names, [sTime, eTime]];
+      }
     }
     return null;
   }
