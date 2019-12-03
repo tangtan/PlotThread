@@ -9,7 +9,7 @@
 }
 
 .toolbar-icon-box:hover {
-  background: #5581e988;
+  background: #1890ff;
   /* box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56); */
 }
 
@@ -20,7 +20,7 @@
   align-items: center;
   height: 50px;
   width: 50px;
-  background: #4b81ff;
+  background: #1890ff;
   border-radius: 2px;
 }
 

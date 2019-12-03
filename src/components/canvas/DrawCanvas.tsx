@@ -14,13 +14,13 @@ import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    addLineState: getToolState(state, 'AddLine'),
-    groupState: getToolState(state, 'Group'),
+    addLineState: getToolState(state, 'AddActor'),
+    groupState: getToolState(state, 'AddEvent'),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
-    relateState: getToolState(state, 'Twine'),
-    stylishState: getToolState(state, 'StrokeDash'),
-    sortState: getToolState(state, 'Sort')
+    relateState: getToolState(state, 'Relate'),
+    stylishState: getToolState(state, 'Stylish'),
+    sortState: getToolState(state, 'Move')
   };
 };
 

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/colors": "^3.2.2",
+    "@ant-design/dark-theme": "^1.0.3",
     "@types/classnames": "^2.2.7",
     "@types/d3-fetch": "^1.1.5",
     "@types/d3-selection": "^1.4.1",

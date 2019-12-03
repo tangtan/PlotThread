@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getToolState } from './store/selectors';
 import './App.css';
 import 'antd/dist/antd.css';
 
@@ -11,15 +10,9 @@ import ToolCanvas from './components/canvas/ToolCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import StyleModal from './components/statebar/StyleBar/StyleModal';
-import { ITool, StateType } from './types';
+import { ITool } from './types';
 
-const mapStateToProps = (state: StateType) => {
-  return {
-    freeMode: getToolState(state, 'FreeMode')
-  };
-};
-
-type Props = {} & ReturnType<typeof mapStateToProps>;
+type Props = {};
 
 type State = {
   leftTools: ITool[];
@@ -61,7 +54,7 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Relate',
+          name: 'Text',
           type: 'png',
           url: 'icons/label.png',
           subTools: []
@@ -98,6 +91,6 @@ class App extends React.Component<Props, State> {
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   null
 )(App);

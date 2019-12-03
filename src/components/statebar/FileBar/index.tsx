@@ -28,13 +28,13 @@ export default class FileBar extends Component<Props, State> {
     `;
     return (
       <FileBar>
-        <Button type="primary" size="large" shape="circle">
+        <Button size="large" shape="circle" type="default" ghost>
           <Icon type="file-add" style={{ fontSize: '22px' }} />
         </Button>
-        <Button type="primary" size="large" shape="circle">
+        <Button size="large" shape="circle" type="default" ghost>
           <Icon type="save" style={{ fontSize: '22px' }} />
         </Button>
-        <Button type="primary" size="large" shape="circle">
+        <Button size="large" shape="circle" type="default" ghost>
           <Icon type="download" style={{ fontSize: '22px' }} />
         </Button>
       </FileBar>
