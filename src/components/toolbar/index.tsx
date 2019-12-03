@@ -47,23 +47,23 @@ export default class ToolBar extends Component<Props, State> {
       ToolListWrapperBottom;
     switch (transitionFlow) {
       case 'left':
-        width = '60px';
+        width = '50px';
         height = `calc(100vh - ${this.props.Top}px)`;
         ToolListWrapperLeft = this.props.Hidden ? -65 : this.props.Left;
         break;
       case 'right':
-        width = '60px';
+        width = '50px';
         height = `calc(100vh - ${this.props.Top}px)`;
         ToolListWrapperRight = this.props.Hidden ? -65 : this.props.Right;
         break;
       case 'top':
         width = `calc(100vw - ${this.props.Left}px)`;
-        height = '60px';
+        height = '50px';
         ToolListWrapperTop = this.props.Hidden ? -65 : this.props.Top;
         break;
       case 'bottom':
         width = `calc(100vw - ${this.props.Left}px)`;
-        height = '60px';
+        height = '50px';
         ToolListWrapperBottom = this.props.Hidden ? -65 : this.props.Bottom;
         break;
       default:
@@ -92,19 +92,19 @@ export default class ToolBar extends Component<Props, State> {
       right: ${ToolListWrapperRight}px;
       top: ${ToolListWrapperTop}px;
       bottom: ${ToolListWrapperBottom}px;
-      width: ${width === '60px' ? width : ''};
-      height: ${height === '60px' ? height : ''};
+      width: ${width === '50px' ? width : ''};
+      height: ${height === '50px' ? height : ''};
       padding: ${this.props.Direction === 'vertical'
-        ? '20px 5px 20px 5px'
-        : '4px 20px 4px 20px'};
+        ? '20px 0px 20px 0px'
+        : '0px 20px 0px 20px'};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
         ? 'row'
         : 'column'};
       align-items: 'center';
       justify-content: 'space-between';
-      background: #535663;
-      opacity: 0.7;
+      background: #34373e;
+      opacity: 1;
       border-radius: ${this.props.Direction === 'vertical'
         ? '0 5px 5px 0'
         : '0 0 5px 5px'};

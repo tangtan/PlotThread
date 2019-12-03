@@ -77,7 +77,7 @@ class DrawCanvas extends Component<Props, State> {
     };
     const { storyXMLUrl, storyLayouter } = this.state;
     let graph = await storyLayouter.readFile(storyXMLUrl);
-    // graph = storyLayouter.scale(100, 100, 800, 500, true);
+    graph = storyLayouter.scale(100, 100, 800, 500, true);
     graph = storyLayouter.space(10, 10);
     console.log(graph);
     this.drawStorylines(graph);
