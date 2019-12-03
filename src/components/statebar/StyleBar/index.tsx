@@ -95,7 +95,7 @@ class StyleBar extends Component<Props, State> {
             this.onClick('FillStyle');
           }}
         />
-        <StyleModal xOffSet={-78} />
+        <StyleModal xOffSet={-100} />
       </FileBar>
     );
   }
