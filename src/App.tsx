@@ -9,7 +9,7 @@ import StateBar from './components/statebar';
 import ToolCanvas from './components/canvas/ToolCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
-import StyleModal from './components/statebar/StyleBar/StyleModal';
+// import StyleModal from './components/statebar/StyleBar/StyleModal';
 import { ITool } from './types';
 
 type Props = {};
@@ -84,7 +84,7 @@ class App extends React.Component<Props, State> {
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
         <ShapeModal />
         <UploadModal />
-        <StyleModal />
+        {/* <StyleModal /> */}
       </div>
     );
   }

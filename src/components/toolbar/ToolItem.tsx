@@ -38,10 +38,14 @@ class ToolItem extends Component<Props, State> {
   }
 
   private onClick = () => {
+    // 同步工具状态
+    this.setState({
+      isClicked: this.props.toolState
+    });
     const name = this.props.toolInfo.name;
     const use = !this.state.isClicked;
     this.props.activateTool(name, use);
-    console.log(name, use);
+    // console.log(name, use);
     // 同步点击状态
     this.setState({
       isClicked: use

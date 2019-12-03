@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { StateType, DispatchType } from '../../../../types';
 import {
   getToolState,
   getSelectedVisualObjects
 } from '../../../../store/selectors';
 import { setTool } from '../../../../store/actions';
-import { SketchPicker } from 'react-color';
+import { SketchPicker, BlockPicker } from 'react-color';
 import { Color, Group, Item } from 'paper';
-import './StyleModal.css';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -25,18 +25,15 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   };
 };
 
-type Props = {} & ReturnType<typeof mapStateToProps> &
+type Props = {
+  xOffSet?: number;
+} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {};
 
 function ColorPicker(props: any) {
-  const {
-    selectedItems,
-    fillStyleState,
-    strokeStyleState,
-    onChangeComplete
-  } = props;
+  const { selectedItems, fillStyleState, strokeStyleState, onChange } = props;
   if (!strokeStyleState && !fillStyleState) {
     return null;
   }
@@ -49,6 +46,7 @@ function ColorPicker(props: any) {
   );
   // TODO: support other types, such as hsl
   let color255 = { r: 0, g: 0, b: 0, a: 1 };
+  // let colorHex = selectedColor.toCSS(true);
   switch (selectedColor.type) {
     case 'rgb':
       const [r, g, b] = selectedColor.components;
@@ -60,7 +58,7 @@ function ColorPicker(props: any) {
     default:
       break;
   }
-  return <SketchPicker color={color255} onChangeComplete={onChangeComplete} />;
+  return <SketchPicker color={color255} onChange={onChange} />;
 }
 
 function pickColorFromSelectedItems(
@@ -75,7 +73,7 @@ function pickColorFromSelectedItems(
   let color;
   if (strokeColor) {
     color = BSFSearch(items, 'strokeColor');
-    console.log(color);
+    // console.log(color);
   }
   if (fillColor) {
     color = BSFSearch(items, 'fillColor');
@@ -112,7 +110,7 @@ class StyleModal extends Component<Props, State> {
     this.state = {};
   }
 
-  handleChangeComplete = (color: any) => {
+  handleChange = (color: any) => {
     const { r, g, b, a } = color.rgb;
     const newColor = new Color(r / 255, g / 255, b / 255, a);
     const { strokeStyleState, fillStyleState, selectedItems } = this.props;
@@ -121,14 +119,14 @@ class StyleModal extends Component<Props, State> {
       selectedItems.forEach(item =>
         this.changeItemColor(item, 'strokeColor', newColor)
       );
-      this.props.closeStrokeStyleTool();
+      // this.props.closeStrokeStyleTool();
     }
     if (fillStyleState) {
       // selectedItems.forEach(item => (item.fillColor = newColor));
       selectedItems.forEach(item =>
         this.changeItemColor(item, 'fillColor', newColor)
       );
-      this.props.closeFillStyleTool();
+      // this.props.closeFillStyleTool();
     }
   };
 
@@ -147,16 +145,27 @@ class StyleModal extends Component<Props, State> {
   }
 
   render() {
-    const { selectedItems, strokeStyleState, fillStyleState } = this.props;
+    const {
+      selectedItems,
+      strokeStyleState,
+      fillStyleState,
+      xOffSet
+    } = this.props;
+    const left = strokeStyleState ? (xOffSet || 0) + 25 : (xOffSet || 0) + 65;
+    const StyleModal = styled.div`
+      position: absolute;
+      top: 55px;
+      left: ${left}px;
+    `;
     return (
-      <div className="style-modal">
+      <StyleModal>
         <ColorPicker
           selectedItems={selectedItems}
           strokeStyleState={strokeStyleState}
           fillStyleState={fillStyleState}
-          onChangeComplete={this.handleChangeComplete}
+          onChange={this.handleChange}
         />
-      </div>
+      </StyleModal>
     );
   }
 }
