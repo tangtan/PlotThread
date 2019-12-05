@@ -95,15 +95,17 @@ export default class ToolBar extends Component<Props, State> {
       width: ${width === '50px' ? width : ''};
       height: ${height === '50px' ? height : ''};
       padding: ${this.props.Direction === 'vertical'
-        ? '20px 0px 20px 0px'
-        : '0px 20px 0px 20px'};
+        ? '18px 2px 18px 2px'
+        : '0px 18px 0px 18px'};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
         ? 'row'
         : 'column'};
-      align-items: 'center';
-      justify-content: 'space-between';
-      background: #34373e;
+      align-items: center;
+      justify-content: space-between;
+      background: ${this.props.Direction === 'vertical'
+        ? '#34373e'
+        : 'transparent'};
       opacity: 1;
       border-radius: ${this.props.Direction === 'vertical'
         ? '0 5px 5px 0'

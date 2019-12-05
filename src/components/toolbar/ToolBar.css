@@ -3,13 +3,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 50px;
-  width: 50px;
+  height: 42px;
+  width: 42px;
+  margin: 5px 2px;
+  border-radius: 3px;
   /* box-shadow: 0 2px 6px 0 rgba(52, 52, 52, 0.5); */
 }
 
 .toolbar-icon-box:hover {
-  background: #1890ff;
+  background: #6376cc;
   /* box-shadow: 0 2px 4px 0 rgba(53, 142, 209, 0.56); */
 }
 
@@ -18,17 +20,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 50px;
-  width: 50px;
-  background: #1890ff;
-  border-radius: 2px;
+  height: 42px;
+  width: 42px;
+  background: #6376cc;
+  border-radius: 3px;
+  margin: 5px 2px;
 }
 
 .toolbar-icon-img {
   display: flex;
   flex-direction: column;
-  width: 25px;
-  height: 25px;
+  width: 32px;
+  height: 32px;
 }
 
 /* svg {
