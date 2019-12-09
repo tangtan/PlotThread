@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Button, Icon } from 'antd';
 import ToolBar from '../../toolbar';
 import { ITool } from '../../../types';
+import SettingPanel from './SettingPanel';
 
 type Props = {
   xOffSet?: number;
@@ -28,19 +27,15 @@ export default class SettingBar extends Component<Props, State> {
   }
 
   render() {
-    // const ToolBar = styled.div`
-    //   display: flex;
-    //   flex-direction: row;
-    //   align-items: center;
-    //   justify-content: center;
-    // `;
-
     return (
-      <ToolBar
-        Right={this.props.xOffSet || 0}
-        Direction={'horizontal'}
-        Tools={this.state.settingTools}
-      />
+      <div>
+        <ToolBar
+          Right={this.props.xOffSet || 0}
+          Direction={'horizontal'}
+          Tools={this.state.settingTools}
+        />
+        <SettingPanel />
+      </div>
     );
   }
 }

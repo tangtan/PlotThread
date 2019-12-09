@@ -7,7 +7,6 @@ import GToolBar from './GToolBar';
 import StyleBar from './StyleBar';
 import FontBar from './FontBar';
 import SettingBar from './SettingBar';
-import { IMenu, ITool } from '../../types';
 
 type Props = {};
 

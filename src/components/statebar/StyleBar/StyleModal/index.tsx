@@ -151,11 +151,9 @@ class StyleModal extends Component<Props, State> {
       fillStyleState,
       xOffSet
     } = this.props;
-    const left = strokeStyleState ? (xOffSet || 0) + 25 : (xOffSet || 0) + 65;
     const StyleModal = styled.div`
       position: absolute;
       top: 55px;
-      left: ${left}px;
     `;
     return (
       <StyleModal>
