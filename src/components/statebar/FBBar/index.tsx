@@ -1,40 +1,56 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button, Icon } from 'antd';
+import { IMenu, ITool } from '../../../types';
+import StateItem from './../StateItem';
 
 type Props = {
   xOffSet?: number;
 };
 
-type State = {};
+type State = {
+  controlItems: IMenu[];
+};
 
 export default class FBBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      controlItems: [
+        {
+          name: 'Back',
+          type: 'png',
+          url: 'icons/back.png',
+          background: false
+        },
+        {
+          name: 'Forward',
+          type: 'png',
+          url: 'icons/forward.png',
+          background: false
+        }
+      ]
+    };
   }
 
   render() {
+    const ControlButtonList = this.state.controlItems.map(
+      (controlItem: IMenu, i: number) => (
+        <StateItem key={`control-item-${i}`} menuInfo={controlItem} />
+      )
+    );
     const FBBar = styled.div`
-      position: absolute;
-      top: 0;
-      left: ${this.props.xOffSet || 0}px;
-      width: 200px;
-      height: 50px;
+      // position: absolute;
+      // top: 0;
+      // left: ${this.props.xOffSet || 0}px;
+      // width: 200px;
+      // height: 50px;
       display: flex;
+      align-items: center;
       flex-direction: row;
       justify-content: center;
-      padding: 4px 4px 0 8px;
+      padding: 0px 18px 0 18px;
     `;
-    return (
-      <FBBar>
-        <Button type="link" size="large" shape="circle" ghost>
-          <Icon type="caret-left" style={{ fontSize: '26px' }} />
-        </Button>
-        <Button type="link" size="large" shape="circle" ghost>
-          <Icon type="caret-right" style={{ fontSize: '26px' }} />
-        </Button>
-      </FBBar>
-    );
+    return <FBBar>{ControlButtonList}</FBBar>;
   }
 }

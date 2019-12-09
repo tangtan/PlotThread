@@ -25,6 +25,12 @@ export type ITool = {
   subTools: ITool[];
 };
 
+export type IMenu = {
+  name: string;
+  type: string;
+  url: string;
+  background: boolean;
+};
 export type IHitOption = {
   segments?: boolean;
   stroke?: boolean;

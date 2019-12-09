@@ -7,6 +7,7 @@ import GToolBar from './GToolBar';
 import StyleBar from './StyleBar';
 import FontBar from './FontBar';
 import SettingBar from './SettingBar';
+import { IMenu, ITool } from '../../types';
 
 type Props = {};
 
@@ -15,7 +16,6 @@ type State = {};
 export default class StateBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
   }
 
   render() {
@@ -29,14 +29,24 @@ export default class StateBar extends Component<Props, State> {
       display: flex;
       flex-direction: row-reverse;
     `;
+    const StateWrapper = styled.div`
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+      justify-content: space-between;
+      align-items: center;
+    `;
     return (
       <StateBar>
-        <FileBar />
-        <FBBar xOffSet={250} />
-        <GToolBar xOffSet={450} />
-        <StyleBar xOffSet={750} />
-        <FontBar xOffSet={850} />
-        <SettingBar />
+        <StateWrapper>
+          <FileBar />
+          <FBBar xOffSet={250} />
+          <GToolBar xOffSet={450} />
+          <StyleBar xOffSet={750} />
+          <FontBar xOffSet={850} />
+          <SettingBar />
+        </StateWrapper>
       </StateBar>
     );
   }

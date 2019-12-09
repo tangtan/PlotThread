@@ -61,27 +61,30 @@ class StyleBar extends Component<Props, State> {
 
   render() {
     const FileBar = styled.div`
-      position: absolute;
-      top: 0;
-      left: ${this.props.xOffSet || 0}px;
-      width: 100px;
-      height: 50px;
+      // position: absolute;
+      // top: 0;
+      // left: ${this.props.xOffSet || 0}px;
+      width: 200px;
+      height: 30px;
+      align-items: center;
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
-      padding: 10px 4px 0 8px;
+      justify-content: flex-end;
+      padding: 0px 0px 0 8px;
     `;
     const FillBtn = styled.div`
       flex: 0 1 30px;
       height: 30px;
       border-radius: 15px;
       background: ${this.props.fillColor};
+      margin: 0 1px;
     `;
     const StrokeBtn = styled.div`
       flex: 0 1 30px;
       height: 30px;
       border-radius: 15px;
       border: 4px solid ${this.props.strokeColor};
+      margin: 0 1px;
     `;
     return (
       <FileBar>

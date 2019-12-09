@@ -57,7 +57,8 @@ export default class ToolBar extends Component<Props, State> {
         ToolListWrapperRight = this.props.Hidden ? -65 : this.props.Right;
         break;
       case 'top':
-        width = `calc(100vw - ${this.props.Left}px)`;
+        // width = `calc(100vw - ${this.props.Left}px)`;
+        width = '200px';
         height = '50px';
         ToolListWrapperTop = this.props.Hidden ? -65 : this.props.Top;
         break;
@@ -70,7 +71,10 @@ export default class ToolBar extends Component<Props, State> {
         break;
     }
     const ToolBarWrapper = styled.div`
-      position: absolute;
+      position: ${
+        this.props.Top === 0 || this.props.Right === 0 ? '' : 'absolute'
+      };
+      display: flex;
       top: ${this.props.Top}px;
       left: ${this.props.Left}px;
       right: ${this.props.Right}px;
@@ -87,16 +91,10 @@ export default class ToolBar extends Component<Props, State> {
       }
     `;
     const ToolListWrapper = styled.div`
-      position: absolute;
-      left: ${ToolListWrapperLeft}px;
-      right: ${ToolListWrapperRight}px;
-      top: ${ToolListWrapperTop}px;
-      bottom: ${ToolListWrapperBottom}px;
-      width: ${width === '50px' ? width : ''};
-      height: ${height === '50px' ? height : ''};
+      height: ${this.props.Direction === 'vertical' ? '480px' : '50px'};
       padding: ${this.props.Direction === 'vertical'
         ? '18px 2px 18px 2px'
-        : '0px 18px 0px 18px'};
+        : ''};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
         ? 'row'

@@ -1,0 +1,34 @@
+.statebar-icon-box-bg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 42px;
+  width: 42px;
+  margin: 2px 5px;
+  border-radius: 20px;
+  background: #25262c;
+}
+
+.statebar-icon-box-bg:active {
+  background: #6376cc;
+  transition: background-color 0.08s;
+}
+
+.statebar-icon-box-nobg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 42px;
+  width: 42px;
+  margin: 2px 5px;
+  border-radius: 3px;
+}
+
+.statebar-icon-img {
+  display: flex;
+  flex-direction: column;
+  width: 32px;
+  height: 32px;
+}

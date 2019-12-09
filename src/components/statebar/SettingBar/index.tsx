@@ -1,30 +1,46 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button, Icon } from 'antd';
+import ToolBar from '../../toolbar';
+import { ITool } from '../../../types';
 
 type Props = {
   xOffSet?: number;
 };
 
-type State = {};
+type State = {
+  settingTools: ITool[];
+};
 
 export default class SettingBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      settingTools: [
+        {
+          name: 'Setting',
+          type: 'png',
+          url: 'icons/setting.png',
+          subTools: []
+        }
+      ]
+    };
   }
 
   render() {
-    const ToolBar = styled.div`
-      flex: 0 1 70px;
-      padding: 4px 4px 0 8px;
-    `;
+    // const ToolBar = styled.div`
+    //   display: flex;
+    //   flex-direction: row;
+    //   align-items: center;
+    //   justify-content: center;
+    // `;
+
     return (
-      <ToolBar>
-        <Button type="link" size="large" ghost>
-          <Icon type="appstore" style={{ fontSize: '26px' }} />
-        </Button>
-      </ToolBar>
+      <ToolBar
+        Right={this.props.xOffSet || 0}
+        Direction={'horizontal'}
+        Tools={this.state.settingTools}
+      />
     );
   }
 }

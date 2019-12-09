@@ -45,10 +45,10 @@ class FontBar extends Component<Props, State> {
 
   render() {
     const FontBar = styled.div`
-      position: absolute;
-      top: 0;
-      left: ${this.props.xOffSet || 0}px;
-      width: 200px;
+      // position: absolute;
+      // top: 0;
+      // left: ${this.props.xOffSet || 0}px;
+      // width: 200px;
       height: 50px;
       display: flex;
       flex-direction: row;

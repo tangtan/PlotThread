@@ -10,12 +10,13 @@ import ToolCanvas from './components/canvas/ToolCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
 // import StyleModal from './components/statebar/StyleBar/StyleModal';
-import { ITool } from './types';
+import { ITool, IMenu } from './types';
 
 type Props = {};
 
 type State = {
   leftTools: ITool[];
+  // fileItems: IMenu[];
 };
 
 class App extends React.Component<Props, State> {
