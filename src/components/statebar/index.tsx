@@ -44,7 +44,7 @@ export default class StateBar extends Component<Props, State> {
           <GToolBar xOffSet={450} />
           <StyleBar xOffSet={750} />
           <FontBar xOffSet={850} />
-          <SettingBar />
+          <SettingBar xOffSet={0} />
         </StateWrapper>
       </StateBar>
     );

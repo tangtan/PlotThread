@@ -81,8 +81,11 @@ export default class FileBar extends Component<Props, State> {
 
     const FileButtonList = this.state.fileItems.map(
       (fileItem: IMenu, i: number) => (
-        <div onClick={() => this.onShowModal(fileItem.name)}>
-          <StateItem key={`state-item-${i}`} menuInfo={fileItem} />
+        <div
+          key={`state-item-${i}`}
+          onClick={() => this.onShowModal(fileItem.name)}
+        >
+          <StateItem menuInfo={fileItem} />
         </div>
       )
     );

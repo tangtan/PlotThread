@@ -3,6 +3,8 @@ import ToolItem from './ToolItem';
 import './ToolBar.css';
 import styled from 'styled-components';
 import { ITool } from '../../types';
+import StylishPanel from './EmbellishPanel';
+import { Animated } from 'react-native';
 
 // add tool png-icons
 // import move from '../../assets/move.png';
@@ -61,6 +63,7 @@ export default class ToolBar extends Component<Props, State> {
         width = '200px';
         height = '50px';
         ToolListWrapperTop = this.props.Hidden ? -65 : this.props.Top;
+
         break;
       case 'bottom':
         width = `calc(100vw - ${this.props.Left}px)`;
@@ -113,9 +116,12 @@ export default class ToolBar extends Component<Props, State> {
       <ToolItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
     return (
-      <ToolBarWrapper>
-        <ToolListWrapper>{toolList}</ToolListWrapper>
-      </ToolBarWrapper>
+      <div>
+        <ToolBarWrapper>
+          <ToolListWrapper>{toolList}</ToolListWrapper>
+        </ToolBarWrapper>
+        <StylishPanel />
+      </div>
     );
   }
 }

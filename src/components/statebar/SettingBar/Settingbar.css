@@ -1,0 +1,30 @@
+.settingbar-content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.settingbar-space-wrapper {
+  margin: 20px 0 30px 0;
+  display: flex;
+  padding: 0 0 30px 0;
+  flex-direction: column;
+}
+
+.settingbar-content-title {
+  color: white;
+  font-size: 19px;
+}
+.settingbar-scale-wrapper {
+  display: flex;
+  margin: 0 0 30px 0;
+  flex-direction: column;
+}
+
+.settingbar-scale-width {
+  display: flex;
+  flex-direction: row;
+}
+
+.settingbar-scale-height {
+  display: flex;
+  flex-direction: row;
+}

@@ -36,6 +36,7 @@ class SettingPanel extends Component<Props, State> {
       <Drawer
         title="Setting"
         placement="right"
+        width="40vw"
         closable={true}
         mask={false}
         visible={settingState}
@@ -49,7 +50,4 @@ class SettingPanel extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SettingPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingPanel);

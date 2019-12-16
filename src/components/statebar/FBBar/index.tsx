@@ -50,6 +50,7 @@ export default class FBBar extends Component<Props, State> {
       flex-direction: row;
       justify-content: center;
       padding: 0px 18px 0 18px;
+      margin-right: 64px;
     `;
     return <FBBar>{ControlButtonList}</FBBar>;
   }
