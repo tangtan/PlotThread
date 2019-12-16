@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import ToolBar from '../../toolbar';
 import { ITool } from '../../../types';
-import SettingPanel from './SettingPanel';
 import { Slider } from 'antd';
-
-import { Popover, Divider } from 'antd';
-import { Animated } from 'react-native';
+import styled from 'styled-components';
+import { Popover } from 'antd';
 
 type Props = {
   xOffSet?: number;
@@ -33,7 +31,10 @@ export default class SettingBar extends Component<Props, State> {
   private onChange = () => {};
 
   render() {
-    const text = <span>Setting</span>;
+    const PopoverTitle = styled.h2`
+      color: #fff;
+    `;
+    const text = <PopoverTitle>Setting</PopoverTitle>;
     const heightIcon = (
       <img className="statebar-icon-img" src="icons/height.png" alt="height" />
     );
@@ -62,8 +63,8 @@ export default class SettingBar extends Component<Props, State> {
     return (
       <Popover
         placement="bottomRight"
-        content={content}
         title={text}
+        content={content}
         trigger="click"
       >
         <div>
@@ -71,7 +72,7 @@ export default class SettingBar extends Component<Props, State> {
             Right={this.props.xOffSet || 0}
             Direction={'horizontal'}
             Tools={this.state.settingTools}
-          ></ToolBar>
+          />
         </div>
       </Popover>
     );

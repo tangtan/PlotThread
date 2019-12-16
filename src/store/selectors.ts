@@ -14,15 +14,17 @@ export const getToolName = (state: StateType) => {
   return state.toolState.toolName;
 };
 
-// get selected (isTransforming === true) visual objects
+// get selected (isTransforming === true || isSelected === true) visual objects
+// storyline, text, freetext: isSelected
+// others: isTransforming
 export const getSelectedVisualObjects = (state: StateType) => {
   const selectedGroups = state.renderQueue.filter(
-    item => item.data.isTransforming === true
+    item => item.data.isTransforming === true || item.selected === true
   );
   if (!project) return selectedGroups;
   if (!project.activeLayer.children) return selectedGroups;
   const selectedItems = project.activeLayer.children.filter(
-    item => item.data.isTransforming === true
+    item => item.data.isTransforming === true || item.selected === true
   );
   return selectedGroups.length < selectedItems.length
     ? selectedItems

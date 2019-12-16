@@ -7,6 +7,10 @@ export default class BasicMouseEvent {
     this.visualObj = visualObj;
   }
 
+  get objType() {
+    return this.visualObj.data.type || 'undefined';
+  }
+
   get isSelected() {
     return this.visualObj.selected || false;
   }
@@ -40,16 +44,16 @@ export default class BasicMouseEvent {
   }
 
   enter(e: any) {
-    if (!this.isTransforming) {
-      this.isSelected = true;
-    }
+    // if (!this.isTransforming) {
+    //   this.isSelected = true;
+    // }
     e.stopPropagation();
   }
 
   leave(e: any) {
-    if (!this.isTransforming) {
-      this.isSelected = false;
-    }
+    // if (!this.isTransforming) {
+    //   this.isSelected = false;
+    // }
     e.stopPropagation();
   }
 
@@ -80,7 +84,17 @@ export default class BasicMouseEvent {
     //   return;
     // }
     this.isTransforming = !this.isTransforming;
-    this.isSelected = false;
+    this.isSelected = !this.isSelected;
+    switch (this.objType) {
+      case 'text':
+      case 'freetext':
+      case 'storyline':
+        this.isTransforming = false;
+        break;
+      default:
+        if (this.isTransforming) this.isSelected = false;
+        break;
+    }
     e.stopPropagation();
   }
 

@@ -13,7 +13,6 @@ module.exports = override(
     modifyVars:{
       "popover-bg": "#34373e",
       "popover-color": "#fff",
-      "popover-title-color": "#fff",
       "popover-min-width": "270px",
       "slider-track-background-color": "#6376cc",
       "slider-rail-background-color": "#fff",
@@ -32,7 +31,7 @@ module.exports = override(
       "select-dropdown-edge-child-vertical-padding": "10px",
       "input-bg": "#25262c",
       "input-color": "#fff",
-
+      "text-color": "#fff"
     }
   })
 

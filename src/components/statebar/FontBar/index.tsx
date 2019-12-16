@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { StateType } from '../../../types';
 import { getSelectedVisualObjects } from '../../../store/selectors';
-import { Select, Input } from 'antd';
+import { Select, Input, Slider, Popover } from 'antd';
 import { PointText } from 'paper';
 import './FontBar.css';
-import { Slider, Popover } from 'antd';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -30,10 +29,6 @@ class FontBar extends Component<Props, State> {
       fontFamily: 'Sans Serif',
       fontSize: 12
     };
-  }
-
-  handleSliderChange(value: any) {
-    this.handleTextChange(value, 'fontSize');
   }
 
   handleTextChange(value: any, type: string) {
@@ -75,7 +70,6 @@ class FontBar extends Component<Props, State> {
         onAfterChange={val => this.handleTextChange(val, 'fontSize')}
       />
     );
-    const text = <span>Font Size</span>;
     const FontBar = styled.div`
       height: 50px;
       display: flex;
@@ -83,6 +77,10 @@ class FontBar extends Component<Props, State> {
       justify-content: space-around;
       padding: 8px 4px 0 8px;
     `;
+    const PopoverTitle = styled.h3`
+      color: #fff;
+    `;
+    const TitleText = <PopoverTitle>Font Size</PopoverTitle>;
     const { Option } = Select;
     return (
       <FontBar>
@@ -106,7 +104,12 @@ class FontBar extends Component<Props, State> {
             Times New Roman
           </Option>
         </Select>
-        <Popover placement="topRight" title={text} content={content}>
+        <Popover
+          placement="topRight"
+          style={{ width: 150 }}
+          title={TitleText}
+          content={content}
+        >
           <Input
             style={{ width: 50, textAlign: 'center' }}
             min={1}

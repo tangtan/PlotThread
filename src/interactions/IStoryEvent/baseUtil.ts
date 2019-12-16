@@ -20,7 +20,7 @@ export class BaseSelectionUtil {
     if (!project) return [];
     if (!project.activeLayer.children) return [];
     return project.activeLayer.children.filter(
-      item => item.data.type === 'storyline' && item.data.isTransforming
+      item => item.data.type === 'storyline' && item.selected
     );
   }
 
@@ -55,6 +55,14 @@ export class StoryUtil extends BaseSelectionUtil {
   constructor(type: string, actorNum: number) {
     super(type, actorNum);
     this.storyStore = null;
+  }
+
+  get storylines() {
+    if (!project) return [];
+    if (!project.activeLayer.children) return [];
+    return project.activeLayer.children.filter(
+      item => item.data.type === 'storyline'
+    );
   }
 
   updateStoryStore(graph: StoryGraph) {
