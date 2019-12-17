@@ -9,14 +9,13 @@ import StateBar from './components/statebar';
 import ToolCanvas from './components/canvas/ToolCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
-// import StyleModal from './components/statebar/StyleBar/StyleModal';
-import { ITool, IMenu } from './types';
+import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
+import { ITool } from './types';
 
 type Props = {};
 
 type State = {
   leftTools: ITool[];
-  // fileItems: IMenu[];
 };
 
 class App extends React.Component<Props, State> {
@@ -76,6 +75,12 @@ class App extends React.Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    document.onselectstart = () => {
+      return false;
+    };
+  }
+
   render() {
     const { leftTools } = this.state;
     return (
@@ -83,15 +88,11 @@ class App extends React.Component<Props, State> {
         <ToolCanvas />
         <StateBar />
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
-        <ShapeModal />
         <UploadModal />
-        {/* <StyleModal /> */}
+        <EmbellishPanel />
       </div>
     );
   }
 }
 
-export default connect(
-  null,
-  null
-)(App);
+export default connect(null, null)(App);

@@ -3,8 +3,6 @@ import ToolItem from './ToolItem';
 import './ToolBar.css';
 import styled from 'styled-components';
 import { ITool } from '../../types';
-import StylishPanel from './EmbellishPanel';
-import { Animated } from 'react-native';
 
 // add tool png-icons
 // import move from '../../assets/move.png';
@@ -116,12 +114,9 @@ export default class ToolBar extends Component<Props, State> {
       <ToolItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
     return (
-      <div>
-        <ToolBarWrapper>
-          <ToolListWrapper>{toolList}</ToolListWrapper>
-        </ToolBarWrapper>
-        <StylishPanel />
-      </div>
+      <ToolBarWrapper>
+        <ToolListWrapper>{toolList}</ToolListWrapper>
+      </ToolBarWrapper>
     );
   }
 }

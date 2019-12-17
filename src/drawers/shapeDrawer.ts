@@ -21,28 +21,28 @@ export default class ShapeDrawer extends BaseDrawer {
     let shape: Path;
     switch (type) {
       case 'circle':
-        shape = this._drawCircle();
+        shape = this._drawCircle(x0, y0);
         break;
       case 'ellipse':
-        shape = this._drawEllipse();
+        shape = this._drawEllipse(x0, y0);
         break;
       case 'triangle':
-        shape = this._drawRegularPolygon(3);
+        shape = this._drawRegularPolygon(3, x0, y0);
         break;
       case 'rectangle':
-        shape = this._drawRectangle();
+        shape = this._drawRectangle(x0, y0);
         break;
       case 'pentagon':
-        shape = this._drawRegularPolygon(5);
+        shape = this._drawRegularPolygon(5, x0, y0);
         break;
       case 'hexagon':
-        shape = this._drawRegularPolygon(6);
+        shape = this._drawRegularPolygon(6, x0, y0);
         break;
       case 'star':
-        shape = this._drawStar(5);
+        shape = this._drawStar(5, x0, y0);
         break;
       default:
-        shape = this._drawCircle();
+        shape = this._drawCircle(x0, y0);
         break;
     }
     shape.fillColor = this.fillColor;
@@ -51,41 +51,41 @@ export default class ShapeDrawer extends BaseDrawer {
     return [shape];
   }
 
-  _drawCircle() {
+  _drawCircle(x0: number, y0: number) {
     return new Path.Circle({
-      center: [this.originPointX, this.originPointY],
+      center: [x0 || this.originPointX, y0 || this.originPointY],
       radius: this.defaultRadius
     });
   }
 
-  _drawEllipse() {
+  _drawEllipse(x0: number, y0: number) {
     return new Path.Ellipse({
-      center: [this.originPointX, this.originPointX],
+      center: [x0 || this.originPointX, y0 || this.originPointY],
       size: [this.defaultEllipseA * 2, this.defaultEllipseB * 2]
     });
   }
 
-  _drawRegularPolygon(sides: number) {
+  _drawRegularPolygon(sides: number, x0: number, y0: number) {
     return new Path.RegularPolygon({
-      center: [this.originPointX, this.originPointY],
+      center: [x0 || this.originPointX, y0 || this.originPointY],
       radius: this.defaultRadius,
       sides: sides
     });
   }
 
-  _drawRectangle() {
+  _drawRectangle(x0: number, y0: number) {
     return new Path.Rectangle({
       point: [
-        this.originPointX - this.defaultEllipseA,
-        this.originPointY - this.defaultEllipseB
+        (x0 || this.originPointX) - this.defaultEllipseA,
+        (y0 || this.originPointY) - this.defaultEllipseB
       ],
       size: [this.defaultEllipseA * 2, this.defaultEllipseB * 2]
     });
   }
 
-  _drawStar(points: number) {
+  _drawStar(points: number, x0: number, y0: number) {
     return new Path.Star({
-      center: [this.originPointX, this.originPointY],
+      center: [x0 || this.originPointX, y0 || this.originPointY],
       points: points,
       radius1: this.defaultEllipseB,
       radius2: this.defaultEllipseA

@@ -6490,6 +6490,10 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.npm.taobao.org/mute-stream/download/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
+muuri@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/muuri/-/muuri-0.8.0.tgz#60e84d2d322fa207efd113905eeb5d9750005a53"
+
 nan@^2.12.1, nan@^2.13.2:
   version "2.14.0"
   resolved "https://registry.npm.taobao.org/nan/download/nan-2.14.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnan%2Fdownload%2Fnan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"

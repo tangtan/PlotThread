@@ -1,0 +1,23 @@
+.panel {
+  position: absolute;
+  top: 52px;
+  right: -320px;
+  transition: right 0.3s;
+}
+
+.panel.is-nav-open {
+  right: 0;
+  transition: right 0.5s;
+}
+
+.item.muuri-item-dragging {
+  z-index: 2003;
+}
+
+.item.muuri-item-releasing {
+  z-index: 2002;
+}
+
+.item.muuri-item-hidden {
+  z-index: 2000;
+}

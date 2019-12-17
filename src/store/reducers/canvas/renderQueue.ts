@@ -22,7 +22,7 @@ const drawVisualObject = (type: string, cfg?: any) => {
     case 'pentagon':
     case 'hexagon':
       const shapeDrawer = new ShapeDrawer(_cfg);
-      return shapeDrawer.draw(type);
+      return shapeDrawer.draw(type, false, _cfg.x, _cfg.y);
     case 'text':
       const textDrawer = new TextDrawer(_cfg);
       return textDrawer.draw(type);
