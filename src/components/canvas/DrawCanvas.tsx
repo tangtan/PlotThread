@@ -11,15 +11,17 @@ import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
+import ReshapeUtil from '../../interactions/IStoryEvent/reshapeSelectionUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
     addLineState: getToolState(state, 'AddActor'),
     groupState: getToolState(state, 'AddEvent'),
+    relateState: getToolState(state, 'Relate'),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
-    relateState: getToolState(state, 'Relate'),
+    reshapeState: getToolState(state, 'Reshape'),
     stylishState: getToolState(state, 'Stylish'),
     sortState: getToolState(state, 'FreeMode')
   };
@@ -40,9 +42,10 @@ type State = {
   storyLayouter: any;
   addLineUtil: SketchUtil;
   groupUtil: CircleUtil;
-  compressUtil: CircleUtil;
-  bendUtil: BrushUtil;
   relateUtil: BrushUtil;
+  bendUtil: BrushUtil;
+  compressUtil: CircleUtil;
+  reshapeUtil: ReshapeUtil;
   stylishUtil: BrushUtil;
   sortUtil: SortUtil;
 };
@@ -55,10 +58,11 @@ class DrawCanvas extends Component<Props, State> {
       storyLayouter: new iStoryline(),
       addLineUtil: new SketchUtil('AddLine', 0),
       groupUtil: new CircleUtil('Group', 0),
-      compressUtil: new CircleUtil('Compress', 0),
       relateUtil: new BrushUtil('Relate', 2),
-      stylishUtil: new BrushUtil('Stylish', 1),
       bendUtil: new BrushUtil('Bend', 1),
+      compressUtil: new CircleUtil('Compress', 0),
+      reshapeUtil: new ReshapeUtil('Reshape', 0),
+      stylishUtil: new BrushUtil('Stylish', 1),
       sortUtil: new SortUtil('Sort', 0)
     };
   }
@@ -111,6 +115,7 @@ class DrawCanvas extends Component<Props, State> {
     this.state.stylishUtil.updateStoryStore(graph);
     this.state.bendUtil.updateStoryStore(graph);
     this.state.sortUtil.updateStoryStore(graph);
+    this.state.reshapeUtil.updateStoryStore(graph);
   }
 
   onMouseDown(e: paper.MouseEvent) {
@@ -121,6 +126,7 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.stylishState) this.state.stylishUtil.down(e);
     if (this.props.bendState) this.state.bendUtil.down(e);
     if (this.props.sortState) this.state.sortUtil.down(e);
+    if (this.props.reshapeState) this.state.reshapeUtil.down(e);
   }
 
   onMouseDrag(e: paper.MouseEvent) {
@@ -131,6 +137,7 @@ class DrawCanvas extends Component<Props, State> {
     if (this.props.stylishState) this.state.stylishUtil.drag(e);
     if (this.props.bendState) this.state.bendUtil.drag(e);
     if (this.props.sortState) this.state.sortUtil.drag(e);
+    if (this.props.reshapeState) this.state.reshapeUtil.drag(e);
   }
 
   onMouseUp(e: paper.MouseEvent) {
@@ -167,9 +174,18 @@ class DrawCanvas extends Component<Props, State> {
       this.drawStorylines(graph);
     }
     if (this.props.sortState) {
-      const [names, span] = this.state.sortUtil.up(e);
-      console.log(names, span);
-      const graph = this.state.storyLayouter.sort(names, span);
+      const param = this.state.sortUtil.up(e);
+      if (param) {
+        const [names, span] = param;
+        const graph = this.state.storyLayouter.sort(names, span);
+        // console.log(names, span, graph);
+        this.drawStorylines(graph);
+      }
+    }
+    if (this.props.reshapeState) {
+      const [upperPath, bottomPath] = this.state.reshapeUtil.up(e);
+      const graph = this.state.storyLayouter.reshape(upperPath, bottomPath);
+      // console.log(upperPath, bottomPath, graph);
       this.drawStorylines(graph);
     }
   }
@@ -189,7 +205,4 @@ class DrawCanvas extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DrawCanvas);
+export default connect(mapStateToProps, mapDispatchToProps)(DrawCanvas);
