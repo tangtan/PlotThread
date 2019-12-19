@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType } from '../../../../types';
+import { StateType, DispatchType, ITool } from '../../../../types';
 import { getToolState } from '../../../../store/selectors';
 import { setTool, addVisualObject } from '../../../../store/actions';
-import { Button } from 'antd';
+import { Button, Divider } from 'antd';
 import Muuri from 'muuri';
 import styled from 'styled-components';
 import './Grid.css';
@@ -34,16 +34,21 @@ type State = {
 class EmbellishPanel extends Component<Props, State> {
   private rootElement = React.createRef<HTMLDivElement>();
   private gridElement = React.createRef<HTMLDivElement>();
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      top: 52,
-      width: 320,
+      top: 50,
+      width: 300,
       shapes: [
+        'appear',
+        'end',
+        'spark',
+        'highlight',
+        'star',
         'circle',
-        'ellipse',
-        'triangle',
         'rectangle',
+        'triangle',
         'pentagon',
         'hexagon'
       ]
@@ -92,41 +97,62 @@ class EmbellishPanel extends Component<Props, State> {
       position: relative;
       width: ${width}px;
       height: calc(100vh - ${top}px);
-      padding: 5px;
-      background: #222;
+      padding: 15px;
+      background: #34373e;
+      opacity: 0.9;
     `;
     const Grid = styled.div`
       position: relative;
+      width: 100%;
     `;
     const Item = styled.div`
       display: block;
       position: absolute;
-      width: 100px;
+      width: 74px;
       height: 100px;
-      margin: 5px;
       z-index: 2001;
-      background: #000;
+      padding: 20px 10px;
       color: #fff;
     `;
     const Content = styled.div`
       position: relative;
       width: 100%;
+      font-size: 14px;
       height: 100%;
     `;
     const ItemList = shapes.map(shape => (
       <Item className=".item" key={shape}>
-        <Content className=".item-content">{shape}</Content>
+        <div className="item-wrapper">
+          <div className="item-image-wrapper">
+            <img
+              className="toolbar-icon-img"
+              src={`icons/${shape}.png`}
+              alt={shape}
+            />
+          </div>
+          <Content className=".item-content">{shape}</Content>
+        </div>
       </Item>
     ));
     return (
       <div className="panel" ref={this.rootElement}>
         <Nav className="nav">
-          <Button type="ghost" onClick={() => this.props.openPicture()}>
+          <div className="panel-title">Symbols</div>
+          <Divider className="panel-divider" />
+          <div style={{ margin: '0 0 50px 0' }}>
+            <Grid className="grid" ref={this.gridElement}>
+              {ItemList}
+            </Grid>
+          </div>
+          <div className="panel-title">Images</div>
+          <Divider className="panel-divider" />
+          <Button
+            type="ghost"
+            onClick={() => this.props.openPicture()}
+            style={{ width: '100%', margin: '20px 0' }}
+          >
             Insert Image
           </Button>
-          <Grid className="grid" ref={this.gridElement}>
-            {ItemList}
-          </Grid>
         </Nav>
       </div>
     );
