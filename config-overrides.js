@@ -31,7 +31,18 @@ module.exports = override(
       "select-dropdown-edge-child-vertical-padding": "10px",
       "input-bg": "#25262c",
       "input-color": "#fff",
-      "text-color": "#fff"
+      "text-color": "#fff",
+      // "modal-header-bg": "#34373e",
+      "modal-heading-color": "#34373e",
+      // "modal-footer-bg": "#34373e",
+      // "modal-mask-bg": "fade(@black, 65%)",
+      // "modal-body-bg": "#34373e",
+      "btn-primary-bg": "#34373e",
+      "btn-default-color": "#34373e",
+      "btn-primary-color": "#fff",
+
+
+
     }
   })
 

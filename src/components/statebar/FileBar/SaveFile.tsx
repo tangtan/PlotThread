@@ -17,6 +17,7 @@ export default class SaveFile extends Component<Props, State> {
   render() {
     return (
       <Modal
+        style={{ left: -150 }}
         title="Save File"
         visible={this.props.visible}
         onOk={() => this.props.onCloseModal()}

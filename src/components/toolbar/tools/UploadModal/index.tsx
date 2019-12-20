@@ -92,6 +92,7 @@ class UploadModal extends Component<Props, State> {
       <div className="upload-modal-wrapper">
         <Modal
           title="Upload Shapes"
+          style={{ left: -150 }}
           visible={this.props.isVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -104,6 +105,7 @@ class UploadModal extends Component<Props, State> {
             showUploadList={{ showRemoveIcon: true, showPreviewIcon: false }}
             fileList={this.state.fileList}
             onRemove={this.handleRemove}
+            style={{ background: '#34373e' }}
           >
             {uploadButton}
           </Upload>
@@ -113,7 +115,4 @@ class UploadModal extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UploadModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UploadModal);
