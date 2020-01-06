@@ -1,3 +1,51 @@
+.toolbar-icon-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.toolbar-icon-annotation {
+  position: absolute;
+  margin: 8px 0 0 53px;
+  padding: 7px 13px;
+  width: auto;
+  text-align: center;
+  border-radius: 3px;
+  height: auto;
+  background: #34373e;
+  opacity: 0%;
+  font-size: 16px;
+  animation: 3s disappear;
+}
+
+@-webkit-keyframes disappear {
+  0% {
+    opacity: 0%;
+  }
+  5% {
+    opacity: 100%;
+  }
+  80% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0%;
+  }
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 0%;
+  }
+  5% {
+    opacity: 100%;
+  }
+  80% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0%;
+  }
+}
+
 .toolbar-icon-box {
   display: flex;
   flex-direction: column;

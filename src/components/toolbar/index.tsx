@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import ToolItem from './ToolItem';
 import './ToolBar.css';
 import styled from 'styled-components';
-import { ITool } from '../../types';
+import { DispatchType, ITool, StateType } from '../../types';
+import { getToolName } from '../../store/selectors';
+import { connect } from 'react-redux';
 
 // add tool png-icons
 // import move from '../../assets/move.png';
@@ -15,17 +17,25 @@ type Props = {
   Direction?: string;
   Hidden?: boolean;
   Tools: ITool[];
-};
+} & ReturnType<typeof mapStateToProps>;
 
 type State = {
   tools: ITool[];
 };
 
-export default class ToolBar extends Component<Props, State> {
+const mapStateToProps = (state: StateType) => {
+  console.log(getToolName(state));
+  return {
+    toolName: getToolName(state)
+  };
+};
+
+class ToolBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
       tools: []
+      // selectedTool: this.props.toolName
     };
   }
 
@@ -71,6 +81,17 @@ export default class ToolBar extends Component<Props, State> {
       default:
         break;
     }
+
+    const AnnotationWrapper = styled.div`
+      display: absolute;
+      left: 20px;
+      width: 30px;
+      height: auto;
+      padding: 3px;
+      background: black;
+      color: white;
+    `;
+
     const ToolBarWrapper = styled.div`
       position: ${
         this.props.Top === 0 || this.props.Right === 0 ? '' : 'absolute'
@@ -113,10 +134,15 @@ export default class ToolBar extends Component<Props, State> {
     const toolList = this.props.Tools.map((tool: ITool, i: number) => (
       <ToolItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
+    // const toolAnnotation = (state: StateType)=>(state.toolState.toolName);
+
     return (
       <ToolBarWrapper>
         <ToolListWrapper>{toolList}</ToolListWrapper>
+        {/*<AnnotationWrapper>{this.props.toolName}</AnnotationWrapper>*/}
       </ToolBarWrapper>
     );
   }
 }
+
+export default connect(mapStateToProps, null)(ToolBar);

@@ -27,13 +27,15 @@ type Props = {
 
 type State = {
   isClicked: boolean;
+  countDown: number;
 };
 
 class ToolItem extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isClicked: false
+      isClicked: false,
+      countDown: 0
     };
   }
 
@@ -48,7 +50,8 @@ class ToolItem extends Component<Props, State> {
     // console.log(name, use);
     // 同步点击状态
     this.setState({
-      isClicked: use
+      isClicked: use,
+      countDown: 3 //注释停留的时间（秒）
     });
   };
 
@@ -62,24 +65,27 @@ class ToolItem extends Component<Props, State> {
     );
 
     const svgIcon = <ReactSVG src={this.props.toolInfo.url} />;
+
     return (
-      <div
-        className={
-          this.props.toolName === this.props.toolInfo.name &&
-          this.state.isClicked &&
-          this.props.toolState
-            ? 'toolbar-icon-box-clicked'
-            : 'toolbar-icon-box'
-        }
-        onClick={this.onClick}
-      >
-        {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
+      <div className="toolbar-icon-wrapper">
+        <div
+          className={
+            this.props.toolName === this.props.toolInfo.name &&
+            this.state.isClicked &&
+            this.props.toolState
+              ? 'toolbar-icon-box-clicked'
+              : 'toolbar-icon-box'
+          }
+          onClick={this.onClick}
+        >
+          {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
+        </div>
+        {this.state.isClicked ? (
+          <div className="toolbar-icon-annotation">{this.props.toolName}</div>
+        ) : null}
       </div>
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolItem);

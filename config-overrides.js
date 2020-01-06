@@ -39,7 +39,16 @@ module.exports = override(
       // "modal-body-bg": "#34373e",
       "btn-primary-bg": "#34373e",
       "btn-default-color": "#34373e",
-      "btn-primary-color": "#fff",
+      "btn-primary-color": "#979797",
+      "tabs-highlight-color": "#fff",
+      "tabs-hover-color": "#fff",
+      "tabs-active-color": "#fff",
+      "tabs-title-font-size": "16px",
+      "tabs-horizontal-margin": "0 10px 0 0",
+      "tabs-bar-margin": "0 0 6px 0",
+      "tabs-title-font-size-lg": "16px",
+      "tabs-title-font-size-sm": "16px",
+      "tabs-ink-bar-color": "#6376cc"
 
 
 

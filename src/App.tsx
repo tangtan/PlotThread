@@ -10,6 +10,7 @@ import ToolCanvas from './components/canvas/ToolCanvas';
 import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
+import GlobalPanel from './components/statebar/GlobalPanel';
 import { ITool } from './types';
 
 type Props = {};
@@ -90,6 +91,7 @@ class App extends React.Component<Props, State> {
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
         <UploadModal />
         <EmbellishPanel />
+        <GlobalPanel />
       </div>
     );
   }

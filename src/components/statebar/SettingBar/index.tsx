@@ -60,21 +60,31 @@ export default class SettingBar extends Component<Props, State> {
         </div>
       </div>
     );
+    // return (
+    //   <Popover
+    //     placement="bottomRight"
+    //     title={text}
+    //     content={content}
+    //     trigger="click"
+    //   >
+    //     <div>
+    //       <ToolBar
+    //         Right={this.props.xOffSet || 0}
+    //         Direction={'horizontal'}
+    //         Tools={this.state.settingTools}
+    //       />
+    //     </div>
+    //   </Popover>
+    // );
+
     return (
-      <Popover
-        placement="bottomRight"
-        title={text}
-        content={content}
-        trigger="click"
-      >
-        <div>
-          <ToolBar
-            Right={this.props.xOffSet || 0}
-            Direction={'horizontal'}
-            Tools={this.state.settingTools}
-          />
-        </div>
-      </Popover>
+      <div>
+        <ToolBar
+          Right={this.props.xOffSet || 0}
+          Direction={'horizontal'}
+          Tools={this.state.settingTools}
+        />
+      </div>
     );
   }
 }

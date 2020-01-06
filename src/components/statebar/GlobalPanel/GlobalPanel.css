@@ -1,0 +1,42 @@
+.panel {
+  background-color: #25262c;
+  position: absolute;
+  top: 50px;
+  right: -300px;
+  transition: right 0.3s;
+}
+
+.panel.is-nav-open {
+  right: 0;
+  transition: right 0.5s;
+}
+
+.panel-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.panel-divider {
+  margin: 10px 0;
+}
+
+.settingbar-content-wrapper {
+  padding: 10px;
+}
+.settingbar-space-wrapper {
+}
+
+.settingbar-scale-wrapper {
+}
+
+.settingbar-content-title {
+  font-size: 16px;
+  margin-top: 16px;
+  margin-bottom: 3px;
+}
+
+.settingbar-scale-width {
+}
