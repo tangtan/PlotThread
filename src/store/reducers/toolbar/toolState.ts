@@ -3,13 +3,6 @@ import { ActionType, ToolStateType } from '../../../types';
 const initialState: ToolStateType = {
   toolName: '',
   toolMap: new Map()
-  // addLine: false,
-  // group: false,
-  // sort: false,
-  // bend: false,
-  // scale: false,
-  // reshape: false,
-  // move: false
 };
 
 export default (state = initialState, action: ActionType) => {
@@ -26,13 +19,6 @@ export default (state = initialState, action: ActionType) => {
         ...state,
         toolName: name,
         toolMap: toolMap
-        // addLine: name === 'AddLine' ? use : false,
-        // group: name === 'Group' ? use : false,
-        // sort: name === 'Sort' ? use : false,
-        // bend: name === 'Bend' ? use : false,
-        // scale: name === 'Scale' ? use : false,
-        // reshape: name === 'Reshape' ? use : false,
-        // move: name === 'Move' ? use : false
       };
     }
     default:

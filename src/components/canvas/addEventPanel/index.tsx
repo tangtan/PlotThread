@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType, ITool } from '../../../types';
+import { StateType, ITool } from '../../../types';
 import { getToolState } from '../../../store/selectors';
-import { addVisualObject } from '../../../store/actions';
-import ToolItem from '../../toolbar/ToolItem';
+import GroupEventItem from './GroupEventItem';
 import styled from 'styled-components';
 
 const mapStateToProps = (state: StateType) => {
@@ -79,7 +78,7 @@ class AddEventPanel extends Component<Props, State> {
       height: 100%;
     `;
     const toolList = this.state.eventTools.map((tool: ITool, i: number) => (
-      <ToolItem key={`tool-item-${i}`} toolInfo={tool} />
+      <GroupEventItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
     return this.props.visible ? (
       <EventToolWrapper>
