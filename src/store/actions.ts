@@ -6,6 +6,16 @@ export const setTool = createAction(
   action => (name: string, use: boolean) => action({ name: name, use: use })
 );
 
+export const setGroupEvent = createAction(
+  'SET_GROUP_EVENT',
+  action => (name: string, use: boolean) => action({ name: name, use: use })
+);
+
+export const setStyleEvent = createAction(
+  'SET_STYLE_EVENT',
+  action => (name: string, use: boolean) => action({ name: name, use: use })
+);
+
 // Render Module
 export const addVisualObject = createAction(
   'ADD_VISUALOBJECT',

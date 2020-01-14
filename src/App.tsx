@@ -3,16 +3,14 @@ import { connect } from 'react-redux';
 import './App.css';
 import 'antd/dist/antd.css';
 
-import MenuBar from './components/menubar';
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
 import ToolCanvas from './components/canvas/ToolCanvas';
-import ShapeModal from './components/toolbar/tools/ShapeModal';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
 import GlobalPanel from './components/statebar/GlobalPanel';
 import { ITool } from './types';
-import AddEventPanel from './components/canvas/addEventPanel';
+import AddEventPanel from './components/canvas/AddEventPanel';
 
 type Props = {};
 
