@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ITool, DispatchType, StateType } from '../../../types';
+import { ITool, DispatchType, StateType } from '../../../../types/index';
 import './addEventPanel.css';
-import { setGroupEvent } from '../../../store/actions';
+import { setGroupEvent, setTool } from '../../../../store/actions';
+import { getToolState } from '../../../../store/selectors';
 import {
   getGroupEventState,
   getGroupEventName
-} from '../../../store/selectors';
+} from '../../../../store/selectors';
 import ReactSVG from 'react-svg';
 
 const mapStateToProps = (state: StateType) => {
@@ -50,6 +51,8 @@ class GroupEventItem extends Component<Props, State> {
     });
     const name = this.props.toolInfo.name;
     const use = !this.state.isClicked;
+    console.log('name' + name);
+    console.log('use' + use);
     this.props.activateTool(name, use);
     // console.log(name, use);
     // 同步点击状态

@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, ITool } from '../../../types';
-import { getToolState } from '../../../store/selectors';
+import { StateType, ITool } from '../../../../types/index';
+import { getToolState } from '../../../../store/selectors';
 import GroupEventItem from './GroupEventItem';
 import styled from 'styled-components';
 
 const mapStateToProps = (state: StateType) => {
   return {
     visible: getToolState(state, 'AddEventPop')
-    //问题一：如何知道是否是刚画完的状态？是否需要加一个toolState表示该笔刚画完？
-    //问题二：此处需要获取region的centerX 和 centerY，目前在"circleSelectionUtil的up函数中能获取到bounds.center的x，y坐标，是不是要把这个状态存到store里面？然后在此处获取？
-    //groupCenterX: getRegionCenterX(state),
-    //groupCenterY: getRegionCenterY(state),
   };
 };
 

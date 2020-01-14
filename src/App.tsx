@@ -7,11 +7,11 @@ import 'antd/dist/antd.css';
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
 import ToolCanvas from './components/canvas/ToolCanvas';
+import AddEventPanel from './components/toolbar/tools/AddEventPanel';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
 import GlobalPanel from './components/statebar/GlobalPanel';
 import { ITool } from './types';
-import AddEventPanel from './components/canvas/addEventPanel';
 
 type Props = {};
 
