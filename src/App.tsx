@@ -1,3 +1,4 @@
+///<reference path="../node_modules/@types/react-redux/index.d.ts"/>
 import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
@@ -10,7 +11,7 @@ import UploadModal from './components/toolbar/tools/UploadModal';
 import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
 import GlobalPanel from './components/statebar/GlobalPanel';
 import { ITool } from './types';
-import AddEventPanel from './components/canvas/AddEventPanel';
+import AddEventPanel from './components/canvas/addEventPanel';
 
 type Props = {};
 
@@ -86,7 +87,6 @@ class App extends React.Component<Props, State> {
     return (
       <div className="App">
         <ToolCanvas />
-        {/*<AddEventPanel />*/}
         <StateBar />
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
         <UploadModal />

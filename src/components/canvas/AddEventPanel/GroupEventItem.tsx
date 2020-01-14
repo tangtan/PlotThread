@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ITool, DispatchType, StateType } from '../../../types';
-import './AddEventPanel.css';
+import './addEventPanel.css';
 import { setGroupEvent } from '../../../store/actions';
 import {
   getGroupEventState,
