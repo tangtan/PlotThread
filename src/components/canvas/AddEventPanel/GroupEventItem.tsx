@@ -70,22 +70,17 @@ class GroupEventItem extends Component<Props, State> {
     const svgIcon = <ReactSVG src={this.props.toolInfo.url} />;
 
     return (
-      <div className="toolbar-icon-wrapper">
-        <div
-          className={
-            this.props.toolName === this.props.toolInfo.name &&
-            this.state.isClicked &&
-            this.props.toolState
-              ? 'toolbar-icon-box-clicked'
-              : 'toolbar-icon-box'
-          }
-          onClick={this.onClick}
-        >
-          {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
-        </div>
-        {this.state.isClicked && this.props.toolName != 'Setting' ? (
-          <div className="toolbar-icon-annotation">{this.props.toolName}</div>
-        ) : null}
+      <div
+        className={
+          this.props.toolName === this.props.toolInfo.name &&
+          this.state.isClicked &&
+          this.props.toolState
+            ? 'toolbar-icon-box-clicked'
+            : 'toolbar-icon-box'
+        }
+        onClick={this.onClick}
+      >
+        {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
       </div>
     );
   }

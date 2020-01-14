@@ -17,17 +17,10 @@ type Props = {
   Direction?: string;
   Hidden?: boolean;
   Tools: ITool[];
-} & ReturnType<typeof mapStateToProps>;
+};
 
 type State = {
   tools: ITool[];
-};
-
-const mapStateToProps = (state: StateType) => {
-  console.log(getToolName(state));
-  return {
-    toolName: getToolName(state)
-  };
 };
 
 class ToolBar extends Component<Props, State> {
@@ -35,7 +28,6 @@ class ToolBar extends Component<Props, State> {
     super(props);
     this.state = {
       tools: []
-      // selectedTool: this.props.toolName
     };
   }
 
@@ -134,7 +126,6 @@ class ToolBar extends Component<Props, State> {
     const toolList = this.props.Tools.map((tool: ITool, i: number) => (
       <ToolItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
-    // const toolAnnotation = (state: StateType)=>(state.toolState.toolName);
 
     return (
       <ToolBarWrapper>
@@ -144,4 +135,4 @@ class ToolBar extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, null)(ToolBar);
+export default connect(null, null)(ToolBar);
