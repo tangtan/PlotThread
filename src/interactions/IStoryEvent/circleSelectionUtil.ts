@@ -18,7 +18,6 @@ export default class CircleSelectionUtil extends StoryUtil {
     }
     if (this.currPath && this.currPath.bounds) {
       const bounds = this.currPath.bounds;
-
       const cPoint = bounds.center;
       const sPoint = bounds.topLeft;
       const ePoint = bounds.bottomRight;
@@ -32,7 +31,7 @@ export default class CircleSelectionUtil extends StoryUtil {
         const centerY = cPoint.y as number;
         //如何把这个centerX和centerY传给addEventPanel组件呢？
         super.mouseUp(e);
-        return [names, [sTime, eTime]];
+        return [names, [sTime, eTime], centerX, centerY];
       }
     }
     super.mouseUp(e);
