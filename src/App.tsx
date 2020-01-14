@@ -88,7 +88,7 @@ class App extends React.Component<Props, State> {
     return (
       <div className="App">
         <ToolCanvas />
-        <AddEventPanel />
+        {/*<AddEventPanel />*/}
         <StateBar />
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
         <UploadModal />

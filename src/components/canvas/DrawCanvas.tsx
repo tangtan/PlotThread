@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { project, view } from 'paper';
 import { StateType, DispatchType, StoryGraph } from '../../types';
-import { addVisualObject } from '../../store/actions';
+import { addVisualObject, setTool } from '../../store/actions';
 import { getToolState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
+import AddEventPanel from './addEventPanel';
 
 import { iStoryline } from 'iStoryline';
 import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
@@ -25,14 +26,20 @@ const mapStateToProps = (state: StateType) => {
     compressState: getToolState(state, 'Compress'),
     reshapeState: getToolState(state, 'Reshape'),
     stylishState: getToolState(state, 'Stylish'),
-    sortState: getToolState(state, 'FreeMode')
+    sortState: getToolState(state, 'FreeMode'),
+    eventPopState: getToolState(state, 'AddEventPop'),
+    mergeState: getToolState(state, 'Merge'),
+    collideState: getToolState(state, 'Collide'),
+    splitState: getToolState(state, 'Split'),
+    twineState: getToolState(state, 'Twine')
   };
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
-      dispatch(addVisualObject(type, cfg))
+      dispatch(addVisualObject(type, cfg)),
+    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
   };
 };
 
@@ -50,6 +57,10 @@ type State = {
   reshapeUtil: ReshapeUtil;
   stylishUtil: BrushUtil;
   sortUtil: SortUtil;
+  groupCenterX: number;
+  groupCenterY: number;
+  groupName: any;
+  groupSpan: any;
 };
 
 class DrawCanvas extends Component<Props, State> {
@@ -65,9 +76,25 @@ class DrawCanvas extends Component<Props, State> {
       compressUtil: new CircleUtil('Compress', 0),
       reshapeUtil: new ReshapeUtil('Reshape', 0),
       stylishUtil: new BrushUtil('Stylish', 1),
-      sortUtil: new SortUtil('Sort', 0)
+      sortUtil: new SortUtil('Sort', 0),
+      groupCenterX: 0,
+      groupCenterY: 0,
+      groupName: null,
+      groupSpan: null
     };
   }
+  private setRegion = (centerX: number, centerY: number) => {
+    this.setState({
+      groupCenterX: centerX,
+      groupCenterY: centerY
+    });
+  };
+  private setGroup = (names: any, span: any) => {
+    this.setState({
+      groupName: names,
+      groupSpan: span
+    });
+  };
 
   // init
   async componentDidMount() {
@@ -148,8 +175,13 @@ class DrawCanvas extends Component<Props, State> {
       console.log(param);
     }
     if (this.props.groupState) {
-      const [names, span] = this.state.groupUtil.up(e);
+      const [names, span, centerX, centerY] = this.state.groupUtil.up(e);
+      this.setGroup(names, span);
+      this.setRegion(centerX as number, centerY as number);
       const graph = this.state.storyLayouter.expand(names, span);
+      this.props.activateTool('AddEventPop', true); //group画完
+      console.log(centerX, centerY);
+      // 加一个eventType
       this.drawStorylines(graph);
     }
     if (this.props.compressState) {
@@ -203,7 +235,15 @@ class DrawCanvas extends Component<Props, State> {
   }
 
   render() {
-    return <ZoomCanvas />;
+    return (
+      <div className="canvas-wrapper">
+        <ZoomCanvas />
+        <AddEventPanel
+          centerX={this.state.groupCenterX}
+          centerY={this.state.groupCenterY}
+        />
+      </div>
+    );
   }
 }
 
