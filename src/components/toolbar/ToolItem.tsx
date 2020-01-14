@@ -47,6 +47,9 @@ class ToolItem extends Component<Props, State> {
     this.props.activateTool(name, use);
     // console.log(name, use);
     // 同步点击状态
+    if (name === 'AddEvent') {
+      this.props.activateTool('AddEventPop', true); //先弹出二级菜单
+    }
     this.setState({
       isClicked: use
     });

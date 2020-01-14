@@ -3,16 +3,17 @@ import { connect } from 'react-redux';
 import { project, view } from 'paper';
 import { StateType, DispatchType, StoryGraph } from '../../types';
 import { addVisualObject, setTool } from '../../store/actions';
-import { getToolState } from '../../store/selectors';
+import { getToolState, getGroupEventState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
-import AddEventPanel from './addEventPanel';
-
+import AddEventPanel from '../toolbar/tools/AddEventPanel';
+import StylishPanel from '../toolbar/tools/StylishPanel';
 import { iStoryline } from 'iStoryline';
 import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
 import ReshapeUtil from '../../interactions/IStoryEvent/reshapeSelectionUtil';
+import { eventNames } from 'cluster';
 // import { Animated } from "react-native";
 // import divide = Animated.divide;
 
@@ -28,10 +29,10 @@ const mapStateToProps = (state: StateType) => {
     stylishState: getToolState(state, 'Stylish'),
     sortState: getToolState(state, 'FreeMode'),
     eventPopState: getToolState(state, 'AddEventPop'),
-    mergeState: getToolState(state, 'Merge'),
-    collideState: getToolState(state, 'Collide'),
-    splitState: getToolState(state, 'Split'),
-    twineState: getToolState(state, 'Twine')
+    mergeState: getGroupEventState(state, 'Merge'),
+    collideState: getGroupEventState(state, 'Collide'),
+    splitState: getGroupEventState(state, 'Split'),
+    twineState: getGroupEventState(state, 'Twine')
   };
 };
 
@@ -83,6 +84,7 @@ class DrawCanvas extends Component<Props, State> {
       groupSpan: null
     };
   }
+
   private setRegion = (centerX: number, centerY: number) => {
     this.setState({
       groupCenterX: centerX,
@@ -149,7 +151,24 @@ class DrawCanvas extends Component<Props, State> {
 
   onMouseDown(e: paper.MouseEvent) {
     if (this.props.addLineState) this.state.addLineUtil.down(e);
-    if (this.props.groupState) this.state.groupUtil.down(e);
+    /*if (this.props.groupState) this.state.groupUtil.down(e);*/
+    const eventName = this.props.mergeState
+      ? 'Merge'
+      : this.props.twineState
+      ? 'Twine'
+      : this.props.collideState
+      ? 'Collide'
+      : this.props.splitState
+      ? 'Split'
+      : null;
+    if (eventName) {
+      this.state.groupUtil.down(e);
+    }
+    // if(this.state.eventName!=''){
+    //   console.log(this.state.eventName);
+    //   this.state.groupUtil.down(e);
+    // }
+    // if()
     if (this.props.compressState) this.state.compressUtil.down(e);
     if (this.props.relateState) this.state.relateUtil.down(e);
     if (this.props.stylishState) this.state.stylishUtil.down(e);
@@ -160,7 +179,23 @@ class DrawCanvas extends Component<Props, State> {
 
   onMouseDrag(e: paper.MouseEvent) {
     if (this.props.addLineState) this.state.addLineUtil.drag(e);
-    if (this.props.groupState) this.state.groupUtil.drag(e);
+    // if (this.props.groupState) this.state.groupUtil.drag(e);
+    const eventName = this.props.mergeState
+      ? 'Merge'
+      : this.props.twineState
+      ? 'Twine'
+      : this.props.collideState
+      ? 'Collide'
+      : this.props.splitState
+      ? 'Split'
+      : null;
+    if (eventName) {
+      this.state.groupUtil.drag(e);
+    }
+    //
+    // if(this.state.eventName!=''){
+    //   this.state.groupUtil.drag(e);
+    // }
     if (this.props.compressState) this.state.compressUtil.drag(e);
     if (this.props.relateState) this.state.relateUtil.drag(e);
     if (this.props.stylishState) this.state.stylishUtil.drag(e);
@@ -174,15 +209,28 @@ class DrawCanvas extends Component<Props, State> {
       const param = this.state.addLineUtil.up(e);
       console.log(param);
     }
-    if (this.props.groupState) {
+    const eventName = this.props.mergeState
+      ? 'Merge'
+      : this.props.twineState
+      ? 'Twine'
+      : this.props.collideState
+      ? 'Collide'
+      : this.props.splitState
+      ? 'Split'
+      : null;
+    //if(this.props.groupState){}
+    if (eventName) {
       const [names, span, centerX, centerY] = this.state.groupUtil.up(e);
       this.setGroup(names, span);
       this.setRegion(centerX as number, centerY as number);
-      const graph = this.state.storyLayouter.expand(names, span);
-      this.props.activateTool('AddEventPop', true); //group画完
+      // this.props.activateTool('AddEventPop', true); //group画完
       console.log(centerX, centerY);
-      // 加一个eventType
+      console.log(eventName);
+      const graph = this.state.storyLayouter.expand(names, span, eventName);
       this.drawStorylines(graph);
+      this.props.activateTool('AddEventPop', false);
+
+      // 加一个eventType
     }
     if (this.props.compressState) {
       const [names, span] = this.state.compressUtil.up(e);
@@ -238,10 +286,12 @@ class DrawCanvas extends Component<Props, State> {
     return (
       <div className="canvas-wrapper">
         <ZoomCanvas />
-        <AddEventPanel
-          centerX={this.state.groupCenterX}
-          centerY={this.state.groupCenterY}
-        />
+        <AddEventPanel centerY={100} centerX={0} />
+        {/*<AddEventPanel*/}
+        {/*centerX={this.state.groupCenterX}*/}
+        {/*centerY={this.state.groupCenterY}*/}
+        {/*/>*/}
+        <StylishPanel centerY={100} centerX={0} />
       </div>
     );
   }
