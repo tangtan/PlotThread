@@ -139,7 +139,6 @@ class ToolBar extends Component<Props, State> {
     return (
       <ToolBarWrapper>
         <ToolListWrapper>{toolList}</ToolListWrapper>
-        {/*<AnnotationWrapper>{this.props.toolName}</AnnotationWrapper>*/}
       </ToolBarWrapper>
     );
   }

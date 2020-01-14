@@ -27,15 +27,13 @@ type Props = {
 
 type State = {
   isClicked: boolean;
-  countDown: number;
 };
 
 class ToolItem extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isClicked: false,
-      countDown: 0
+      isClicked: false
     };
   }
 
@@ -50,8 +48,7 @@ class ToolItem extends Component<Props, State> {
     // console.log(name, use);
     // 同步点击状态
     this.setState({
-      isClicked: use,
-      countDown: 3 //注释停留的时间（秒）
+      isClicked: use
     });
   };
 
@@ -80,7 +77,7 @@ class ToolItem extends Component<Props, State> {
         >
           {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
         </div>
-        {this.state.isClicked ? (
+        {this.state.isClicked && this.props.toolName != 'Setting' ? (
           <div className="toolbar-icon-annotation">{this.props.toolName}</div>
         ) : null}
       </div>

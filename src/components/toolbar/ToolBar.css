@@ -35,10 +35,10 @@
   0% {
     opacity: 0%;
   }
-  5% {
+  2% {
     opacity: 100%;
   }
-  80% {
+  90% {
     opacity: 100%;
   }
   100% {
@@ -74,7 +74,6 @@
   border-radius: 3px;
   margin: 5px 2px;
 }
-
 .toolbar-icon-img {
   display: flex;
   flex-direction: column;

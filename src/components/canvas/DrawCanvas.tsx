@@ -12,6 +12,8 @@ import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
 import ReshapeUtil from '../../interactions/IStoryEvent/reshapeSelectionUtil';
+// import { Animated } from "react-native";
+// import divide = Animated.divide;
 
 const mapStateToProps = (state: StateType) => {
   return {
