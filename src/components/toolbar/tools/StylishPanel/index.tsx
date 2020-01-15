@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    visible: getToolState(state, 'AddEventPop')
+    visible: getToolState(state, 'StylishPop')
   };
 };
 
@@ -17,36 +17,36 @@ type Props = {
 } & ReturnType<typeof mapStateToProps>;
 
 type State = {
-  eventTools: ITool[];
+  stylishTools: ITool[];
 };
 
 class StylishPanel extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      eventTools: [
+      stylishTools: [
         {
-          name: 'Collide',
+          name: 'Wave',
           type: 'png',
-          url: 'icons/collide.png',
+          url: 'icons/wave.png',
           subTools: []
         },
         {
-          name: 'Twine',
+          name: 'Zigzag',
           type: 'png',
-          url: 'icons/twine.png',
+          url: 'icons/zigzag.png',
           subTools: []
         },
         {
-          name: 'Merge',
+          name: 'Dashed',
           type: 'png',
-          url: 'icons/merge.png',
+          url: 'icons/dashed.png',
           subTools: []
         },
         {
-          name: 'Split',
+          name: 'Wiggle',
           type: 'png',
-          url: 'icons/split.png',
+          url: 'icons/wiggle.png',
           subTools: []
         }
       ]
@@ -54,7 +54,7 @@ class StylishPanel extends Component<Props, State> {
   }
 
   render() {
-    const EventToolWrapper = styled.div`
+    const StylishToolWrapper = styled.div`
       position: absolute;
       justify-content: space-between;
       background: #34373e;
@@ -66,20 +66,20 @@ class StylishPanel extends Component<Props, State> {
       padding: 5px 10px;
       height: auto;
     `;
-    const EventToolListWrapper = styled.div`
+    const StylishToolListWrapper = styled.div`
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       width: 100%;
       height: 100%;
     `;
-    const toolList = this.state.eventTools.map((tool: ITool, i: number) => (
+    const toolList = this.state.stylishTools.map((tool: ITool, i: number) => (
       <StylishItem key={`tool-item-${i}`} toolInfo={tool} />
     ));
     return this.props.visible ? (
-      <EventToolWrapper>
-        <EventToolListWrapper>{toolList}</EventToolListWrapper>
-      </EventToolWrapper>
+      <StylishToolWrapper>
+        <StylishToolListWrapper>{toolList}</StylishToolListWrapper>
+      </StylishToolWrapper>
     ) : null;
   }
 }

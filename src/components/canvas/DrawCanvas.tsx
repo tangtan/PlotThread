@@ -32,7 +32,11 @@ const mapStateToProps = (state: StateType) => {
     mergeState: getGroupEventState(state, 'Merge'),
     collideState: getGroupEventState(state, 'Collide'),
     splitState: getGroupEventState(state, 'Split'),
-    twineState: getGroupEventState(state, 'Twine')
+    twineState: getGroupEventState(state, 'Twine'),
+    waveState: getGroupEventState(state, 'Wave'),
+    zigzagState: getGroupEventState(state, 'Zigzag'),
+    wiggleState: getGroupEventState(state, 'Wiggle'),
+    dashedState: getGroupEventState(state, 'Dashed')
   };
 };
 
@@ -189,16 +193,23 @@ class DrawCanvas extends Component<Props, State> {
       : this.props.splitState
       ? 'Split'
       : null;
+
+    const stylishName = this.props.dashedState
+      ? 'Dashed'
+      : this.props.waveState
+      ? 'Wave'
+      : this.props.zigzagState
+      ? 'Zigzag'
+      : this.props.wiggleState
+      ? 'Wiggle'
+      : null;
     if (eventName) {
       this.state.groupUtil.drag(e);
     }
-    //
-    // if(this.state.eventName!=''){
-    //   this.state.groupUtil.drag(e);
-    // }
     if (this.props.compressState) this.state.compressUtil.drag(e);
     if (this.props.relateState) this.state.relateUtil.drag(e);
-    if (this.props.stylishState) this.state.stylishUtil.drag(e);
+    if (stylishName) this.state.stylishUtil.drag(e);
+    // if (this.props.stylishState) this.state.stylishUtil.drag(e);
     if (this.props.bendState) this.state.bendUtil.drag(e);
     if (this.props.sortState) this.state.sortUtil.drag(e);
     if (this.props.reshapeState) this.state.reshapeUtil.drag(e);
@@ -218,6 +229,17 @@ class DrawCanvas extends Component<Props, State> {
       : this.props.splitState
       ? 'Split'
       : null;
+
+    const stylishName = this.props.dashedState
+      ? 'Dashed'
+      : this.props.waveState
+      ? 'Wave'
+      : this.props.zigzagState
+      ? 'Zigzag'
+      : this.props.wiggleState
+      ? 'Wiggle'
+      : null;
+
     //if(this.props.groupState){}
     if (eventName) {
       const [names, span, centerX, centerY] = this.state.groupUtil.up(e);
@@ -241,9 +263,15 @@ class DrawCanvas extends Component<Props, State> {
       const param = this.state.relateUtil.up(e);
       console.log(param);
     }
-    if (this.props.stylishState) {
+    // if (this.props.stylishState) {
+    //   const param = this.state.stylishUtil.up(e);
+    //   console.log(param);
+    // }
+
+    if (stylishName) {
       const param = this.state.stylishUtil.up(e);
       console.log(param);
+      this.props.activateTool('StylishPop', false);
     }
     if (this.props.bendState) {
       const [names, span] = this.state.bendUtil.up(e);

@@ -50,6 +50,9 @@ class ToolItem extends Component<Props, State> {
     if (name === 'AddEvent') {
       this.props.activateTool('AddEventPop', true); //先弹出二级菜单
     }
+    if (name === 'Stylish') {
+      this.props.activateTool('StylishPop', true); //先弹出二级菜单
+    }
     this.setState({
       isClicked: use
     });
