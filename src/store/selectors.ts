@@ -7,6 +7,7 @@ export const getToolState = (state: StateType, name: string) => {
   if (name === 'FreeMode') {
     return toolName.length === 0 ? true : !toolMap.get(toolName);
   }
+
   return toolMap.has(name) ? toolMap.get(name) : false;
 };
 

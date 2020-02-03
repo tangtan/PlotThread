@@ -7,8 +7,10 @@ import { StateType } from '../../types';
 import { getToolState } from '../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
+  console.log(getToolState(state, 'DownloadPic'));
   return {
-    zoomState: getToolState(state, 'Zoom') as boolean
+    zoomState: getToolState(state, 'Zoom') as boolean,
+    downloadPicState: getToolState(state, 'DownloadPic') as boolean
   };
 };
 
@@ -77,6 +79,9 @@ class ZoomCanvas extends Component<Props, State> {
       canvas.call(canvasZoom);
       paper.setup('canvas');
     }
+
+    if (this.props.downloadPicState) {
+    }
   }
 
   render() {
@@ -90,7 +95,4 @@ class ZoomCanvas extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(ZoomCanvas);
+export default connect(mapStateToProps, null)(ZoomCanvas);

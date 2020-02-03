@@ -2,13 +2,22 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import StateItem from './../StateItem';
 import { IMenu } from '../../../types';
-
+import { StateType, DispatchType } from '../../../types';
+import { setTool } from '../../../store/actions';
+import { getToolState } from '../../../store/selectors';
 import OpenFile from './OpenFile';
 import SaveFile from './SaveFile';
+import { connect } from 'react-redux';
+
+const mapDispatchToProps = (dispatch: DispatchType) => {
+  return {
+    downloadPic: () => dispatch(setTool('DownloadPic', true))
+  };
+};
 
 type Props = {
   xOffSet?: number;
-};
+} & ReturnType<typeof mapDispatchToProps>;
 
 type State = {
   fileItems: IMenu[];
@@ -16,7 +25,7 @@ type State = {
   saveFileVisible: boolean;
 };
 
-export default class FileBar extends Component<Props, State> {
+class FileBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -56,8 +65,25 @@ export default class FileBar extends Component<Props, State> {
         this.setState({
           saveFileVisible: true
         });
+        break;
+      case 'Download':
+        this.downloadPic();
+        break;
+      // this.props.downloadPic();
       default:
         break;
+    }
+  }
+
+  downloadPic() {
+    var canvas = document.getElementById('canvas') as HTMLCanvasElement;
+    if (canvas != null) {
+      var image = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
+      // here is the most important part because if you dont replace you will get a DOM 18 exception.
+
+      window.location.href = image; // it will save locally
     }
   }
 
@@ -104,3 +130,5 @@ export default class FileBar extends Component<Props, State> {
     );
   }
 }
+
+export default connect(null, mapDispatchToProps)(FileBar);
