@@ -27,3 +27,7 @@ export const addVisualArray = createAction(
   action => (array: string[], cfgs?: any[]) =>
     action({ array: array, cfgs: cfgs || [] })
 );
+
+export const redoAction = createAction('REDO');
+
+export const undoAction = createAction('UNDO');

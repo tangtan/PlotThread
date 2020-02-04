@@ -40,11 +40,6 @@ export default class FBBar extends Component<Props, State> {
       )
     );
     const FBBar = styled.div`
-      // position: absolute;
-      // top: 0;
-      // left: ${this.props.xOffSet || 0}px;
-      // width: 200px;
-      // height: 50px;
       display: flex;
       align-items: center;
       flex-direction: row;

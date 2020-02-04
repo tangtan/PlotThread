@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Input } from 'antd';
 
 type Props = {
   visible: boolean;
   onCloseModal: any;
 };
 
-type State = {};
+type State = {
+  fileName: string;
+};
 
 export default class SaveFile extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fileName: ''
+    };
   }
+
+  private handleInputChange = (e: any) => {
+    this.setState({
+      fileName: e.target.value
+    });
+    console.log(this.state.fileName);
+  };
 
   render() {
     return (
@@ -20,10 +31,12 @@ export default class SaveFile extends Component<Props, State> {
         style={{ left: -150 }}
         title="Save File"
         visible={this.props.visible}
-        onOk={() => this.props.onCloseModal()}
+        onOk={() => {
+          this.props.onCloseModal();
+        }}
         onCancel={() => this.props.onCloseModal()}
       >
-        <p>TT</p>
+        <Input defaultValue="storyline" onChange={this.handleInputChange} />
       </Modal>
     );
   }

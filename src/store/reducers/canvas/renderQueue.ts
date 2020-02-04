@@ -9,7 +9,6 @@ import IMouseEvent from '../../../interactions/IMouseEvent';
 import { drawSelectionBounds } from '../../../drawers/baseDrawer';
 
 const initialState: VisualObject[] = [];
-
 const errorMsg = 'Incorrect render type';
 
 const drawVisualObject = (type: string, cfg?: any) => {

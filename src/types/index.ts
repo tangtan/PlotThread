@@ -10,7 +10,16 @@ export type StateType = {
   groupEventState: GroupEventStateType;
   styleEventState: StyleEventStateType;
   renderQueue: VisualObject[];
+  historyQueue: historyQueueType;
 };
+
+export type historyQueueType = {
+  postConfigArray: number[];
+  pointer: number; //index
+};
+
+//config数据结构
+export type PostConfig = number; //暂时写成number测试
 
 export type DispatchType = typeof store.dispatch;
 
