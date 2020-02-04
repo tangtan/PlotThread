@@ -14,8 +14,8 @@ export type StateType = {
 };
 
 export type historyQueueType = {
-  postConfigArray: number[];
-  pointer: number; //index
+  configArray: number[];
+  pointer: number;
 };
 
 //config数据结构

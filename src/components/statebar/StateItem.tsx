@@ -3,17 +3,11 @@ import { connect } from 'react-redux';
 import './Statebar.css';
 import { DispatchType, IMenu } from '../../types';
 import { redoAction, undoAction } from '../../store/actions';
-
-const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {
-    redoAction: () => dispatch(redoAction()),
-    undoAction: () => dispatch(undoAction())
-  };
-};
+import store from '../../store';
 
 type Props = {
   menuInfo: IMenu;
-} & ReturnType<typeof mapDispatchToProps>;
+};
 
 class StateItem extends Component<Props> {
   constructor(props: Props) {
@@ -22,16 +16,18 @@ class StateItem extends Component<Props> {
       isClicked: false
     };
   }
+
   private onClick = () => {
     const actionName = this.props.menuInfo.name;
     console.log(actionName);
     if (actionName == 'Back') {
-      this.props.undoAction();
+      store.dispatch(undoAction());
     }
     if (actionName == 'Forward') {
-      this.props.redoAction();
+      store.dispatch(redoAction());
     }
   };
+
   render() {
     const imgIcon = (
       <img
@@ -56,4 +52,4 @@ class StateItem extends Component<Props> {
   }
 }
 
-export default connect(mapDispatchToProps)(StateItem);
+export default StateItem;
