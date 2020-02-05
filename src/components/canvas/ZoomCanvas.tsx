@@ -7,7 +7,6 @@ import { StateType } from '../../types';
 import { getToolState } from '../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
-  console.log(getToolState(state, 'DownloadPic'));
   return {
     zoomState: getToolState(state, 'Zoom') as boolean,
     downloadPicState: getToolState(state, 'DownloadPic') as boolean

@@ -1917,6 +1917,12 @@ aws4@^1.8.0:
   version "1.9.0"
   resolved "https://registry.npm.taobao.org/aws4/download/aws4-1.9.0.tgz#24390e6ad61386b0a747265754d2a17219de862c"
 
+axios@^0.19.2:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  dependencies:
+    follow-redirects "1.5.10"
+
 axobject-query@^2.0.2:
   version "2.1.1"
   resolved "https://registry.npm.taobao.org/axobject-query/download/axobject-query-2.1.1.tgz#2a3b1271ec722d48a4cd4b3fcc20c853326a49a7"
@@ -3147,8 +3153,8 @@ d3-fetch@^1.1.2:
     d3-dsv "1"
 
 d3-format@1:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.4.2.tgz#2a8c0ebf500f315981c2110eaaf70b82f472cb2b"
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.4.3.tgz#4e8eb4dff3fdcb891a8489ec6e698601c41b96f1"
 
 d3-interpolate@1, d3-interpolate@^1.2.0:
   version "1.4.0"
@@ -3171,8 +3177,8 @@ d3-selection@1, d3-selection@^1.1.0, d3-selection@^1.4.0:
   resolved "https://registry.npm.taobao.org/d3-selection/download/d3-selection-1.4.1.tgz#98eedbbe085fbda5bafa2f9e3f3a2f4d7d622a98"
 
 d3-time-format@2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.2.2.tgz#187597ffc6a0f37cb36bb7a1d7167cdc887ecda0"
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.2.3.tgz#0c9a12ee28342b2037e5ea1cf0b9eb4dd75f29cb"
   dependencies:
     d3-time "1"
 
@@ -3230,6 +3236,12 @@ date-fns@^1.27.2:
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.npm.taobao.org/debug/download/debug-2.6.9.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
+  dependencies:
+    ms "2.0.0"
+
+debug@=3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
     ms "2.0.0"
 
@@ -4186,6 +4198,12 @@ flush-write-stream@^1.0.0:
 fn-name@~2.0.1:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/fn-name/download/fn-name-2.0.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffn-name%2Fdownload%2Ffn-name-2.0.1.tgz#5214d7537a4d06a4a301c0cc262feb84188002e7"
+
+follow-redirects@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  dependencies:
+    debug "=3.1.0"
 
 follow-redirects@^1.0.0:
   version "1.9.0"
@@ -9285,8 +9303,8 @@ simple-swizzle@^0.2.2:
     is-arrayish "^0.3.1"
 
 "simplify-js@git+https://github.com/mourner/simplify-js.git":
-  version "1.2.3"
-  resolved "git+https://github.com/mourner/simplify-js.git#9c67ff90c058df55267d401efa220d7479134674"
+  version "1.2.4"
+  resolved "git+https://github.com/mourner/simplify-js.git#4f566b7368d4f4be8a9db40608bba557a2b5f643"
 
 sisteransi@^1.0.3:
   version "1.0.4"

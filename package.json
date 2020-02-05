@@ -18,6 +18,7 @@
     "@types/react-redux": "^7.0.9",
     "@types/styled-components": "^4.1.18",
     "antd": "^3.19.4",
+    "axios": "^0.19.2",
     "babel-plugin-import": "^1.13.0",
     "classnames": "^2.2.6",
     "customize-cra": "^0.9.1",

@@ -7,15 +7,14 @@ import { getToolState, getGroupEventState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 import AddEventPanel from '../toolbar/tools/AddEventPanel';
 import StylishPanel from '../toolbar/tools/StylishPanel';
-import { iStoryline } from 'iStoryline';
+import { iStoryline, storyRender } from 'iStoryline';
 import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
 import ReshapeUtil from '../../interactions/IStoryEvent/reshapeSelectionUtil';
-import { eventNames } from 'cluster';
-// import { Animated } from "react-native";
-// import divide = Animated.divide;
+import axios from 'axios';
+import './DrawCanvas.css';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -68,6 +67,25 @@ type State = {
   groupSpan: any;
 };
 
+async function post(url: string) {
+  let config = {
+    id: url,
+    sessionInnerGap: 18,
+    sessionOuterGap: 54,
+    sessionInnerGaps: [],
+    sessionOuterGaps: [],
+    majorCharacters: [],
+    orders: [],
+    groupIds: [],
+    selectedSessions: [],
+    orderTable: [],
+    sessionBreaks: []
+  };
+  let serverUrl = 'http://localhost:5050/api/update';
+  let rawData = await axios.post(serverUrl, config);
+  return rawData;
+}
+
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -118,10 +136,16 @@ class DrawCanvas extends Component<Props, State> {
       this.onMouseUp(e);
     };
     const { storyXMLUrl, storyLayouter } = this.state;
-    let graph = await storyLayouter.readFile(storyXMLUrl);
-    graph = storyLayouter.scale(100, 100, 800, 500, true);
-    graph = storyLayouter.space(10, 10);
+    // let graph = await storyLayouter.readFile(storyXMLUrl);
+    // graph = storyLayouter.scale(100, 100, 800, 500, true);
+    // graph = storyLayouter.space(10, 10);
+    const storyScriptUrl =
+      '/Users/tantang/Projects/vis18/server/StorylineBackend/deploy/uploadFiles/StarWars.xml';
+    let rawData = await post(storyScriptUrl);
+    console.log(rawData);
+    let graph = storyRender('SmoothRender', rawData.data);
     console.log(graph);
+    graph.names = graph.entities;
     this.drawStorylines(graph);
   }
 
@@ -315,10 +339,6 @@ class DrawCanvas extends Component<Props, State> {
       <div className="canvas-wrapper">
         <ZoomCanvas />
         <AddEventPanel centerY={100} centerX={0} />
-        {/*<AddEventPanel*/}
-        {/*centerX={this.state.groupCenterX}*/}
-        {/*centerY={this.state.groupCenterY}*/}
-        {/*/>*/}
         <StylishPanel centerY={100} centerX={0} />
       </div>
     );
