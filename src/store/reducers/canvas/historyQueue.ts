@@ -1,29 +1,47 @@
-import { ActionType, historyQueueType } from '../../../types';
+import {
+  ActionType,
+  historyQueueType,
+  StoryFlowProtocType
+} from '../../../types';
+
+const initialProtoc = {
+  id: 'starwars.xml',
+  sessionInnerGap: 18,
+  sessionOuterGap: 54,
+  sessionInnerGaps: [],
+  sessionOuterGaps: [],
+  majorCharacters: [],
+  orders: [],
+  groupIds: [],
+  selectedSessions: [],
+  orderTable: [],
+  sessionBreaks: []
+} as StoryFlowProtocType;
 
 const initialState: historyQueueType = {
-  configArray: [1, 2, 3, 4, 5, 6, 7], //暂时写成数字
+  protocQueue: [initialProtoc], //暂时写成数字
   pointer: 0
 };
 
 export default (state = initialState, action: ActionType) => {
-  const { configArray } = state;
+  const { protocQueue } = state;
   switch (action.type) {
     case 'UNDO':
-      if (configArray.length > state.pointer) {
-        console.log(configArray[state.pointer + 1]);
+      if (protocQueue.length > state.pointer) {
+        console.log(protocQueue[state.pointer + 1]);
         return {
           ...state,
           pointer: state.pointer + 1,
-          configArray: configArray
+          protocQueue: protocQueue
         };
       }
     case 'REDO':
       if (state.pointer > 0) {
-        console.log(configArray[state.pointer - 1]);
+        console.log(protocQueue[state.pointer - 1]);
         return {
           ...state,
           pointer: state.pointer - 1,
-          configArray: configArray
+          protocQueue: protocQueue
         };
       }
     //如果有其他的action也记录到historyQueue当中

@@ -6,13 +6,12 @@ import { addVisualObject, setTool } from '../../store/actions';
 import { getToolState, getGroupEventState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
 
-import { iStoryline, storyRender } from 'iStoryline';
+import { iStoryline } from 'iStoryline';
 import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
 import ReshapeUtil from '../../interactions/IStoryEvent/reshapeSelectionUtil';
-import axios from 'axios';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -65,25 +64,6 @@ type State = {
   groupSpan: any;
 };
 
-async function post(url: string) {
-  let config = {
-    id: url,
-    sessionInnerGap: 18,
-    sessionOuterGap: 54,
-    sessionInnerGaps: [],
-    sessionOuterGaps: [],
-    majorCharacters: [],
-    orders: [],
-    groupIds: [],
-    selectedSessions: [],
-    orderTable: [],
-    sessionBreaks: []
-  };
-  let serverUrl = 'http://localhost:5050/api/update';
-  let rawData = await axios.post(serverUrl, config);
-  return rawData;
-}
-
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -133,19 +113,11 @@ class DrawCanvas extends Component<Props, State> {
     view.onMouseUp = (e: paper.MouseEvent) => {
       this.onMouseUp(e);
     };
-    const { storyXMLUrl, storyLayouter } = this.state;
+    // const { storyXMLUrl, storyLayouter } = this.state;
     // let graph = await storyLayouter.readFile(storyXMLUrl);
     // graph = storyLayouter.scale(100, 100, 800, 500, true);
     // graph = storyLayouter.space(10, 10);
-    // const storyScriptUrl =
-    // '/Users/tantang/Projects/vis18/server/StorylineBackend/deploy/uploadFiles/StarWars.xml';
-    const storyScriptUrl = 'starwars.xml';
-    let rawData = await post(storyScriptUrl);
-    console.log(rawData);
-    let graph = storyRender('SmoothRender', rawData.data);
-    console.log(graph);
-    graph.names = graph.entities;
-    this.drawStorylines(graph);
+    // this.drawStorylines(graph);
   }
 
   drawStorylines(graph: StoryGraph) {
@@ -188,14 +160,7 @@ class DrawCanvas extends Component<Props, State> {
       : this.props.splitState
       ? 'Split'
       : null;
-    if (eventName) {
-      this.state.groupUtil.down(e);
-    }
-    // if(this.state.eventName!=''){
-    //   console.log(this.state.eventName);
-    //   this.state.groupUtil.down(e);
-    // }
-    // if()
+    if (eventName) this.state.groupUtil.down(e);
     if (this.props.compressState) this.state.compressUtil.down(e);
     if (this.props.relateState) this.state.relateUtil.down(e);
     if (this.props.stylishState) this.state.stylishUtil.down(e);
@@ -206,7 +171,6 @@ class DrawCanvas extends Component<Props, State> {
 
   onMouseDrag(e: paper.MouseEvent) {
     if (this.props.addLineState) this.state.addLineUtil.drag(e);
-    // if (this.props.groupState) this.state.groupUtil.drag(e);
     const eventName = this.props.mergeState
       ? 'Merge'
       : this.props.twineState
@@ -226,9 +190,8 @@ class DrawCanvas extends Component<Props, State> {
       : this.props.wiggleState
       ? 'Wiggle'
       : null;
-    if (eventName) {
-      this.state.groupUtil.drag(e);
-    }
+    // if (this.props.groupState) this.state.groupUtil.drag(e);
+    if (eventName) this.state.groupUtil.drag(e);
     if (this.props.compressState) this.state.compressUtil.drag(e);
     if (this.props.relateState) this.state.relateUtil.drag(e);
     if (stylishName) this.state.stylishUtil.drag(e);
@@ -241,7 +204,6 @@ class DrawCanvas extends Component<Props, State> {
   onMouseUp(e: paper.MouseEvent) {
     if (this.props.addLineState) {
       const param = this.state.addLineUtil.up(e);
-      // console.log(param);
     }
     const eventName = this.props.mergeState
       ? 'Merge'

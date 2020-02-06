@@ -1,9 +1,10 @@
 import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
-import { Path, Raster, Group } from 'paper';
+import { Path, Group } from 'paper';
 
 export type ActionType = ActionType<typeof actions>;
+export type DispatchType = typeof store.dispatch;
 
 export type StateType = {
   toolState: ToolStateType;
@@ -14,14 +15,53 @@ export type StateType = {
 };
 
 export type historyQueueType = {
-  configArray: number[];
+  protocQueue: StoryFlowProtocType[];
   pointer: number;
 };
 
-//config数据结构
-export type PostConfig = number; //暂时写成number测试
+// StoryFlow 数据结构
+export type StoryFlowProtocType = {
+  id: string;
+  sessionInnerGap: number;
+  sessionOuterGap: number;
+  sessionInnerGaps: SessionInnerGapType[];
+  sessionOuterGaps: SessionOuterGapType[];
+  majorCharacters: MajorCharactersType[];
+  orders: OrdersType[];
+  groupIds: [];
+  selectedSessions: [];
+  orderTable: any[];
+  sessionBreaks: SessionBreaksType[];
+};
 
-export type DispatchType = typeof store.dispatch;
+export type SessionInnerGapType = {
+  item1: number; // session id
+  item2: number; // inner gap
+};
+
+export type SessionOuterGapType = {
+  item1: {
+    item1: number; // session1 id
+    item2: number; // session2 id
+  }; // sessions pair
+  item2: {
+    item1: number; // lower bound of the gap
+    item2: number; // upper bound of the gap
+  }; // outer gap between session1 and session2
+};
+
+export type MajorCharactersType = {
+  item1: number; // character id
+  item2: number[]; // time spans
+};
+
+export type OrdersType = number[][];
+
+export type SessionBreaksType = {
+  frame: number; // time span
+  session1: number; // session1 id
+  session2: number; // session2 id
+};
 
 // Tool State
 export type ToolStateType = {

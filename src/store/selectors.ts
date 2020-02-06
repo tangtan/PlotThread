@@ -102,3 +102,17 @@ function BSFSearch(nodes: any[], style = 'fillColor'): Color | undefined {
   }
   return BSFSearch(nodes, style);
 }
+
+// History Back & Forward
+export const getHistoryQueue = (state: StateType) => {
+  return state.historyQueue.protocQueue;
+};
+
+export const getHistoryPointer = (state: StateType) => {
+  return state.historyQueue.pointer;
+};
+
+export const getCurrentStoryFlowProtoc = (state: StateType) => {
+  const { protocQueue, pointer } = state.historyQueue;
+  return protocQueue[pointer];
+};

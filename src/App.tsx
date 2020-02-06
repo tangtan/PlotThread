@@ -8,6 +8,7 @@ import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
 // Canvas
 import ToolCanvas from './components/canvas/ToolCanvas';
+import StoryFlowCanvas from './components/canvas/StoryFlowCanvas';
 // Panels
 import AddEventPanel from './components/toolbar/tools/AddEventPanel';
 import StylishPanel from './components/toolbar/tools/StylishPanel';
@@ -89,7 +90,7 @@ class App extends React.Component<Props, State> {
     const { leftTools } = this.state;
     return (
       <div className="App">
-        <ToolCanvas />
+        <StoryFlowCanvas />
         <StateBar />
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
         <UploadModal />
