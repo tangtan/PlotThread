@@ -1,6 +1,5 @@
 .App {
   text-align: center;
-  overflow: hidden;
   height: 100vh;
   width: 100vw;
 }
@@ -42,4 +41,14 @@
   display: flex;
   flex-direction: column;
   background: white;
+}
+
+.addEvent-wrapper {
+  width: 200px;
+  background: black;
+  height: 30px;
+  position: absolute;
+  top: 200px;
+  left: 400px;
+  color: white;
 }

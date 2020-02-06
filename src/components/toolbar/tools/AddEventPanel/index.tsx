@@ -12,8 +12,8 @@ const mapStateToProps = (state: StateType) => {
 };
 
 type Props = {
-  centerX: number;
-  centerY: number;
+  centerX?: number;
+  centerY?: number;
 } & ReturnType<typeof mapStateToProps>;
 
 type State = {

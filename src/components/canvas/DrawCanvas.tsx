@@ -5,8 +5,7 @@ import { StateType, DispatchType, StoryGraph } from '../../types';
 import { addVisualObject, setTool } from '../../store/actions';
 import { getToolState, getGroupEventState } from '../../store/selectors';
 import ZoomCanvas from './ZoomCanvas';
-import AddEventPanel from '../toolbar/tools/AddEventPanel';
-import StylishPanel from '../toolbar/tools/StylishPanel';
+
 import { iStoryline, storyRender } from 'iStoryline';
 import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import SketchUtil from '../../interactions/IStoryEvent/sketchSelectionUtil';
@@ -14,7 +13,6 @@ import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
 import ReshapeUtil from '../../interactions/IStoryEvent/reshapeSelectionUtil';
 import axios from 'axios';
-import './DrawCanvas.css';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -139,8 +137,9 @@ class DrawCanvas extends Component<Props, State> {
     // let graph = await storyLayouter.readFile(storyXMLUrl);
     // graph = storyLayouter.scale(100, 100, 800, 500, true);
     // graph = storyLayouter.space(10, 10);
-    const storyScriptUrl =
-      '/Users/tantang/Projects/vis18/server/StorylineBackend/deploy/uploadFiles/StarWars.xml';
+    // const storyScriptUrl =
+    // '/Users/tantang/Projects/vis18/server/StorylineBackend/deploy/uploadFiles/StarWars.xml';
+    const storyScriptUrl = 'starwars.xml';
     let rawData = await post(storyScriptUrl);
     console.log(rawData);
     let graph = storyRender('SmoothRender', rawData.data);
@@ -242,7 +241,7 @@ class DrawCanvas extends Component<Props, State> {
   onMouseUp(e: paper.MouseEvent) {
     if (this.props.addLineState) {
       const param = this.state.addLineUtil.up(e);
-      console.log(param);
+      // console.log(param);
     }
     const eventName = this.props.mergeState
       ? 'Merge'
@@ -263,64 +262,55 @@ class DrawCanvas extends Component<Props, State> {
       : this.props.wiggleState
       ? 'Wiggle'
       : null;
-
-    //if(this.props.groupState){}
+    console.log(eventName);
     if (eventName) {
       const [names, span, centerX, centerY] = this.state.groupUtil.up(e);
-      this.setGroup(names, span);
-      this.setRegion(centerX as number, centerY as number);
+      // this.setGroup(names, span);
+      // this.setRegion(centerX as number, centerY as number);
       // this.props.activateTool('AddEventPop', true); //group画完
-      console.log(centerX, centerY);
-      console.log(eventName);
-      const graph = this.state.storyLayouter.expand(names, span, eventName);
-      this.drawStorylines(graph);
+      // const graph = this.state.storyLayouter.expand(names, span, eventName);
+      // this.drawStorylines(graph);
       this.props.activateTool('AddEventPop', false);
 
       // 加一个eventType
     }
     if (this.props.compressState) {
       const [names, span] = this.state.compressUtil.up(e);
-      const graph = this.state.storyLayouter.compress(names, span);
-      this.drawStorylines(graph);
+      // const graph = this.state.storyLayouter.compress(names, span);
+      // this.drawStorylines(graph);
     }
     if (this.props.relateState) {
       const param = this.state.relateUtil.up(e);
-      console.log(param);
+      // console.log(param);
     }
-    // if (this.props.stylishState) {
-    //   const param = this.state.stylishUtil.up(e);
-    //   console.log(param);
-    // }
 
     if (stylishName) {
       const param = this.state.stylishUtil.up(e);
-      console.log(param);
+      // console.log(param);
       this.props.activateTool('StylishPop', false);
     }
     if (this.props.bendState) {
       const [names, span] = this.state.bendUtil.up(e);
       let graph;
-      if (span.length === 1) {
-        graph = this.state.storyLayouter.bend(names, span);
-      } else {
-        graph = this.state.storyLayouter.straighten(names, span);
-      }
-      this.drawStorylines(graph);
+      // if (span.length === 1) {
+      //   graph = this.state.storyLayouter.bend(names, span);
+      // } else {
+      //   graph = this.state.storyLayouter.straighten(names, span);
+      // }
+      // this.drawStorylines(graph);
     }
     if (this.props.sortState) {
       const param = this.state.sortUtil.up(e);
       if (param) {
         const [names, span] = param;
-        const graph = this.state.storyLayouter.sort(names, span);
-        // console.log(names, span, graph);
-        this.drawStorylines(graph);
+        // const graph = this.state.storyLayouter.sort(names, span);
+        // this.drawStorylines(graph);
       }
     }
     if (this.props.reshapeState) {
       const [upperPath, bottomPath] = this.state.reshapeUtil.up(e);
-      const graph = this.state.storyLayouter.reshape(upperPath, bottomPath);
-      // console.log(upperPath, bottomPath, graph);
-      this.drawStorylines(graph);
+      // const graph = this.state.storyLayouter.reshape(upperPath, bottomPath);
+      // this.drawStorylines(graph);
     }
   }
 
@@ -335,13 +325,7 @@ class DrawCanvas extends Component<Props, State> {
   }
 
   render() {
-    return (
-      <div className="canvas-wrapper">
-        <ZoomCanvas />
-        <AddEventPanel centerY={100} centerX={0} />
-        <StylishPanel centerY={100} centerX={0} />
-      </div>
-    );
+    return <ZoomCanvas />;
   }
 }
 

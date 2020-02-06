@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './GlobalPanel.css';
-import { DispatchType, StateType } from '../../../types';
-import { getToolState } from '../../../store/selectors';
+import { DispatchType, StateType } from '../../../../types';
+import { getToolState } from '../../../../store/selectors';
 import styled from 'styled-components';
-import { Button, Divider, Tabs, Slider } from 'antd';
-import { setTool } from '../../../store/actions';
+import { Tabs, Slider } from 'antd';
+
 const { TabPane } = Tabs;
 
 const mapStateToProps = (state: StateType) => {
@@ -57,13 +57,13 @@ class GlobalPanel extends Component<Props, State> {
       background: #34373e;
       text-align: left;
     `;
-    const heightIcon = (
+    const HeightIcon = (
       <img className="statebar-icon-img" src="icons/height.png" alt="height" />
     );
-    const widthIcon = (
+    const WidthIcon = (
       <img className="statebar-icon-img" src="icons/width.png" alt="width" />
     );
-    const settings = (
+    const Settings = (
       <div className="settingbar-content-wrapper">
         <div className="settingbar-space-wrapper">
           <div className="settingbar-content-title">Space</div>
@@ -72,11 +72,11 @@ class GlobalPanel extends Component<Props, State> {
         <div className="settingbar-scale-wrapper">
           <div className="settingbar-content-title">Scale</div>
           <div className="settingbar-scale-width">
-            {widthIcon}
+            {WidthIcon}
             <Slider max={100} min={0} onChange={this.onChange} />
           </div>
           <div className="settingbar-scale-height">
-            {heightIcon}
+            {HeightIcon}
             <Slider max={100} min={0} onChange={this.onChange} />
           </div>
         </div>
@@ -88,12 +88,11 @@ class GlobalPanel extends Component<Props, State> {
         <Nav className="nav">
           <Tabs onChange={this.callback} size="small">
             <TabPane tab="Settings" key="1">
-              {settings}
+              {Settings}
             </TabPane>
             <TabPane tab="Templates" key="2">
               {/*{templates}*/}
             </TabPane>
-            <TabPane key="3"></TabPane>
           </Tabs>
         </Nav>
       </div>

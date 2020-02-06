@@ -19,7 +19,7 @@ class StateItem extends Component<Props> {
 
   private onClick = () => {
     const actionName = this.props.menuInfo.name;
-    console.log(actionName);
+    // console.log(actionName);
     if (actionName == 'Back') {
       store.dispatch(undoAction());
     }

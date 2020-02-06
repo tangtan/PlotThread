@@ -2,8 +2,8 @@ import { StateType, ActionType } from '../../types';
 import { combineReducers } from 'redux';
 
 import toolState from './toolbar/toolState';
-import groupEventState from './groupEvent/groupEventState';
-import styleEventState from './styleEvent/styleEventState';
+import groupEventState from './event/groupEventState';
+import styleEventState from './event/styleEventState';
 import renderQueue from './canvas/renderQueue';
 import historyQueue from './canvas/historyQueue';
 

@@ -3,14 +3,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import 'antd/dist/antd.css';
-
+// State & Tool bars
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
+// Canvas
 import ToolCanvas from './components/canvas/ToolCanvas';
+// Panels
 import AddEventPanel from './components/toolbar/tools/AddEventPanel';
+import StylishPanel from './components/toolbar/tools/StylishPanel';
 import UploadModal from './components/toolbar/tools/UploadModal';
 import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
-import GlobalPanel from './components/statebar/GlobalPanel';
+import GlobalPanel from './components/toolbar/tools/GlobalPanel';
 import { ITool } from './types';
 
 type Props = {};
@@ -92,6 +95,8 @@ class App extends React.Component<Props, State> {
         <UploadModal />
         <EmbellishPanel />
         <GlobalPanel />
+        <AddEventPanel centerX={0} centerY={100} />
+        <StylishPanel centerX={0} centerY={100} />
       </div>
     );
   }

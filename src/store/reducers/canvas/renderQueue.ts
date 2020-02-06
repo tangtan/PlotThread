@@ -37,7 +37,7 @@ const drawVisualObject = (type: string, cfg?: any) => {
       const storyDrawer = new StoryDrawer(_cfg);
       return storyDrawer.draw(type);
     default:
-      if (type.startsWith('data:image')) {
+      if (type && type.startsWith('data:image')) {
         const imageDrawer = new ImageDrawer(_cfg);
         return imageDrawer.draw(type);
       }

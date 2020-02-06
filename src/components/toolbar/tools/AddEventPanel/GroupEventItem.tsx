@@ -51,8 +51,6 @@ class GroupEventItem extends Component<Props, State> {
     });
     const name = this.props.toolInfo.name;
     const use = !this.state.isClicked;
-    console.log('name' + name);
-    console.log('use' + use);
     this.props.activateTool(name, use);
     // console.log(name, use);
     // 同步点击状态

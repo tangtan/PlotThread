@@ -69,20 +69,22 @@ class FileBar extends Component<Props, State> {
       case 'Download':
         this.downloadPic();
         break;
-      // this.props.downloadPic();
       default:
         break;
     }
   }
 
   downloadPic() {
+    // only download within-window content
     var canvas = document.getElementById('canvas') as HTMLCanvasElement;
     if (canvas != null) {
       var image = canvas
         .toDataURL('image/png')
         .replace('image/png', 'image/octet-stream');
-      // here is the most important part because if you dont replace you will get a DOM 18 exception.
-      window.location.href = image; // it will save locally
+      var link = document.createElement('a') as HTMLAnchorElement;
+      link.href = image;
+      link.download = 'storyline.png';
+      link.click();
     }
   }
 

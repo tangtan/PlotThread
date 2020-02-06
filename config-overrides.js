@@ -10,36 +10,33 @@ module.exports = override(
   }),
   addLessLoader({
     javascriptEnabled: true,
-    modifyVars:{
+    modifyVars: {
+      "component-background": '#34373e',
+      "primary-color": '#6376cc',
+      "item-hover-bg": '#605a53',
       "popover-bg": "#34373e",
       "popover-color": "#fff",
       "popover-min-width": "270px",
+      "popover-arrow-width": "8px",
       "slider-track-background-color": "#6376cc",
       "slider-rail-background-color": "#fff",
       "slider-dot-border-color": "#fff",
-      "popover-arrow-width": "8px",
       "slider-handle-border-width": "0px",
       "slider-handle-background-color": "#fff",
       "slider-handle-color": "fff",
       "slider-handle-color-hover": "#fff",
       "slider-margin": "8px 6px 30px 10px",
-      "select-dropdown-bg": "#34373e",
-      "select-item-selected-bg": "#605a53",
-      "select-item-active-bg": "#605a53",
-      "select-background": "#25262c",
+      "select-item-selected-bg": "#6376cc",
       "select-dropdown-vertical-padding": "20px",
       "select-dropdown-edge-child-vertical-padding": "10px",
       "input-bg": "#25262c",
       "input-color": "#fff",
       "text-color": "#fff",
-      // "modal-header-bg": "#34373e",
-      "modal-heading-color": "#34373e",
-      // "modal-footer-bg": "#34373e",
-      // "modal-mask-bg": "fade(@black, 65%)",
-      // "modal-body-bg": "#34373e",
-      "btn-primary-bg": "#34373e",
-      "btn-default-color": "#34373e",
-      "btn-primary-color": "#979797",
+      "modal-header-bg": "#34373e",
+      "modal-heading-color": "#fff",
+      "modal-content-bg": "#34373e",
+      "modal-footer-bg": "#34373e",
+      "modal-mask-bg": "fade(@black, 65%)",
       "tabs-highlight-color": "#fff",
       "tabs-hover-color": "#fff",
       "tabs-active-color": "#fff",
@@ -49,9 +46,6 @@ module.exports = override(
       "tabs-title-font-size-lg": "16px",
       "tabs-title-font-size-sm": "16px",
       "tabs-ink-bar-color": "#6376cc"
-
-
-
     }
   })
 

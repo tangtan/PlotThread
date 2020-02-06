@@ -5,19 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.addEvent-wrapper {
-  width: 200px;
-  background: black;
-  height: 30px;
-  position: absolute;
-  top: 200px;
-  left: 400px;
-  color: white;
 }

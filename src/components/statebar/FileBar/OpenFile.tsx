@@ -39,7 +39,7 @@ export default class OpenFile extends Component<Props, State> {
     const { name, multiple, action } = this.state;
     return (
       <Modal
-        style={{ left: -150, top: 180 }}
+        style={{ top: 180 }}
         title="Open File"
         visible={this.props.visible}
         onOk={() => this.props.onCloseModal()}
