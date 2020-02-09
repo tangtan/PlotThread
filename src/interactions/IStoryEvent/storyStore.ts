@@ -48,8 +48,14 @@ export class StoryStore {
   getStorylineID(x: number | string, y: number | string) {
     return this.graph.getStorylineID(x, y);
   }
+  getStorylineIDByName(name: string) {
+    return this.graph.getStorylineIDByName(name);
+  }
   getStoryTimeSpan(x: number | string, y: number | string) {
     return this.graph.getStoryTimeSpan(x, y);
+  }
+  getStoryTimeID(time: number) {
+    return this.graph.getStoryTimeID(time);
   }
   getLocationColor(x: number | string, y: number | string) {
     return this.graph.getLocationColor(x, y);
@@ -68,5 +74,25 @@ export class StoryStore {
   }
   getCharacterY(name: string, time: number) {
     return this.graph.getCharacterY(name, time);
+  }
+  getSessionID(x: number | string, y: number | string) {
+    return this.graph.getSessionID(x, y);
+  }
+  getSessions(
+    x0: number | string,
+    y0: number | string,
+    x1: number | string,
+    y1: number | string
+  ) {
+    return this.graph.getSessions(x0, y0, x1, y1);
+  }
+  getPrevSessionID(id: number) {
+    return this.graph.getPrevSessionID(id);
+  }
+  getNextSessionID(id: number) {
+    return this.graph.getNextSessionID(id);
+  }
+  getBesideSessions(x: number | string, y: number | string, name: string) {
+    return this.graph.getBesideSessions(x, y, name);
   }
 }

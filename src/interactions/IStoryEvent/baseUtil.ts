@@ -1,6 +1,8 @@
 import paper, { Path, Point, project } from 'paper';
 import { StoryGraph } from '../../types';
 import { StoryStore } from './storyStore';
+import { select } from 'd3-selection';
+import { start } from 'repl';
 
 export class BaseSelectionUtil {
   utilType: string;
@@ -74,7 +76,8 @@ export class StoryUtil extends BaseSelectionUtil {
     const startX = sPoint.x as number;
     const startY = sPoint.y as number;
     const startTime = this.storyStore.getStoryTimeSpan(startX, startY)[0];
-    return startTime;
+    const startTimeID = this.storyStore.getStoryTimeID(startTime);
+    return startTimeID;
   }
 
   getEndTime(ePoint: Point) {
@@ -82,9 +85,41 @@ export class StoryUtil extends BaseSelectionUtil {
     const endX = ePoint.x as number;
     const endY = ePoint.y as number;
     const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[1];
-    return endTime;
+    const endTimeID = this.storyStore.getStoryTimeID(endTime);
+    return endTimeID;
   }
 
+  getSessions(sPoint: Point, ePoint: Point) {
+    if (!this.storyStore) return [-1];
+    const startX = sPoint.x as number;
+    const startY = sPoint.y as number;
+    const endX = ePoint.x as number;
+    const endY = ePoint.y as number;
+    const sessions = this.storyStore.getSessions(startX, startY, endX, endY);
+    return sessions;
+  }
+
+  getSessionBreaks(sPoint: Point, ePoint: Point) {
+    if (!this.storyStore) return { lsSessionID: -1, leSessionID: -1 };
+    const startX = sPoint.x as number;
+    const startY = sPoint.y as number;
+    const endX = ePoint.x as number;
+    const endY = ePoint.y as number;
+    const mSessionID = this.storyStore.getSessionID(
+      (startX + endX) / 2,
+      (startY + endY) / 2
+    );
+    const { lTime, sSessionID } = this.storyStore.getPrevSessionID(mSessionID);
+    const { rTime, eSessionID } = this.storyStore.getNextSessionID(mSessionID);
+    return { lTime, rTime, sSessionID, mSessionID, eSessionID };
+  }
+
+  getStorylineIDByName(name: string | null) {
+    if (!this.storyStore) return -1;
+    if (!name) return -1;
+    const ret = this.storyStore.getStorylineIDByName(name);
+    return ret ? (ret as number) : -1;
+  }
   isInSelectionRegion(name: string, sPoint: Point, ePoint: Point) {
     let flag = false;
     const sTime = this.getStartTime(sPoint);

@@ -18,12 +18,15 @@ export default class SortSelectionUtil extends StoryUtil {
     for (let i = 0, len = order.length; i < len; i++) {
       const { name, oldY, newY } = order[i];
       // console.log(name, oldY, newY);
+      const ID = this.getStorylineIDByName(name);
       if (newY - oldY > 1) {
         const upName = order[i - 1].name;
-        return [[upName, name], time];
+        const upID = this.getStorylineIDByName(upName);
+        return [[upID, ID], time];
       } else if (newY - oldY < -1) {
         const downName = order[i + 1].name;
-        return [[name, downName], time];
+        const downID = this.getStorylineIDByName(downName);
+        return [[ID, downID], time];
       }
     }
     return null;

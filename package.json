@@ -27,7 +27,7 @@
     "d3-zoom": "^1.7.3",
     "git": "^0.1.5",
     "husky": "^2.3.0",
-    "iStoryline": "file:../istoryline",
+    "iStoryline": "file:../istoryline.js",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lint-staged": "^8.1.7",

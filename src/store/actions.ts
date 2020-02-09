@@ -28,6 +28,14 @@ export const addVisualArray = createAction(
     action({ array: array, cfgs: cfgs || [] })
 );
 
-export const redoAction = createAction('REDO', action => () => action({}));
+export const redoAction = createAction('REDO', action => (cfg?: any) =>
+  action({ cfg: cfg || {} })
+);
 
-export const undoAction = createAction('UNDO', action => () => action({}));
+export const undoAction = createAction('UNDO', action => (cfg?: any) =>
+  action({ cfg: cfg || {} })
+);
+
+export const addAction = createAction('ADD', action => (cfg?: any) =>
+  action({ cfg: cfg || {} })
+);

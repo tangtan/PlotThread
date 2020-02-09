@@ -28,18 +28,18 @@ class App extends React.Component<Props, State> {
     super(props);
     this.state = {
       leftTools: [
-        {
-          name: 'AddActor',
-          type: 'png',
-          url: 'icons/actor.png',
-          subTools: []
-        },
-        {
-          name: 'AddEvent',
-          type: 'png',
-          url: 'icons/event.png',
-          subTools: []
-        },
+        // {
+        //   name: 'AddActor',
+        //   type: 'png',
+        //   url: 'icons/actor.png',
+        //   subTools: []
+        // },
+        // {
+        //   name: 'AddEvent',
+        //   type: 'png',
+        //   url: 'icons/event.png',
+        //   subTools: []
+        // },
         {
           name: 'Bend',
           type: 'png',
@@ -52,12 +52,12 @@ class App extends React.Component<Props, State> {
           url: 'icons/expand.png',
           subTools: []
         },
-        {
-          name: 'Reshape',
-          type: 'png',
-          url: 'icons/reshape.png',
-          subTools: []
-        },
+        // {
+        //   name: 'Reshape',
+        //   type: 'png',
+        //   url: 'icons/reshape.png',
+        //   subTools: []
+        // },
         {
           name: 'Text',
           type: 'png',

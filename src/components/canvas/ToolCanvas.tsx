@@ -61,7 +61,6 @@ class ToolCanvas extends Component<Props, State> {
   updateTool(type: string, toolState: boolean | undefined) {
     if (toolState) {
       let toolItem = this.constructTool(type);
-      // console.log(type, toolItem);
       if (toolItem) toolItem.activate();
       toolStore.set(type, toolItem);
     } else {
@@ -94,7 +93,4 @@ class ToolCanvas extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolCanvas);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolCanvas);

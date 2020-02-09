@@ -100,19 +100,19 @@ class DrawCanvas extends Component<Props, State> {
 
   // init
   async componentDidMount() {
-    console.log(project);
-    view.onClick = (e: paper.MouseEvent) => {
-      this.onMouseClick(e);
-    };
-    view.onMouseDown = (e: paper.MouseEvent) => {
-      this.onMouseDown(e);
-    };
-    view.onMouseDrag = (e: paper.MouseEvent) => {
-      this.onMouseDrag(e);
-    };
-    view.onMouseUp = (e: paper.MouseEvent) => {
-      this.onMouseUp(e);
-    };
+    // console.log(project);
+    // view.onClick = (e: paper.MouseEvent) => {
+    //   this.onMouseClick(e);
+    // };
+    // view.onMouseDown = (e: paper.MouseEvent) => {
+    //   this.onMouseDown(e);
+    // };
+    // view.onMouseDrag = (e: paper.MouseEvent) => {
+    //   this.onMouseDrag(e);
+    // };
+    // view.onMouseUp = (e: paper.MouseEvent) => {
+    //   this.onMouseUp(e);
+    // };
     // const { storyXMLUrl, storyLayouter } = this.state;
     // let graph = await storyLayouter.readFile(storyXMLUrl);
     // graph = storyLayouter.scale(100, 100, 800, 500, true);

@@ -24,6 +24,7 @@ export default class CircleSelectionUtil extends StoryUtil {
       if (sPoint && ePoint && cPoint && this.storyStore) {
         const sTime = this.getStartTime(sPoint);
         const eTime = this.getEndTime(ePoint);
+        const sessions = this.getSessions(sPoint, ePoint);
         const names = this.storyStore.names.filter(name =>
           this.isInSelectionRegion(name, sPoint, ePoint)
         );
@@ -31,7 +32,8 @@ export default class CircleSelectionUtil extends StoryUtil {
         const centerY = cPoint.y as number;
         //如何把这个centerX和centerY传给addEventPanel组件呢？
         super.mouseUp(e);
-        return [names, [sTime, eTime], centerX, centerY];
+        //return [names, [sTime, eTime], centerX, centerY];
+        return [names, sessions];
       }
     }
     super.mouseUp(e);

@@ -1,6 +1,7 @@
 import { StoryUtil } from './baseUtil';
 import { ColorPicker } from '../../utils/color';
 import paper, { Path } from 'paper';
+import { connect } from 'http2';
 
 export default class BrushSelectionUtil extends StoryUtil {
   constructor(type: string, actorNum: number) {
@@ -18,15 +19,26 @@ export default class BrushSelectionUtil extends StoryUtil {
       const sTime = this.getStartTime(this._downPoint);
       const eTime = this.getEndTime(this._dragPoint);
       const names = this.selectedItems.map(item => item.name);
+      const {
+        lTime,
+        rTime,
+        sSessionID,
+        mSessionID,
+        eSessionID
+      } = this.getSessionBreaks(this._downPoint, this._dragPoint);
+      const nameIDs: number[] = [];
+      names.forEach((val, id, array) => {
+        nameIDs.push(Number(this.getStorylineIDByName(val)));
+      });
       const x1 = this._downPoint.x || 0;
       const y1 = this._downPoint.y || 0;
       const x2 = this._dragPoint.x || 0;
       const y2 = this._dragPoint.y || 0;
-      const thresK = 2.5;
+      const thresK = 0;
       if (y2 - y1 > thresK * (x2 - x1)) {
-        return [names, [sTime]]; // Bend
+        return [nameIDs, [lTime, rTime, sSessionID, mSessionID, eSessionID]]; // Bend
       } else {
-        return [names, [sTime, eTime]];
+        return [nameIDs, [sTime, eTime]];
       }
     }
     return null;
