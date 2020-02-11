@@ -39,3 +39,7 @@ export const undoAction = createAction('UNDO', action => (cfg?: any) =>
 export const addAction = createAction('ADD', action => (cfg?: any) =>
   action({ cfg: cfg || {} })
 );
+
+export const changeAction = createAction('CHANGE', action => (cfgs?: any) =>
+  action({ cfgs: cfgs || {} })
+);

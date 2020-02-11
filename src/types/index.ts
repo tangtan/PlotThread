@@ -16,6 +16,7 @@ export type StateType = {
 
 export type historyQueueType = {
   protocQueue: StoryFlowProtocType[];
+  layoutBackUp: StoryFlowResponseType;
   pointer: number;
 };
 
@@ -32,6 +33,8 @@ export type StoryFlowProtocType = {
   selectedSessions: [];
   orderTable: any[];
   sessionBreaks: SessionBreaksType[];
+  // stylishInfo: StylishInfoType[];
+  // relateInfo: RelateInfoType[];
 };
 
 export type SessionInnerGapType = {
@@ -62,7 +65,26 @@ export type SessionBreaksType = {
   session1: number; // session1 id
   session2: number; // session2 id
 };
-
+// StoryFlow 返回数据结构
+export type StoryFlowResponseType = {
+  error: number;
+  data: StoryFlowStoryType;
+};
+export type StoryFlowStoryType = {
+  array: StoryFlowCharacterType[];
+  perm: number[][];
+  sessionTable: number[][];
+};
+export type StoryFlowCharacterType = {
+  character_id: number;
+  name: string;
+  points: StoryFlowPointsType[];
+};
+export type StoryFlowPointsType = {
+  item1: number;
+  item2: number;
+  item3: number;
+};
 // Tool State
 export type ToolStateType = {
   toolName: string; // 辅助判断 FreeMode

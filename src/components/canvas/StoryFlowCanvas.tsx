@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { project, view } from 'paper';
+import { Button } from 'antd';
 import {
   StateType,
   DispatchType,
   StoryGraph,
-  historyQueueType
+  historyQueueType,
+  StoryFlowResponseType
 } from '../../types';
-import { getCurrentStoryFlowProtoc } from '../../store/selectors';
+import {
+  getCurrentStoryFlowProtoc,
+  getCurrentPostRes
+} from '../../store/selectors';
 import { getToolState, getGroupEventState } from '../../store/selectors';
 import {
   addVisualObject,
   redoAction,
   undoAction,
-  addAction
+  addAction,
+  changeAction
 } from '../../store/actions';
 import { iStoryline, storyRender } from 'iStoryline';
 import ToolCanvas from './ToolCanvas';
@@ -23,16 +29,20 @@ import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
 import historyQueue from '../../store/reducers/canvas/historyQueue';
+import TemplatenUtil from '../../interactions/IStoryEvent/templateSelectionUtil';
+import ZoomCanvas from './ZoomCanvas';
+import { html } from 'd3-fetch';
 
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
+    layoutBackUp: getCurrentPostRes(state),
     renderQueue: state.renderQueue,
     historyQueue: state.historyQueue,
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
     sortState: getToolState(state, 'FreeMode'),
-    stylishState: getToolState(state, 'Stylish'),
+    predictState: getToolState(state, 'Reshape'),
     collideState: getGroupEventState(state, 'Collide'),
     knotState: getGroupEventState(state, 'Knot'),
     twineState: getGroupEventState(state, 'Twine'),
@@ -49,7 +59,8 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
       dispatch(addVisualObject(type, cfg)),
     //  redoAction: () => dispatch(redoAction()),
     //undoAction: () => dispatch(undoAction()),
-    addAction: (protocol: any) => dispatch(addAction(protocol))
+    addAction: (protocol: any) => dispatch(addAction(protocol)),
+    changeAction: (postRes: any) => dispatch(changeAction(postRes))
   };
 };
 
@@ -63,7 +74,7 @@ type State = {
   bendUtil: BrushUtil;
   compressUtil: CircleUtil;
   sortUtil: SortUtil;
-  stylishUtil: BrushUtil;
+  templateUtil: TemplatenUtil;
   waveUtil: BrushUtil;
   zigzagUtil: BrushUtil;
   bumpUtil: BrushUtil;
@@ -77,13 +88,14 @@ class StoryFlowCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      storyScriptUrl: 'StarWars.xml',
+      storyScriptUrl: 'Redcap.xml',
       storyServerUrl: 'http://localhost:5050/api/update',
+      //storyServerUrl:'http://127.0.0.1:5000/update',
       storyLayouter: new iStoryline(),
       bendUtil: new BrushUtil('Bend', 1),
       compressUtil: new CircleUtil('Compress', 0),
       sortUtil: new SortUtil('Sort', 0),
-      stylishUtil: new BrushUtil('Stylish', 1),
+      templateUtil: new TemplatenUtil('Template', 0),
       waveUtil: new BrushUtil('Wave', 1),
       zigzagUtil: new BrushUtil('Zigzag', 1),
       bumpUtil: new BrushUtil('Bump', 1),
@@ -95,9 +107,13 @@ class StoryFlowCanvas extends Component<Props, State> {
   }
 
   private genStoryGraph = async () => {
-    const postReq = this.props.storyProtoc;
+    const protoc = this.props.storyProtoc;
+    const data = this.props.layoutBackUp;
     const postUrl = this.state.storyServerUrl;
+    const postReq = { data: data, protoc: protoc };
+    //const postReq = protoc;
     const postRes = await axios.post(postUrl, postReq);
+    this.props.changeAction(postRes.data);
     const graph = this.state.storyLayouter._layout(postRes.data, postReq);
     return graph;
   };
@@ -135,9 +151,18 @@ class StoryFlowCanvas extends Component<Props, State> {
       this.onMouseUp(e);
     };
   }
-
+  async handleClick() {
+    const protoc = this.props.storyProtoc;
+    const data = this.props.layoutBackUp;
+    const postReq = { data: data, protoc: protoc };
+    //const postReq = data;
+    const postUrl = 'http://localhost:5050/api/predict';
+    const postRes = await axios.post(postUrl, postReq);
+    const graph = this.state.storyLayouter._layout(postRes.data, postReq);
+    this.drawStorylines(graph);
+  }
   async componentDidUpdate(prevProps: Props) {
-    if (this.props.historyQueue !== prevProps.historyQueue) {
+    if (this.props.storyProtoc !== prevProps.storyProtoc) {
       const graph = await this.genStoryGraph();
       this.drawStorylines(graph);
     }
@@ -147,7 +172,7 @@ class StoryFlowCanvas extends Component<Props, State> {
     this.state.compressUtil.updateStoryStore(graph);
     this.state.bendUtil.updateStoryStore(graph);
     this.state.sortUtil.updateStoryStore(graph);
-    this.state.stylishUtil.updateStoryStore(graph);
+    this.state.templateUtil.updateStoryStore(graph);
     this.state.waveUtil.updateStoryStore(graph);
     this.state.bumpUtil.updateStoryStore(graph);
     this.state.zigzagUtil.updateStoryStore(graph);
@@ -163,7 +188,6 @@ class StoryFlowCanvas extends Component<Props, State> {
     if (this.props.compressState) this.state.compressUtil.down(e);
     if (this.props.bendState) this.state.bendUtil.down(e);
     if (this.props.sortState) this.state.sortUtil.down(e);
-    if (this.props.stylishState) this.state.stylishUtil.down(e);
     if (this.props.waveState) this.state.waveUtil.down(e);
     if (this.props.dashState) this.state.dashUtil.down(e);
     if (this.props.zigzagState) this.state.zigzagUtil.down(e);
@@ -177,7 +201,6 @@ class StoryFlowCanvas extends Component<Props, State> {
     if (this.props.compressState) this.state.compressUtil.drag(e);
     if (this.props.bendState) this.state.bendUtil.drag(e);
     if (this.props.sortState) this.state.sortUtil.drag(e);
-    if (this.props.stylishState) this.state.stylishUtil.drag(e);
     if (this.props.waveState) this.state.waveUtil.drag(e);
     if (this.props.dashState) this.state.dashUtil.drag(e);
     if (this.props.zigzagState) this.state.zigzagUtil.drag(e);
@@ -300,7 +323,19 @@ class StoryFlowCanvas extends Component<Props, State> {
     }
   }
   render() {
-    return <ToolCanvas />;
+    return (
+      <div>
+        <Button
+          type="primary"
+          style={{ position: 'absolute', top: '700px', background: '#34373e' }}
+          size="large"
+          onClick={() => this.handleClick()}
+        >
+          Template
+        </Button>
+        <ToolCanvas />
+      </div>
+    );
   }
 }
 

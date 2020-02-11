@@ -1,6 +1,7 @@
 ///<reference path="../node_modules/@types/react-redux/index.d.ts"/>
 import React from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 // State & Tool bars
@@ -52,12 +53,12 @@ class App extends React.Component<Props, State> {
           url: 'icons/expand.png',
           subTools: []
         },
-        // {
-        //   name: 'Reshape',
-        //   type: 'png',
-        //   url: 'icons/reshape.png',
-        //   subTools: []
-        // },
+        {
+          name: 'Reshape',
+          type: 'png',
+          url: 'icons/reshape.png',
+          subTools: []
+        },
         {
           name: 'Text',
           type: 'png',

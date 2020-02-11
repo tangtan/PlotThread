@@ -116,3 +116,7 @@ export const getCurrentStoryFlowProtoc = (state: StateType) => {
   const { protocQueue, pointer } = state.historyQueue;
   return protocQueue[pointer];
 };
+
+export const getCurrentPostRes = (state: StateType) => {
+  return state.historyQueue.layoutBackUp;
+};

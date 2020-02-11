@@ -1,11 +1,13 @@
 import {
   ActionType,
   historyQueueType,
-  StoryFlowProtocType
+  StoryFlowProtocType,
+  StoryFlowResponseType
 } from '../../../types';
+import { stat } from 'fs';
 
 const initialProtoc = {
-  id: 'starwars.xml',
+  id: 'Redcap.xml',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],
@@ -22,18 +24,20 @@ const initialProtoc = {
 
 const initialState: historyQueueType = {
   protocQueue: [initialProtoc], //暂时写成数字
+  layoutBackUp: {} as StoryFlowResponseType, // ?
   pointer: 0
 };
 
 export default (state = initialState, action: ActionType) => {
-  const { protocQueue } = state;
+  const { protocQueue, layoutBackUp } = state;
   switch (action.type) {
     case 'UNDO':
       if (protocQueue.length > state.pointer) {
         return {
           ...state,
           pointer: state.pointer + 1,
-          protocQueue: protocQueue
+          protocQueue: protocQueue,
+          layoutBackUp: layoutBackUp
         };
       }
     case 'REDO':
@@ -41,7 +45,8 @@ export default (state = initialState, action: ActionType) => {
         return {
           ...state,
           pointer: state.pointer - 1,
-          protocQueue: protocQueue
+          protocQueue: protocQueue,
+          layoutBackUp: layoutBackUp
         };
       }
     case 'ADD':
@@ -54,7 +59,17 @@ export default (state = initialState, action: ActionType) => {
       return {
         ...state,
         pointer: 0,
-        protocQueue: newProtocQueue
+        protocQueue: newProtocQueue,
+        layoutBackUp: layoutBackUp
+      };
+    case 'CHANGE':
+      const { cfgs } = action.payload;
+      let newLayoutBackup = cfgs as StoryFlowResponseType;
+      return {
+        ...state,
+        pointer: state.pointer,
+        protocQueue: protocQueue,
+        layoutBackUp: newLayoutBackup
       };
     //如果有其他的action也记录到historyQueue当中
     default:
