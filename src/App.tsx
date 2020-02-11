@@ -34,12 +34,12 @@ class App extends React.Component<Props, State> {
         //   url: 'icons/actor.png',
         //   subTools: []
         // },
-        // {
-        //   name: 'AddEvent',
-        //   type: 'png',
-        //   url: 'icons/event.png',
-        //   subTools: []
-        // },
+        {
+          name: 'AddEvent',
+          type: 'png',
+          url: 'icons/event.png',
+          subTools: []
+        },
         {
           name: 'Bend',
           type: 'png',

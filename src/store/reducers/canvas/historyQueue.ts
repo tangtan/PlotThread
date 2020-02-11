@@ -15,7 +15,9 @@ const initialProtoc = {
   groupIds: [],
   selectedSessions: [],
   orderTable: [],
-  sessionBreaks: []
+  sessionBreaks: [],
+  stylishInfo: [],
+  relateInfo: []
 } as StoryFlowProtocType;
 
 const initialState: historyQueueType = {

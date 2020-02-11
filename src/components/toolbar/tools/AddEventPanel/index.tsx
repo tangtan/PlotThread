@@ -38,17 +38,23 @@ class AddEventPanel extends Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Merge',
+          name: 'Knot',
           type: 'png',
           url: 'icons/merge.png',
           subTools: []
-        },
-        {
-          name: 'Split',
-          type: 'png',
-          url: 'icons/split.png',
-          subTools: []
         }
+        // {
+        //   name: 'Merge',
+        //   type: 'png',
+        //   url: 'icons/merge.png',
+        //   subTools: []
+        // },
+        // {
+        //   name: 'Split',
+        //   type: 'png',
+        //   url: 'icons/split.png',
+        //   subTools: []
+        // }
       ]
     };
   }

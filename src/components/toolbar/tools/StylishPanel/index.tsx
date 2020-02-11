@@ -38,13 +38,13 @@ class StylishPanel extends Component<Props, State> {
           subTools: []
         },
         {
-          name: 'Dashed',
+          name: 'Dash',
           type: 'png',
           url: 'icons/dashed.png',
           subTools: []
         },
         {
-          name: 'Wiggle',
+          name: 'Bump',
           type: 'png',
           url: 'icons/wiggle.png',
           subTools: []
