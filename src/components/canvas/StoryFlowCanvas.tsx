@@ -2,36 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { project, view } from 'paper';
 import { Button } from 'antd';
-import {
-  StateType,
-  DispatchType,
-  StoryGraph,
-  historyQueueType,
-  StoryFlowResponseType
-} from '../../types';
+import { StateType, DispatchType, StoryGraph } from '../../types';
 import {
   getCurrentStoryFlowProtoc,
   getCurrentPostRes
 } from '../../store/selectors';
 import { getToolState, getGroupEventState } from '../../store/selectors';
-import {
-  addVisualObject,
-  redoAction,
-  undoAction,
-  addAction,
-  changeAction
-} from '../../store/actions';
-import { iStoryline, storyRender } from 'iStoryline';
+import { addVisualObject, addAction, changeAction } from '../../store/actions';
+import { iStoryline } from 'iStoryline';
 import ToolCanvas from './ToolCanvas';
 import axios from 'axios';
 
 import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
 import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
-import historyQueue from '../../store/reducers/canvas/historyQueue';
 import TemplatenUtil from '../../interactions/IStoryEvent/templateSelectionUtil';
-import ZoomCanvas from './ZoomCanvas';
-import { html } from 'd3-fetch';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -57,8 +42,6 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    //  redoAction: () => dispatch(redoAction()),
-    //undoAction: () => dispatch(undoAction()),
     addAction: (protocol: any) => dispatch(addAction(protocol)),
     changeAction: (postRes: any) => dispatch(changeAction(postRes))
   };
@@ -68,8 +51,8 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
-  storyScriptUrl: string;
-  storyServerUrl: string;
+  serverUpdateUrl: string;
+  serverPredictUrl: string;
   storyLayouter: any;
   bendUtil: BrushUtil;
   compressUtil: CircleUtil;
@@ -88,9 +71,8 @@ class StoryFlowCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      storyScriptUrl: 'Redcap.xml',
-      storyServerUrl: 'http://localhost:5050/api/update',
-      //storyServerUrl:'http://127.0.0.1:5000/update',
+      serverUpdateUrl: 'api/update',
+      serverPredictUrl: 'api/predict',
       storyLayouter: new iStoryline(),
       bendUtil: new BrushUtil('Bend', 1),
       compressUtil: new CircleUtil('Compress', 0),
@@ -109,11 +91,11 @@ class StoryFlowCanvas extends Component<Props, State> {
   private genStoryGraph = async () => {
     const protoc = this.props.storyProtoc;
     const data = this.props.layoutBackUp;
-    const postUrl = this.state.storyServerUrl;
+    const postUrl = this.state.serverUpdateUrl;
     const postReq = { data: data, protoc: protoc };
-    //const postReq = protoc;
     const postRes = await axios.post(postUrl, postReq);
-    this.props.changeAction(postRes.data);
+    // console.log(postRes);
+    this.props.changeAction(postRes.data.data);
     const graph = this.state.storyLayouter._layout(postRes.data, postReq);
     return graph;
   };
@@ -127,7 +109,6 @@ class StoryFlowCanvas extends Component<Props, State> {
     // draw new graph
     for (let i = 0; i < graph.paths.length; i++) {
       if (graph.names[i] === 'RABBIT') continue;
-      const path = graph.paths[i];
       this.props.addVisualObject('storyline', {
         storylineName: graph.names[i],
         storylinePath: graph.paths[i]
@@ -156,7 +137,7 @@ class StoryFlowCanvas extends Component<Props, State> {
     const data = this.props.layoutBackUp;
     const postReq = { data: data, protoc: protoc };
     //const postReq = data;
-    const postUrl = 'http://localhost:5050/api/predict';
+    const postUrl = this.state.serverPredictUrl;
     const postRes = await axios.post(postUrl, postReq);
     const graph = this.state.storyLayouter._layout(postRes.data, postReq);
     this.drawStorylines(graph);
