@@ -75,8 +75,11 @@ export class StoryUtil extends BaseSelectionUtil {
     if (!this.storyStore) return -1;
     const startX = sPoint.x as number;
     const startY = sPoint.y as number;
-    const startTime = this.storyStore.getStoryTimeSpan(startX, startY)[0];
-    const startTimeID = this.storyStore.getStoryTimeID(startTime);
+    const startTime = this.storyStore.getStoryTimeSpan(startX, startY);
+    const startTimeID = this.storyStore.getStoryTimeSpanID(
+      startTime[0],
+      startTime[1]
+    )[0];
     return startTimeID;
   }
 
@@ -84,8 +87,11 @@ export class StoryUtil extends BaseSelectionUtil {
     if (!this.storyStore) return -1;
     const endX = ePoint.x as number;
     const endY = ePoint.y as number;
-    const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[1];
-    const endTimeID = this.storyStore.getStoryTimeID(endTime);
+    const endTime = this.storyStore.getStoryTimeSpan(endX, endY);
+    const endTimeID = this.storyStore.getStoryTimeSpanID(
+      endTime[0],
+      endTime[1]
+    )[1];
     return endTimeID;
   }
 

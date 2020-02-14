@@ -54,6 +54,9 @@ export class StoryStore {
   getStoryTimeSpan(x: number | string, y: number | string) {
     return this.graph.getStoryTimeSpan(x, y);
   }
+  getStoryTimeSpanID(startTime: number, endTime: number) {
+    return this.graph.getStoryTimeSpanID(startTime, endTime);
+  }
   getStoryTimeID(time: number) {
     return this.graph.getStoryTimeID(time);
   }

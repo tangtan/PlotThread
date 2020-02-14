@@ -2,7 +2,7 @@
   "name": "interface",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5050",
   "dependencies": {
     "@ant-design/colors": "^3.2.2",
     "@ant-design/dark-theme": "^1.0.3",

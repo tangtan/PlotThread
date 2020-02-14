@@ -34,7 +34,7 @@ export default class BrushSelectionUtil extends StoryUtil {
       const y1 = this._downPoint.y || 0;
       const x2 = this._dragPoint.x || 0;
       const y2 = this._dragPoint.y || 0;
-      const thresK = 0;
+      const thresK = 2.5;
       if (y2 - y1 > thresK * (x2 - x1)) {
         return [nameIDs, [lTime, rTime, sSessionID, mSessionID, eSessionID]]; // Bend
       } else {

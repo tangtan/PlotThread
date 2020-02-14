@@ -93,10 +93,9 @@ class StoryFlowCanvas extends Component<Props, State> {
     const data = this.props.layoutBackUp;
     const postUrl = this.state.serverUpdateUrl;
     const postReq = { data: data, protoc: protoc };
-    const postRes = await axios.post(postUrl, postReq);
-    // console.log(postRes);
+    const postRes = await axios.post(postUrl, protoc);
     this.props.changeAction(postRes.data.data);
-    const graph = this.state.storyLayouter._layout(postRes.data, postReq);
+    const graph = this.state.storyLayouter._layout(postRes.data, protoc);
     return graph;
   };
 
@@ -136,7 +135,6 @@ class StoryFlowCanvas extends Component<Props, State> {
     const protoc = this.props.storyProtoc;
     const data = this.props.layoutBackUp;
     const postReq = { data: data, protoc: protoc };
-    //const postReq = data;
     const postUrl = this.state.serverPredictUrl;
     const postRes = await axios.post(postUrl, postReq);
     const graph = this.state.storyLayouter._layout(postRes.data, postReq);
