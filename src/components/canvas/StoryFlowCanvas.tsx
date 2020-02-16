@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { project, view } from 'paper';
+import { project, view, CompoundPath, Item } from 'paper';
 import { Button } from 'antd';
-import { StateType, DispatchType, StoryGraph } from '../../types';
+import { StateType, DispatchType, StoryGraph, StoryLine } from '../../types';
 import {
   getCurrentStoryFlowProtoc,
   getCurrentPostRes
@@ -94,7 +94,7 @@ class StoryFlowCanvas extends Component<Props, State> {
     const postUrl = this.state.serverUpdateUrl;
     const postReq = { data: data, protoc: protoc };
     const postRes = await axios.post(postUrl, protoc);
-    this.props.changeAction(postRes.data.data);
+    this.props.changeAction(postRes.data);
     const graph = this.state.storyLayouter._layout(postRes.data, protoc);
     return graph;
   };
@@ -104,17 +104,41 @@ class StoryFlowCanvas extends Component<Props, State> {
     const storylines = this.props.renderQueue.filter(
       item => item.data.type === 'storyline'
     );
+
     storylines.forEach(storyline => storyline.remove());
+
     // draw new graph
     for (let i = 0; i < graph.paths.length; i++) {
       if (graph.names[i] === 'RABBIT') continue;
       this.props.addVisualObject('storyline', {
         storylineName: graph.names[i],
-        storylinePath: graph.paths[i]
+        storylinePath: graph.paths[i],
+        prevStoryline:
+          i < storylines.length ? storylines[i].lastChild.children : [],
+        drawType: 'new'
       });
     }
   }
+  private updateStorylines(graph: StoryGraph) {
+    this.updateUtils(graph);
+    const storylines = this.props.renderQueue.filter(
+      item => item.data.type === 'storyline'
+    );
 
+    storylines.forEach(storyline => storyline.remove());
+
+    // draw new graph
+    for (let i = 0; i < graph.paths.length; i++) {
+      if (graph.names[i] === 'RABBIT') continue;
+      this.props.addVisualObject('storyline', {
+        storylineName: graph.names[i],
+        storylinePath: graph.paths[i],
+        prevStoryline:
+          i < storylines.length ? storylines[i].lastChild.children : [],
+        drawType: 'update'
+      });
+    }
+  }
   async componentDidMount() {
     // const graph = await this.genStoryGraph();
     // this.drawStorylines(graph);
@@ -141,9 +165,14 @@ class StoryFlowCanvas extends Component<Props, State> {
     this.drawStorylines(graph);
   }
   async componentDidUpdate(prevProps: Props) {
-    if (this.props.storyProtoc !== prevProps.storyProtoc) {
+    if (this.props.storyProtoc.id !== prevProps.storyProtoc.id) {
       const graph = await this.genStoryGraph();
       this.drawStorylines(graph);
+    } else {
+      if (this.props.storyProtoc !== prevProps.storyProtoc) {
+        const graph = await this.genStoryGraph();
+        this.updateStorylines(graph);
+      }
     }
   }
 

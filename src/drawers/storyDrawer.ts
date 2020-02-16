@@ -1,4 +1,4 @@
-import { Path, Matrix, Point, CompoundPath } from 'paper';
+import { Path, Matrix, Point, CompoundPath, Item } from 'paper';
 import { StoryName, StoryLine, StorySegment } from '../types';
 import BaseDrawer from './baseDrawer';
 import TextDrawer from './textDrawer';
@@ -7,11 +7,15 @@ export default class StoryDrawer extends BaseDrawer {
   cfg: any;
   storylineName: string;
   storylinePath: StoryLine;
+  prevStoryline: Path[];
+  drawType: string;
   constructor(cfg: any) {
     super(cfg);
     this.cfg = cfg || {};
     this.storylineName = cfg.storylineName || 'unknown';
     this.storylinePath = cfg.storylinePath || [];
+    this.prevStoryline = cfg.prevStoryline || [];
+    this.drawType = cfg.drawType || 'new';
   }
 
   _drawVisualObjects(
@@ -20,19 +24,32 @@ export default class StoryDrawer extends BaseDrawer {
     x0: number,
     y0: number
   ) {
-    const { storylineName, storylinePath } = this;
-    const compoundPath = this._drawStorySegments(storylineName, storylinePath);
+    const { storylineName, storylinePath, prevStoryline, drawType } = this;
+    const compoundPath = this._drawStorySegments(
+      storylineName,
+      storylinePath,
+      prevStoryline,
+      drawType
+    );
     const textLabels = this._drawStoryName(storylineName, compoundPath);
     return [...textLabels, compoundPath];
   }
 
-  _drawStorySegments(name: StoryName, storyline: StoryLine) {
+  _drawStorySegments(
+    name: StoryName,
+    storyline: StoryLine,
+    prevStoryline: Path[],
+    drawType: string
+  ) {
     const strokes = storyline.map((storySegment: StorySegment) => {
       const pathStr = DrawUtil.getPathStr('sketch', storySegment);
       const path = new Path(pathStr);
       path.simplify();
+      path.visible = false;
       return path;
     });
+    if (drawType === 'new') TweenUtil.TweenNew(strokes);
+    else TweenUtil.TweenUpdate(strokes, prevStoryline);
     return new CompoundPath({
       name: name,
       children: strokes,
@@ -82,9 +99,7 @@ class DrawUtil {
       const middleX = (rPoint[0] + lPoint[0]) / 2;
       pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
       if (rPoint[1] !== lPoint[1]) {
-        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${
-          lPoint[0]
-        } ${lPoint[1]} `;
+        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${lPoint[0]} ${lPoint[1]} `;
       } else {
         pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
       }
@@ -97,7 +112,12 @@ class DrawUtil {
 class TweenUtil {
   constructor() {}
 
-  static TweenBetweenTwoPath(path: Path, pathTo: Path, duration = 1000) {
+  static TweenBetweenTwoPath(
+    path: Path,
+    pathTo: Path,
+    cnt: number,
+    duration = 200
+  ) {
     // synchronize two paths
     const segments = path.segments || [];
     const segmentsTo = pathTo.segments || [];
@@ -113,12 +133,60 @@ class TweenUtil {
 
     // tween two paths
     const pathFrom = path.clone({ insert: false }) as Path;
-    path.tween(duration).onUpdate = (e: any) => {
-      path.interpolate(pathFrom, pathTo, e.factor);
+    setTimeout(
+      function(path: Path, pathFrom: Path, pathTo: Path) {
+        path.tween(duration).onUpdate = (e: any) => {
+          path.visible = true;
+          path.interpolate(pathFrom, pathTo, e.factor);
+        };
+      },
+      (cnt + 1) * duration,
+      path,
+      pathFrom,
+      pathTo
+    );
+    return cnt + 1;
+  }
+  static ChangeBetweenTwoPath(path: Path, pathTo: Path, duration = 200) {
+    const segments = path.segments || [];
+    const segmentsTo = pathTo.segments || [];
+    while (segments.length !== segmentsTo.length) {
+      const lastIndex = segments.length - 1;
+      const lastSegment = path.lastSegment;
+      if (segments.length > segmentsTo.length) {
+        path.removeSegment(lastIndex);
+      } else {
+        path.add(lastSegment);
+      }
+    }
+
+    // tween two paths
+    const pathToTo = pathTo.clone({ insert: false }) as Path;
+    pathTo.tween(duration).onUpdate = (e: any) => {
+      pathTo.interpolate(path, pathToTo, e.factor);
+      pathTo.visible = true;
     };
   }
-
-  static TweenFromFirstSegment(path: Path, duration = 1000) {
+  static TweenUpdate(strokes: Path[], prevStoryline: Path[]) {
+    for (let i = 0; i < strokes.length; i++) {
+      if (i < prevStoryline.length) {
+        this.ChangeBetweenTwoPath(prevStoryline[i], strokes[i]);
+      } else {
+        strokes[i].visible = true;
+      }
+    }
+  }
+  static async TweenNew(strokes: Path[], duration = 1000) {
+    let cnt = 0;
+    while (cnt < strokes.length) {
+      cnt = await this.TweenFromFirstSegment(
+        strokes[cnt],
+        cnt,
+        duration / strokes.length
+      );
+    }
+  }
+  static async TweenFromFirstSegment(path: Path, cnt: number, duration = 200) {
     // path.set({ insert: false });
     const pathTo = path.clone({ insert: false }) as Path;
     const firstSegment = path.firstSegment;
@@ -133,7 +201,8 @@ class TweenUtil {
       const moveMat = new Matrix(1, 0, 0, 1, newX - oldX, newY - oldY);
       segment.transform(moveMat);
     });
-    TweenUtil.TweenBetweenTwoPath(path, pathTo, duration);
+    cnt = await TweenUtil.TweenBetweenTwoPath(path, pathTo, cnt, duration);
     pathTo.remove();
+    return cnt;
   }
 }

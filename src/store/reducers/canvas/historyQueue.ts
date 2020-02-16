@@ -6,7 +6,7 @@ import {
 } from '../../../types';
 
 const initialProtoc = {
-  id: 'JurassicPark.xml',
+  id: 'StarWars.xml',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],
