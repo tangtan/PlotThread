@@ -4,10 +4,9 @@ import {
   StoryFlowProtocType,
   StoryFlowResponseType
 } from '../../../types';
-import { stat } from 'fs';
 
 const initialProtoc = {
-  id: 'Redcap.xml',
+  id: 'JurassicPark.xml',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],

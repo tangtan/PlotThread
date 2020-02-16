@@ -8,14 +8,13 @@ import 'antd/dist/antd.css';
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
 // Canvas
-import ToolCanvas from './components/canvas/ToolCanvas';
 import StoryFlowCanvas from './components/canvas/StoryFlowCanvas';
 // Panels
 import AddEventPanel from './components/toolbar/tools/AddEventPanel';
 import StylishPanel from './components/toolbar/tools/StylishPanel';
 import UploadModal from './components/toolbar/tools/UploadModal';
-import EmbellishPanel from './components/toolbar/tools/EmbellishPanel';
-import GlobalPanel from './components/toolbar/tools/GlobalPanel';
+import EmbellishPanel from './components/Setting/EmbellishPanel';
+import GlobalPanel from './components/Setting';
 import { ITool } from './types';
 
 type Props = {};

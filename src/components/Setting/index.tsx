@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './GlobalPanel.css';
-import { DispatchType, StateType } from '../../../../types';
-import { getToolState } from '../../../../store/selectors';
+import './Setting.css';
+import { DispatchType, StateType } from '../../types';
+import { getToolState } from '../../store/selectors';
 import styled from 'styled-components';
 import { Tabs, Slider } from 'antd';
 

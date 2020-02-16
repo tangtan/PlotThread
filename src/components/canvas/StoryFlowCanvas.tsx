@@ -116,8 +116,8 @@ class StoryFlowCanvas extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    const graph = await this.genStoryGraph();
-    this.drawStorylines(graph);
+    // const graph = await this.genStoryGraph();
+    // this.drawStorylines(graph);
     view.onClick = (e: paper.MouseEvent) => {
       this.onMouseClick(e);
     };

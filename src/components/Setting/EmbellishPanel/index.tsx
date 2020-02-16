@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType, ITool } from '../../../../types';
-import { getToolState } from '../../../../store/selectors';
-import { setTool, addVisualObject } from '../../../../store/actions';
+import { StateType, DispatchType, ITool } from '../../../types';
+import { getToolState } from '../../../store/selectors';
+import { setTool, addVisualObject } from '../../../store/actions';
 import { Button, Divider } from 'antd';
 import Muuri from 'muuri';
 import styled from 'styled-components';
