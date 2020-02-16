@@ -2,6 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import { Path, Group } from 'paper';
+import { type } from 'os';
 
 export type ActionType = ActionType<typeof actions>;
 export type DispatchType = typeof store.dispatch;
@@ -33,10 +34,19 @@ export type StoryFlowProtocType = {
   selectedSessions: [];
   orderTable: any[];
   sessionBreaks: SessionBreaksType[];
-  // stylishInfo: StylishInfoType[];
-  // relateInfo: RelateInfoType[];
+  stylishInfo: StylishInfoType[];
+  relateInfo: RelateInfoType[];
 };
-
+export type StylishInfoType = {
+  names: number[];
+  timespan: number[];
+  style: string;
+};
+export type RelateInfoType = {
+  names: number[];
+  timespan: number[];
+  style: string;
+};
 export type SessionInnerGapType = {
   item1: number; // session id
   item2: number; // inner gap
