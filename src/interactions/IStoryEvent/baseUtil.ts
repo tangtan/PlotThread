@@ -1,10 +1,9 @@
 import paper, { Path, Point, project } from 'paper';
 import { StoryGraph } from '../../types';
-import { StoryStore } from './storyStore';
-import { select } from 'd3-selection';
-import { start } from 'repl';
+import { StoryStore } from '../../utils/storyStore';
+import { ColorPicker } from '../../utils/color';
 
-export class BaseSelectionUtil {
+class BaseSelectionUtil {
   utilType: string;
   actorNum: number;
   _downPoint: Point | null;
@@ -151,5 +150,74 @@ export class StoryUtil extends BaseSelectionUtil {
       }
     }
     return flag;
+  }
+}
+
+export class SketchSelectionUtil extends StoryUtil {
+  /*
+   * 自由笔刷工具
+   */
+  constructor(type: string, actorNum: number) {
+    super(type, actorNum);
+  }
+
+  createCurrPath() {
+    if (this.currPath) this.currPath.remove();
+    this.currPath = new Path();
+    if (this._downPoint) this.currPath.add(this._downPoint);
+    this.currPath.strokeWidth = 2;
+    this.currPath.strokeColor = ColorPicker.black;
+  }
+
+  updateCurrPath() {
+    if (this.currPath && this._dragPoint) this.currPath.add(this._dragPoint);
+  }
+}
+
+export class BrushSelectionUtil extends StoryUtil {
+  /*
+   * 直线笔刷工具
+   */
+  constructor(type: string, actorNum: number) {
+    super(type, actorNum);
+  }
+
+  updateCurrPath() {
+    if (this._downPoint && this._dragPoint) {
+      if (this.currPath) this.currPath.remove();
+      this.currPath = new Path.Line(this._downPoint, this._dragPoint);
+      this.currPath.strokeColor = ColorPicker.black;
+      this.currPath.strokeWidth = 2;
+    }
+  }
+}
+
+export class CircleSelectionUtil extends StoryUtil {
+  /*
+   * 自由选框工具
+   */
+  constructor(type: string, actorNum: number) {
+    super(type, actorNum);
+  }
+
+  createCurrPath() {
+    if (this.currPath) this.currPath.remove();
+    this.currPath = new Path({ closed: true });
+    if (this._downPoint) this.currPath.add(this._downPoint);
+    this.currPath.strokeWidth = 2;
+    this.currPath.strokeColor = ColorPicker.black;
+  }
+
+  updateCurrPath() {
+    if (this.currPath && this._dragPoint) this.currPath.add(this._dragPoint);
+  }
+}
+
+export class RectSelectionUtil extends StoryUtil {
+  /*
+   * TODO: 矩形选框工具
+   */
+  constructor(type: string, actorNum: number) {
+    super(type, actorNum);
   }
 }

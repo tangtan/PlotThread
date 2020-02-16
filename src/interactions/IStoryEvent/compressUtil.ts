@@ -1,8 +1,6 @@
-import { StoryUtil } from './baseUtil';
-import { ColorPicker } from '../../utils/color';
-import paper, { Path } from 'paper';
+import { CircleSelectionUtil } from './baseUtil';
 
-export default class CircleSelectionUtil extends StoryUtil {
+export default class CompressUtil extends CircleSelectionUtil {
   constructor(type: string, actorNum: number) {
     super(type, actorNum);
   }
@@ -42,17 +40,5 @@ export default class CircleSelectionUtil extends StoryUtil {
 
   drag(e: paper.MouseEvent) {
     super.mouseDrag(e);
-  }
-
-  createCurrPath() {
-    if (this.currPath) this.currPath.remove();
-    this.currPath = new Path({ closed: true });
-    if (this._downPoint) this.currPath.add(this._downPoint);
-    this.currPath.strokeWidth = 2;
-    this.currPath.strokeColor = ColorPicker.black;
-  }
-
-  updateCurrPath() {
-    if (this.currPath && this._dragPoint) this.currPath.add(this._dragPoint);
   }
 }

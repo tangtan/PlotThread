@@ -1,9 +1,6 @@
-import { StoryUtil } from './baseUtil';
-import { ColorPicker } from '../../utils/color';
-import paper, { Path } from 'paper';
-import { connect } from 'http2';
+import { BrushSelectionUtil } from './baseUtil';
 
-export default class BrushSelectionUtil extends StoryUtil {
+export default class StylishUtil extends BrushSelectionUtil {
   constructor(type: string, actorNum: number) {
     super(type, actorNum);
   }
@@ -46,14 +43,5 @@ export default class BrushSelectionUtil extends StoryUtil {
 
   drag(e: paper.MouseEvent) {
     super.mouseDrag(e);
-  }
-
-  updateCurrPath() {
-    if (this._downPoint && this._dragPoint) {
-      if (this.currPath) this.currPath.remove();
-      this.currPath = new Path.Line(this._downPoint, this._dragPoint);
-      this.currPath.strokeColor = ColorPicker.black;
-      this.currPath.strokeWidth = 2;
-    }
   }
 }

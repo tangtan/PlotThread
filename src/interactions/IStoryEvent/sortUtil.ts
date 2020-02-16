@@ -1,8 +1,7 @@
 import { StoryUtil } from './baseUtil';
-import { ColorPicker } from '../../utils/color';
 import paper, { Group, CompoundPath } from 'paper';
 
-export default class SortSelectionUtil extends StoryUtil {
+export default class SortUtil extends StoryUtil {
   constructor(type: string, actorNum: number) {
     super(type, actorNum);
   }

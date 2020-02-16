@@ -13,10 +13,12 @@ import { iStoryline } from 'iStoryline';
 import ToolCanvas from './ToolCanvas';
 import axios from 'axios';
 
-import BrushUtil from '../../interactions/IStoryEvent/brushSelectionUtil';
-import CircleUtil from '../../interactions/IStoryEvent/circleSelectionUtil';
-import SortUtil from '../../interactions/IStoryEvent/sortSelectionUtil';
-import TemplatenUtil from '../../interactions/IStoryEvent/templateSelectionUtil';
+import SortUtil from '../../interactions/IStoryEvent/sortUtil';
+import TemplatenUtil from '../../interactions/IStoryEvent/templatenUtil';
+import BendUtil from '../../interactions/IStoryEvent/bendUtil';
+import CompressUtil from '../../interactions/IStoryEvent/compressUtil';
+import StylishUtil from '../../interactions/IStoryEvent/stylishUtil';
+import RelateUtil from '../../interactions/IStoryEvent/relateUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -54,17 +56,17 @@ type State = {
   serverUpdateUrl: string;
   serverPredictUrl: string;
   storyLayouter: any;
-  bendUtil: BrushUtil;
-  compressUtil: CircleUtil;
+  bendUtil: BendUtil;
+  compressUtil: CompressUtil;
   sortUtil: SortUtil;
   templateUtil: TemplatenUtil;
-  waveUtil: BrushUtil;
-  zigzagUtil: BrushUtil;
-  bumpUtil: BrushUtil;
-  dashUtil: BrushUtil;
-  knotUtil: BrushUtil;
-  twineUtil: BrushUtil;
-  collideUtil: BrushUtil;
+  waveUtil: StylishUtil;
+  zigzagUtil: StylishUtil;
+  bumpUtil: StylishUtil;
+  dashUtil: StylishUtil;
+  knotUtil: RelateUtil;
+  twineUtil: RelateUtil;
+  collideUtil: RelateUtil;
 };
 
 class StoryFlowCanvas extends Component<Props, State> {
@@ -74,17 +76,17 @@ class StoryFlowCanvas extends Component<Props, State> {
       serverUpdateUrl: 'api/update',
       serverPredictUrl: 'api/predict',
       storyLayouter: new iStoryline(),
-      bendUtil: new BrushUtil('Bend', 1),
-      compressUtil: new CircleUtil('Compress', 0),
+      bendUtil: new BendUtil('Bend', 1),
+      compressUtil: new CompressUtil('Compress', 0),
       sortUtil: new SortUtil('Sort', 0),
       templateUtil: new TemplatenUtil('Template', 0),
-      waveUtil: new BrushUtil('Wave', 1),
-      zigzagUtil: new BrushUtil('Zigzag', 1),
-      bumpUtil: new BrushUtil('Bump', 1),
-      dashUtil: new BrushUtil('Dash', 1),
-      collideUtil: new BrushUtil('Collide', 2),
-      knotUtil: new BrushUtil('Knot', 2),
-      twineUtil: new BrushUtil('Twine', 2)
+      waveUtil: new StylishUtil('Wave', 1),
+      zigzagUtil: new StylishUtil('Zigzag', 1),
+      bumpUtil: new StylishUtil('Bump', 1),
+      dashUtil: new StylishUtil('Dash', 1),
+      collideUtil: new RelateUtil('Collide', 2),
+      knotUtil: new RelateUtil('Knot', 2),
+      twineUtil: new RelateUtil('Twine', 2)
     };
   }
 
