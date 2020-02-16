@@ -4,19 +4,20 @@ import { ITool } from '../../types';
 import './ToolBar.css';
 import { DispatchType, StateType } from '../../types';
 import { setTool } from '../../store/actions';
-import { getToolState, getToolName } from '../../store/selectors';
+import { getToolName } from '../../store/selectors';
 import ReactSVG from 'react-svg';
+import ToolBar from './index';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    toolName: getToolName(state),
-    toolState: getToolState(state, state.toolState.toolName) as boolean
+    toolName: getToolName(state)
   };
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
-    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
+    openTool: (name: string, use: boolean) => dispatch(setTool(name, use)),
+    closeTools: () => dispatch(setTool('FreeMode', true))
   };
 };
 
@@ -25,38 +26,29 @@ type Props = {
 } & ReturnType<typeof mapDispatchToProps> &
   ReturnType<typeof mapStateToProps>;
 
-type State = {
-  isClicked: boolean;
-};
+type State = {};
 
 class ToolItem extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      isClicked: false
-    };
+    this.state = {};
   }
 
   private onClick = () => {
-    // 同步工具状态
-    this.setState({
-      isClicked: this.props.toolState
-    });
-    const name = this.props.toolInfo.name;
-    const use = !this.state.isClicked;
-    this.props.activateTool(name, use);
-    // console.log(name, use);
-    // 同步点击状态
-    if (name === 'AddEvent') {
-      this.props.activateTool('AddEventPop', true); //先弹出二级菜单
+    const lastToolName = this.props.toolName;
+    const currToolName = this.props.toolInfo.name;
+    this.props.closeTools();
+    if (currToolName !== lastToolName) {
+      this.props.openTool(currToolName, true);
     }
-    if (name === 'Stylish') {
-      this.props.activateTool('StylishPop', true); //先弹出二级菜单
-    }
-    this.setState({
-      isClicked: use
-    });
   };
+
+  isShowSubToolBar() {
+    const currentToolName = this.props.toolName;
+    const subToolsName = this.props.toolInfo.subTools.map(_ => _.name);
+    const validToolList = [...subToolsName, this.props.toolInfo.name];
+    return validToolList.includes(currentToolName);
+  }
 
   render() {
     const imgIcon = (
@@ -69,13 +61,17 @@ class ToolItem extends Component<Props, State> {
 
     const svgIcon = <ReactSVG src={this.props.toolInfo.url} />;
 
+    const { subTools } = this.props.toolInfo;
+    const subToolBar =
+      this.props.toolInfo.subTools.length > 0 ? (
+        <ToolBar Left={50} Direction={'vertical'} Tools={subTools} />
+      ) : null;
+
     return (
       <div className="toolbar-icon-wrapper">
         <div
           className={
-            this.props.toolName === this.props.toolInfo.name &&
-            this.state.isClicked &&
-            this.props.toolState
+            this.props.toolName === this.props.toolInfo.name
               ? 'toolbar-icon-box-clicked'
               : 'toolbar-icon-box'
           }
@@ -83,9 +79,7 @@ class ToolItem extends Component<Props, State> {
         >
           {this.props.toolInfo.type === 'svg' ? svgIcon : imgIcon}
         </div>
-        {this.state.isClicked && this.props.toolName != 'Setting' ? (
-          <div className="toolbar-icon-annotation">{this.props.toolName}</div>
-        ) : null}
+        {this.isShowSubToolBar() ? subToolBar : null}
       </div>
     );
   }

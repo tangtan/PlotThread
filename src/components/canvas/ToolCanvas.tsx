@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { addVisualObject, setTool } from '../../store/actions';
-import DrawCanvas from './DrawCanvas';
+import ZoomCanvas from './ZoomCanvas';
 import { getToolState } from '../../store/selectors';
 import { Group } from 'paper';
 
@@ -89,7 +89,7 @@ class ToolCanvas extends Component<Props, State> {
   }
 
   render() {
-    return <DrawCanvas />;
+    return <ZoomCanvas />;
   }
 }
 

@@ -26,11 +26,6 @@
 .settingbar-content-wrapper {
   padding: 10px;
 }
-.settingbar-space-wrapper {
-}
-
-.settingbar-scale-wrapper {
-}
 
 .settingbar-content-title {
   font-size: 16px;
@@ -38,5 +33,28 @@
   margin-bottom: 3px;
 }
 
-.settingbar-scale-width {
+.item.muuri-item-dragging {
+  z-index: 2003;
+}
+
+.item.muuri-item-releasing {
+  z-index: 2002;
+}
+
+.item.muuri-item-hidden {
+  z-index: 2000;
+}
+
+.item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.item-image-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }

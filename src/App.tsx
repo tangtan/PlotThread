@@ -1,20 +1,12 @@
 ///<reference path="../node_modules/@types/react-redux/index.d.ts"/>
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
-// State & Tool bars
+
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
-// Canvas
 import StoryFlowCanvas from './components/canvas/StoryFlowCanvas';
-// Panels
-import AddEventPanel from './components/toolbar/tools/AddEventPanel';
-import StylishPanel from './components/toolbar/tools/StylishPanel';
-import UploadModal from './components/toolbar/tools/UploadModal';
-import EmbellishPanel from './components/Setting/EmbellishPanel';
-import GlobalPanel from './components/Setting';
 import { ITool } from './types';
 
 type Props = {};
@@ -38,7 +30,38 @@ class App extends React.Component<Props, State> {
           name: 'AddEvent',
           type: 'png',
           url: 'icons/event.png',
-          subTools: []
+          subTools: [
+            {
+              name: 'Collide',
+              type: 'png',
+              url: 'icons/collide.png',
+              subTools: []
+            },
+            {
+              name: 'Twine',
+              type: 'png',
+              url: 'icons/twine.png',
+              subTools: []
+            },
+            {
+              name: 'Knot',
+              type: 'png',
+              url: 'icons/merge.png',
+              subTools: []
+            }
+            // {
+            //   name: 'Merge',
+            //   type: 'png',
+            //   url: 'icons/merge.png',
+            //   subTools: []
+            // },
+            // {
+            //   name: 'Split',
+            //   type: 'png',
+            //   url: 'icons/split.png',
+            //   subTools: []
+            // }
+          ]
         },
         {
           name: 'Bend',
@@ -68,14 +91,39 @@ class App extends React.Component<Props, State> {
           name: 'Stylish',
           type: 'png',
           url: 'icons/stroke.png',
-          subTools: []
-        },
-        {
-          name: 'Bellish',
-          type: 'png',
-          url: 'icons/bellish.png',
-          subTools: []
+          subTools: [
+            {
+              name: 'Wave',
+              type: 'png',
+              url: 'icons/wave.png',
+              subTools: []
+            },
+            {
+              name: 'Zigzag',
+              type: 'png',
+              url: 'icons/zigzag.png',
+              subTools: []
+            },
+            {
+              name: 'Dash',
+              type: 'png',
+              url: 'icons/dashed.png',
+              subTools: []
+            },
+            {
+              name: 'Bump',
+              type: 'png',
+              url: 'icons/wiggle.png',
+              subTools: []
+            }
+          ]
         }
+        // {
+        //   name: 'Bellish',
+        //   type: 'png',
+        //   url: 'icons/bellish.png',
+        //   subTools: []
+        // }
       ]
     };
   }
@@ -93,11 +141,6 @@ class App extends React.Component<Props, State> {
         <StoryFlowCanvas />
         <StateBar />
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
-        <UploadModal />
-        <EmbellishPanel />
-        <GlobalPanel />
-        <AddEventPanel centerX={0} centerY={100} />
-        <StylishPanel centerX={0} centerY={100} />
       </div>
     );
   }

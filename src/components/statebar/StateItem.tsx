@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import './Statebar.css';
-import { DispatchType, IMenu } from '../../types';
+import { IMenu } from '../../types';
 import { redoAction, undoAction } from '../../store/actions';
 import store from '../../store';
 

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ToolItem from './ToolItem';
 import './ToolBar.css';
 import styled from 'styled-components';
-import { DispatchType, ITool, StateType } from '../../types';
-import { getToolName } from '../../store/selectors';
+import { ITool } from '../../types';
 import { connect } from 'react-redux';
 
 // add tool png-icons
@@ -19,109 +18,42 @@ type Props = {
   Tools: ITool[];
 };
 
-type State = {
-  tools: ITool[];
-};
+type State = {};
 
 class ToolBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      tools: []
-    };
+    this.state = {};
   }
 
   render() {
-    const transitionFlow =
-      this.props.Left === 0
-        ? 'left'
-        : this.props.Right === 0
-        ? 'right'
-        : this.props.Top === 0
-        ? 'top'
-        : this.props.Bottom === 0
-        ? 'bottom'
-        : 'null';
-    let width, height;
-    let ToolListWrapperLeft,
-      ToolListWrapperRight,
-      ToolListWrapperTop,
-      ToolListWrapperBottom;
-    switch (transitionFlow) {
-      case 'left':
-        width = '50px';
-        height = `calc(100vh - ${this.props.Top}px)`;
-        ToolListWrapperLeft = this.props.Hidden ? -65 : this.props.Left;
-        break;
-      case 'right':
-        width = '50px';
-        height = `calc(100vh - ${this.props.Top}px)`;
-        ToolListWrapperRight = this.props.Hidden ? -65 : this.props.Right;
-        break;
-      case 'top':
-        // width = `calc(100vw - ${this.props.Left}px)`;
-        width = '200px';
-        height = '50px';
-        ToolListWrapperTop = this.props.Hidden ? -65 : this.props.Top;
-
-        break;
-      case 'bottom':
-        width = `calc(100vw - ${this.props.Left}px)`;
-        height = '50px';
-        ToolListWrapperBottom = this.props.Hidden ? -65 : this.props.Bottom;
-        break;
-      default:
-        break;
-    }
-
-    const AnnotationWrapper = styled.div`
-      display: absolute;
-      left: 20px;
-      width: 30px;
-      height: auto;
-      padding: 3px;
-      background: black;
-      color: white;
-    `;
+    const toolBarWidth = `${this.props.Tools.length * 60}px`;
 
     const ToolBarWrapper = styled.div`
-      position: ${
-        this.props.Top === 0 || this.props.Right === 0 ? '' : 'absolute'
-      };
+      position: ${this.props.Top === 0 ? '' : 'absolute'};
       display: flex;
       top: ${this.props.Top}px;
       left: ${this.props.Left}px;
       right: ${this.props.Right}px;
       bottom: ${this.props.Bottom}px;
-      width: ${width};
-      height: ${height};
-
-      &:hover div {
-        left: ${this.props.Left === 0 ? '0px' : ''};
-        right: ${this.props.Right === 0 ? '0px' : ''};
-        top: ${this.props.Top === 0 ? '0px' : ''};
-        bottom ${this.props.Bottom === 0 ? '0px' : ''};
-        transition: ${transitionFlow} 0.5s;
-      }
     `;
     const ToolListWrapper = styled.div`
-      height: ${this.props.Direction === 'vertical' ? '480px' : '50px'};
+      height: ${this.props.Direction === 'vertical' ? toolBarWidth : '50px'};
+      width: ${this.props.Direction === 'horizontal' ? toolBarWidth : '50px'};
       padding: ${this.props.Direction === 'vertical'
         ? '18px 2px 18px 2px'
-        : ''};
+        : '2px 18px 2px 18px'};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
         ? 'row'
         : 'column'};
       align-items: center;
       justify-content: space-between;
-      background: ${this.props.Direction === 'vertical'
-        ? '#34373e'
-        : 'transparent'};
+      background: ${'#34373e'};
       opacity: 1;
       border-radius: ${this.props.Direction === 'vertical'
         ? '0 5px 5px 0'
-        : '0 0 5px 5px'};
+        : '5px 5px 0 0'};
     `;
     const toolList = this.props.Tools.map((tool: ITool, i: number) => (
       <ToolItem key={`tool-item-${i}`} toolInfo={tool} />

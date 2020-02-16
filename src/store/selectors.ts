@@ -11,36 +11,8 @@ export const getToolState = (state: StateType, name: string) => {
   return toolMap.has(name) ? toolMap.get(name) : false;
 };
 
-export const getGroupEventState = (state: StateType, name: string) => {
-  const { groupEventName, groupEventMap } = state.groupEventState;
-  if (name === 'SimpleGroup') {
-    return groupEventName.length === 0
-      ? true
-      : !groupEventMap.get(groupEventName);
-  }
-  return groupEventMap.has(name) ? groupEventMap.get(name) : false;
-};
-
-export const getStyleEventState = (state: StateType, name: string) => {
-  const { styleEventName, styleEventMap } = state.styleEventState;
-  if (name === 'SimpleStyle') {
-    return styleEventName.length === 0
-      ? true
-      : !styleEventMap.get(styleEventName);
-  }
-  return styleEventMap.has(name) ? styleEventMap.get(name) : false;
-};
-
 export const getToolName = (state: StateType) => {
   return state.toolState.toolName;
-};
-
-export const getGroupEventName = (state: StateType) => {
-  return state.groupEventState.groupEventName;
-};
-
-export const getStyleEventName = (state: StateType) => {
-  return state.styleEventState.styleEventName;
 };
 
 // get selected (isTransforming === true || isSelected === true) visual objects

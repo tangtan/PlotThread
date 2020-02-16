@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { project, view, CompoundPath, Item } from 'paper';
+import { project, view } from 'paper';
 import { Button } from 'antd';
-import { StateType, DispatchType, StoryGraph, StoryLine } from '../../types';
+import { StateType, DispatchType, StoryGraph } from '../../types';
 import {
   getCurrentStoryFlowProtoc,
   getCurrentPostRes
 } from '../../store/selectors';
-import { getToolState, getGroupEventState } from '../../store/selectors';
+import { getToolState } from '../../store/selectors';
 import { addVisualObject, addAction, changeAction } from '../../store/actions';
 import { iStoryline } from 'iStoryline';
 import ToolCanvas from './ToolCanvas';
@@ -28,13 +28,13 @@ const mapStateToProps = (state: StateType) => {
     compressState: getToolState(state, 'Compress'),
     sortState: getToolState(state, 'FreeMode'),
     predictState: getToolState(state, 'Reshape'),
-    collideState: getGroupEventState(state, 'Collide'),
-    knotState: getGroupEventState(state, 'Knot'),
-    twineState: getGroupEventState(state, 'Twine'),
-    waveState: getGroupEventState(state, 'Wave'),
-    zigzagState: getGroupEventState(state, 'Zigzag'),
-    bumpState: getGroupEventState(state, 'Bump'),
-    dashState: getGroupEventState(state, 'Dash')
+    collideState: getToolState(state, 'Collide'),
+    knotState: getToolState(state, 'Knot'),
+    twineState: getToolState(state, 'Twine'),
+    waveState: getToolState(state, 'Wave'),
+    zigzagState: getToolState(state, 'Zigzag'),
+    bumpState: getToolState(state, 'Bump'),
+    dashState: getToolState(state, 'Dash')
   };
 };
 
@@ -140,8 +140,8 @@ class StoryFlowCanvas extends Component<Props, State> {
     }
   }
   async componentDidMount() {
-    // const graph = await this.genStoryGraph();
-    // this.drawStorylines(graph);
+    const graph = await this.genStoryGraph();
+    this.drawStorylines(graph);
     view.onClick = (e: paper.MouseEvent) => {
       this.onMouseClick(e);
     };

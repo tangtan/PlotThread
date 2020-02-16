@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button, Icon } from 'antd';
-import { IMenu, ITool } from '../../../types';
+import { IMenu } from '../../../types';
 import StateItem from './../StateItem';
 
 type Props = {

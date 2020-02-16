@@ -9,8 +9,6 @@ export type DispatchType = typeof store.dispatch;
 
 export type StateType = {
   toolState: ToolStateType;
-  groupEventState: GroupEventStateType;
-  styleEventState: StyleEventStateType;
   renderQueue: VisualObject[];
   historyQueue: historyQueueType;
 };
@@ -99,18 +97,6 @@ export type StoryFlowPointsType = {
 export type ToolStateType = {
   toolName: string; // 辅助判断 FreeMode
   toolMap: Map<string, boolean>; // 动态储存工具状态
-};
-
-// Group Event State
-export type GroupEventStateType = {
-  groupEventName: string;
-  groupEventMap: Map<string, boolean>;
-};
-
-// Style Event State
-export type StyleEventStateType = {
-  styleEventName: string;
-  styleEventMap: Map<string, boolean>;
 };
 
 export type ITool = {

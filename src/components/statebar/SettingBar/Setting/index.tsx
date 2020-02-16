@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './Setting.css';
-import { DispatchType, StateType } from '../../types';
-import { getToolState } from '../../store/selectors';
+import { DispatchType, StateType } from '../../../../types';
+import { getToolState } from '../../../../store/selectors';
 import styled from 'styled-components';
 import { Tabs, Slider } from 'antd';
+
+import Embellish from './panels/Embellish';
 
 const { TabPane } = Tabs;
 
@@ -18,11 +20,11 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {};
 };
 
-type Props = {};
+type Props = {} & ReturnType<typeof mapStateToProps>;
+
 type State = {
   top: number;
   width: number;
-  //templates
 };
 
 class GlobalPanel extends Component<Props, State> {
@@ -34,6 +36,7 @@ class GlobalPanel extends Component<Props, State> {
       width: 300
     };
   }
+
   componentDidUpdate() {
     if (this.rootElement.current) {
       const node = this.rootElement.current;
@@ -87,11 +90,11 @@ class GlobalPanel extends Component<Props, State> {
       <div className="panel" ref={this.rootElement}>
         <Nav className="nav">
           <Tabs onChange={this.callback} size="small">
-            <TabPane tab="Settings" key="1">
-              {Settings}
+            <TabPane tab="Shapes" key="1">
+              <Embellish />
             </TabPane>
-            <TabPane tab="Templates" key="2">
-              {/*{templates}*/}
+            <TabPane tab="Settings" key="2">
+              {Settings}
             </TabPane>
           </Tabs>
         </Nav>
