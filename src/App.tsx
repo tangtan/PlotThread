@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
-import StoryFlowCanvas from './components/canvas/StoryFlowCanvas';
+import DrawCanvas from './components/canvas/DrawCanvas';
 import { ITool } from './types';
 
 type Props = {};
@@ -138,7 +138,7 @@ class App extends React.Component<Props, State> {
     const { leftTools } = this.state;
     return (
       <div className="App">
-        <StoryFlowCanvas />
+        <DrawCanvas />
         <StateBar />
         <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
       </div>

@@ -27,7 +27,7 @@ export type StoryFlowProtocType = {
   sessionInnerGaps: SessionInnerGapType[];
   sessionOuterGaps: SessionOuterGapType[];
   majorCharacters: MajorCharactersType[];
-  orders: OrdersType[];
+  orders: OrdersType;
   groupIds: [];
   selectedSessions: [];
   orderTable: any[];

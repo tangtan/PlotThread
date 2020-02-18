@@ -2,11 +2,18 @@ import {
   ActionType,
   historyQueueType,
   StoryFlowProtocType,
-  StoryFlowResponseType
+  StoryFlowResponseType,
+  SessionInnerGapType,
+  SessionOuterGapType,
+  MajorCharactersType,
+  OrdersType,
+  StylishInfoType,
+  RelateInfoType,
+  SessionBreaksType
 } from '../../../types';
 
 const initialProtoc = {
-  id: 'StarWars.xml',
+  id: 'JurassicParkTune.xml',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],
@@ -26,6 +33,35 @@ const initialState: historyQueueType = {
   layoutBackUp: {} as StoryFlowResponseType, // ?
   pointer: 0
 };
+
+export class StoryFlowProtoc {
+  id: string;
+  sessionInnerGap: number;
+  sessionOuterGap: number;
+  sessionInnerGaps: SessionInnerGapType[];
+  sessionOuterGaps: SessionOuterGapType[];
+  majorCharacters: MajorCharactersType[];
+  orders: OrdersType;
+  groupIds: [];
+  selectedSessions: [];
+  sessionBreaks: SessionBreaksType[];
+  stylishInfo: StylishInfoType[];
+  relateInfo: RelateInfoType[];
+  constructor(prevProtoc: StoryFlowProtocType) {
+    this.id = prevProtoc.id;
+    this.sessionInnerGap = prevProtoc.sessionInnerGap;
+    this.sessionOuterGap = prevProtoc.sessionOuterGap;
+    this.sessionInnerGaps = prevProtoc.sessionInnerGaps;
+    this.sessionOuterGaps = prevProtoc.sessionOuterGaps;
+    this.majorCharacters = prevProtoc.majorCharacters;
+    this.orders = prevProtoc.orders;
+    this.groupIds = prevProtoc.groupIds;
+    this.selectedSessions = prevProtoc.selectedSessions;
+    this.sessionBreaks = prevProtoc.sessionBreaks;
+    this.stylishInfo = prevProtoc.stylishInfo;
+    this.relateInfo = prevProtoc.relateInfo;
+  }
+}
 
 export default (state = initialState, action: ActionType) => {
   const { protocQueue, layoutBackUp } = state;
