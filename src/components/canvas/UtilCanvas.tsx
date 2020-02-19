@@ -136,12 +136,18 @@ class UtilCanvas extends Component<Props, State> {
   onMouseUp(e: paper.MouseEvent) {
     if (this.props.compressState) {
       const [names, span] = this.state.compressUtil.up(e);
-      let newProcotol = this.deepCopy(this.props.storyProtoc);
+      let newProtocol = this.deepCopy(this.props.storyProtoc);
       if (span) {
-        for (let i = 0; i < span.length; i++) {
-          newProcotol.sessionInnerGaps.push({ item1: span[i], item2: 10 });
+        if (span.length > 1) {
+          newProtocol.sessionOuterGaps.push({
+            item1: { item1: span[0], item2: span[1] },
+            item2: { item1: 100, item2: -1 }
+          });
+        } else {
+          newProtocol.sessionInnerGaps.push({ item1: span[0], item2: 10 });
         }
-        this.props.addAction(newProcotol);
+        newProtocol.interaction = 'compress';
+        this.props.addAction(newProtocol);
       }
     }
     if (this.props.bendState) {
@@ -169,15 +175,24 @@ class UtilCanvas extends Component<Props, State> {
             newProtocol.majorCharacters.push({ item1: nameIDs[i], item2: tmp });
           }
         }
+        newProtocol.interaction = 'bend';
         this.props.addAction(newProtocol);
       }
     }
     if (this.props.sortState) {
       const param = this.state.sortUtil.up(e);
       if (param) {
-        const [ids, span] = param;
         let newProtocol = this.deepCopy(this.props.storyProtoc);
-        newProtocol.orders.push(ids);
+        if (typeof param[0] === 'number') {
+          const [id, order] = param;
+          order.push(0); //rabbit的order
+          newProtocol.orderTable.push({ item1: id, item2: order });
+        } else {
+          const [ids, span] = param;
+          newProtocol.orders.push(ids);
+          this.props.addAction(newProtocol);
+        }
+        newProtocol.interaction = 'sort';
         this.props.addAction(newProtocol);
       }
     }
@@ -201,13 +216,14 @@ class UtilCanvas extends Component<Props, State> {
         ? this.state.dashUtil.up(e)
         : null;
       if (span && nameIDs) {
-        let newProcotol = this.deepCopy(this.props.storyProtoc);
-        newProcotol.stylishInfo.push({
+        let newProtocol = this.deepCopy(this.props.storyProtoc);
+        newProtocol.stylishInfo.push({
           names: nameIDs,
           timespan: span,
           style: stylishName
         });
-        this.props.addAction(newProcotol);
+        newProtocol.interaction = 'stylish';
+        this.props.addAction(newProtocol);
       }
     }
     const relateName = this.props.collideState
@@ -226,13 +242,14 @@ class UtilCanvas extends Component<Props, State> {
         ? this.state.twineUtil.up(e)
         : null;
       if (span && nameIDs) {
-        let newProcotol = this.deepCopy(this.props.storyProtoc);
-        newProcotol.relateInfo.push({
+        let newProtocol = this.deepCopy(this.props.storyProtoc);
+        newProtocol.relateInfo.push({
           names: nameIDs,
           timespan: span,
           style: relateName
         });
-        this.props.addAction(newProcotol);
+        newProtocol.interaction = 'relate';
+        this.props.addAction(newProtocol);
       }
     }
   }

@@ -17,11 +17,9 @@ export default class CompressUtil extends CircleSelectionUtil {
     if (this.currPath && this.currPath.bounds) {
       const bounds = this.currPath.bounds;
       const cPoint = bounds.center;
-      const sPoint = bounds.topLeft;
-      const ePoint = bounds.bottomRight;
+      const sPoint = bounds.topCenter;
+      const ePoint = bounds.bottomCenter;
       if (sPoint && ePoint && cPoint && this.storyStore) {
-        const sTime = this.getStartTime(sPoint);
-        const eTime = this.getEndTime(ePoint);
         const sessions = this.getSessions(sPoint, ePoint);
         const names = this.storyStore.names.filter(name =>
           this.isInSelectionRegion(name, sPoint, ePoint)

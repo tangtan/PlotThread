@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StateType, DispatchType, StoryGraph } from '../../types';
+import { StateType, DispatchType, StoryGraph, StyleConfig } from '../../types';
 import { Button } from 'antd';
 import { iStoryline } from 'iStoryline';
 import UtilCanvas from './UtilCanvas';
@@ -70,7 +70,8 @@ class DrawCanvas extends Component<Props, State> {
         storylinePath: graph.paths[i],
         prevStoryline:
           i < storylines.length ? storylines[i].lastChild.children : [],
-        animationType: 'creation'
+        animationType: 'creation',
+        segmentIDs: []
       });
     }
   }
@@ -80,18 +81,44 @@ class DrawCanvas extends Component<Props, State> {
     );
 
     storylines.forEach(storyline => storyline.remove());
-
     // draw new graph
+    const animationType =
+      this.props.storyProtoc.interaction === 'stylish' ||
+      this.props.storyProtoc.interaction === 'relate'
+        ? 'regionalTransition'
+        : 'globalTransition';
     for (let i = 0; i < graph.paths.length; i++) {
       if (graph.names[i] === 'RABBIT') continue;
-      this.props.addVisualObject('storyline', {
-        storylineName: graph.names[i],
-        storylinePath: graph.paths[i],
-        prevStoryline:
-          i < storylines.length ? storylines[i].lastChild.children : [],
-        animationType: 'transition'
-      });
+      if (animationType === 'regionalTransition') {
+        this.props.addVisualObject('storyline', {
+          storylineName: graph.names[i],
+          storylinePath: graph.paths[i],
+          prevStoryline:
+            i < storylines.length ? storylines[i].lastChild.children : [],
+          animationType: animationType,
+          segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i])
+        });
+      } else {
+        this.props.addVisualObject('storyline', {
+          storylineName: graph.names[i],
+          storylinePath: graph.paths[i],
+          prevStoryline:
+            i < storylines.length ? storylines[i].lastChild.children : [],
+          animationType: animationType,
+          segmentIDs: []
+        });
+      }
     }
+  }
+  getSegmentIDs(styleConfig: StyleConfig[], name: string) {
+    if (!styleConfig) return [];
+    let ret = [];
+    for (let i = 0; i < styleConfig.length; i++) {
+      if (styleConfig[i].name === name) {
+        ret.push(styleConfig[i].segmentID);
+      }
+    }
+    return ret;
   }
   async componentDidMount() {
     const graph = await this.genStoryGraph();

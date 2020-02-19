@@ -13,7 +13,7 @@ import {
 } from '../../../types';
 
 const initialProtoc = {
-  id: 'JurassicParkTune.xml',
+  id: 'StarWars.xml',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],
@@ -25,7 +25,8 @@ const initialProtoc = {
   orderTable: [],
   sessionBreaks: [],
   stylishInfo: [],
-  relateInfo: []
+  relateInfo: [],
+  interaction: ''
 } as StoryFlowProtocType;
 
 const initialState: historyQueueType = {

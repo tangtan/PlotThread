@@ -29,11 +29,11 @@ export default class MoveEvent extends BaseMouseEvent {
 
   drag(e: any) {
     super.drag(e);
-    //   if (this.isCreating) return;
-    //   if (this.isTransforming) return;
-    //   this.isSelected = true;
-    //   // 平移 Visual Object 及其 selectionBounds
-    //   this.visualObj.translate(e.delta);
-    //   this.visualObj.data.selectionBounds.translate(e.delta);
+    if (this.isCreating) return;
+    if (this.isTransforming) return;
+    this.isSelected = true;
+    // 平移 Visual Object 及其 selectionBounds
+    this.visualObj.translate(e.delta);
+    this.visualObj.data.selectionBounds.translate(e.delta);
   }
 }

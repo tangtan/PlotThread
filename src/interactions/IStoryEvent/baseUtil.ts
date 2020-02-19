@@ -100,7 +100,43 @@ export class StoryUtil extends BaseSelectionUtil {
     const startY = sPoint.y as number;
     const endX = ePoint.x as number;
     const endY = ePoint.y as number;
-    const sessions = this.storyStore.getSessions(startX, startY, endX, endY);
+    let sessions = [];
+    let sSession = this.storyStore.getSessionID(startX, startY);
+    let rSession = this.storyStore.getSessionID(endX, endY);
+    if (sSession !== rSession) {
+      let mSession = sSession;
+      let rate = 50;
+      for (let i = 1; i < rate; i++) {
+        mSession = this.storyStore.getSessionID(
+          startX,
+          startY + ((endY - startY) / rate) * i
+        );
+        if (mSession !== sSession) {
+          rSession = mSession;
+          break;
+        }
+      }
+    }
+    // if(sSession !== rSession){
+    //   let mSession = -1;
+    //   let rate = 100;
+    //   let l = 1,r = rate - 1;
+    //   let ansSession = sSession;
+    //   while(l <= r){
+    //     let mid = (l + r) >> 1;
+    //     let tmpSession = this.storyStore.getSessionID(startX,startY + (endY - startY) / rate * mid);
+    //     if(tmpSession === sSession){
+    //       l = mid + 1;
+    //     }
+    //     else{
+    //       r = mid - 1;
+    //       ansSession = tmpSession;
+    //     }
+    //   }
+    //   rSession = ansSession;
+    // }
+    if (sSession !== -1) sessions.push(sSession);
+    if (rSession !== -1 && rSession !== sSession) sessions.push(rSession);
     return sessions;
   }
 

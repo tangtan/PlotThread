@@ -34,6 +34,7 @@ export type StoryFlowProtocType = {
   sessionBreaks: SessionBreaksType[];
   stylishInfo: StylishInfoType[];
   relateInfo: RelateInfoType[];
+  interaction: string;
 };
 export type StylishInfoType = {
   names: number[];
@@ -132,6 +133,12 @@ export type StoryGraph = {
   names: StoryName[];
   nodes: StorySegment[];
   paths: StoryLine[];
+  styleConfig: StyleConfig[];
+};
+export type StyleConfig = {
+  name: string;
+  segmentID: number;
+  styles: string[];
 };
 export type PathGroup = Path[];
 

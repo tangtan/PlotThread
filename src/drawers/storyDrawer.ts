@@ -21,6 +21,7 @@ export default class StoryDrawer extends BaseDrawer {
   storylinePath: StoryLine;
   prevStoryline: Path[];
   animationType: string;
+  segmentIDs: number[];
   constructor(cfg: any) {
     super(cfg);
     this.cfg = cfg || {};
@@ -28,6 +29,7 @@ export default class StoryDrawer extends BaseDrawer {
     this.storylinePath = cfg.storylinePath || [];
     this.prevStoryline = cfg.prevStoryline || [];
     this.animationType = cfg.animationType || 'creation';
+    this.segmentIDs = cfg.segmentIDs || [];
   }
   _drawVisualObjects(
     type: string,
@@ -35,12 +37,19 @@ export default class StoryDrawer extends BaseDrawer {
     x0: number,
     y0: number
   ) {
-    const { storylineName, storylinePath, prevStoryline, animationType } = this;
+    const {
+      storylineName,
+      storylinePath,
+      prevStoryline,
+      animationType,
+      segmentIDs
+    } = this;
     const compoundPath = this._drawStorySegments(
       storylineName,
       storylinePath,
       prevStoryline,
-      animationType
+      animationType,
+      segmentIDs
     );
     const textLabels = this._drawStoryName(storylineName, compoundPath);
     return [...textLabels, compoundPath];
@@ -50,104 +59,23 @@ export default class StoryDrawer extends BaseDrawer {
     name: StoryName,
     storyline: StoryLine,
     prevStoryline: Path[],
-    animationType: string
+    animationType: string,
+    segmentIDs: number[]
   ) {
     const strokes = storyline.map((storySegment: StorySegment) => {
       const pathStr = DrawUtil.getPathStr('sketch', storySegment);
       let path = new Path(pathStr);
       path.simplify();
-      path.onMouseDrag = (e: paper.MouseEvent) => {
-        this.dragMouse(e, path);
-      };
-      path.onMouseEnter = () => {
-        path.selected = true;
-      };
-      path.onMouseLeave = () => {
-        path.selected = false;
-      };
       path.visible = false;
       return path;
     });
-    BaseAnimator.Animate(animationType, strokes, prevStoryline);
+    BaseAnimator.Animate(animationType, strokes, prevStoryline, segmentIDs);
     return new CompoundPath({
       name: name,
       children: strokes,
       strokeWidth: this.strokeWidth,
       strokeColor: this.strokeColor
     });
-  }
-  dragMouse(e: paper.MouseEvent, path: Path, limits = 6) {
-    if (path.segments) {
-      if (path.segments.length < limits) {
-        this._smoothDragPath(path, path.firstSegment, 0);
-        this._smoothDragPath(path, path.lastSegment, 1);
-      }
-      for (let i = 2; i < path.segments.length - 2; i++) {
-        let segment = path.segments[i];
-        let deltaY = e.delta ? (e.delta.y ? e.delta.y : 0) : 0;
-        if (segment.point) {
-          let prevY = segment.point.y as number;
-          segment.point.y = prevY + deltaY;
-        }
-      }
-      let firstSegment = path.firstSegment;
-      let nxtSeg = firstSegment.next.next;
-      let pathStr = DrawUtil.getSmoothPathStrBetween(firstSegment, nxtSeg);
-      this._shiftDragPath(pathStr, path, 0);
-
-      let lastSegment = path.lastSegment;
-      let prvSeg = lastSegment.previous.previous;
-      pathStr = DrawUtil.getSmoothPathStrBetween(prvSeg, lastSegment);
-      this._shiftDragPath(pathStr, path, 1);
-    }
-  }
-  _shiftDragPath(pathStr: string, path: Path, type: number) {
-    let newPath = new Path(pathStr);
-    if (newPath.segments && path.segments) {
-      if (type) {
-        path.removeSegment(path.segments.length - 1);
-        path.removeSegment(path.segments.length - 1);
-        path.add(new Segment(newPath.segments[1]));
-        path.add(new Segment(newPath.segments[2]));
-      } else {
-        path.removeSegment(0);
-        path.removeSegment(0);
-        path.insert(0, new Segment(newPath.segments[2]));
-        path.insert(0, new Segment(newPath.segments[1]));
-      }
-    }
-    newPath.remove();
-  }
-  _smoothDragPath(
-    path: Path,
-    segment: Segment,
-    type: number,
-    smoothRate = 0.4
-  ) {
-    let middleX = 0;
-    let middleY = 0;
-    if (segment.point) {
-      let prevX = segment.point.x as number;
-      let prevY = segment.point.y as number;
-      let nxtSeg = type ? segment.previous : segment.next;
-      let deltaX = 0;
-      if (nxtSeg) {
-        if (nxtSeg.point) {
-          let nextX = nxtSeg.point.x as number;
-          deltaX = nextX - prevX;
-          segment.point.x = prevX + deltaX * smoothRate;
-          middleX = (prevX + segment.point.x) / 2;
-          middleY = prevY;
-          if (type) {
-            path.add(new Point(middleX, middleY));
-            path.add(new Point(prevX, prevY));
-          } else {
-            path.insert(0, new Point(middleX, middleY));
-            path.insert(0, new Point(prevX, prevY));
-          }
-        }
-      }
-    }
   }
   _drawStoryName(name: StoryName, path: CompoundPath) {
     const firstSegment = path.firstSegment.point || new Point(0, 0);
@@ -175,22 +103,6 @@ class DrawUtil {
     let i, len;
     for (i = 1, len = points.length; i < len; i++) {
       pathStr += `L ${points[i][0]} ${points[i][1]}`;
-    }
-    return pathStr;
-  }
-  static getSmoothPathStrBetween(lSegment: Segment, rSegment: Segment) {
-    let pathStr = ``;
-    if (lSegment.point) {
-      let prevX = lSegment.point.x as number;
-      let prevY = lSegment.point.y as number;
-      if (rSegment.point) {
-        let nextX = rSegment.point.x as number;
-        let nextY = rSegment.point.y as number;
-        const middleX = (nextX + prevX) / 2;
-        pathStr = `M ${prevX - 10} ${prevY} L ${prevX} ${prevY}`;
-        pathStr += `C ${middleX} ${prevY} ${middleX} ${nextY} ${nextX} ${nextY} L ${nextX +
-          10} ${nextY}`;
-      }
     }
     return pathStr;
   }

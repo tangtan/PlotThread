@@ -33,6 +33,9 @@ export class StoryStore {
   ) {
     return this.graph.getStorySegment(storylineID, storySegmentID);
   }
+  getStorySegmentIDByTime(storylineID: number | string, timespan: any) {
+    return this.graph.getStorySegmentIDByTime(storylineID, timespan);
+  }
   getStoryline(x: number | string, y: number | string) {
     return this.graph.getStoryline(x, y);
   }

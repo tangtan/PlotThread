@@ -2,10 +2,18 @@ import { Path, Point, Matrix } from 'paper';
 
 export default class BaseAnimator {
   constructor() {}
-  static Animate(type: string, strokes: Path[], prevStrokes: Path[]) {
+  static Animate(
+    type: string,
+    strokes: Path[],
+    prevStrokes: Path[],
+    segmentIDs: number[]
+  ) {
     switch (type) {
-      case 'transition':
-        this.Transit(strokes, prevStrokes);
+      case 'regionalTransition':
+        this.RegionalTransit(strokes, prevStrokes, segmentIDs);
+        break;
+      case 'globalTransition':
+        this.GlobalTransit(strokes, prevStrokes);
         break;
       case 'creation':
         this.Create(strokes);
@@ -14,13 +22,30 @@ export default class BaseAnimator {
         break;
     }
   }
-  static Transit(strokes: Path[], prevStoryline: Path[]) {
+  static RegionalTransit(
+    strokes: Path[],
+    prevStoryline: Path[],
+    segmentIDs: number[]
+  ) {
+    let flag = [];
+    for (let i = 0; i < strokes.length; i++) flag[i] = 0;
+    for (let i = 0; i < segmentIDs.length; i++) {
+      this.TransitBetweenTwoPath(
+        prevStoryline[segmentIDs[i]],
+        strokes[segmentIDs[i]]
+      );
+      flag[i] = 1;
+    }
+
     for (let i = 0; i < strokes.length; i++) {
-      if (i < prevStoryline.length) {
-        this.TransitBetweenTwoPath(prevStoryline[i], strokes[i]);
-      } else {
+      if (!flag[i]) {
         strokes[i].visible = true;
       }
+    }
+  }
+  static GlobalTransit(strokes: Path[], prevStoryline: Path[]) {
+    for (let i = 0; i < strokes.length; i++) {
+      this.TransitBetweenTwoPath(prevStoryline[i], strokes[i]);
     }
   }
   static async Create(strokes: Path[], duration = 1000) {
