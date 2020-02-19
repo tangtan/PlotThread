@@ -1,13 +1,13 @@
 import { ActionType, VisualObject } from '../../../types';
-import { Group, Rectangle, PointText, Path, Segment, Point } from 'paper';
+import { Group, Rectangle, Path, Segment, Point } from 'paper';
 import StoryDrawer from '../../../drawers/storyDrawer';
 import ShapeDrawer from '../../../drawers/shapeDrawer';
 import ImageDrawer from '../../../drawers/imageDrawer';
 import PathDrawer from '../../../drawers/pathDrawer';
 import TextDrawer from '../../../drawers/textDrawer';
 import IMouseEvent from '../../../interactions/IMouseEvent';
+import dragSegment from '../../../interactions/IMouseEvent/segmentEvent';
 import { drawSelectionBounds } from '../../../drawers/baseDrawer';
-import { type } from 'os';
 
 const initialState: VisualObject[] = [];
 const errorMsg = 'Incorrect render type';
@@ -85,6 +85,7 @@ const onStoryline = (storyline: Group) => {
   storyline.data.selectionBounds = drawSelectionBounds(bounds);
   storyline.data.selectionBounds.visible = storyline.data.isTransforming;
   const mouseUtil = new IMouseEvent(storyline);
+  // storyline nameLabel 全局排序
   if (textLabel) {
     textLabel.onClick = (e: any) => {
       mouseUtil.click(e);
@@ -93,11 +94,13 @@ const onStoryline = (storyline: Group) => {
       mouseUtil.drag(e);
     };
   }
+  // storyline segments 局部排序
   if (strokes) {
     strokes.forEach(path => {
       path.onMouseDrag = (e: paper.MouseEvent) => {
-        dragMouse(e, path as Path);
+        dragSegment(e, path as Path);
       };
+      // TODO: easy segment dragger
       path.onMouseEnter = () => {
         path.selected = true;
       };
@@ -107,95 +110,7 @@ const onStoryline = (storyline: Group) => {
     });
   }
 };
-function dragMouse(e: paper.MouseEvent, path: Path, limits = 6) {
-  if (path.segments) {
-    if (path.segments.length < limits) {
-      smoothDragPath(path, path.firstSegment, 0);
-      smoothDragPath(path, path.lastSegment, 1);
-    }
-    for (let i = 2; i < path.segments.length - 2; i++) {
-      let segment = path.segments[i];
-      let deltaY = e.delta ? (e.delta.y ? e.delta.y : 0) : 0;
-      if (segment.point) {
-        let prevY = segment.point.y as number;
-        segment.point.y = prevY + deltaY;
-      }
-    }
-    let firstSegment = path.firstSegment;
-    let nxtSeg = firstSegment.next.next;
-    let pathStr = getSmoothPathStrBetween(firstSegment, nxtSeg);
-    shiftDragPath(pathStr, path, 0);
 
-    let lastSegment = path.lastSegment;
-    let prvSeg = lastSegment.previous.previous;
-    pathStr = getSmoothPathStrBetween(prvSeg, lastSegment);
-    shiftDragPath(pathStr, path, 1);
-  }
-}
-function shiftDragPath(pathStr: string, path: Path, type: number) {
-  let newPath = new Path(pathStr);
-  if (newPath.segments && path.segments) {
-    if (type) {
-      path.removeSegment(path.segments.length - 1);
-      path.removeSegment(path.segments.length - 1);
-      path.add(new Segment(newPath.segments[1]));
-      path.add(new Segment(newPath.segments[2]));
-    } else {
-      path.removeSegment(0);
-      path.removeSegment(0);
-      path.insert(0, new Segment(newPath.segments[2]));
-      path.insert(0, new Segment(newPath.segments[1]));
-    }
-  }
-  newPath.remove();
-}
-function getSmoothPathStrBetween(lSegment: Segment, rSegment: Segment) {
-  let pathStr = ``;
-  if (lSegment.point) {
-    let prevX = lSegment.point.x as number;
-    let prevY = lSegment.point.y as number;
-    if (rSegment.point) {
-      let nextX = rSegment.point.x as number;
-      let nextY = rSegment.point.y as number;
-      const middleX = (nextX + prevX) / 2;
-      pathStr = `M ${prevX - 10} ${prevY} L ${prevX} ${prevY}`;
-      pathStr += `C ${middleX} ${prevY} ${middleX} ${nextY} ${nextX} ${nextY} L ${nextX +
-        10} ${nextY}`;
-    }
-  }
-  return pathStr;
-}
-function smoothDragPath(
-  path: Path,
-  segment: Segment,
-  type: number,
-  smoothRate = 0.4
-) {
-  let middleX = 0;
-  let middleY = 0;
-  if (segment.point) {
-    let prevX = segment.point.x as number;
-    let prevY = segment.point.y as number;
-    let nxtSeg = type ? segment.previous : segment.next;
-    let deltaX = 0;
-    if (nxtSeg) {
-      if (nxtSeg.point) {
-        let nextX = nxtSeg.point.x as number;
-        deltaX = nextX - prevX;
-        segment.point.x = prevX + deltaX * smoothRate;
-        middleX = (prevX + segment.point.x) / 2;
-        middleY = prevY;
-        if (type) {
-          path.add(new Point(middleX, middleY));
-          path.add(new Point(prevX, prevY));
-        } else {
-          path.insert(0, new Point(middleX, middleY));
-          path.insert(0, new Point(prevX, prevY));
-        }
-      }
-    }
-  }
-}
 export default (state = initialState, action: ActionType) => {
   const newState = [...state];
   switch (action.type) {
@@ -212,7 +127,8 @@ export default (state = initialState, action: ActionType) => {
       const { array, cfgs } = action.payload;
       array.forEach((type, index) => {
         const object = drawVisualObject(type, cfgs[index]);
-        onVisualObject(object);
+        if (type === 'storyline') onStoryline(object);
+        else onVisualObject(object);
         if (object) {
           newState.push(object);
         }

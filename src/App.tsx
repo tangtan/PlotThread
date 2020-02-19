@@ -64,30 +64,6 @@ class App extends React.Component<Props, State> {
           ]
         },
         {
-          name: 'Bend',
-          type: 'png',
-          url: 'icons/bend.png',
-          subTools: []
-        },
-        {
-          name: 'Compress',
-          type: 'png',
-          url: 'icons/expand.png',
-          subTools: []
-        },
-        {
-          name: 'Reshape',
-          type: 'png',
-          url: 'icons/reshape.png',
-          subTools: []
-        },
-        {
-          name: 'Text',
-          type: 'png',
-          url: 'icons/label.png',
-          subTools: []
-        },
-        {
           name: 'Stylish',
           type: 'png',
           url: 'icons/stroke.png',
@@ -117,6 +93,30 @@ class App extends React.Component<Props, State> {
               subTools: []
             }
           ]
+        },
+        {
+          name: 'Bend',
+          type: 'png',
+          url: 'icons/bend.png',
+          subTools: []
+        },
+        {
+          name: 'Compress',
+          type: 'png',
+          url: 'icons/expand.png',
+          subTools: []
+        },
+        {
+          name: 'Reshape',
+          type: 'png',
+          url: 'icons/reshape.png',
+          subTools: []
+        },
+        {
+          name: 'Text',
+          type: 'png',
+          url: 'icons/label.png',
+          subTools: []
         }
         // {
         //   name: 'Bellish',
@@ -140,7 +140,12 @@ class App extends React.Component<Props, State> {
       <div className="App">
         <DrawCanvas />
         <StateBar />
-        <ToolBar Top={200} Left={0} Direction={'vertical'} Tools={leftTools} />
+        <ToolBar
+          Bottom={0}
+          Left={500}
+          Direction={'horizontal'}
+          Tools={leftTools}
+        />
       </div>
     );
   }

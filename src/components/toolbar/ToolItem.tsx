@@ -64,7 +64,7 @@ class ToolItem extends Component<Props, State> {
     const { subTools } = this.props.toolInfo;
     const subToolBar =
       this.props.toolInfo.subTools.length > 0 ? (
-        <ToolBar Left={50} Direction={'vertical'} Tools={subTools} />
+        <ToolBar Top={-50} Direction={'horizontal'} Tools={subTools} />
       ) : null;
 
     return (

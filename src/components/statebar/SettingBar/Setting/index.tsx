@@ -4,9 +4,11 @@ import './Setting.css';
 import { DispatchType, StateType } from '../../../../types';
 import { getToolState } from '../../../../store/selectors';
 import styled from 'styled-components';
-import { Tabs, Slider } from 'antd';
+import { Tabs } from 'antd';
 
+import Template from './panels/Template';
 import Embellish from './panels/Embellish';
+import GlobalConfig from './panels/GlobalConfig';
 
 const { TabPane } = Tabs;
 
@@ -33,7 +35,7 @@ class GlobalPanel extends Component<Props, State> {
     super(props);
     this.state = {
       top: 50,
-      width: 300
+      width: 350
     };
   }
 
@@ -44,9 +46,8 @@ class GlobalPanel extends Component<Props, State> {
     }
   }
 
-  private onChange = () => {};
-
   private callback = () => {};
+
   render() {
     const { top, width } = this.state;
     // 隔离内部组件与Wrapper
@@ -60,41 +61,19 @@ class GlobalPanel extends Component<Props, State> {
       background: #34373e;
       text-align: left;
     `;
-    const HeightIcon = (
-      <img className="statebar-icon-img" src="icons/height.png" alt="height" />
-    );
-    const WidthIcon = (
-      <img className="statebar-icon-img" src="icons/width.png" alt="width" />
-    );
-    const Settings = (
-      <div className="settingbar-content-wrapper">
-        <div className="settingbar-space-wrapper">
-          <div className="settingbar-content-title">Space</div>
-          <Slider max={100} min={0} onChange={this.onChange} />
-        </div>
-        <div className="settingbar-scale-wrapper">
-          <div className="settingbar-content-title">Scale</div>
-          <div className="settingbar-scale-width">
-            {WidthIcon}
-            <Slider max={100} min={0} onChange={this.onChange} />
-          </div>
-          <div className="settingbar-scale-height">
-            {HeightIcon}
-            <Slider max={100} min={0} onChange={this.onChange} />
-          </div>
-        </div>
-      </div>
-    );
 
     return (
       <div className="panel" ref={this.rootElement}>
         <Nav className="nav">
           <Tabs onChange={this.callback} size="small">
-            <TabPane tab="Shapes" key="1">
+            <TabPane tab="Template" key="1">
+              <Template />
+            </TabPane>
+            <TabPane tab="Shapes" key="2">
               <Embellish />
             </TabPane>
-            <TabPane tab="Settings" key="2">
-              {Settings}
+            <TabPane tab="Settings" key="3">
+              <GlobalConfig />
             </TabPane>
           </Tabs>
         </Nav>
