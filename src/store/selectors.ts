@@ -5,7 +5,9 @@ import { project, Color } from 'paper';
 export const getToolState = (state: StateType, name: string) => {
   const { toolName, toolMap } = state.toolState;
   if (name === 'FreeMode') {
-    return toolName.length === 0 ? true : !toolMap.get(toolName);
+    return toolName.length === 0 || toolName === 'FreeMode'
+      ? true
+      : !toolMap.get(toolName);
   }
 
   return toolMap.has(name) ? toolMap.get(name) : false;
@@ -88,7 +90,19 @@ export const getCurrentStoryFlowProtoc = (state: StateType) => {
   const { protocQueue, pointer } = state.historyQueue;
   return protocQueue[pointer];
 };
-
-export const getCurrentPostRes = (state: StateType) => {
-  return state.historyQueue.layoutBackUp;
+export const getCurrentStoryFlowLayout = (state: StateType) => {
+  const { layoutQueue, pointer } = state.historyQueue;
+  return layoutQueue[pointer];
+};
+export const getCurrentPredictGraph = (state: StateType) => {
+  const { predictQueue, predictPointer } = state.historyQueue;
+  return predictQueue[predictPointer];
+};
+export const getCurrentActionType = (state: StateType) => {
+  const { actionTypeQueue, pointer } = state.historyQueue;
+  return actionTypeQueue[pointer];
+};
+export const getCurrentPredictQueue = (state: StateType) => {
+  const { predictQueue } = state.historyQueue;
+  return predictQueue;
 };

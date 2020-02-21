@@ -6,8 +6,11 @@ import ImageDrawer from '../../../drawers/imageDrawer';
 import PathDrawer from '../../../drawers/pathDrawer';
 import TextDrawer from '../../../drawers/textDrawer';
 import IMouseEvent from '../../../interactions/IMouseEvent';
-import dragSegment from '../../../interactions/IMouseEvent/segmentEvent';
+import dragSegment, {
+  updateSegment
+} from '../../../interactions/IMouseEvent/segmentEvent';
 import { drawSelectionBounds } from '../../../drawers/baseDrawer';
+import { updateLayoutAction } from '../../actions';
 
 const initialState: VisualObject[] = [];
 const errorMsg = 'Incorrect render type';
@@ -96,9 +99,18 @@ const onStoryline = (storyline: Group) => {
   }
   // storyline segments 局部排序
   if (strokes) {
-    strokes.forEach(path => {
+    for (let i = 0; i < strokes.length; i++) {
+      let path = strokes[i];
+      path.data.segmentID = i;
       path.onMouseDrag = (e: paper.MouseEvent) => {
         dragSegment(e, path as Path);
+      };
+      path.onMouseDown = (e: paper.MouseEvent) => {
+        path.data.downPoint = e.point;
+      };
+      path.onMouseUp = (e: paper.MouseEvent) => {
+        path.data.dragPoint = e.point;
+        updateSegment(path as Path);
       };
       // TODO: easy segment dragger
       path.onMouseEnter = () => {
@@ -107,7 +119,7 @@ const onStoryline = (storyline: Group) => {
       path.onMouseLeave = () => {
         path.selected = false;
       };
-    });
+    }
   }
 };
 

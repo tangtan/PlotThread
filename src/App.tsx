@@ -21,11 +21,29 @@ class App extends React.Component<Props, State> {
     this.state = {
       leftTools: [
         // {
-        //   name: 'AddActor',
+        //   name: 'Comb',
         //   type: 'png',
-        //   url: 'icons/actor.png',
+        //   url: 'icons/comb.png',
         //   subTools: []
         // },
+        {
+          name: 'Repel',
+          type: 'png',
+          url: 'icons/repel.png',
+          subTools: []
+        },
+        {
+          name: 'Attract',
+          type: 'png',
+          url: 'icons/attract.png',
+          subTools: []
+        },
+        {
+          name: 'Transform',
+          type: 'png',
+          url: 'icons/transform.png',
+          subTools: []
+        },
         {
           name: 'AddEvent',
           type: 'png',
@@ -104,12 +122,6 @@ class App extends React.Component<Props, State> {
           name: 'Compress',
           type: 'png',
           url: 'icons/expand.png',
-          subTools: []
-        },
-        {
-          name: 'Reshape',
-          type: 'png',
-          url: 'icons/reshape.png',
           subTools: []
         },
         {

@@ -14,12 +14,14 @@ import BaseDrawer from './baseDrawer';
 import TextDrawer from './textDrawer';
 import BaseAnimator from '../animators/baseAnimator';
 import { ColorPicker } from '../utils/color';
+import { StoryStore } from '../utils/storyStore';
 
 export default class StoryDrawer extends BaseDrawer {
   cfg: any;
   storylineName: string;
   storylinePath: StoryLine;
   prevStoryline: Path[];
+  characterID: number;
   animationType: string;
   segmentIDs: number[];
   constructor(cfg: any) {
@@ -29,6 +31,7 @@ export default class StoryDrawer extends BaseDrawer {
     this.storylinePath = cfg.storylinePath || [];
     this.prevStoryline = cfg.prevStoryline || [];
     this.animationType = cfg.animationType || 'creation';
+    this.characterID = cfg.characterID || -1;
     this.segmentIDs = cfg.segmentIDs || [];
   }
   _drawVisualObjects(
@@ -41,6 +44,7 @@ export default class StoryDrawer extends BaseDrawer {
       storylineName,
       storylinePath,
       prevStoryline,
+      characterID,
       animationType,
       segmentIDs
     } = this;
@@ -48,6 +52,7 @@ export default class StoryDrawer extends BaseDrawer {
       storylineName,
       storylinePath,
       prevStoryline,
+      characterID,
       animationType,
       segmentIDs
     );
@@ -59,6 +64,7 @@ export default class StoryDrawer extends BaseDrawer {
     name: StoryName,
     storyline: StoryLine,
     prevStoryline: Path[],
+    characterID: number,
     animationType: string,
     segmentIDs: number[]
   ) {
@@ -67,6 +73,7 @@ export default class StoryDrawer extends BaseDrawer {
       let path = new Path(pathStr);
       path.simplify();
       path.visible = false;
+      path.data.characterID = characterID;
       return path;
     });
     BaseAnimator.Animate(animationType, strokes, prevStoryline, segmentIDs);

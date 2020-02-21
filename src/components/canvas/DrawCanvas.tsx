@@ -5,27 +5,49 @@ import { iStoryline } from 'iStoryline';
 import UtilCanvas from './UtilCanvas';
 import {
   getCurrentStoryFlowProtoc,
-  getCurrentPostRes,
-  getToolState
+  getToolState,
+  getCurrentPredictGraph,
+  getCurrentStoryFlowLayout,
+  getCurrentActionType
 } from '../../store/selectors';
-import { addVisualObject, changeAction } from '../../store/actions';
+import {
+  addVisualObject,
+  changeLayoutAction,
+  newPredictAction,
+  setTool,
+  addAction,
+  updateLayoutAction,
+  updateProtocAction
+} from '../../store/actions';
 import axios from 'axios';
 import { project, view } from 'paper';
 import { connect } from 'react-redux';
+import { render } from 'react-dom';
+import { checkActionStable } from '../../store/reducers/canvas/historyQueue';
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
-    layoutBackUp: getCurrentPostRes(state),
+    predictGraph: getCurrentPredictGraph(state),
+    storyLayout: getCurrentStoryFlowLayout(state),
+    actionType: getCurrentActionType(state),
     renderQueue: state.renderQueue,
     historyQueue: state.historyQueue,
-    freeMode: getToolState(state, 'FreeMode')
+    freeMode: getToolState(state, 'FreeMode'),
+    templateState: getToolState(state, 'Template')
   };
 };
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    changeAction: (postRes: any) => dispatch(changeAction(postRes))
+    changeLayoutAction: (postRes: any, scaleRate: number) =>
+      dispatch(changeLayoutAction(postRes, scaleRate)),
+    newPredictAction: (newPredictQueue: any[]) =>
+      dispatch(newPredictAction(newPredictQueue)),
+    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use)),
+    addAction: (protoc: any, layout: any, scale: number) =>
+      dispatch(addAction(protoc, layout, scale)),
+    updateProtocAction: (protoc: any) => dispatch(updateProtocAction(protoc))
   };
 };
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -47,13 +69,19 @@ class DrawCanvas extends Component<Props, State> {
   }
   private genStoryGraph = async () => {
     const protoc = this.props.storyProtoc;
-    const data = this.props.layoutBackUp;
+    const data = this.props.storyLayout;
     const postUrl = this.state.serverUpdateUrl;
-    const postReq = { data: data, protoc: protoc };
-    const postRes = await axios.post(postUrl, protoc);
-    this.props.changeAction(postRes.data);
-    const graph = this.state.storyLayouter._layout(postRes.data, protoc);
-    return graph;
+    const postReq = { data: { error: 0, data: data }, protoc: protoc };
+    const postRes = await axios.post(postUrl, postReq);
+    const graph = this.state.storyLayouter._layout(
+      postRes.data.data[0],
+      postRes.data.protoc[0]
+    );
+    this.props.addAction(
+      postRes.data.protoc[0],
+      postRes.data.data[0],
+      graph.scaleRate
+    );
   };
   private drawStorylines(graph: StoryGraph) {
     const storylines = this.props.renderQueue.filter(
@@ -70,6 +98,7 @@ class DrawCanvas extends Component<Props, State> {
         storylinePath: graph.paths[i],
         prevStoryline:
           i < storylines.length ? storylines[i].lastChild.children : [],
+        characterID: i,
         animationType: 'creation',
         segmentIDs: []
       });
@@ -96,6 +125,7 @@ class DrawCanvas extends Component<Props, State> {
           prevStoryline:
             i < storylines.length ? storylines[i].lastChild.children : [],
           animationType: animationType,
+          characterID: i,
           segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i])
         });
       } else {
@@ -105,6 +135,7 @@ class DrawCanvas extends Component<Props, State> {
           prevStoryline:
             i < storylines.length ? storylines[i].lastChild.children : [],
           animationType: animationType,
+          characterID: i,
           segmentIDs: []
         });
       }
@@ -121,30 +152,49 @@ class DrawCanvas extends Component<Props, State> {
     return ret;
   }
   async componentDidMount() {
-    const graph = await this.genStoryGraph();
-    this.drawStorylines(graph);
+    await this.genStoryGraph();
     view.onClick = (e: paper.MouseEvent) => {
       this.onMouseClick(e);
     };
   }
+  checkActionStable(type: string) {
+    if (type === 'ADD') return true;
+    if (type === 'UPDATE_LAYOUT') return true;
+    return false;
+  }
   async componentDidUpdate(prevProps: Props) {
-    if (this.props.storyProtoc.id !== prevProps.storyProtoc.id) {
-      const graph = await this.genStoryGraph();
-      this.drawStorylines(graph);
-    } else {
-      if (this.props.storyProtoc !== prevProps.storyProtoc) {
-        const graph = await this.genStoryGraph();
-        this.updateStorylines(graph);
+    if (this.props.historyQueue.pointer !== prevProps.historyQueue.pointer) {
+      if (this.checkActionStable(this.props.actionType)) {
+        const graph = this.state.storyLayouter._layout(
+          this.props.storyLayout,
+          this.props.storyProtoc
+        );
+        if (this.props.historyQueue.pointer <= 1) this.drawStorylines(graph);
+        else this.updateStorylines(graph);
+      } else {
+        await this.genStoryGraph();
       }
     }
   }
   async handleClick() {
     const protoc = this.props.storyProtoc;
-    const data = this.props.layoutBackUp;
+    const data = this.props.storyLayout;
+    this.props.activateTool('Setting', true);
     const postReq = { data: data, protoc: protoc };
     const postUrl = this.state.serverPredictUrl;
     const postRes = await axios.post(postUrl, postReq);
-    const graph = this.state.storyLayouter._layout(postRes.data, postReq);
+    let newPredictQueue = [];
+    for (let i = 0; i < postRes.data.data.length; i++) {
+      newPredictQueue[i] = {
+        layout: postRes.data.data[i],
+        protoc: postRes.data.protoc[i]
+      };
+    }
+    this.props.newPredictAction(newPredictQueue);
+    const graph = this.state.storyLayouter._layout(
+      postRes.data.data[0],
+      postRes.data.protoc[0]
+    );
     this.drawStorylines(graph);
   }
   onMouseClick(e: paper.MouseEvent) {

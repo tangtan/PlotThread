@@ -1,18 +1,26 @@
 import { Path, Segment, Point } from 'paper';
+import { updateLayoutAction } from '../../store/actions';
+import store from '../../store';
+import { getCurrentStoryFlowProtoc } from '../../store/selectors';
 
 export default function dragSegment(
   e: paper.MouseEvent,
   path: Path,
   limits = 6
 ) {
+  let characterID = -1,
+    segmentID = -1,
+    deltaY = 0;
   if (path.segments) {
     if (path.segments.length < limits) {
       smoothDragPath(path, path.firstSegment, 0);
       smoothDragPath(path, path.lastSegment, 1);
     }
+    deltaY = e.delta ? (e.delta.y ? e.delta.y : 0) : 0;
+    characterID = path.data.characterID;
+    segmentID = path.data.segmentID;
     for (let i = 2; i < path.segments.length - 2; i++) {
       let segment = path.segments[i];
-      let deltaY = e.delta ? (e.delta.y ? e.delta.y : 0) : 0;
       if (segment.point) {
         let prevY = segment.point.y as number;
         segment.point.y = prevY + deltaY;
@@ -28,6 +36,7 @@ export default function dragSegment(
     pathStr = getSmoothPathStrBetween(prvSeg, lastSegment);
     shiftDragPath(pathStr, path, 1);
   }
+  return { characterID, segmentID, deltaY };
 }
 
 function shiftDragPath(pathStr: string, path: Path, type: number) {
@@ -95,4 +104,24 @@ function smoothDragPath(
       }
     }
   }
+}
+
+export function updateSegment(path: Path) {
+  const downPoint = path.data.downPoint;
+  const dragPoint = path.data.dragPoint;
+  if (downPoint && dragPoint) {
+    let deltaY = dragPoint.y - downPoint.y;
+    if (Math.abs(deltaY) < 1e-3) {
+    } else {
+      let characterID = path.data.characterID;
+      let segmentID = path.data.segmentID;
+      if (characterID !== -1 && segmentID !== -1) {
+        store.dispatch(updateLayoutAction(characterID, segmentID, deltaY));
+      }
+    }
+  }
+}
+
+export function deepCopy(x: any) {
+  return JSON.parse(JSON.stringify(x));
 }

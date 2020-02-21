@@ -15,10 +15,17 @@ export type StateType = {
 
 export type historyQueueType = {
   protocQueue: StoryFlowProtocType[];
-  layoutBackUp: StoryFlowResponseType;
+  layoutQueue: StoryFlowStoryType[];
+  scaleQueue: number[];
+  actionTypeQueue: string[];
   pointer: number;
+  predictQueue: PredictAnswerType[];
+  predictPointer: number;
 };
-
+export type PredictAnswerType = {
+  layout: StoryFlowStoryType;
+  protoc: StoryFlowProtocType;
+};
 // StoryFlow 数据结构
 export type StoryFlowProtocType = {
   id: string;
@@ -75,10 +82,6 @@ export type SessionBreaksType = {
   session2: number; // session2 id
 };
 // StoryFlow 返回数据结构
-export type StoryFlowResponseType = {
-  error: number;
-  data: StoryFlowStoryType;
-};
 export type StoryFlowStoryType = {
   array: StoryFlowCharacterType[];
   perm: number[][];
@@ -134,6 +137,7 @@ export type StoryGraph = {
   nodes: StorySegment[];
   paths: StoryLine[];
   styleConfig: StyleConfig[];
+  scaleRate: number;
 };
 export type StyleConfig = {
   name: string;

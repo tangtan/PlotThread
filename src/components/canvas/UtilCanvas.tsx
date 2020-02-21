@@ -8,17 +8,26 @@ import RelateUtil from '../../interactions/IStoryEvent/relateUtil';
 import {
   getToolState,
   getCurrentStoryFlowProtoc,
-  getCurrentPostRes
+  getCurrentStoryFlowLayout
 } from '../../store/selectors';
 import { view, project } from 'paper';
 import ToolCanvas from './ToolCanvas';
 import { connect } from 'react-redux';
-import { addVisualObject, addAction, changeAction } from '../../store/actions';
+import {
+  addVisualObject,
+  addAction,
+  updateProtocAction
+} from '../../store/actions';
 import { iStoryline } from 'iStoryline';
+import ReshapeSelectionUtil from '../../interactions/IStoryEvent/reshapeUtil';
+import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
+import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
+import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
+import CombUtil from '../../interactions/IStoryEvent/combUtil';
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
-    layoutBackUp: getCurrentPostRes(state),
+    storyLayout: getCurrentStoryFlowLayout(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
     sortState: getToolState(state, 'FreeMode'),
@@ -28,14 +37,18 @@ const mapStateToProps = (state: StateType) => {
     zigzagState: getToolState(state, 'Zigzag'),
     collideState: getToolState(state, 'Collide'),
     knotState: getToolState(state, 'Knot'),
-    twineState: getToolState(state, 'Twine')
+    twineState: getToolState(state, 'Twine'),
+    combState: getToolState(state, 'Comb'),
+    repelState: getToolState(state, 'Repel'),
+    attractState: getToolState(state, 'Attract'),
+    transformState: getToolState(state, 'Transform')
   };
 };
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    addAction: (protocol: any) => dispatch(addAction(protocol))
+    updateProtocAction: (protoc: any) => dispatch(updateProtocAction(protoc))
   };
 };
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -53,6 +66,10 @@ type State = {
   collideUtil: RelateUtil;
   knotUtil: RelateUtil;
   twineUtil: RelateUtil;
+  repelUtil: RepelUtil;
+  attractUtil: AttractUtil;
+  transformUtil: TransformUtil;
+  combUtil: CombUtil;
 };
 class UtilCanvas extends Component<Props, State> {
   constructor(props: Props) {
@@ -68,7 +85,11 @@ class UtilCanvas extends Component<Props, State> {
       zigzagUtil: new StylishUtil('Zigzag', 1),
       collideUtil: new RelateUtil('Collide', 2),
       knotUtil: new RelateUtil('Knot', 2),
-      twineUtil: new RelateUtil('Twine', 2)
+      twineUtil: new RelateUtil('Twine', 2),
+      repelUtil: new RepelUtil('Repel', 0),
+      attractUtil: new AttractUtil('Attract', 0),
+      transformUtil: new TransformUtil('Transform', 0),
+      combUtil: new CombUtil('Comb', 0)
     };
   }
   updateUtils(graph: StoryGraph) {
@@ -82,6 +103,10 @@ class UtilCanvas extends Component<Props, State> {
     this.state.collideUtil.updateStoryStore(graph);
     this.state.knotUtil.updateStoryStore(graph);
     this.state.twineUtil.updateStoryStore(graph);
+    this.state.repelUtil.updateStoryStore(graph);
+    this.state.attractUtil.updateStoryStore(graph);
+    this.state.transformUtil.updateStoryStore(graph);
+    this.state.combUtil.updateStoryStore(graph);
   }
   deepCopy(x: any) {
     return JSON.parse(JSON.stringify(x));
@@ -99,11 +124,11 @@ class UtilCanvas extends Component<Props, State> {
   }
   componentDidUpdate(prevProps: Props) {
     if (
-      this.props.layoutBackUp !== prevProps.layoutBackUp ||
+      this.props.storyLayout !== prevProps.storyLayout ||
       this.props.storyProtoc !== prevProps.storyProtoc
     ) {
       const graph = this.state.storyLayouter._layout(
-        this.props.layoutBackUp,
+        this.props.storyLayout,
         this.props.storyProtoc
       );
       this.updateUtils(graph);
@@ -120,6 +145,10 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.collideState) this.state.collideUtil.down(e);
     if (this.props.knotState) this.state.knotUtil.down(e);
     if (this.props.twineState) this.state.twineUtil.down(e);
+    if (this.props.combState) this.state.combUtil.down(e);
+    if (this.props.transformState) this.state.transformUtil.down(e);
+    if (this.props.repelState) this.state.repelUtil.down(e);
+    if (this.props.attractState) this.state.attractUtil.down(e);
   }
   onMouseDrag(e: paper.MouseEvent) {
     if (this.props.bendState) this.state.bendUtil.drag(e);
@@ -132,6 +161,10 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.collideState) this.state.collideUtil.drag(e);
     if (this.props.knotState) this.state.knotUtil.drag(e);
     if (this.props.twineState) this.state.twineUtil.drag(e);
+    if (this.props.attractState) this.state.attractUtil.drag(e);
+    if (this.props.combState) this.state.combUtil.drag(e);
+    if (this.props.repelState) this.state.repelUtil.drag(e);
+    if (this.props.transformState) this.state.transformUtil.drag(e);
   }
   onMouseUp(e: paper.MouseEvent) {
     if (this.props.compressState) {
@@ -147,7 +180,7 @@ class UtilCanvas extends Component<Props, State> {
           newProtocol.sessionInnerGaps.push({ item1: span[0], item2: 10 });
         }
         newProtocol.interaction = 'compress';
-        this.props.addAction(newProtocol);
+        this.props.updateProtocAction(newProtocol);
       }
     }
     if (this.props.bendState) {
@@ -176,7 +209,7 @@ class UtilCanvas extends Component<Props, State> {
           }
         }
         newProtocol.interaction = 'bend';
-        this.props.addAction(newProtocol);
+        this.props.updateProtocAction(newProtocol);
       }
     }
     if (this.props.sortState) {
@@ -190,10 +223,10 @@ class UtilCanvas extends Component<Props, State> {
         } else {
           const [ids, span] = param;
           newProtocol.orders.push(ids);
-          this.props.addAction(newProtocol);
+          this.props.updateProtocAction(newProtocol);
         }
         newProtocol.interaction = 'sort';
-        this.props.addAction(newProtocol);
+        this.props.updateProtocAction(newProtocol);
       }
     }
     const stylishName = this.props.waveState
@@ -223,7 +256,7 @@ class UtilCanvas extends Component<Props, State> {
           style: stylishName
         });
         newProtocol.interaction = 'stylish';
-        this.props.addAction(newProtocol);
+        this.props.updateProtocAction(newProtocol);
       }
     }
     const relateName = this.props.collideState
@@ -249,8 +282,14 @@ class UtilCanvas extends Component<Props, State> {
           style: relateName
         });
         newProtocol.interaction = 'relate';
-        this.props.addAction(newProtocol);
+        this.props.updateProtocAction(newProtocol);
       }
+    }
+    if (this.props.repelState) {
+    }
+    if (this.props.attractState) {
+    }
+    if (this.props.transformState) {
     }
   }
   render() {

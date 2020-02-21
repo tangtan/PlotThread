@@ -18,6 +18,12 @@ export const addVisualArray = createAction(
     action({ array: array, cfgs: cfgs || [] })
 );
 
+export const newPredictAction = createAction(
+  'NEW_PREDICT',
+  action => (newPredictQueue?: any[]) =>
+    action({ newPredictQueue: newPredictQueue || [] })
+);
+
 export const redoAction = createAction('REDO', action => (cfg?: any) =>
   action({ cfg: cfg || {} })
 );
@@ -26,10 +32,25 @@ export const undoAction = createAction('UNDO', action => (cfg?: any) =>
   action({ cfg: cfg || {} })
 );
 
-export const addAction = createAction('ADD', action => (cfg?: any) =>
-  action({ cfg: cfg || {} })
+export const addAction = createAction(
+  'ADD',
+  action => (protoc: any, layout: any, scale: number) =>
+    action({ protoc: protoc, layout: layout, scale: scale })
 );
 
-export const changeAction = createAction('CHANGE', action => (cfgs?: any) =>
-  action({ cfgs: cfgs || {} })
+export const updateLayoutAction = createAction(
+  'UPDATE_LAYOUT',
+  action => (characterID: number, segmentID: number, deltaY: number) =>
+    action({ characterID: characterID, segmentID: segmentID, deltaY: deltaY })
+);
+
+export const updateProtocAction = createAction(
+  'UPDATE_PROTOC',
+  action => (protoc: any) => action({ protocol: protoc })
+);
+
+export const changeLayoutAction = createAction(
+  'CHANGE_LAYOUT',
+  action => (cfgs: any, scaleRate: number) =>
+    action({ cfgs: cfgs || {}, scaleRate: scaleRate })
 );
