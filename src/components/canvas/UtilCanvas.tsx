@@ -16,14 +16,14 @@ import { connect } from 'react-redux';
 import {
   addVisualObject,
   addAction,
-  updateProtocAction
+  updateProtocAction,
+  updateLayoutAction
 } from '../../store/actions';
 import { iStoryline } from 'iStoryline';
 import ReshapeSelectionUtil from '../../interactions/IStoryEvent/reshapeUtil';
 import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
-import CombUtil from '../../interactions/IStoryEvent/combUtil';
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
@@ -38,7 +38,6 @@ const mapStateToProps = (state: StateType) => {
     collideState: getToolState(state, 'Collide'),
     knotState: getToolState(state, 'Knot'),
     twineState: getToolState(state, 'Twine'),
-    combState: getToolState(state, 'Comb'),
     repelState: getToolState(state, 'Repel'),
     attractState: getToolState(state, 'Attract'),
     transformState: getToolState(state, 'Transform')
@@ -48,7 +47,8 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    updateProtocAction: (protoc: any) => dispatch(updateProtocAction(protoc))
+    updateProtocAction: (protoc: any) => dispatch(updateProtocAction(protoc)),
+    updateLayoutAction: (layout: any) => dispatch(updateLayoutAction(layout))
   };
 };
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -69,7 +69,6 @@ type State = {
   repelUtil: RepelUtil;
   attractUtil: AttractUtil;
   transformUtil: TransformUtil;
-  combUtil: CombUtil;
 };
 class UtilCanvas extends Component<Props, State> {
   constructor(props: Props) {
@@ -88,8 +87,7 @@ class UtilCanvas extends Component<Props, State> {
       twineUtil: new RelateUtil('Twine', 2),
       repelUtil: new RepelUtil('Repel', 0),
       attractUtil: new AttractUtil('Attract', 0),
-      transformUtil: new TransformUtil('Transform', 0),
-      combUtil: new CombUtil('Comb', 0)
+      transformUtil: new TransformUtil('Transform', 0)
     };
   }
   updateUtils(graph: StoryGraph) {
@@ -106,7 +104,6 @@ class UtilCanvas extends Component<Props, State> {
     this.state.repelUtil.updateStoryStore(graph);
     this.state.attractUtil.updateStoryStore(graph);
     this.state.transformUtil.updateStoryStore(graph);
-    this.state.combUtil.updateStoryStore(graph);
   }
   deepCopy(x: any) {
     return JSON.parse(JSON.stringify(x));
@@ -145,7 +142,6 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.collideState) this.state.collideUtil.down(e);
     if (this.props.knotState) this.state.knotUtil.down(e);
     if (this.props.twineState) this.state.twineUtil.down(e);
-    if (this.props.combState) this.state.combUtil.down(e);
     if (this.props.transformState) this.state.transformUtil.down(e);
     if (this.props.repelState) this.state.repelUtil.down(e);
     if (this.props.attractState) this.state.attractUtil.down(e);
@@ -162,7 +158,6 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.knotState) this.state.knotUtil.drag(e);
     if (this.props.twineState) this.state.twineUtil.drag(e);
     if (this.props.attractState) this.state.attractUtil.drag(e);
-    if (this.props.combState) this.state.combUtil.drag(e);
     if (this.props.repelState) this.state.repelUtil.drag(e);
     if (this.props.transformState) this.state.transformUtil.drag(e);
   }
@@ -286,10 +281,142 @@ class UtilCanvas extends Component<Props, State> {
       }
     }
     if (this.props.repelState) {
+      const ret = this.state.repelUtil.up(e);
+      if (ret) {
+        const [type, [[name1, s1, e1], [name2, s2, e2]]] = ret; //type为1 则第一组在下面
+        let flag = type ? 1 : -1;
+        let newLayout = this.deepCopy(this.props.storyLayout);
+        for (let j = 0; j < name1.length; j++) {
+          for (let i = 0; i < newLayout.array.length; i++) {
+            if (newLayout.array[i].name === name1[j]) {
+              for (let k = s1; k <= e1; k++) {
+                if (newLayout.perm[i][k] !== -1) {
+                  newLayout.array[i].points[k].item3 += flag * 30;
+                }
+              }
+            }
+          }
+        }
+        for (let j = 0; j < name2.length; j++) {
+          for (let i = 0; i < newLayout.array.length; i++) {
+            if (newLayout.array[i].name === name2[j]) {
+              for (let k = s2; k <= e2; k++) {
+                if (newLayout.perm[i][k] !== -1) {
+                  newLayout.array[i].points[k].item3 += -flag * 30;
+                }
+              }
+            }
+          }
+        }
+        this.props.updateLayoutAction(newLayout);
+      }
     }
     if (this.props.attractState) {
+      const [names, sTimeID, eTimeID] = this.state.attractUtil.up(e);
+      let newLayout = this.deepCopy(this.props.storyLayout);
+      let minY = 1e9;
+      let maxY = 0;
+      for (let j = 0; j < names.length; j++) {
+        for (let i = 0; i < newLayout.array.length; i++) {
+          if (newLayout.array[i].name === names[j]) {
+            if (newLayout.perm[i][sTimeID] !== -1) {
+              minY = Math.min(newLayout.array[i].points[sTimeID].item3, minY);
+              maxY = Math.max(newLayout.array[i].points[sTimeID].item3, maxY);
+            }
+            if (newLayout.perm[i][eTimeID] !== -1) {
+              minY = Math.min(newLayout.array[i].points[eTimeID].item3, minY);
+              maxY = Math.max(newLayout.array[i].points[eTimeID].item3, maxY);
+            }
+          }
+        }
+      }
+      let midY = (minY + maxY) / 2;
+      for (let j = 0; j < names.length; j++) {
+        for (let i = 0; i < newLayout.array.length; i++) {
+          if (newLayout.array[i].name === names[j]) {
+            for (let k = sTimeID; k <= eTimeID; k++) {
+              if (newLayout.perm[i][k] !== -1) {
+                const prevY = newLayout.array[i].points[k].item3;
+                if (prevY > midY) {
+                  newLayout.array[i].points[k].item3 =
+                    (20 * (prevY - midY)) / (maxY - midY) + midY;
+                } else {
+                  newLayout.array[i].points[k].item3 =
+                    midY - (20 * (midY - prevY)) / (midY - minY);
+                }
+              }
+            }
+          }
+        }
+      }
+      this.props.updateLayoutAction(newLayout);
     }
     if (this.props.transformState) {
+      const ret = this.state.transformUtil.up(e);
+      if (ret) {
+        const { names, timeID, paths } = ret;
+        const sTimeID = timeID[0];
+        const eTimeID = timeID[1];
+        let upperPath = paths[0];
+        let bottomPath = paths[1];
+        if (upperPath && bottomPath) {
+          upperPath.sort((a: number[], b: number[]) => a[0] - b[0]);
+          bottomPath.sort((a: number[], b: number[]) => a[0] - b[0]);
+          let newLayout = this.deepCopy(this.props.storyLayout);
+          let minY = 1e9;
+          let maxY = 0;
+          for (let j = 0; j < names.length; j++) {
+            for (let i = 0; i < newLayout.array.length; i++) {
+              if (newLayout.array[i].name === names[j]) {
+                for (let k = sTimeID; k <= eTimeID; k++) {
+                  if (newLayout.perm[i][k] !== -1) {
+                    minY = Math.min(newLayout.array[i].points[k].item3, minY);
+                    maxY = Math.max(newLayout.array[i].points[k].item3, maxY);
+                  }
+                }
+              }
+            }
+          }
+          let pminY = 1e9,
+            pmaxY = 0;
+          for (let i = 0; i < upperPath.length; i++) {
+            pminY = Math.min(upperPath[i][1], pminY);
+            pmaxY = Math.max(upperPath[i][1], pmaxY);
+          }
+          for (let i = 0; i < bottomPath.length; i++) {
+            pminY = Math.min(bottomPath[i][1], pminY);
+            pmaxY = Math.max(bottomPath[i][1], pmaxY);
+          }
+          const rate = (maxY - minY) / (pmaxY - pminY);
+          for (let i = 0; i < upperPath.length; i++) {
+            upperPath[i][1] = rate * (upperPath[i][1] - pminY) + minY;
+          }
+          for (let i = 0; i < bottomPath.length; i++) {
+            bottomPath[i][1] = rate * (bottomPath[i][1] - pminY) + minY;
+          }
+          let increment = Math.floor(
+            upperPath.length / (eTimeID - sTimeID + 1)
+          );
+          for (let j = 0; j < names.length; j++) {
+            for (let i = 0; i < newLayout.array.length; i++) {
+              if (newLayout.array[i].name === names[j]) {
+                for (let k = sTimeID, st = 0; k <= eTimeID; k++, st++) {
+                  if (newLayout.perm[i][k] !== -1) {
+                    let l = st * increment;
+                    let r = (st + 1) * increment - 1;
+                    let m = Math.floor((l + r) / 2);
+                    newLayout.array[i].points[k].item3 =
+                      ((bottomPath[m][1] - upperPath[m][1]) / (maxY - minY)) *
+                        (newLayout.array[i].points[k].item3 - minY) +
+                      upperPath[m][1];
+                  }
+                }
+              }
+            }
+          }
+          this.props.updateLayoutAction(newLayout);
+        }
+      }
     }
   }
   render() {

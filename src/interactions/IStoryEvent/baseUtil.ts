@@ -69,8 +69,22 @@ export class StoryUtil extends BaseSelectionUtil {
   updateStoryStore(graph: StoryGraph) {
     this.storyStore = new StoryStore(graph);
   }
-
   getStartTime(sPoint: Point) {
+    if (!this.storyStore) return -1;
+    const startX = sPoint.x as number;
+    const startY = sPoint.y as number;
+    const startTime = this.storyStore.getStoryTimeSpan(startX, startY)[0];
+    return startTime;
+  }
+
+  getEndTime(ePoint: Point) {
+    if (!this.storyStore) return -1;
+    const endX = ePoint.x as number;
+    const endY = ePoint.y as number;
+    const endTime = this.storyStore.getStoryTimeSpan(endX, endY)[0];
+    return endTime;
+  }
+  getStartTimeID(sPoint: Point) {
     if (!this.storyStore) return -1;
     const startX = sPoint.x as number;
     const startY = sPoint.y as number;
@@ -82,7 +96,7 @@ export class StoryUtil extends BaseSelectionUtil {
     return startTimeID;
   }
 
-  getEndTime(ePoint: Point) {
+  getEndTimeID(ePoint: Point) {
     if (!this.storyStore) return -1;
     const endX = ePoint.x as number;
     const endY = ePoint.y as number;

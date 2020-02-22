@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../../../types';
 import { Button } from 'antd';
 import { iStoryline } from 'iStoryline';
-import { setTool } from '../../../../../store/actions';
+import {
+  setTool,
+  nextPredictAction,
+  lastPredictAction
+} from '../../../../../store/actions';
 import { getCurrentPredictQueue } from '../../../../../store/selectors';
 import { svg } from 'd3-fetch';
 
@@ -15,7 +19,10 @@ const mapStateToProps = (state: StateType) => {
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {};
+  return {
+    nextPredictAction: () => dispatch(nextPredictAction()),
+    lastPredictAction: () => dispatch(lastPredictAction())
+  };
 };
 
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -68,8 +75,8 @@ class Template extends Component<Props, State> {
       ));
       canvasQueue[i] = (
         <svg
-          width="330px"
-          height="220px"
+          width="100%"
+          height="30%"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -80,13 +87,27 @@ class Template extends Component<Props, State> {
     }
     return canvasQueue;
   }
-  clickNext() {}
-  clickLast() {}
+  clickNext() {
+    this.props.nextPredictAction();
+  }
+  clickLast() {
+    this.props.lastPredictAction();
+  }
   render() {
     let canvasQueue = this.getCanvasQueue();
     return (
       <div className="template">
-        {canvasQueue}
+        <div
+          className="canvasqueue"
+          style={{
+            overflowY: 'auto',
+            overflowX: 'auto',
+            width: '100%',
+            height: '750px'
+          }}
+        >
+          {canvasQueue}
+        </div>
         <Button
           type="ghost"
           style={{ width: '40%', margin: '20px 10px' }}

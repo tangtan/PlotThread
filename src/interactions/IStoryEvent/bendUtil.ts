@@ -13,8 +13,8 @@ export default class BendUtil extends BrushSelectionUtil {
     super.mouseUp(e);
     if (this.selectedItems.length !== this.actorNum) return null;
     if (this._downPoint && this._dragPoint) {
-      const sTime = this.getStartTime(this._downPoint);
-      const eTime = this.getEndTime(this._dragPoint);
+      const sTime = this.getStartTimeID(this._downPoint);
+      const eTime = this.getEndTimeID(this._dragPoint);
       const names = this.selectedItems.map(item => item.name);
       const {
         lTime,

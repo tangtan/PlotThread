@@ -38,8 +38,8 @@ export const addAction = createAction(
     action({ protoc: protoc, layout: layout, scale: scale })
 );
 
-export const updateLayoutAction = createAction(
-  'UPDATE_LAYOUT',
+export const changeLayoutAction = createAction(
+  'CHANGE_LAYOUT',
   action => (characterID: number, segmentID: number, deltaY: number) =>
     action({ characterID: characterID, segmentID: segmentID, deltaY: deltaY })
 );
@@ -49,8 +49,15 @@ export const updateProtocAction = createAction(
   action => (protoc: any) => action({ protocol: protoc })
 );
 
-export const changeLayoutAction = createAction(
-  'CHANGE_LAYOUT',
-  action => (cfgs: any, scaleRate: number) =>
-    action({ cfgs: cfgs || {}, scaleRate: scaleRate })
+export const updateLayoutAction = createAction(
+  'UPDATE_LAYOUT',
+  action => (storyLayout: any) => action({ storyLayout: storyLayout })
+);
+
+export const nextPredictAction = createAction('NEXT_PREDICT', action => () =>
+  action({})
+);
+
+export const lastPredictAction = createAction('LAST_PREDICT', action => () =>
+  action({})
 );

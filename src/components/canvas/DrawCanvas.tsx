@@ -16,7 +16,6 @@ import {
   newPredictAction,
   setTool,
   addAction,
-  updateLayoutAction,
   updateProtocAction
 } from '../../store/actions';
 import axios from 'axios';
@@ -40,8 +39,6 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    changeLayoutAction: (postRes: any, scaleRate: number) =>
-      dispatch(changeLayoutAction(postRes, scaleRate)),
     newPredictAction: (newPredictQueue: any[]) =>
       dispatch(newPredictAction(newPredictQueue)),
     activateTool: (name: string, use: boolean) => dispatch(setTool(name, use)),
@@ -71,7 +68,7 @@ class DrawCanvas extends Component<Props, State> {
     const protoc = this.props.storyProtoc;
     const data = this.props.storyLayout;
     const postUrl = this.state.serverUpdateUrl;
-    const postReq = { data: { error: 0, data: data }, protoc: protoc };
+    const postReq = { data: data, protoc: protoc };
     const postRes = await axios.post(postUrl, postReq);
     const graph = this.state.storyLayouter._layout(
       postRes.data.data[0],
@@ -160,6 +157,9 @@ class DrawCanvas extends Component<Props, State> {
   checkActionStable(type: string) {
     if (type === 'ADD') return true;
     if (type === 'UPDATE_LAYOUT') return true;
+    if (type === 'CHANGE_LAYOUT') return true;
+    if (type === 'NEXT_PREDICT') return true;
+    if (type === 'LAST_PREDICT') return true;
     return false;
   }
   async componentDidUpdate(prevProps: Props) {
@@ -184,18 +184,28 @@ class DrawCanvas extends Component<Props, State> {
     const postUrl = this.state.serverPredictUrl;
     const postRes = await axios.post(postUrl, postReq);
     let newPredictQueue = [];
-    for (let i = 0; i < postRes.data.data.length; i++) {
+    for (let i = 0; i < 7; i++) {
       newPredictQueue[i] = {
-        layout: postRes.data.data[i],
-        protoc: postRes.data.protoc[i]
+        layout: postRes.data.data[0],
+        protoc: postRes.data.protoc[0]
       };
     }
-    this.props.newPredictAction(newPredictQueue);
+    // for (let i = 0; i < postRes.data.data.length; i++) {
+    //   newPredictQueue[i] = {
+    //     layout: postRes.data.data[i],
+    //     protoc: postRes.data.protoc[i]
+    //   };
+    // }
     const graph = this.state.storyLayouter._layout(
       postRes.data.data[0],
       postRes.data.protoc[0]
     );
-    this.drawStorylines(graph);
+    this.props.addAction(
+      postRes.data.protoc[0],
+      postRes.data.data[0],
+      graph.scaleRate
+    );
+    this.props.newPredictAction(newPredictQueue);
   }
   onMouseClick(e: paper.MouseEvent) {
     if (project) {

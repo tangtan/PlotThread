@@ -74,6 +74,9 @@ export function checkActionStable(
 ) {
   if (actionTypeQueue[newPointer] === 'ADD') return true;
   if (actionTypeQueue[newPointer] === 'UPDATE_LAYOUT') return true;
+  if (actionTypeQueue[newPointer] === 'CHANGE_LAYOUT') return true;
+  if (actionTypeQueue[newPointer] === 'NEXT_PREDICT') return true;
+  if (actionTypeQueue[newPointer] === 'LAST_PREDICT') return true;
   return false;
 }
 export default (state = initialState, action: ActionType) => {
@@ -144,7 +147,7 @@ export default (state = initialState, action: ActionType) => {
         scaleQueue: newScaleQueue,
         actionTypeQueue: newActionTypeQueue
       };
-    case 'UPDATE_LAYOUT':
+    case 'CHANGE_LAYOUT':
       const { characterID, segmentID, deltaY } = action.payload;
       let updateLayout = deepCopy(layoutQueue[pointer]);
       let updateProtoc = deepCopy(protocQueue[pointer]);
@@ -168,7 +171,7 @@ export default (state = initialState, action: ActionType) => {
       newProtocQueue[pointer + 1] = updateProtoc as StoryFlowProtocType;
       newLayoutQueue[pointer + 1] = updateLayout as StoryFlowStoryType;
       newScaleQueue[pointer + 1] = updateScale;
-      newActionTypeQueue[pointer + 1] = 'UPDATE_LAYOUT';
+      newActionTypeQueue[pointer + 1] = 'CHANGE_LAYOUT';
       return {
         ...state,
         pointer: pointer + 1,
@@ -197,17 +200,21 @@ export default (state = initialState, action: ActionType) => {
         scaleQueue: newScaleQueue,
         actionTypeQueue: newActionTypeQueue
       };
-    case 'CHANGE_LAYOUT':
-      const { cfgs, scaleRate } = action.payload;
-      let newLayout = cfgs as StoryFlowStoryType;
+    case 'UPDATE_LAYOUT':
+      const { storyLayout } = action.payload;
       let newProtoc = deepCopy(protocQueue[pointer]);
+      let newScale = scaleQueue[pointer];
       newProtocQueue[pointer + 1] = newProtoc as StoryFlowProtocType;
-      newLayoutQueue[pointer + 1] = newLayout as StoryFlowStoryType;
+      newLayoutQueue[pointer + 1] = storyLayout as StoryFlowStoryType;
+      newScaleQueue[pointer + 1] = newScale;
+      newActionTypeQueue[pointer + 1] = 'UPDATE_LAYOUT';
       return {
         ...state,
         pointer: pointer + 1,
         protocQueue: newProtocQueue,
-        layoutQueue: newLayoutQueue
+        layoutQueue: newLayoutQueue,
+        scaleQueue: newScaleQueue,
+        actionTypeQueue: newActionTypeQueue
       };
     case 'NEW_PREDICT':
       const { newPredictQueue } = action.payload;
@@ -216,44 +223,50 @@ export default (state = initialState, action: ActionType) => {
         predictQueue: newPredictQueue,
         predictPointer: 0
       };
-    // case 'NEXT_PREDICT':
-    //   if (state.predictPointer + 1 < state.predictQueue.length) {
-    //     newProtocQueue[pointer + 1] = deepCopy(state.predictQueue[state.predictPointer + 1].protoc);
-    //     newLayoutQueue[pointer + 1] = deepCopy(state.predictQueue[state.predictPointer + 1].layout);
-    //     newActionTypeQueue[pointer + 1] = 'NEXT_PREDICT';
-    //     newScaleQueue[pointer + 1] = deepCopy(scaleQueue[pointer]);//???scale不一定不变
-    //     return {
-    //       ...state,
-    //       protocQueue: newProtocQueue,
-    //       layoutQueue: newLayoutQueue,
-    //       scaleQueue: newScaleQueue,
-    //       actionTypeQueue: newActionTypeQueue,
-    //       pointer: pointer + 1,
-    //       predictPointer: state.predictPointer + 1,
-    //     };
-    //   }
-    //   else {
-    //     return state;
-    //   }
-    // case 'LAST_PREDICT':
-    //   if (state.predictPointer - 1 > 0) {
-    //     newProtocQueue[pointer + 1] = deepCopy(state.predictQueue[state.predictPointer - 1].protoc);
-    //     newLayoutQueue[pointer + 1] = deepCopy(state.predictQueue[state.predictPointer - 1].layout);
-    //     newActionTypeQueue[pointer + 1] = 'LAST_PREDICT';
-    //     newScaleQueue[pointer + 1] = deepCopy(scaleQueue[pointer]);//???scale不一定不变
-    //     return {
-    //       ...state,
-    //       protocQueue: newProtocQueue,
-    //       layoutQueue: newLayoutQueue,
-    //       scaleQueue: newScaleQueue,
-    //       actionTypeQueue: newActionTypeQueue,
-    //       pointer: pointer + 1,
-    //       predictPointer: state.predictPointer - 1,
-    //     };
-    //   }
-    //   else {
-    //     return state;
-    //   }
+    case 'NEXT_PREDICT':
+      if (state.predictPointer + 1 < state.predictQueue.length) {
+        newProtocQueue[pointer + 1] = deepCopy(
+          state.predictQueue[state.predictPointer + 1].protoc
+        );
+        newLayoutQueue[pointer + 1] = deepCopy(
+          state.predictQueue[state.predictPointer + 1].layout
+        );
+        newActionTypeQueue[pointer + 1] = 'NEXT_PREDICT';
+        newScaleQueue[pointer + 1] = deepCopy(scaleQueue[pointer]); //???scale不一定不变
+        return {
+          ...state,
+          protocQueue: newProtocQueue,
+          layoutQueue: newLayoutQueue,
+          scaleQueue: newScaleQueue,
+          actionTypeQueue: newActionTypeQueue,
+          pointer: pointer + 1,
+          predictPointer: state.predictPointer + 1
+        };
+      } else {
+        return state;
+      }
+    case 'LAST_PREDICT':
+      if (state.predictPointer - 1 > 0) {
+        newProtocQueue[pointer + 1] = deepCopy(
+          state.predictQueue[state.predictPointer - 1].protoc
+        );
+        newLayoutQueue[pointer + 1] = deepCopy(
+          state.predictQueue[state.predictPointer - 1].layout
+        );
+        newActionTypeQueue[pointer + 1] = 'LAST_PREDICT';
+        newScaleQueue[pointer + 1] = deepCopy(scaleQueue[pointer]); //???scale不一定不变
+        return {
+          ...state,
+          protocQueue: newProtocQueue,
+          layoutQueue: newLayoutQueue,
+          scaleQueue: newScaleQueue,
+          actionTypeQueue: newActionTypeQueue,
+          pointer: pointer + 1,
+          predictPointer: state.predictPointer - 1
+        };
+      } else {
+        return state;
+      }
     //如果有其他的action也记录到historyQueue当中
     default:
       return state;

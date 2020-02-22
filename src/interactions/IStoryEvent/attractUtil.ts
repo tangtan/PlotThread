@@ -19,17 +19,16 @@ export default class AttractUtil extends CircleSelectionUtil {
       const cPoint = bounds.center;
       const sPoint = bounds.topCenter;
       const ePoint = bounds.bottomCenter;
-      if (sPoint && ePoint && cPoint && this.storyStore) {
-        const sessions = this.getSessions(sPoint, ePoint);
+      const lPoint = bounds.topLeft;
+      const rPoint = bounds.bottomRight;
+      if (sPoint && ePoint && cPoint && lPoint && rPoint && this.storyStore) {
+        const sTimeID = this.getStartTimeID(lPoint);
+        const eTimeID = this.getEndTimeID(rPoint);
         const names = this.storyStore.names.filter(name =>
           this.isInSelectionRegion(name, sPoint, ePoint)
         );
-        const centerX = cPoint.x as number;
-        const centerY = cPoint.y as number;
-        //如何把这个centerX和centerY传给addEventPanel组件呢？
         super.mouseUp(e);
-        //return [names, [sTime, eTime], centerX, centerY];
-        return [names, sessions];
+        return [names, sTimeID, eTimeID];
       }
     }
     super.mouseUp(e);
