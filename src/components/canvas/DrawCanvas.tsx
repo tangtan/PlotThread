@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StateType, DispatchType, StoryGraph, StyleConfig } from '../../types';
-import { Button } from 'antd';
+import { Button, Progress } from 'antd';
 import { iStoryline } from 'iStoryline';
 import UtilCanvas from './UtilCanvas';
 import {
@@ -54,6 +54,8 @@ type State = {
   serverUpdateUrl: string;
   serverPredictUrl: string;
   storyLayouter: any;
+  percent: number;
+  progressVisible: boolean;
 };
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
@@ -61,7 +63,9 @@ class DrawCanvas extends Component<Props, State> {
     this.state = {
       serverUpdateUrl: 'api/update',
       serverPredictUrl: 'api/predict',
-      storyLayouter: new iStoryline()
+      storyLayouter: new iStoryline(),
+      percent: 0,
+      progressVisible: false
     };
   }
   private genStoryGraph = async () => {
@@ -176,26 +180,43 @@ class DrawCanvas extends Component<Props, State> {
       }
     }
   }
+  increase = () => {
+    let percent = this.state.percent + 1;
+    if (percent > 98) {
+      percent = 98;
+    }
+    this.setState({ percent });
+  };
   async handleClick() {
+    this.setState({
+      percent: 0,
+      progressVisible: true
+    });
+    let tmpID = setInterval(() => this.increase(), 1000);
     const protoc = this.props.storyProtoc;
     const data = this.props.storyLayout;
     this.props.activateTool('Setting', true);
     const postReq = { data: data, protoc: protoc };
     const postUrl = this.state.serverPredictUrl;
     const postRes = await axios.post(postUrl, postReq);
+    clearInterval(tmpID);
     let newPredictQueue = [];
-    for (let i = 0; i < 7; i++) {
-      newPredictQueue[i] = {
-        layout: postRes.data.data[0],
-        protoc: postRes.data.protoc[0]
-      };
-    }
-    // for (let i = 0; i < postRes.data.data.length; i++) {
+    // for (let i = 0; i < 7; i++) {
     //   newPredictQueue[i] = {
-    //     layout: postRes.data.data[i],
-    //     protoc: postRes.data.protoc[i]
+    //     layout: postRes.data.data[0],
+    //     protoc: postRes.data.protoc[0]
     //   };
     // }
+    for (let i = 0; i < postRes.data.data.length; i++) {
+      newPredictQueue[i] = {
+        layout: postRes.data.data[i],
+        protoc: postRes.data.protoc[i]
+      };
+    }
+    this.setState({
+      percent: 100,
+      progressVisible: false
+    });
     const graph = this.state.storyLayouter._layout(
       postRes.data.data[0],
       postRes.data.protoc[0]
@@ -217,6 +238,29 @@ class DrawCanvas extends Component<Props, State> {
     }
   }
   render() {
+    let myProgress = (
+      <Progress
+        percent={this.state.percent}
+        style={{
+          position: 'fixed',
+          left: '700px',
+          top: '500px',
+          width: '500px'
+        }}
+      />
+    );
+    if (!this.state.progressVisible) {
+      myProgress = (
+        <div
+          style={{
+            position: 'fixed',
+            left: '700px',
+            top: '500px',
+            width: '500px'
+          }}
+        />
+      );
+    }
     return (
       <div>
         <Button
@@ -227,6 +271,7 @@ class DrawCanvas extends Component<Props, State> {
         >
           Template
         </Button>
+        {myProgress}
         <UtilCanvas />
       </div>
     );

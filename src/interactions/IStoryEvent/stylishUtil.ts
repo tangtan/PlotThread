@@ -11,7 +11,9 @@ export default class StylishUtil extends BrushSelectionUtil {
 
   up(e: paper.MouseEvent) {
     super.mouseUp(e);
-    if (this.selectedItems.length !== this.actorNum) return null;
+    if (this.selectedItems.length !== this.actorNum) {
+      return null;
+    }
     if (this._downPoint && this._dragPoint) {
       const sTime = this.getStartTimeID(this._downPoint);
       const eTime = this.getEndTimeID(this._dragPoint);

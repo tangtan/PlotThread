@@ -24,6 +24,7 @@ import ReshapeSelectionUtil from '../../interactions/IStoryEvent/reshapeUtil';
 import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
+import { notification } from 'antd';
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
@@ -163,48 +164,63 @@ class UtilCanvas extends Component<Props, State> {
   }
   onMouseUp(e: paper.MouseEvent) {
     if (this.props.compressState) {
-      const [names, span] = this.state.compressUtil.up(e);
-      let newProtocol = this.deepCopy(this.props.storyProtoc);
-      if (span) {
-        if (span.length > 1) {
-          newProtocol.sessionOuterGaps.push({
-            item1: { item1: span[0], item2: span[1] },
-            item2: { item1: 100, item2: -1 }
-          });
+      const ret = this.state.compressUtil.up(e);
+      if (ret) {
+        const [names, span] = ret;
+        let newProtocol = this.deepCopy(this.props.storyProtoc);
+        if (span && span.length >= 1) {
+          if (span.length > 1) {
+            newProtocol.sessionOuterGaps.push({
+              item1: { item1: span[0], item2: span[1] },
+              item2: { item1: 100, item2: -1 }
+            });
+          } else {
+            newProtocol.sessionInnerGaps.push({ item1: span[0], item2: 10 });
+          }
+          newProtocol.interaction = 'compress';
+          this.props.updateProtocAction(newProtocol);
         } else {
-          newProtocol.sessionInnerGaps.push({ item1: span[0], item2: 10 });
+          this.openCompressNotification();
         }
-        newProtocol.interaction = 'compress';
-        this.props.updateProtocAction(newProtocol);
+      } else {
+        this.openCompressNotification();
       }
     }
     if (this.props.bendState) {
-      const [nameIDs, span] = this.state.bendUtil.up(e);
-      let newProtocol = this.deepCopy(this.props.storyProtoc);
-      if (span && nameIDs) {
-        if (span.length === 5) {
-          //bend
-          newProtocol.sessionBreaks.push({
-            frame: span[0],
-            session1: span[2],
-            session2: span[3]
-          });
-          newProtocol.sessionBreaks.push({
-            frame: span[1],
-            session1: span[3],
-            session2: span[4]
-          });
-        } else {
-          for (let i = 0; i < nameIDs.length; i++) {
-            let tmp = [];
-            for (let j = span[0]; j <= span[1]; j++) {
-              tmp.push(j);
+      const ret = this.state.bendUtil.up(e);
+      if (ret) {
+        const [nameIDs, span] = ret;
+        let newProtocol = this.deepCopy(this.props.storyProtoc);
+        if (span && nameIDs) {
+          if (span.length === 5) {
+            //bend
+            newProtocol.sessionBreaks.push({
+              frame: span[0],
+              session1: span[2],
+              session2: span[3]
+            });
+            newProtocol.sessionBreaks.push({
+              frame: span[1],
+              session1: span[3],
+              session2: span[4]
+            });
+          } else {
+            for (let i = 0; i < nameIDs.length; i++) {
+              let tmp = [];
+              for (let j = span[0]; j <= span[1]; j++) {
+                tmp.push(j);
+              }
+              newProtocol.majorCharacters.push({
+                item1: nameIDs[i],
+                item2: tmp
+              });
             }
-            newProtocol.majorCharacters.push({ item1: nameIDs[i], item2: tmp });
           }
+          newProtocol.interaction = 'bend';
+          this.props.updateProtocAction(newProtocol);
         }
-        newProtocol.interaction = 'bend';
-        this.props.updateProtocAction(newProtocol);
+      } else {
+        this.openBendNotification();
       }
     }
     if (this.props.sortState) {
@@ -222,6 +238,7 @@ class UtilCanvas extends Component<Props, State> {
         }
         newProtocol.interaction = 'sort';
         this.props.updateProtocAction(newProtocol);
+      } else {
       }
     }
     const stylishName = this.props.waveState
@@ -234,7 +251,7 @@ class UtilCanvas extends Component<Props, State> {
       ? 'Dash'
       : null;
     if (stylishName) {
-      const [nameIDs, span] = this.props.waveState
+      const ret = this.props.waveState
         ? this.state.waveUtil.up(e)
         : this.props.bumpState
         ? this.state.bumpUtil.up(e)
@@ -243,15 +260,20 @@ class UtilCanvas extends Component<Props, State> {
         : this.props.dashState
         ? this.state.dashUtil.up(e)
         : null;
-      if (span && nameIDs) {
-        let newProtocol = this.deepCopy(this.props.storyProtoc);
-        newProtocol.stylishInfo.push({
-          names: nameIDs,
-          timespan: span,
-          style: stylishName
-        });
-        newProtocol.interaction = 'stylish';
-        this.props.updateProtocAction(newProtocol);
+      if (ret) {
+        const [nameIDs, span] = ret;
+        if (span && nameIDs) {
+          let newProtocol = this.deepCopy(this.props.storyProtoc);
+          newProtocol.stylishInfo.push({
+            names: nameIDs,
+            timespan: span,
+            style: stylishName
+          });
+          newProtocol.interaction = 'stylish';
+          this.props.updateProtocAction(newProtocol);
+        }
+      } else {
+        this.openStylishNotification();
       }
     }
     const relateName = this.props.collideState
@@ -262,22 +284,27 @@ class UtilCanvas extends Component<Props, State> {
       ? 'Twine'
       : null;
     if (relateName) {
-      const [nameIDs, span] = this.props.collideState
+      const ret = this.props.collideState
         ? this.state.collideUtil.up(e)
         : this.props.knotState
         ? this.state.knotUtil.up(e)
         : this.props.twineState
         ? this.state.twineUtil.up(e)
         : null;
-      if (span && nameIDs) {
-        let newProtocol = this.deepCopy(this.props.storyProtoc);
-        newProtocol.relateInfo.push({
-          names: nameIDs,
-          timespan: span,
-          style: relateName
-        });
-        newProtocol.interaction = 'relate';
-        this.props.updateProtocAction(newProtocol);
+      if (ret) {
+        const [nameIDs, span] = ret;
+        if (span && nameIDs) {
+          let newProtocol = this.deepCopy(this.props.storyProtoc);
+          newProtocol.relateInfo.push({
+            names: nameIDs,
+            timespan: span,
+            style: relateName
+          });
+          newProtocol.interaction = 'relate';
+          this.props.updateProtocAction(newProtocol);
+        }
+      } else {
+        this.openRelateNotification();
       }
     }
     if (this.props.repelState) {
@@ -309,47 +336,54 @@ class UtilCanvas extends Component<Props, State> {
           }
         }
         this.props.updateLayoutAction(newLayout);
+      } else {
+        this.openRepelNotification();
       }
     }
     if (this.props.attractState) {
-      const [names, sTimeID, eTimeID] = this.state.attractUtil.up(e);
-      let newLayout = this.deepCopy(this.props.storyLayout);
-      let minY = 1e9;
-      let maxY = 0;
-      for (let j = 0; j < names.length; j++) {
-        for (let i = 0; i < newLayout.array.length; i++) {
-          if (newLayout.array[i].name === names[j]) {
-            if (newLayout.perm[i][sTimeID] !== -1) {
-              minY = Math.min(newLayout.array[i].points[sTimeID].item3, minY);
-              maxY = Math.max(newLayout.array[i].points[sTimeID].item3, maxY);
-            }
-            if (newLayout.perm[i][eTimeID] !== -1) {
-              minY = Math.min(newLayout.array[i].points[eTimeID].item3, minY);
-              maxY = Math.max(newLayout.array[i].points[eTimeID].item3, maxY);
+      const ret = this.state.attractUtil.up(e);
+      if (ret) {
+        const [names, sTimeID, eTimeID] = ret;
+        let newLayout = this.deepCopy(this.props.storyLayout);
+        let minY = 1e9;
+        let maxY = 0;
+        for (let j = 0; j < names.length; j++) {
+          for (let i = 0; i < newLayout.array.length; i++) {
+            if (newLayout.array[i].name === names[j]) {
+              if (newLayout.perm[i][sTimeID] !== -1) {
+                minY = Math.min(newLayout.array[i].points[sTimeID].item3, minY);
+                maxY = Math.max(newLayout.array[i].points[sTimeID].item3, maxY);
+              }
+              if (newLayout.perm[i][eTimeID] !== -1) {
+                minY = Math.min(newLayout.array[i].points[eTimeID].item3, minY);
+                maxY = Math.max(newLayout.array[i].points[eTimeID].item3, maxY);
+              }
             }
           }
         }
-      }
-      let midY = (minY + maxY) / 2;
-      for (let j = 0; j < names.length; j++) {
-        for (let i = 0; i < newLayout.array.length; i++) {
-          if (newLayout.array[i].name === names[j]) {
-            for (let k = sTimeID; k <= eTimeID; k++) {
-              if (newLayout.perm[i][k] !== -1) {
-                const prevY = newLayout.array[i].points[k].item3;
-                if (prevY > midY) {
-                  newLayout.array[i].points[k].item3 =
-                    (20 * (prevY - midY)) / (maxY - midY) + midY;
-                } else {
-                  newLayout.array[i].points[k].item3 =
-                    midY - (20 * (midY - prevY)) / (midY - minY);
+        let midY = (minY + maxY) / 2;
+        for (let j = 0; j < names.length; j++) {
+          for (let i = 0; i < newLayout.array.length; i++) {
+            if (newLayout.array[i].name === names[j]) {
+              for (let k = sTimeID; k <= eTimeID; k++) {
+                if (newLayout.perm[i][k] !== -1) {
+                  const prevY = newLayout.array[i].points[k].item3;
+                  if (prevY > midY) {
+                    newLayout.array[i].points[k].item3 =
+                      (20 * (prevY - midY)) / (maxY - midY) + midY;
+                  } else {
+                    newLayout.array[i].points[k].item3 =
+                      midY - (20 * (midY - prevY)) / (midY - minY);
+                  }
                 }
               }
             }
           }
         }
+        this.props.updateLayoutAction(newLayout);
+      } else {
+        this.openAttractNotification();
       }
-      this.props.updateLayoutAction(newLayout);
     }
     if (this.props.transformState) {
       const ret = this.state.transformUtil.up(e);
@@ -416,9 +450,63 @@ class UtilCanvas extends Component<Props, State> {
           }
           this.props.updateLayoutAction(newLayout);
         }
+      } else {
+        this.openTransformNotification();
       }
     }
   }
+  openCompressNotification = () => {
+    notification.open({
+      message: 'Compress Notification',
+      description: 'Please draw a circle to select at least two characters.',
+      duration: 1.5
+    });
+  };
+  openBendNotification = () => {
+    notification.open({
+      message: 'Bend Notification',
+      description: 'Please click the name label to select only one character.',
+      duration: 1.5
+    });
+  };
+  openStylishNotification = () => {
+    notification.open({
+      message: 'Stylish Notification',
+      description: 'Please click the name label to select only one character.',
+      duration: 1.5
+    });
+  };
+  openRelateNotification = () => {
+    notification.open({
+      message: 'Relate Notification',
+      description:
+        'Please click the name label to select exactly two characters.',
+      duration: 1.5
+    });
+  };
+  openRepelNotification = () => {
+    notification.open({
+      message: 'Repel Notification',
+      description:
+        'Please draw a circle to select at least one group, then draw a line.',
+      duration: 1.5
+    });
+  };
+  openAttractNotification = () => {
+    notification.open({
+      message: 'Attract Notification',
+      description: 'Please draw a circle to select at least one group.',
+      duration: 1.5
+    });
+  };
+  openTransformNotification = () => {
+    notification.open({
+      message: 'Transform Notification',
+      description:
+        'Please draw a circle to select at least one group, then draw a free path.',
+      duration: 1.5
+    });
+  };
   render() {
     return <ToolCanvas />;
   }

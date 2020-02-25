@@ -34,7 +34,7 @@ export default class BaseAnimator {
         prevStoryline[segmentIDs[i]],
         strokes[segmentIDs[i]]
       );
-      flag[i] = 1;
+      flag[segmentIDs[i]] = 1;
     }
 
     for (let i = 0; i < strokes.length; i++) {

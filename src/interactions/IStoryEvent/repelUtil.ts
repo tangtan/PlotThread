@@ -32,7 +32,6 @@ export default class RepelUtil extends CircleSelectionUtil {
   }
   createBounds(point: Point | null) {
     if (!point || !point.x || !point.y) return null;
-    console.log(point);
     let bounds = {
       topLeft: new Point(point.x - 50, point.y - 50),
       middleCenter: point,
