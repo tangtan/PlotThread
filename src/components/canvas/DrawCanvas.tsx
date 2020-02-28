@@ -12,7 +12,6 @@ import {
 } from '../../store/selectors';
 import {
   addVisualObject,
-  changeLayoutAction,
   newPredictAction,
   setTool,
   addAction,
@@ -21,8 +20,6 @@ import {
 import axios from 'axios';
 import { project, view } from 'paper';
 import { connect } from 'react-redux';
-import { render } from 'react-dom';
-import { checkActionStable } from '../../store/reducers/canvas/historyQueue';
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
@@ -74,6 +71,7 @@ class DrawCanvas extends Component<Props, State> {
     const postUrl = this.state.serverUpdateUrl;
     const postReq = { data: data, protoc: protoc };
     const postRes = await axios.post(postUrl, postReq);
+    console.log(postRes);
     const graph = this.state.storyLayouter._layout(
       postRes.data.data[0],
       postRes.data.protoc[0]

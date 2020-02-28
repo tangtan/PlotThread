@@ -41,6 +41,7 @@ export type StoryFlowProtocType = {
   sessionBreaks: SessionBreaksType[];
   stylishInfo: StylishInfoType[];
   relateInfo: RelateInfoType[];
+  scaleInfo: ScaleInfoType[];
   interaction: string;
 };
 export type StylishInfoType = {
@@ -52,6 +53,17 @@ export type RelateInfoType = {
   names: number[];
   timespan: number[];
   style: string;
+};
+export type ScaleInfoType = {
+  param: ScaleParamType;
+  style: string;
+};
+export type ScaleParamType = {
+  x0: number;
+  y0: number;
+  width: number;
+  height: number;
+  reserveRation: boolean;
 };
 export type SessionInnerGapType = {
   item1: number; // session id

@@ -9,9 +9,9 @@ import {
   OrdersType,
   StylishInfoType,
   RelateInfoType,
+  ScaleInfoType,
   SessionBreaksType
 } from '../../../types';
-import { stat } from 'fs';
 
 const initialProtoc = {
   id: 'StarWars.xml',
@@ -27,6 +27,7 @@ const initialProtoc = {
   sessionBreaks: [],
   stylishInfo: [],
   relateInfo: [],
+  scaleInfo: [],
   interaction: ''
 } as StoryFlowProtocType;
 
@@ -53,6 +54,7 @@ export class StoryFlowProtoc {
   sessionBreaks: SessionBreaksType[];
   stylishInfo: StylishInfoType[];
   relateInfo: RelateInfoType[];
+  scaleInfo: ScaleInfoType[];
   constructor(prevProtoc: StoryFlowProtocType) {
     this.id = prevProtoc.id;
     this.sessionInnerGap = prevProtoc.sessionInnerGap;
@@ -66,6 +68,7 @@ export class StoryFlowProtoc {
     this.sessionBreaks = prevProtoc.sessionBreaks;
     this.stylishInfo = prevProtoc.stylishInfo;
     this.relateInfo = prevProtoc.relateInfo;
+    this.scaleInfo = prevProtoc.scaleInfo;
   }
 }
 export function checkActionStable(
