@@ -37,6 +37,26 @@ class Template extends Component<Props, State> {
     super(props);
     this.state = { storyLayouter: new iStoryline() };
   }
+  genSmoothPathStr(points: any) {
+    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
+    let i, len;
+    for (i = 1, len = points.length; i < len - 1; i += 2) {
+      const rPoint = points[i];
+      const lPoint = points[i + 1];
+      console.log(i, points[i], points[i + 1]);
+      const middleX = (rPoint[0] + lPoint[0]) / 2;
+      console.log(i, middleX);
+      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
+      if (rPoint[1] !== lPoint[1]) {
+        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${lPoint[0]} ${lPoint[1]} `;
+      } else {
+        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
+      }
+    }
+    if (i < len) pathStr += `L ${points[i][0]} ${points[i][1]}`;
+    else pathStr += `L ${points[i - 1][0]} ${points[i - 1][1]}`;
+    return pathStr;
+  }
   genSimplePathStr(points: any) {
     let pathStr = `M ${points[0][0]} ${points[0][1]} `;
     let i, len;
@@ -53,13 +73,19 @@ class Template extends Component<Props, State> {
         this.props.predictQueue[i].layout,
         this.props.predictQueue[i].protoc
       );
-      const nodes = graph.paths;
+      const nodes = [];
+      console.log(i, graph);
+      for (let i = 0; i < graph.paths.length; i++) {
+        if (graph.names[i] !== 'RABBIT') {
+          nodes.push(graph.paths[i]);
+        }
+      }
       const newNodes = nodes.map((line: any) => {
         const newLine = line.map((seg: any) => {
           const newSeg = seg.map((point: any) => {
             let newPoint = [];
-            newPoint[0] = point[0] / 4.5;
-            newPoint[1] = point[1] / 3;
+            newPoint[0] = (point[0] - 300) / 4;
+            newPoint[1] = (point[1] - 200) / 3;
             return newPoint;
           });
           return newSeg;
@@ -67,11 +93,18 @@ class Template extends Component<Props, State> {
         return newLine;
       });
       const pathStrs = newNodes.map((line: any) => {
-        const pathStr = this.genSimplePathStr(line);
-        return pathStr;
+        const segStrs = line.map((seg: any) => {
+          const pathStr = this.genSmoothPathStr(seg);
+          return pathStr;
+        });
+        let path = '';
+        for (let i = 0; i < segStrs.length; i++) {
+          path += segStrs[i];
+        }
+        return path;
       });
       const istorylines = pathStrs.map((pathStr: any) => (
-        <path d={pathStr} fill="transparent" stroke="black"></path>
+        <path d={pathStr} fill="transparent" stroke="white"></path>
       ));
       canvasQueue[i] = (
         <svg
@@ -80,7 +113,7 @@ class Template extends Component<Props, State> {
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <rect width="98%" height="98%" fill="white" x="1%" y="1%" />
+          <rect width="98%" height="98%" fill="grey" x="1%" y="1%" />
           {istorylines}
         </svg>
       );
