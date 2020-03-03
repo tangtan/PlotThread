@@ -4,12 +4,10 @@ import { StateType, DispatchType } from '../../../../../types';
 import { Button } from 'antd';
 import { iStoryline } from 'iStoryline';
 import {
-  setTool,
   nextPredictAction,
   lastPredictAction
 } from '../../../../../store/actions';
 import { getCurrentPredictQueue } from '../../../../../store/selectors';
-import { svg } from 'd3-fetch';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -46,6 +44,23 @@ class Template extends Component<Props, State> {
     }
     return pathStr;
   }
+  genSmoothPathStr(points: any) {
+    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
+    let i, len;
+    for (i = 1, len = points.length; i < len - 1; i += 2) {
+      const rPoint = points[i];
+      const lPoint = points[i + 1];
+      const middleX = (rPoint[0] + lPoint[0]) / 2;
+      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
+      if (rPoint[1] !== lPoint[1]) {
+        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${lPoint[0]} ${lPoint[1]} `;
+      } else {
+        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
+      }
+    }
+    pathStr += `L ${points[i][0]} ${points[i][1]}`;
+    return pathStr;
+  }
   getCanvasQueue() {
     let canvasQueue = [];
     for (let i = 0; i < this.props.predictQueue.length; i++) {
@@ -54,35 +69,48 @@ class Template extends Component<Props, State> {
         this.props.predictQueue[i].protoc
       );
       const nodes = graph.paths;
+      const names = graph.names;
       const newNodes = nodes.map((line: any) => {
         const newLine = line.map((seg: any) => {
           const newSeg = seg.map((point: any) => {
             let newPoint = [];
-            newPoint[0] = point[0] / 4.5;
-            newPoint[1] = point[1] / 3;
+            newPoint[0] = (point[0] - 200) / 4.5;
+            newPoint[1] = (point[1] - 250) / 3;
             return newPoint;
           });
           return newSeg;
         });
         return newLine;
       });
-      const pathStrs = newNodes.map((line: any) => {
+      const filteredNodes = newNodes.filter(
+        (line: any, i: number) => names[i] !== 'RABBIT'
+      );
+      const pathStrs = filteredNodes.map((line: any) => {
         const pathStr = this.genSimplePathStr(line);
+        // const pathStr = this.genSmoothPathStr(line);
         return pathStr;
       });
-      const istorylines = pathStrs.map((pathStr: any) => (
-        <path d={pathStr} fill="transparent" stroke="black"></path>
+      const storylines = pathStrs.map((pathStr: any) => (
+        <path d={pathStr} fill="transparent" stroke="white"></path>
       ));
       canvasQueue[i] = (
-        <svg
-          width="100%"
-          height="30%"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          className="svg-bg"
+          style={{
+            background: 'black',
+            margin: '5px 0',
+            opacity: '0.4'
+          }}
         >
-          <rect width="98%" height="98%" fill="white" x="1%" y="1%" />
-          {istorylines}
-        </svg>
+          <svg
+            width="100%"
+            height="30%"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {storylines}
+          </svg>
+        </div>
       );
     }
     return canvasQueue;

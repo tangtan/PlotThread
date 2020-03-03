@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StateType, DispatchType, OrdersType, StoryGraph } from '../../types';
+import { StateType, DispatchType, StoryGraph } from '../../types';
 import BendUtil from '../../interactions/IStoryEvent/bendUtil';
 import CompressUtil from '../../interactions/IStoryEvent/compressUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortUtil';
@@ -10,21 +10,20 @@ import {
   getCurrentStoryFlowProtoc,
   getCurrentStoryFlowLayout
 } from '../../store/selectors';
-import { view, project } from 'paper';
+import { view } from 'paper';
 import ToolCanvas from './ToolCanvas';
 import { connect } from 'react-redux';
 import {
   addVisualObject,
-  addAction,
   updateProtocAction,
   updateLayoutAction
 } from '../../store/actions';
 import { iStoryline } from 'iStoryline';
-import ReshapeSelectionUtil from '../../interactions/IStoryEvent/reshapeUtil';
 import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
 import { notification } from 'antd';
+
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
@@ -180,10 +179,16 @@ class UtilCanvas extends Component<Props, State> {
           newProtocol.interaction = 'compress';
           this.props.updateProtocAction(newProtocol);
         } else {
-          this.openCompressNotification();
+          this.openNotification(
+            'Compress',
+            'Please draw a horizontal line to select the time range.'
+          );
         }
       } else {
-        this.openCompressNotification();
+        this.openNotification(
+          'Compress',
+          'Please draw a circle to pick characters.'
+        );
       }
     }
     if (this.props.bendState) {
@@ -220,7 +225,8 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
       } else {
-        this.openBendNotification();
+        // this.openBendNotification();
+        this.openNotification('Bend', 'Please just click one name label.');
       }
     }
     if (this.props.sortState) {
@@ -273,7 +279,8 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
       } else {
-        this.openStylishNotification();
+        // this.openStylishNotification();
+        this.openNotification('Stylish', 'Please click one name label first.');
       }
     }
     const relateName = this.props.collideState
@@ -304,7 +311,8 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
       } else {
-        this.openRelateNotification();
+        // this.openRelateNotification();
+        this.openNotification('Relate', 'Please click two name labels first.');
       }
     }
     if (this.props.repelState) {
@@ -337,7 +345,11 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        this.openRepelNotification();
+        // this.openRepelNotification();
+        this.openNotification(
+          'Repel',
+          'Please draw a circle to select a region and then draw a vertical line.'
+        );
       }
     }
     if (this.props.attractState) {
@@ -382,7 +394,11 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        this.openAttractNotification();
+        // this.openAttractNotification();
+        this.openNotification(
+          'Attract',
+          'Please draw a circle to select a region and then draw a vertical line.'
+        );
       }
     }
     if (this.props.transformState) {
@@ -451,62 +467,27 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateLayoutAction(newLayout);
         }
       } else {
-        this.openTransformNotification();
+        // this.openTransformNotification();
+        this.openNotification(
+          'Transform',
+          'Please draw a circle to select at least one group, then draw a free path.'
+        );
       }
     }
   }
-  openCompressNotification = () => {
-    notification.open({
-      message: 'Compress Notification',
-      description: 'Please draw a circle to select at least two characters.',
-      duration: 1.5
+
+  openNotification = (toolName: string, msg: string, duration = 8) => {
+    notification.error({
+      message: toolName,
+      description: msg,
+      duration: duration,
+      placement: 'topLeft',
+      style: {
+        color: 'white'
+      }
     });
   };
-  openBendNotification = () => {
-    notification.open({
-      message: 'Bend Notification',
-      description: 'Please click the name label to select only one character.',
-      duration: 1.5
-    });
-  };
-  openStylishNotification = () => {
-    notification.open({
-      message: 'Stylish Notification',
-      description: 'Please click the name label to select only one character.',
-      duration: 1.5
-    });
-  };
-  openRelateNotification = () => {
-    notification.open({
-      message: 'Relate Notification',
-      description:
-        'Please click the name label to select exactly two characters.',
-      duration: 1.5
-    });
-  };
-  openRepelNotification = () => {
-    notification.open({
-      message: 'Repel Notification',
-      description:
-        'Please draw a circle to select at least one group, then draw a line.',
-      duration: 1.5
-    });
-  };
-  openAttractNotification = () => {
-    notification.open({
-      message: 'Attract Notification',
-      description: 'Please draw a circle to select at least one group.',
-      duration: 1.5
-    });
-  };
-  openTransformNotification = () => {
-    notification.open({
-      message: 'Transform Notification',
-      description:
-        'Please draw a circle to select at least one group, then draw a free path.',
-      duration: 1.5
-    });
-  };
+
   render() {
     return <ToolCanvas />;
   }
