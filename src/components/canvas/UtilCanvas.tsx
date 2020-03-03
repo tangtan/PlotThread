@@ -243,6 +243,7 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
         newProtocol.interaction = 'sort';
+        // console.log("newProtoc",newProtocol);
         this.props.updateProtocAction(newProtocol);
       } else {
       }
@@ -308,6 +309,7 @@ class UtilCanvas extends Component<Props, State> {
             style: relateName
           });
           newProtocol.interaction = 'relate';
+          //  console.log(newProtocol);
           this.props.updateProtocAction(newProtocol);
         }
       } else {

@@ -14,7 +14,7 @@ import {
 } from '../../../types';
 
 const initialProtoc = {
-  id: 'StarWars.xml',
+  id: 'CocoNew.xml',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],
@@ -249,7 +249,7 @@ export default (state = initialState, action: ActionType) => {
         return state;
       }
     case 'LAST_PREDICT':
-      if (state.predictPointer - 1 > 0) {
+      if (state.predictPointer - 1 >= 0) {
         newProtocQueue[pointer + 1] = deepCopy(
           state.predictQueue[state.predictPointer - 1].protoc
         );

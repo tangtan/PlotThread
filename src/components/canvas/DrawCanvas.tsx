@@ -59,9 +59,10 @@ class DrawCanvas extends Component<Props, State> {
     const protoc = this.props.storyProtoc;
     const data = this.props.storyLayout;
     const postUrl = this.state.serverUpdateUrl;
-    const postReq = { data: data, protoc: protoc };
+    //    const postReq = { data: data, protoc: protoc };
+    const postReq = { data: { error: 0, data: data }, protoc: protoc };
     const postRes = await axios.post(postUrl, postReq);
-    console.log(postRes);
+    //  console.log(postRes);
     const graph = this.state.storyLayouter._layout(
       postRes.data.data[0],
       postRes.data.protoc[0]
@@ -114,7 +115,8 @@ class DrawCanvas extends Component<Props, State> {
             i < storylines.length ? storylines[i].lastChild.children : [],
           animationType: animationType,
           characterID: i,
-          segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i])
+          segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i]),
+          dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
         });
       } else {
         this.props.addVisualObject('storyline', {
@@ -124,10 +126,27 @@ class DrawCanvas extends Component<Props, State> {
             i < storylines.length ? storylines[i].lastChild.children : [],
           animationType: animationType,
           characterID: i,
-          segmentIDs: []
+          segmentIDs: [],
+          dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
         });
       }
     }
+  }
+  getDashIDs(styleConfig: StyleConfig[], name: string) {
+    if (!styleConfig) return [];
+    // console.log(styleConfig);
+    let ret = [];
+    for (let i = 0; i < styleConfig.length; i++) {
+      if (styleConfig[i].name === name) {
+        for (let j = 0; j < styleConfig[i].styles.length; j++) {
+          if (styleConfig[i].styles[j] === 'Dash') {
+            ret.push(styleConfig[i].segmentID);
+            break;
+          }
+        }
+      }
+    }
+    return ret;
   }
   getSegmentIDs(styleConfig: StyleConfig[], name: string) {
     if (!styleConfig) return [];

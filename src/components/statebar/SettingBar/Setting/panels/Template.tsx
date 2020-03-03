@@ -35,6 +35,26 @@ class Template extends Component<Props, State> {
     super(props);
     this.state = { storyLayouter: new iStoryline() };
   }
+  genSmoothPathStr(points: any) {
+    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
+    let i, len;
+    for (i = 1, len = points.length; i < len - 1; i += 2) {
+      const rPoint = points[i];
+      const lPoint = points[i + 1];
+      console.log(i, points[i], points[i + 1]);
+      const middleX = (rPoint[0] + lPoint[0]) / 2;
+      console.log(i, middleX);
+      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
+      if (rPoint[1] !== lPoint[1]) {
+        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${lPoint[0]} ${lPoint[1]} `;
+      } else {
+        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
+      }
+    }
+    if (i < len) pathStr += `L ${points[i][0]} ${points[i][1]}`;
+    else pathStr += `L ${points[i - 1][0]} ${points[i - 1][1]}`;
+    return pathStr;
+  }
   genSimplePathStr(points: any) {
     let pathStr = `M ${points[0][0]} ${points[0][1]} `;
     let i, len;
@@ -44,23 +64,6 @@ class Template extends Component<Props, State> {
     }
     return pathStr;
   }
-  genSmoothPathStr(points: any) {
-    let pathStr = `M ${points[0][0]} ${points[0][1]} `;
-    let i, len;
-    for (i = 1, len = points.length; i < len - 1; i += 2) {
-      const rPoint = points[i];
-      const lPoint = points[i + 1];
-      const middleX = (rPoint[0] + lPoint[0]) / 2;
-      pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
-      if (rPoint[1] !== lPoint[1]) {
-        pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${lPoint[0]} ${lPoint[1]} `;
-      } else {
-        pathStr += `L ${lPoint[0]} ${lPoint[1]} `;
-      }
-    }
-    pathStr += `L ${points[i][0]} ${points[i][1]}`;
-    return pathStr;
-  }
   getCanvasQueue() {
     let canvasQueue = [];
     for (let i = 0; i < this.props.predictQueue.length; i++) {
@@ -68,27 +71,35 @@ class Template extends Component<Props, State> {
         this.props.predictQueue[i].layout,
         this.props.predictQueue[i].protoc
       );
-      const nodes = graph.paths;
-      const names = graph.names;
+      const nodes = [];
+      console.log(i, graph);
+      for (let i = 0; i < graph.paths.length; i++) {
+        if (graph.names[i] !== 'RABBIT') {
+          nodes.push(graph.paths[i]);
+        }
+      }
       const newNodes = nodes.map((line: any) => {
         const newLine = line.map((seg: any) => {
           const newSeg = seg.map((point: any) => {
             let newPoint = [];
-            newPoint[0] = (point[0] - 200) / 4.5;
-            newPoint[1] = (point[1] - 250) / 3;
+            newPoint[0] = (point[0] - 300) / 4;
+            newPoint[1] = (point[1] - 200) / 3;
             return newPoint;
           });
           return newSeg;
         });
         return newLine;
       });
-      const filteredNodes = newNodes.filter(
-        (line: any, i: number) => names[i] !== 'RABBIT'
-      );
-      const pathStrs = filteredNodes.map((line: any) => {
-        const pathStr = this.genSimplePathStr(line);
-        // const pathStr = this.genSmoothPathStr(line);
-        return pathStr;
+      const pathStrs = newNodes.map((line: any) => {
+        const segStrs = line.map((seg: any) => {
+          const pathStr = this.genSmoothPathStr(seg);
+          return pathStr;
+        });
+        let path = '';
+        for (let i = 0; i < segStrs.length; i++) {
+          path += segStrs[i];
+        }
+        return path;
       });
       const storylines = pathStrs.map((pathStr: any) => (
         <path d={pathStr} fill="transparent" stroke="white"></path>
