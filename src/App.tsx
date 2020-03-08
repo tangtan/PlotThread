@@ -46,9 +46,9 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
-          name: 'AddEvent',
+          name: 'Relate',
           type: 'png',
-          url: 'icons/event.png',
+          url: 'icons/relate.png',
           subTools: [
             {
               name: 'Collide',
@@ -68,18 +68,6 @@ class App extends React.Component<Props, State> {
               url: 'icons/merge.png',
               subTools: []
             }
-            // {
-            //   name: 'Merge',
-            //   type: 'png',
-            //   url: 'icons/merge.png',
-            //   subTools: []
-            // },
-            // {
-            //   name: 'Split',
-            //   type: 'png',
-            //   url: 'icons/split.png',
-            //   subTools: []
-            // }
           ]
         },
         {
@@ -130,13 +118,13 @@ class App extends React.Component<Props, State> {
           type: 'png',
           url: 'icons/label.png',
           subTools: []
+        },
+        {
+          name: 'Sort',
+          type: 'png',
+          url: 'icons/sort.png',
+          subTools: []
         }
-        // {
-        //   name: 'Bellish',
-        //   type: 'png',
-        //   url: 'icons/bellish.png',
-        //   subTools: []
-        // }
       ]
     };
   }

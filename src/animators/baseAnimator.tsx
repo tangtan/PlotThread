@@ -1,11 +1,11 @@
-import { Path, Point, Matrix } from 'paper';
+import { Path, Point, Matrix, Item } from 'paper';
 
 export default class BaseAnimator {
   constructor() {}
   static Animate(
     type: string,
     strokes: Path[],
-    prevStrokes: Path[],
+    prevStrokes: Item[],
     segmentIDs: number[]
   ) {
     switch (type) {
@@ -24,14 +24,14 @@ export default class BaseAnimator {
   }
   static RegionalTransit(
     strokes: Path[],
-    prevStoryline: Path[],
+    prevStoryline: Item[],
     segmentIDs: number[]
   ) {
     let flag = [];
     for (let i = 0; i < strokes.length; i++) flag[i] = 0;
     for (let i = 0; i < segmentIDs.length; i++) {
       this.TransitBetweenTwoPath(
-        prevStoryline[segmentIDs[i]],
+        prevStoryline[segmentIDs[i]] as Path,
         strokes[segmentIDs[i]]
       );
       flag[segmentIDs[i]] = 1;
@@ -43,9 +43,9 @@ export default class BaseAnimator {
       }
     }
   }
-  static GlobalTransit(strokes: Path[], prevStoryline: Path[]) {
+  static GlobalTransit(strokes: Path[], prevStoryline: Item[]) {
     for (let i = 0; i < strokes.length; i++) {
-      this.TransitBetweenTwoPath(prevStoryline[i], strokes[i]);
+      this.TransitBetweenTwoPath(prevStoryline[i] as Path, strokes[i]);
     }
   }
   static async Create(strokes: Path[], duration = 1000) {

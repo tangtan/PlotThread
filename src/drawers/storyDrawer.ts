@@ -15,12 +15,14 @@ import TextDrawer from './textDrawer';
 import BaseAnimator from '../animators/baseAnimator';
 import { ColorPicker } from '../utils/color';
 import { StoryStore } from '../utils/storyStore';
+import { Children } from 'react';
+import { Group } from 'antd/lib/radio';
 
 export default class StoryDrawer extends BaseDrawer {
   cfg: any;
   storylineName: string;
   storylinePath: StoryLine;
-  prevStoryline: Path[];
+  prevStoryline: Item[];
   characterID: number;
   animationType: string;
   segmentIDs: number[];
@@ -61,19 +63,20 @@ export default class StoryDrawer extends BaseDrawer {
       dashIDs
     );
     const textLabels = this._drawStoryName(storylineName, compoundPath);
-    return [...textLabels, compoundPath];
+    return [...textLabels, ...compoundPath];
   }
 
   _drawStorySegments(
     name: StoryName,
     storyline: StoryLine,
-    prevStoryline: Path[],
+    prevStoryline: Item[],
     characterID: number,
     animationType: string,
     segmentIDs: number[],
     dashIDs: number[]
   ) {
     let strokes = [];
+    let left = 0;
     for (let i = 0; i < storyline.length; i++) {
       let flag = 1;
       for (let j = 0; j < dashIDs.length; j++) {
@@ -82,29 +85,32 @@ export default class StoryDrawer extends BaseDrawer {
           break;
         }
       }
-      let pathStr = '';
-      if (flag) {
-        pathStr = DrawUtil.getPathStr('sketch', storyline[i]);
-      } else {
-        pathStr = DrawUtil.getPathStr('dash', storyline[i]);
-      }
+      let pathStr = DrawUtil.getPathStr('sketch', storyline[i]);
       let path = new Path(pathStr);
       path.simplify();
       //path.smooth();
       path.visible = false;
-      path.data.characterID = characterID;
+      path.strokeWidth = this.strokeWidth;
+      path.strokeColor = this.strokeColor;
+      path.data.characterID = characterID - 1;
+      if (flag) {
+      } else {
+        path.dashOffset = left;
+        path.dashArray = [10, 10];
+        left += path.length;
+        left %= 20;
+      }
       strokes.push(path);
     }
-    BaseAnimator.Animate(animationType, strokes, prevStoryline, segmentIDs);
-    return new CompoundPath({
-      name: name,
-      children: strokes,
-      strokeWidth: this.strokeWidth,
-      strokeColor: this.strokeColor
-    });
+    let prevStrokes = [];
+    for (let i = 1; i < prevStoryline.length; i++) {
+      prevStrokes.push(prevStoryline[i]);
+    }
+    BaseAnimator.Animate(animationType, strokes, prevStrokes, segmentIDs);
+    return strokes;
   }
-  _drawStoryName(name: StoryName, path: CompoundPath) {
-    const firstSegment = path.firstSegment.point || new Point(0, 0);
+  _drawStoryName(name: StoryName, path: Path[]) {
+    const firstSegment = path[0].firstSegment.point || new Point(0, 0);
     const x0 = firstSegment.x || this.originPointX;
     const y0 = firstSegment.y || this.originPointY;
     let cfg = this.cfg;

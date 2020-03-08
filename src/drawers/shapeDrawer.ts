@@ -1,5 +1,6 @@
 import BaseDrawer from './baseDrawer';
-import { Path } from 'paper';
+import { Path, Segment, CompoundPath } from 'paper';
+import { ENGINE_METHOD_PKEY_ASN1_METHS } from 'constants';
 
 export default class ShapeDrawer extends BaseDrawer {
   defaultRadius: number;
@@ -18,8 +19,20 @@ export default class ShapeDrawer extends BaseDrawer {
     x0: number,
     y0: number
   ) {
-    let shape: Path;
+    let shape: Path | CompoundPath;
     switch (type) {
+      case 'appear':
+        shape = this._drawAppear(x0, y0);
+        break;
+      case 'end':
+        shape = this._drawEnd(x0, y0);
+        break;
+      case 'spark':
+        shape = this._drawSpark(x0, y0);
+        break;
+      case 'highlight':
+        shape = this._drawHighlight(x0, y0);
+        break;
       case 'circle':
         shape = this._drawCircle(x0, y0);
         break;
@@ -65,6 +78,74 @@ export default class ShapeDrawer extends BaseDrawer {
     });
   }
 
+  _drawAppear(x0: number, y0: number) {
+    let paths = [];
+    for (let i = 0; i < 8; i++) {
+      const outer = [
+        x0 + Math.cos((3.14 / 4) * i) * this.defaultEllipseA,
+        y0 + Math.sin((3.14 / 4) * i) * this.defaultEllipseA
+      ];
+      const inner = [
+        x0 + Math.cos((3.14 / 4) * i) * this.defaultEllipseB,
+        y0 + Math.sin((3.14 / 4) * i) * this.defaultEllipseB
+      ];
+      const str = `M ${inner[0]} ${inner[1]} L ${outer[0]} ${outer[1]}`;
+      paths[i] = new Path(str);
+    }
+    return new CompoundPath(paths);
+  }
+  _drawEnd(x0: number, y0: number) {
+    const lefStr = `M ${x0 - 5} ${y0 - this.defaultEllipseB} L ${x0 - 5} ${y0 +
+      this.defaultEllipseB}`;
+    const rigStr = `M ${x0 + 5} ${y0 - this.defaultEllipseA} L ${x0 + 5} ${y0 +
+      this.defaultEllipseA}`;
+    const lefSeg = new Path(lefStr);
+    const rigSeg = new Path(rigStr);
+    return new CompoundPath({
+      children: [lefSeg, rigSeg]
+    });
+  }
+  _drawHighlight(x0: number, y0: number) {
+    let paths = [];
+    for (let i = 0; i < 3; i++) {
+      const outer = [
+        x0 + Math.cos((Math.PI / 3) * i + Math.PI * 0.5) * this.defaultEllipseA,
+        y0 + Math.sin((Math.PI / 3) * i + Math.PI * 0.5) * this.defaultEllipseA
+      ];
+      const inner = [
+        x0 + Math.cos((Math.PI / 3) * i + Math.PI * 1.5) * this.defaultEllipseA,
+        y0 + Math.sin((Math.PI / 3) * i + Math.PI * 1.5) * this.defaultEllipseA
+      ];
+      const str = `M ${inner[0]} ${inner[1]} L ${outer[0]} ${outer[1]}`;
+      paths[i] = new Path(str);
+    }
+    return new CompoundPath(paths);
+  }
+  _drawSpark(x0: number, y0: number) {
+    let pathStr = `M ${x0 + this.defaultEllipseA} ${y0}`;
+    for (let i = 1; i < 8; i++) {
+      if (i & 1) {
+        const point = [
+          x0 + Math.cos((3.14 / 4) * i) * this.defaultEllipseB,
+          y0 + Math.sin((3.14 / 4) * i) * this.defaultEllipseB
+        ];
+        pathStr += ` L ${point[0]} ${point[1]}`;
+      } else {
+        const point = [
+          x0 + Math.cos((3.14 / 4) * i) * this.defaultEllipseA,
+          y0 + Math.sin((3.14 / 4) * i) * this.defaultEllipseA
+        ];
+        pathStr += ` L ${point[0]} ${point[1]}`;
+      }
+    }
+    pathStr += ` L ${x0 + this.defaultEllipseA} ${y0}`;
+    const point = [
+      x0 + Math.cos(3.14 / 4) * this.defaultEllipseB,
+      y0 + Math.sin(3.14 / 4) * this.defaultEllipseB
+    ];
+    pathStr += ` L ${point[0]} ${point[1]}`;
+    return new Path(pathStr);
+  }
   _drawRegularPolygon(sides: number, x0: number, y0: number) {
     return new Path.RegularPolygon({
       center: [x0 || this.originPointX, y0 || this.originPointY],

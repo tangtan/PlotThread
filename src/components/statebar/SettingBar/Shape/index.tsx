@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './Setting.css';
+import './Shape.css';
 import { DispatchType, StateType } from '../../../../types';
 import { getToolState } from '../../../../store/selectors';
 import styled from 'styled-components';
 import { Tabs } from 'antd';
 
-import Template from './panels/Template';
-import GlobalConfig from './panels/GlobalConfig';
+import Embellish from './panels/Embellish';
 
 const { TabPane } = Tabs;
 
 const mapStateToProps = (state: StateType) => {
   return {
-    visible: getToolState(state, 'Setting')
+    visible: getToolState(state, 'Embellish')
   };
 };
 
@@ -28,7 +27,7 @@ type State = {
   width: number;
 };
 
-class GlobalPanel extends Component<Props, State> {
+class ShapePanel extends Component<Props, State> {
   private rootElement = React.createRef<HTMLDivElement>();
   constructor(props: Props) {
     super(props);
@@ -65,11 +64,8 @@ class GlobalPanel extends Component<Props, State> {
       <div className="panel" ref={this.rootElement}>
         <Nav className="nav">
           <Tabs onChange={this.callback} size="small">
-            <TabPane tab="Template" key="1">
-              <Template />
-            </TabPane>
-            <TabPane tab="Settings" key="2">
-              <GlobalConfig />
+            <TabPane tab="Shapes" key="1">
+              <Embellish />
             </TabPane>
           </Tabs>
         </Nav>
@@ -77,4 +73,4 @@ class GlobalPanel extends Component<Props, State> {
     );
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(GlobalPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(ShapePanel);

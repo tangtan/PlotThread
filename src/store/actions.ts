@@ -49,6 +49,10 @@ export const updateProtocAction = createAction(
   action => (protoc: any) => action({ protocol: protoc })
 );
 
+export const newProtocAction = createAction('NEW_PROTOC', action => (id: any) =>
+  action({ id: id })
+);
+
 export const updateLayoutAction = createAction(
   'UPDATE_LAYOUT',
   action => (storyLayout: any) => action({ storyLayout: storyLayout })
@@ -60,4 +64,21 @@ export const nextPredictAction = createAction('NEXT_PREDICT', action => () =>
 
 export const lastPredictAction = createAction('LAST_PREDICT', action => () =>
   action({})
+);
+
+export const recordPointerAction = createAction(
+  'RECORD_POINTER',
+  action => (originalPointer: number) =>
+    action({ originalPointer: originalPointer })
+);
+export const backPointerAction = createAction('BACK_POINTER', action => () =>
+  action({})
+);
+export const forwardPointerAction = createAction(
+  'FORWARD_POINTER',
+  action => () => action({})
+);
+export const abandonPointerAction = createAction(
+  'ABANDON_POINTER',
+  action => () => action({})
 );

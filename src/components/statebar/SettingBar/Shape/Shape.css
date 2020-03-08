@@ -1,0 +1,60 @@
+.panel {
+  background-color: #25262c;
+  position: absolute;
+  top: 50px;
+  right: -350px;
+  transition: right 0.3s;
+}
+
+.panel.is-nav-open {
+  right: 0;
+  transition: right 0.5s;
+}
+
+.panel-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.panel-divider {
+  margin: 10px 0;
+}
+
+.settingbar-content-wrapper {
+  padding: 10px;
+}
+
+.settingbar-content-title {
+  font-size: 16px;
+  margin-top: 16px;
+  margin-bottom: 3px;
+}
+
+.item.muuri-item-dragging {
+  z-index: 2003;
+}
+
+.item.muuri-item-releasing {
+  z-index: 2002;
+}
+
+.item.muuri-item-hidden {
+  z-index: 2000;
+}
+
+.item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.item-image-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

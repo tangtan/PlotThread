@@ -15,6 +15,7 @@ export default class RelateUtil extends BrushSelectionUtil {
     if (this._downPoint && this._dragPoint) {
       const sTime = this.getStartTimeID(this._downPoint);
       const eTime = this.getEndTimeID(this._dragPoint);
+      console.log('relate up', this.selectedItems);
       const names = this.selectedItems.map(item => item.name);
       const {
         lTime,

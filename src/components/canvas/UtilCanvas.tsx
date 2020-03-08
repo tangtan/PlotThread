@@ -30,7 +30,7 @@ const mapStateToProps = (state: StateType) => {
     storyLayout: getCurrentStoryFlowLayout(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
-    sortState: getToolState(state, 'FreeMode'),
+    sortState: getToolState(state, 'Sort'),
     bumpState: getToolState(state, 'Bump'),
     dashState: getToolState(state, 'Dash'),
     waveState: getToolState(state, 'Wave'),
@@ -124,11 +124,13 @@ class UtilCanvas extends Component<Props, State> {
       this.props.storyLayout !== prevProps.storyLayout ||
       this.props.storyProtoc !== prevProps.storyProtoc
     ) {
-      const graph = this.state.storyLayouter._layout(
-        this.props.storyLayout,
-        this.props.storyProtoc
-      );
-      this.updateUtils(graph);
+      if (this.props.storyLayout && this.props.storyProtoc) {
+        const graph = this.state.storyLayouter._layout(
+          this.props.storyLayout,
+          this.props.storyProtoc
+        );
+        this.updateUtils(graph);
+      }
     }
   }
   onMouseDown(e: paper.MouseEvent) {
@@ -271,6 +273,7 @@ class UtilCanvas extends Component<Props, State> {
         const [nameIDs, span] = ret;
         if (span && nameIDs) {
           let newProtocol = this.deepCopy(this.props.storyProtoc);
+          if (!newProtocol.stylishInfo) newProtocol.stylishInfo = [];
           newProtocol.stylishInfo.push({
             names: nameIDs,
             timespan: span,
@@ -303,6 +306,7 @@ class UtilCanvas extends Component<Props, State> {
         const [nameIDs, span] = ret;
         if (span && nameIDs) {
           let newProtocol = this.deepCopy(this.props.storyProtoc);
+          if (!newProtocol.relateInfo) newProtocol.relateInfo = [];
           newProtocol.relateInfo.push({
             names: nameIDs,
             timespan: span,
@@ -347,7 +351,6 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        // this.openRepelNotification();
         this.openNotification(
           'Repel',
           'Please draw a circle to select a region and then draw a vertical line.'
@@ -357,38 +360,26 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.attractState) {
       const ret = this.state.attractUtil.up(e);
       if (ret) {
-        const [names, sTimeID, eTimeID] = ret;
+        const [type, [[name1, s1, e1], [name2, s2, e2]]] = ret; //type为1 则第一组在下面
+        let flag = type ? 1 : -1;
         let newLayout = this.deepCopy(this.props.storyLayout);
-        let minY = 1e9;
-        let maxY = 0;
-        for (let j = 0; j < names.length; j++) {
+        for (let j = 0; j < name1.length; j++) {
           for (let i = 0; i < newLayout.array.length; i++) {
-            if (newLayout.array[i].name === names[j]) {
-              if (newLayout.perm[i][sTimeID] !== -1) {
-                minY = Math.min(newLayout.array[i].points[sTimeID].item3, minY);
-                maxY = Math.max(newLayout.array[i].points[sTimeID].item3, maxY);
-              }
-              if (newLayout.perm[i][eTimeID] !== -1) {
-                minY = Math.min(newLayout.array[i].points[eTimeID].item3, minY);
-                maxY = Math.max(newLayout.array[i].points[eTimeID].item3, maxY);
+            if (newLayout.array[i].name === name1[j]) {
+              for (let k = s1; k <= e1; k++) {
+                if (newLayout.perm[i][k] !== -1) {
+                  newLayout.array[i].points[k].item3 -= flag * 30;
+                }
               }
             }
           }
         }
-        let midY = (minY + maxY) / 2;
-        for (let j = 0; j < names.length; j++) {
+        for (let j = 0; j < name2.length; j++) {
           for (let i = 0; i < newLayout.array.length; i++) {
-            if (newLayout.array[i].name === names[j]) {
-              for (let k = sTimeID; k <= eTimeID; k++) {
+            if (newLayout.array[i].name === name2[j]) {
+              for (let k = s2; k <= e2; k++) {
                 if (newLayout.perm[i][k] !== -1) {
-                  const prevY = newLayout.array[i].points[k].item3;
-                  if (prevY > midY) {
-                    newLayout.array[i].points[k].item3 =
-                      (20 * (prevY - midY)) / (maxY - midY) + midY;
-                  } else {
-                    newLayout.array[i].points[k].item3 =
-                      midY - (20 * (midY - prevY)) / (midY - minY);
-                  }
+                  newLayout.array[i].points[k].item3 -= -flag * 30;
                 }
               }
             }
@@ -396,7 +387,6 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        // this.openAttractNotification();
         this.openNotification(
           'Attract',
           'Please draw a circle to select a region and then draw a vertical line.'

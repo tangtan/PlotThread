@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../../../types';
-import { Button } from 'antd';
+import { Button, Icon } from 'antd';
 import { iStoryline } from 'iStoryline';
 import {
   nextPredictAction,
-  lastPredictAction
+  lastPredictAction,
+  backPointerAction,
+  forwardPointerAction,
+  abandonPointerAction
 } from '../../../../../store/actions';
 import { getCurrentPredictQueue } from '../../../../../store/selectors';
 
@@ -19,7 +22,10 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     nextPredictAction: () => dispatch(nextPredictAction()),
-    lastPredictAction: () => dispatch(lastPredictAction())
+    lastPredictAction: () => dispatch(lastPredictAction()),
+    backPointerAction: () => dispatch(backPointerAction()),
+    forwardPointerAction: () => dispatch(forwardPointerAction()),
+    abandonPointerAction: () => dispatch(abandonPointerAction())
   };
 };
 
@@ -41,9 +47,7 @@ class Template extends Component<Props, State> {
     for (i = 1, len = points.length; i < len - 1; i += 2) {
       const rPoint = points[i];
       const lPoint = points[i + 1];
-      console.log(i, points[i], points[i + 1]);
       const middleX = (rPoint[0] + lPoint[0]) / 2;
-      console.log(i, middleX);
       pathStr += `L ${rPoint[0]} ${rPoint[1]} `;
       if (rPoint[1] !== lPoint[1]) {
         pathStr += `C ${middleX} ${rPoint[1]} ${middleX} ${lPoint[1]} ${lPoint[0]} ${lPoint[1]} `;
@@ -72,7 +76,6 @@ class Template extends Component<Props, State> {
         this.props.predictQueue[i].protoc
       );
       const nodes = [];
-      console.log(i, graph);
       for (let i = 0; i < graph.paths.length; i++) {
         if (graph.names[i] !== 'RABBIT') {
           nodes.push(graph.paths[i]);
@@ -83,7 +86,7 @@ class Template extends Component<Props, State> {
           const newSeg = seg.map((point: any) => {
             let newPoint = [];
             newPoint[0] = (point[0] - 300) / 4;
-            newPoint[1] = (point[1] - 200) / 3;
+            newPoint[1] = (point[1] - 300) / 3;
             return newPoint;
           });
           return newSeg;
@@ -132,6 +135,15 @@ class Template extends Component<Props, State> {
   clickLast() {
     this.props.lastPredictAction();
   }
+  downCompare() {
+    this.props.backPointerAction();
+  }
+  upCompare() {
+    this.props.forwardPointerAction();
+  }
+  clickAbandon() {
+    this.props.abandonPointerAction();
+  }
   render() {
     let canvasQueue = this.getCanvasQueue();
     return (
@@ -149,17 +161,37 @@ class Template extends Component<Props, State> {
         </div>
         <Button
           type="ghost"
-          style={{ width: '40%', margin: '20px 10px' }}
-          onClick={() => this.clickNext()}
+          style={{ width: '20%', margin: '20px 5px' }}
+          onClick={() => this.clickLast()}
         >
-          Next
+          <img src="icons/up.png" width="30px" height="30px" />
         </Button>
         <Button
           type="ghost"
-          style={{ width: '40%', margin: '20px 10px' }}
-          onClick={() => this.clickLast()}
+          style={{ width: '20%', margin: '5px 10px' }}
+          onClick={() => this.clickNext()}
         >
-          Last
+          <img src="icons/down.png" width="30px" height="30px" />
+        </Button>
+        <Button
+          type="link"
+          ghost
+          style={{
+            background: '#34373e'
+          }}
+          size="large"
+          shape="circle"
+          onMouseDown={() => this.downCompare()}
+          onMouseUp={() => this.upCompare()}
+        >
+          <img src="icons/compare.png" width="40px" height="40px" />
+        </Button>
+        <Button
+          type="ghost"
+          style={{ width: '30%', margin: '10px' }}
+          onClick={() => this.clickAbandon()}
+        >
+          Abandon
         </Button>
       </div>
     );

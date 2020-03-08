@@ -5,6 +5,7 @@ import { setTool } from '../../../store/actions';
 import { getSelectedItemColor } from '../../../store/selectors';
 import { connect } from 'react-redux';
 import StyleModal from './StyleModal';
+import StrokePicker from './StrokePicker';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -98,13 +99,11 @@ class StyleBar extends Component<Props, State> {
             this.onClick('FillStyle');
           }}
         />
+        <StrokePicker xOffSet={20} />
         <StyleModal xOffSet={-100} />
       </FileBar>
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(StyleBar);
+export default connect(mapStateToProps, mapDispatchToProps)(StyleBar);

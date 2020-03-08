@@ -32,6 +32,7 @@ export default class BaseDrawer {
     const visualObjects = this._drawVisualObjects(type, isCreating, x0, y0);
     const compoundGroup = new Group({
       children: visualObjects,
+      name: visualObjects[0]._content,
       data: {
         isCreating: isCreating,
         isTransforming: false,
@@ -43,13 +44,12 @@ export default class BaseDrawer {
     compoundGroup.name = this._nameVisualObject(compoundGroup, type);
     return compoundGroup;
   }
-
   _nameVisualObject(visualObj: Group, type: string) {
     const _type = type.startsWith('data:image') ? 'image' : type;
     const defaultName = `${_type}-${visualObj.index}`;
     switch (type) {
       case 'storyline':
-        return visualObj.lastChild.name || defaultName;
+        return visualObj.name || defaultName;
       default:
         return defaultName;
     }

@@ -1,5 +1,6 @@
 import { StateType } from '../types';
 import { project, Color } from 'paper';
+import { deepCopy } from '../interactions/IMouseEvent/segmentEvent';
 
 // toolbar module
 export const getToolState = (state: StateType, name: string) => {

@@ -14,7 +14,7 @@ import {
 } from '../../../types';
 
 const initialProtoc = {
-  id: 'CocoNew.xml',
+  id: '',
   sessionInnerGap: 18,
   sessionOuterGap: 54,
   sessionInnerGaps: [],
@@ -30,13 +30,14 @@ const initialProtoc = {
   scaleInfo: [],
   interaction: ''
 } as StoryFlowProtocType;
-
+const initialGraph = {} as StoryFlowStoryType;
 const initialState: historyQueueType = {
   protocQueue: [initialProtoc], //暂时写成数字
   layoutQueue: [], // ?
   scaleQueue: [],
   actionTypeQueue: [],
   pointer: 0,
+  originalPointer: 0,
   predictQueue: [],
   predictPointer: 0
 };
@@ -88,7 +89,8 @@ export default (state = initialState, action: ActionType) => {
     layoutQueue,
     scaleQueue,
     actionTypeQueue,
-    pointer
+    pointer,
+    predictQueue
   } = state;
   let newProtocQueue = protocQueue;
   let newLayoutQueue = layoutQueue;
@@ -136,6 +138,37 @@ export default (state = initialState, action: ActionType) => {
       } else {
         return state;
       }
+    case 'RECORD_POINTER':
+      const { originalPointer } = action.payload;
+      return {
+        ...state,
+        originalPointer: originalPointer
+      };
+    case 'BACK_POINTER':
+      return {
+        ...state,
+        pointer: state.originalPointer
+      };
+    case 'FORWARD_POINTER':
+      return {
+        ...state,
+        pointer: newProtocQueue.length - 1
+      };
+    case 'ABANDON_POINTER':
+      newProtocQueue.splice(state.originalPointer + 1);
+      newLayoutQueue.splice(state.originalPointer + 1);
+      newScaleQueue.splice(state.originalPointer + 1);
+      newActionTypeQueue.splice(state.originalPointer + 1);
+      return {
+        ...state,
+        pointer: state.originalPointer,
+        protocQueue: newProtocQueue,
+        layoutQueue: newLayoutQueue,
+        scaleQueue: newScaleQueue,
+        actionTypeQueue: newActionTypeQueue,
+        predictPointer: 0,
+        predictQueue: []
+      };
     case 'ADD':
       const { protoc, layout, scale } = action.payload;
       newProtocQueue[pointer + 1] = protoc as StoryFlowProtocType;
@@ -167,10 +200,10 @@ export default (state = initialState, action: ActionType) => {
       }
       updateLayout.array[characterID].points[j].item3 +=
         deltaY * scaleQueue[pointer];
-      newProtocQueue.slice(pointer + 1);
-      newLayoutQueue.slice(pointer + 1);
-      newScaleQueue.slice(pointer + 1);
-      newActionTypeQueue.slice(pointer + 1);
+      newProtocQueue.splice(pointer + 1);
+      newLayoutQueue.splice(pointer + 1);
+      newScaleQueue.splice(pointer + 1);
+      newActionTypeQueue.splice(pointer + 1);
       newProtocQueue[pointer + 1] = updateProtoc as StoryFlowProtocType;
       newLayoutQueue[pointer + 1] = updateLayout as StoryFlowStoryType;
       newScaleQueue[pointer + 1] = updateScale;
@@ -183,14 +216,33 @@ export default (state = initialState, action: ActionType) => {
         scaleQueue: newScaleQueue,
         actionTypeQueue: newActionTypeQueue
       };
+    case 'NEW_PROTOC':
+      const { id } = action.payload;
+      let iniProtoc = deepCopy(initialProtoc);
+      iniProtoc.id = id;
+      newProtocQueue.splice(1);
+      newLayoutQueue.splice(1);
+      newScaleQueue.splice(1);
+      newActionTypeQueue.splice(1);
+      newProtocQueue[1] = iniProtoc as StoryFlowProtocType;
+      newScaleQueue[1] = 1;
+      newActionTypeQueue[1] = 'NEW_PROTOC';
+      return {
+        ...state,
+        pointer: 1,
+        protocQueue: newProtocQueue,
+        layoutQueue: newLayoutQueue,
+        scaleQueue: newScaleQueue,
+        actionTypeQueue: newActionTypeQueue
+      };
     case 'UPDATE_PROTOC':
       const { protocol } = action.payload;
       let upLayout = deepCopy(layoutQueue[pointer]);
       let upScale = scaleQueue[pointer];
-      newProtocQueue.slice(pointer + 1);
-      newLayoutQueue.slice(pointer + 1);
-      newScaleQueue.slice(pointer + 1);
-      newActionTypeQueue.slice(pointer + 1);
+      newProtocQueue.splice(pointer + 1);
+      newLayoutQueue.splice(pointer + 1);
+      newScaleQueue.splice(pointer + 1);
+      newActionTypeQueue.splice(pointer + 1);
       newProtocQueue[pointer + 1] = protocol as StoryFlowProtocType;
       newLayoutQueue[pointer + 1] = upLayout as StoryFlowStoryType;
       newScaleQueue[pointer + 1] = upScale;
@@ -276,5 +328,6 @@ export default (state = initialState, action: ActionType) => {
   }
 };
 export function deepCopy(x: any) {
+  if (!x) return null;
   return JSON.parse(JSON.stringify(x));
 }

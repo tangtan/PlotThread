@@ -3,7 +3,7 @@ import ToolBar from '../../toolbar';
 import { ITool } from '../../../types';
 import SettingPanel from './Setting';
 import UploadPicModal from './UploadModal';
-
+import ShapePanel from './Shape';
 type Props = {
   xOffSet?: number;
 };
@@ -17,6 +17,12 @@ export default class SettingBar extends Component<Props, State> {
     super(props);
     this.state = {
       settingTools: [
+        {
+          name: 'Embellish',
+          type: 'png',
+          url: 'icons/embellish.png',
+          subTools: []
+        },
         {
           name: 'Setting',
           type: 'png',
@@ -37,6 +43,7 @@ export default class SettingBar extends Component<Props, State> {
           Tools={this.state.settingTools}
         />
         <SettingPanel />
+        <ShapePanel />
         <UploadPicModal />
       </div>
     );

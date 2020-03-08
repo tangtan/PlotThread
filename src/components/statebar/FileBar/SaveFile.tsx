@@ -22,9 +22,8 @@ export default class SaveFile extends Component<Props, State> {
     this.setState({
       fileName: e.target.value
     });
-    console.log(this.state.fileName);
   };
-
+  saveFile() {}
   render() {
     return (
       <Modal
@@ -32,6 +31,7 @@ export default class SaveFile extends Component<Props, State> {
         title="Save File"
         visible={this.props.visible}
         onOk={() => {
+          this.saveFile();
           this.props.onCloseModal();
         }}
         onCancel={() => this.props.onCloseModal()}

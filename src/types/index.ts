@@ -19,6 +19,7 @@ export type historyQueueType = {
   scaleQueue: number[];
   actionTypeQueue: string[];
   pointer: number;
+  originalPointer: number;
   predictQueue: PredictAnswerType[];
   predictPointer: number;
 };

@@ -16,7 +16,7 @@ import {
   updateProtocAction
 } from '../../store/actions';
 import axios from 'axios';
-import { project, view } from 'paper';
+import { project, view, Item } from 'paper';
 import { connect } from 'react-redux';
 const mapStateToProps = (state: StateType) => {
   return {
@@ -60,18 +60,21 @@ class DrawCanvas extends Component<Props, State> {
     const data = this.props.storyLayout;
     const postUrl = this.state.serverUpdateUrl;
     //    const postReq = { data: data, protoc: protoc };
-    const postReq = { data: { error: 0, data: data }, protoc: protoc };
+    const postReq = { data: data, protoc: protoc };
     const postRes = await axios.post(postUrl, postReq);
-    //  console.log(postRes);
-    const graph = this.state.storyLayouter._layout(
-      postRes.data.data[0],
-      postRes.data.protoc[0]
-    );
-    this.props.addAction(
-      postRes.data.protoc[0],
-      postRes.data.data[0],
-      graph.scaleRate
-    );
+    if (postRes.data && postRes.data.data && postRes.data.protoc) {
+      if (postRes.data.data[0] && postRes.data.protoc[0]) {
+        const graph = this.state.storyLayouter._layout(
+          postRes.data.data[0],
+          postRes.data.protoc[0]
+        );
+        this.props.addAction(
+          postRes.data.protoc[0],
+          postRes.data.data[0],
+          graph.scaleRate
+        );
+      }
+    }
   };
   private drawStorylines(graph: StoryGraph) {
     const storylines = this.props.renderQueue.filter(
@@ -87,7 +90,7 @@ class DrawCanvas extends Component<Props, State> {
         storylinePath: graph.paths[i],
         prevStoryline:
           i < storylines.length ? storylines[i].lastChild.children : [],
-        characterID: i,
+        characterID: i + 1,
         animationType: 'creation',
         segmentIDs: []
       });
@@ -111,10 +114,9 @@ class DrawCanvas extends Component<Props, State> {
         this.props.addVisualObject('storyline', {
           storylineName: graph.names[i],
           storylinePath: graph.paths[i],
-          prevStoryline:
-            i < storylines.length ? storylines[i].lastChild.children : [],
+          prevStoryline: i < storylines.length ? storylines[i].children : [],
           animationType: animationType,
-          characterID: i,
+          characterID: i + 1,
           segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i]),
           dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
         });
@@ -122,10 +124,9 @@ class DrawCanvas extends Component<Props, State> {
         this.props.addVisualObject('storyline', {
           storylineName: graph.names[i],
           storylinePath: graph.paths[i],
-          prevStoryline:
-            i < storylines.length ? storylines[i].lastChild.children : [],
+          prevStoryline: i < storylines.length ? storylines[i].children : [],
           animationType: animationType,
-          characterID: i,
+          characterID: i + 1,
           segmentIDs: [],
           dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
         });
@@ -169,12 +170,14 @@ class DrawCanvas extends Component<Props, State> {
   async componentDidUpdate(prevProps: Props) {
     if (this.props.historyQueue.pointer !== prevProps.historyQueue.pointer) {
       if (this.checkActionStable(this.props.actionType)) {
-        const graph = this.state.storyLayouter._layout(
-          this.props.storyLayout,
-          this.props.storyProtoc
-        );
-        if (this.props.historyQueue.pointer <= 1) this.drawStorylines(graph);
-        else this.updateStorylines(graph);
+        if (this.props.storyLayout && this.props.storyProtoc) {
+          const graph = this.state.storyLayouter._layout(
+            this.props.storyLayout,
+            this.props.storyProtoc
+          );
+          if (this.props.historyQueue.pointer <= 2) this.drawStorylines(graph);
+          else this.updateStorylines(graph);
+        }
       } else {
         await this.genStoryGraph();
       }
@@ -192,6 +195,14 @@ class DrawCanvas extends Component<Props, State> {
       this.props.renderQueue.forEach(item => {
         item.data.isTransforming = false;
         item.data.selectionBounds.visible = false;
+      });
+      this.props.renderQueue.forEach(item => this.deselectItem(item));
+    }
+  }
+  deselectItem(item: Item) {
+    if (item.children) {
+      item.children.forEach(item => {
+        item.data.isTransforming = false;
       });
     }
   }

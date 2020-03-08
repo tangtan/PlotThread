@@ -11,6 +11,7 @@ import dragSegment, {
 } from '../../../interactions/IMouseEvent/segmentEvent';
 import { drawSelectionBounds } from '../../../drawers/baseDrawer';
 import { updateLayoutAction } from '../../actions';
+import { ColorPicker } from '../../../utils/color';
 
 const initialState: VisualObject[] = [];
 const errorMsg = 'Incorrect render type';
@@ -23,6 +24,11 @@ const drawVisualObject = (type: string, cfg?: any) => {
     case 'triangle':
     case 'rectangle':
     case 'pentagon':
+    case 'star':
+    case 'end':
+    case 'appear':
+    case 'spark':
+    case 'highlight':
     case 'hexagon':
       const shapeDrawer = new ShapeDrawer(_cfg);
       return shapeDrawer.draw(type, false, _cfg.x, _cfg.y);
@@ -82,7 +88,7 @@ const onVisualObject = (visualObj: Group) => {
 
 const onStoryline = (storyline: Group) => {
   const textLabel = storyline.children ? storyline.children[0] : null;
-  const strokes = storyline.children ? storyline.children[1].children : null;
+  const strokes = storyline.children ? storyline.children.slice(1) : null;
   const bounds = storyline.internalBounds as Rectangle;
   if (storyline.data.selectionBounds) storyline.data.selectionBounds.remove();
   storyline.data.selectionBounds = drawSelectionBounds(bounds);
@@ -114,10 +120,19 @@ const onStoryline = (storyline: Group) => {
       };
       // TODO: easy segment dragger
       path.onMouseEnter = () => {
-        path.selected = true;
+        path.data.originColor = path.strokeColor;
+        path.data.originWidth = path.strokeWidth;
+        path.strokeColor = ColorPicker.blue;
+        path.strokeWidth = 4;
       };
       path.onMouseLeave = () => {
-        path.selected = false;
+        path.strokeColor = path.data.originColor;
+        path.strokeWidth = path.data.originWidth;
+      };
+      path.onClick = (e: paper.MouseEvent) => {
+        path.selected = true;
+        path.data.isTransforming = true;
+        e.stopPropagation();
       };
     }
   }

@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../types';
-import { Button, Progress } from 'antd';
+import { Button, Progress, Menu } from 'antd';
 import { iStoryline } from 'iStoryline';
 import axios from 'axios';
 import {
   getCurrentStoryFlowProtoc,
-  getCurrentStoryFlowLayout
+  getCurrentStoryFlowLayout,
+  getHistoryPointer
 } from '../store/selectors';
-import { addAction, newPredictAction, setTool } from '../store/actions';
+import {
+  addAction,
+  newPredictAction,
+  setTool,
+  recordPointerAction
+} from '../store/actions';
+import ReactSVG from 'react-svg';
 
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
-    storyLayout: getCurrentStoryFlowLayout(state)
+    storyLayout: getCurrentStoryFlowLayout(state),
+    pointer: getHistoryPointer(state)
   };
 };
 
@@ -23,6 +31,8 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
       dispatch(addAction(protoc, layout, scale)),
     newPredictAction: (newPredictQueue: any[]) =>
       dispatch(newPredictAction(newPredictQueue)),
+    recordPointerAction: (originalPointer: number) =>
+      dispatch(recordPointerAction(originalPointer)),
     activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
   };
 };
@@ -34,7 +44,7 @@ type State = {
   serverPredictUrl: string;
   storyLayouter: any;
   percent: number;
-  progressVisible: boolean;
+  predictSignal: boolean;
 };
 
 class TemplateBTN extends Component<Props, State> {
@@ -44,7 +54,7 @@ class TemplateBTN extends Component<Props, State> {
       serverPredictUrl: 'api/predict',
       storyLayouter: new iStoryline(),
       percent: 0,
-      progressVisible: false
+      predictSignal: false
     };
   }
 
@@ -55,51 +65,56 @@ class TemplateBTN extends Component<Props, State> {
     }
     this.setState({ percent });
   };
-
-  async handleClick() {
+  clickCancel() {
+    this.setState({
+      predictSignal: false
+    });
+    this.props.activateTool('Setting', false);
+  }
+  async clickAi() {
+    const originalPointer = this.props.pointer;
     this.setState({
       percent: 0,
-      progressVisible: true
+      predictSignal: true
     });
+    this.props.recordPointerAction(originalPointer);
+    //console.log(originalPointer);
     let tmpID = setInterval(() => this.increase(), 1000);
     const protoc = this.props.storyProtoc;
     const data = this.props.storyLayout;
     this.props.activateTool('Setting', true);
     const postReq = { data: data, protoc: protoc };
+    //console.log(JSON.stringify(postReq));
     const postUrl = this.state.serverPredictUrl;
     const postRes = await axios.post(postUrl, postReq);
     clearInterval(tmpID);
-    let newPredictQueue = [];
-    // for (let i = 0; i < 7; i++) {
-    //   newPredictQueue[i] = {
-    //     layout: postRes.data.data[0],
-    //     protoc: postRes.data.protoc[0]
-    //   };
-    // }
-    for (let i = 0; i < postRes.data.data.length; i++) {
-      newPredictQueue[i] = {
-        layout: postRes.data.data[i],
-        protoc: postRes.data.protoc[i]
-      };
+    if (this.state.predictSignal) {
+      let newPredictQueue = [];
+      for (let i = 0; i < postRes.data.data.length; i++) {
+        newPredictQueue[i] = {
+          layout: postRes.data.data[i],
+          protoc: postRes.data.protoc[i]
+        };
+      }
+      this.setState({
+        percent: 100,
+        predictSignal: false
+      });
+      const graph = this.state.storyLayouter._layout(
+        postRes.data.data[0],
+        postRes.data.protoc[0]
+      );
+      this.props.addAction(
+        postRes.data.protoc[0],
+        postRes.data.data[0],
+        graph.scaleRate
+      );
+      this.props.newPredictAction(newPredictQueue);
     }
-    this.setState({
-      percent: 100,
-      progressVisible: false
-    });
-    const graph = this.state.storyLayouter._layout(
-      postRes.data.data[0],
-      postRes.data.protoc[0]
-    );
-    this.props.addAction(
-      postRes.data.protoc[0],
-      postRes.data.data[0],
-      graph.scaleRate
-    );
-    this.props.newPredictAction(newPredictQueue);
   }
 
   render() {
-    let { percent, progressVisible } = this.state;
+    let { percent, predictSignal } = this.state;
     let myProgress = (
       <Progress
         percent={percent}
@@ -116,23 +131,39 @@ class TemplateBTN extends Component<Props, State> {
         }}
       />
     );
+    const AI = <ReactSVG src="svg/Menu_Ai/AI generator.svg"></ReactSVG>;
     return (
       <div className="ai-btn">
         <Button
           type="primary"
           style={{
             position: 'absolute',
-            bottom: '60px',
+            bottom: '100px',
             left: '60px',
             background: '#34373e'
           }}
           size="large"
           shape="circle"
-          onClick={() => this.handleClick()}
+          onClick={() => this.clickAi()}
         >
-          AI
+          Ai
         </Button>
-        {progressVisible ? myProgress : null}
+        <Button
+          type="primary"
+          style={{
+            position: 'absolute',
+            bottom: '50px',
+            left: '60px',
+            background: '#34373e'
+          }}
+          size="large"
+          shape="circle"
+          disabled={!this.state.predictSignal}
+          onClick={() => this.clickCancel()}
+        >
+          X
+        </Button>
+        {predictSignal ? myProgress : null}
       </div>
     );
   }
