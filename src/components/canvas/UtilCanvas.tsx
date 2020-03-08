@@ -36,7 +36,8 @@ const mapStateToProps = (state: StateType) => {
     waveState: getToolState(state, 'Wave'),
     zigzagState: getToolState(state, 'Zigzag'),
     collideState: getToolState(state, 'Collide'),
-    knotState: getToolState(state, 'Knot'),
+    mergeState: getToolState(state, 'Merge'),
+    splitState: getToolState(state, 'Split'),
     twineState: getToolState(state, 'Twine'),
     repelState: getToolState(state, 'Repel'),
     attractState: getToolState(state, 'Attract'),
@@ -64,7 +65,8 @@ type State = {
   waveUtil: StylishUtil;
   zigzagUtil: StylishUtil;
   collideUtil: RelateUtil;
-  knotUtil: RelateUtil;
+  mergeUtil: RelateUtil;
+  splitUtil: RelateUtil;
   twineUtil: RelateUtil;
   repelUtil: RepelUtil;
   attractUtil: AttractUtil;
@@ -83,7 +85,8 @@ class UtilCanvas extends Component<Props, State> {
       waveUtil: new StylishUtil('Wave', 1),
       zigzagUtil: new StylishUtil('Zigzag', 1),
       collideUtil: new RelateUtil('Collide', 2),
-      knotUtil: new RelateUtil('Knot', 2),
+      mergeUtil: new RelateUtil('Merge', 2),
+      splitUtil: new RelateUtil('Split', 2),
       twineUtil: new RelateUtil('Twine', 2),
       repelUtil: new RepelUtil('Repel', 0),
       attractUtil: new AttractUtil('Attract', 0),
@@ -99,7 +102,8 @@ class UtilCanvas extends Component<Props, State> {
     this.state.waveUtil.updateStoryStore(graph);
     this.state.zigzagUtil.updateStoryStore(graph);
     this.state.collideUtil.updateStoryStore(graph);
-    this.state.knotUtil.updateStoryStore(graph);
+    this.state.mergeUtil.updateStoryStore(graph);
+    this.state.splitUtil.updateStoryStore(graph);
     this.state.twineUtil.updateStoryStore(graph);
     this.state.repelUtil.updateStoryStore(graph);
     this.state.attractUtil.updateStoryStore(graph);
@@ -142,7 +146,8 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.waveState) this.state.waveUtil.down(e);
     if (this.props.zigzagState) this.state.zigzagUtil.down(e);
     if (this.props.collideState) this.state.collideUtil.down(e);
-    if (this.props.knotState) this.state.knotUtil.down(e);
+    if (this.props.mergeState) this.state.mergeUtil.down(e);
+    if (this.props.splitState) this.state.splitUtil.down(e);
     if (this.props.twineState) this.state.twineUtil.down(e);
     if (this.props.transformState) this.state.transformUtil.down(e);
     if (this.props.repelState) this.state.repelUtil.down(e);
@@ -157,7 +162,8 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.waveState) this.state.waveUtil.drag(e);
     if (this.props.zigzagState) this.state.zigzagUtil.drag(e);
     if (this.props.collideState) this.state.collideUtil.drag(e);
-    if (this.props.knotState) this.state.knotUtil.drag(e);
+    if (this.props.mergeState) this.state.mergeUtil.drag(e);
+    if (this.props.splitState) this.state.splitUtil.drag(e);
     if (this.props.twineState) this.state.twineUtil.drag(e);
     if (this.props.attractState) this.state.attractUtil.drag(e);
     if (this.props.repelState) this.state.repelUtil.drag(e);
@@ -234,6 +240,7 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.sortState) {
       const param = this.state.sortUtil.up(e);
       if (param) {
+        // console.log(param);
         let newProtocol = this.deepCopy(this.props.storyProtoc);
         if (typeof param[0] === 'number') {
           const [id, order] = param;
@@ -289,16 +296,20 @@ class UtilCanvas extends Component<Props, State> {
     }
     const relateName = this.props.collideState
       ? 'Collide'
-      : this.props.knotState
-      ? 'Knot'
+      : this.props.mergeState
+      ? 'Merge'
+      : this.props.splitState
+      ? 'Split'
       : this.props.twineState
       ? 'Twine'
       : null;
     if (relateName) {
       const ret = this.props.collideState
         ? this.state.collideUtil.up(e)
-        : this.props.knotState
-        ? this.state.knotUtil.up(e)
+        : this.props.mergeState
+        ? this.state.mergeUtil.up(e)
+        : this.props.splitState
+        ? this.state.splitUtil.up(e)
         : this.props.twineState
         ? this.state.twineUtil.up(e)
         : null;
@@ -313,7 +324,7 @@ class UtilCanvas extends Component<Props, State> {
             style: relateName
           });
           newProtocol.interaction = 'relate';
-          //  console.log(newProtocol);
+          // console.log(newProtocol);
           this.props.updateProtocAction(newProtocol);
         }
       } else {

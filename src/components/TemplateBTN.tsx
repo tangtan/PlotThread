@@ -66,10 +66,12 @@ class TemplateBTN extends Component<Props, State> {
     this.setState({ percent });
   };
   clickCancel() {
-    this.setState({
-      predictSignal: false
-    });
-    this.props.activateTool('Setting', false);
+    if (this.state.predictSignal) {
+      this.setState({
+        predictSignal: false
+      });
+      this.props.activateTool('Setting', false);
+    }
   }
   async clickAi() {
     const originalPointer = this.props.pointer;
@@ -131,37 +133,45 @@ class TemplateBTN extends Component<Props, State> {
         }}
       />
     );
-    const AI = <ReactSVG src="svg/Menu_Ai/AI generator.svg"></ReactSVG>;
+    const AI = predictSignal ? (
+      <img src="icons/AI_generator_active.png" width="50px" height="50px" />
+    ) : (
+      <img src="icons/AI_generator.png" width="50px" height="50px" />
+    );
+    const CANCEL = predictSignal ? (
+      <img src="icons/terminate_active.png" width="50px" height="50px" />
+    ) : (
+      <img src="icons/terminate_deactivate.png" width="50px" height="50px" />
+    );
     return (
       <div className="ai-btn">
         <Button
-          type="primary"
+          type="link"
+          ghost
           style={{
             position: 'absolute',
-            bottom: '100px',
-            left: '60px',
-            background: '#34373e'
+            bottom: '150px',
+            left: '60px'
           }}
           size="large"
           shape="circle"
           onClick={() => this.clickAi()}
         >
-          Ai
+          {AI}
         </Button>
         <Button
-          type="primary"
+          type="link"
+          ghost
           style={{
             position: 'absolute',
-            bottom: '50px',
-            left: '60px',
-            background: '#34373e'
+            bottom: '95px',
+            left: '60px'
           }}
           size="large"
           shape="circle"
-          disabled={!this.state.predictSignal}
           onClick={() => this.clickCancel()}
         >
-          X
+          {CANCEL}
         </Button>
         {predictSignal ? myProgress : null}
       </div>

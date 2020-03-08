@@ -62,6 +62,7 @@ class DrawCanvas extends Component<Props, State> {
     //    const postReq = { data: data, protoc: protoc };
     const postReq = { data: data, protoc: protoc };
     const postRes = await axios.post(postUrl, postReq);
+    console.log(postRes);
     if (postRes.data && postRes.data.data && postRes.data.protoc) {
       if (postRes.data.data[0] && postRes.data.protoc[0]) {
         const graph = this.state.storyLayouter._layout(

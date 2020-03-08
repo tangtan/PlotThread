@@ -66,9 +66,9 @@ export default class SortUtil extends StoryUtil {
       totY[i] = -1;
       let id = this.storyStore.getStorySegmentIDByTime(i, timespan);
       if (id !== -1) {
-        const compoundPath = this.storylines[i].lastChild;
+        const compoundPath = this.storylines[i].children;
         if (compoundPath) {
-          const stroke = compoundPath.children;
+          const stroke = compoundPath.slice(1);
           if (stroke && stroke.length > id) {
             const path = stroke[id] as Path;
             totY[i] = path.firstSegment.next.point
