@@ -65,7 +65,19 @@ class App extends React.Component<Props, State> {
             {
               name: 'Knot',
               type: 'png',
+              url: 'icons/knot.png',
+              subTools: []
+            },
+            {
+              name: 'Merge',
+              type: 'png',
               url: 'icons/merge.png',
+              subTools: []
+            },
+            {
+              name: 'Split',
+              type: 'png',
+              url: 'icons/split.png',
               subTools: []
             }
           ]
