@@ -1,4 +1,5 @@
 import { Path, Point, Matrix, Item } from 'paper';
+import { ColorPicker } from '../utils/color';
 
 export default class BaseAnimator {
   constructor() {}
@@ -16,7 +17,7 @@ export default class BaseAnimator {
         this.GlobalTransit(strokes, prevStrokes);
         break;
       case 'creation':
-        this.Create(strokes);
+        this.Create(strokes, prevStrokes);
         break;
       default:
         break;
@@ -40,6 +41,10 @@ export default class BaseAnimator {
     for (let i = 0; i < strokes.length; i++) {
       if (!flag[i]) {
         strokes[i].visible = true;
+        if (i < prevStoryline.length) {
+          strokes[i].strokeWidth = prevStoryline[i].strokeWidth;
+          strokes[i].strokeColor = prevStoryline[i].strokeColor;
+        }
       }
     }
   }
@@ -48,7 +53,7 @@ export default class BaseAnimator {
       this.TransitBetweenTwoPath(prevStoryline[i] as Path, strokes[i]);
     }
   }
-  static async Create(strokes: Path[], duration = 1000) {
+  static async Create(strokes: Path[], prevStrokes: Item[], duration = 1000) {
     let cnt = 0;
     while (cnt < strokes.length) {
       cnt = await this.TweenFromFirstSegment(
@@ -56,6 +61,16 @@ export default class BaseAnimator {
         cnt,
         duration / strokes.length
       );
+    }
+    for (let i = 0; i < prevStrokes.length; i++) {
+      if (i < strokes.length) {
+        strokes[i].strokeWidth = prevStrokes[i].strokeWidth;
+        strokes[i].strokeColor = prevStrokes[i].strokeColor;
+      } else {
+        strokes[i].strokeWidth = 2;
+        strokes[i].strokeColor = ColorPicker.black;
+        strokes[i].visible = true;
+      }
     }
   }
   static TweenBetweenTwoPath(
@@ -65,6 +80,8 @@ export default class BaseAnimator {
     duration = 200
   ) {
     // synchronize two paths
+    if (!path) return 0;
+    if (!pathTo) return 0;
     const segments = path.segments || [];
     const segmentsTo = pathTo.segments || [];
     while (segments.length !== segmentsTo.length) {
@@ -94,6 +111,8 @@ export default class BaseAnimator {
     return cnt + 1;
   }
   static TransitBetweenTwoPath(path: Path, pathTo: Path, duration = 200) {
+    if (!path) return;
+    if (!pathTo) return;
     const segments = path.segments || [];
     const segmentsTo = pathTo.segments || [];
     while (segments.length !== segmentsTo.length) {
@@ -111,6 +130,10 @@ export default class BaseAnimator {
     pathTo.tween(duration).onUpdate = (e: any) => {
       pathTo.interpolate(path, pathToTo, e.factor);
       pathTo.visible = true;
+      pathTo.strokeWidth = path.strokeWidth || 2;
+      pathTo.strokeColor = path.strokeColor
+        ? path.strokeColor
+        : ColorPicker.black;
     };
   }
   static async TweenFromFirstSegment(path: Path, cnt: number, duration = 200) {

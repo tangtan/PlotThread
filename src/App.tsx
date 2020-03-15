@@ -136,6 +136,12 @@ class App extends React.Component<Props, State> {
           type: 'png',
           url: 'icons/sort.png',
           subTools: []
+        },
+        {
+          name: 'Drag',
+          type: 'png',
+          url: 'icons/knot.png',
+          subTools: []
         }
       ]
     };

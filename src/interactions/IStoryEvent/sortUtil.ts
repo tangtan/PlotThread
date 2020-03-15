@@ -13,6 +13,7 @@ export default class SortUtil extends StoryUtil {
   up(e: paper.MouseEvent) {
     super.mouseUp(e);
     const item = project ? project.hitTest(e.point as Point) : null;
+    console.log(item);
     if (item) {
       if (item.type === 'stroke') {
         //region
@@ -115,9 +116,14 @@ export default class SortUtil extends StoryUtil {
   }
 
   getPathYFromCanvas(_line: Group) {
-    const compoundPath = _line.lastChild as CompoundPath;
-    const firstSegment = compoundPath.firstSegment;
-    if (!firstSegment.point) return 0;
-    return firstSegment.point.y || 0;
+    if (_line.children) {
+      const compoundPath = _line.children.slice(1);
+      const firstPath = compoundPath[0] as Path;
+      if (!firstPath || !firstPath.firstSegment) return 0;
+      const firstSegment = firstPath.firstSegment;
+      if (!firstSegment.point) return 0;
+      return firstSegment.point.y || 0;
+    }
+    return 0;
   }
 }

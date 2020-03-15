@@ -89,8 +89,7 @@ class DrawCanvas extends Component<Props, State> {
       this.props.addVisualObject('storyline', {
         storylineName: graph.names[i],
         storylinePath: graph.paths[i],
-        prevStoryline:
-          i < storylines.length ? storylines[i].lastChild.children : [],
+        prevStoryline: i < storylines.length ? storylines[i].children : [],
         characterID: i + 1,
         animationType: 'creation',
         segmentIDs: []

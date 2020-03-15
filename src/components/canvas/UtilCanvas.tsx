@@ -230,6 +230,7 @@ class UtilCanvas extends Component<Props, State> {
             }
           }
           newProtocol.interaction = 'bend';
+          console.log(newProtocol);
           this.props.updateProtocAction(newProtocol);
         }
       } else {

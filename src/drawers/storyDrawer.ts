@@ -161,6 +161,7 @@ class DrawUtil {
   }
   static getSketchPathStr(line: StorySegment) {
     let points = line;
+    points.sort((a, b) => a[0] - b[0]);
     let pathStr = `M ${points[0][0]} ${points[0][1]} `;
     let i, len;
     for (i = 1, len = points.length; i < len; i++) {

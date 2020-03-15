@@ -28,6 +28,7 @@ export default class TextDrawer extends BaseDrawer {
       new PointText({
         point: [_x0, _y0],
         content: isCreating ? '' : this.defaultContent,
+        name: isCreating ? '' : this.defaultContent,
         fillColor: this.fillColor,
         fontFamily: this.fontFamily,
         fontWeight: this.fontWeight,

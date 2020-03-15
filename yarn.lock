@@ -3166,7 +3166,7 @@ d3-interpolate@1, d3-interpolate@^1.2.0:
 
 d3-scale@^3.2.0:
   version "3.2.1"
-  resolved "https://registry.npm.taobao.org/d3-scale/download/d3-scale-3.2.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fd3-scale%2Fdownload%2Fd3-scale-3.2.1.tgz#da1684adce7261b4bc7a76fe193d887f0e909e69"
+  resolved "https://registry.npm.taobao.org/d3-scale/download/d3-scale-3.2.1.tgz#da1684adce7261b4bc7a76fe193d887f0e909e69"
   integrity sha1-2haErc5yYbS8enb+GT2Ifw6Qnmk=
   dependencies:
     d3-array "1.2.0 - 2"
