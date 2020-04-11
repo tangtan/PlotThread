@@ -65,26 +65,20 @@ export default class DragUtil extends CircleSelectionUtil {
       }
       const bounds = this.createBounds(e.point);
       if (bounds) {
-        const lPoint = bounds.topLeft;
-        const rPoint = bounds.bottomRight;
         const sPoint = this.startPoint;
         const ePoint = this.endPoint;
-        if (lPoint && rPoint && sPoint && ePoint && this.storyStore) {
-          const secSTimeID = this.getStartTimeID(lPoint);
-          const secETimeID = this.getEndTimeID(rPoint);
-          const secNames = this.storyStore.names.filter(name =>
-            this.isInSelectionRegion(name, lPoint, rPoint)
-          );
-          const type = sPoint.y && ePoint.y ? sPoint.y > ePoint.y : 0; // s > e bottom to top
+        if (sPoint && ePoint && sPoint.y && ePoint.y && this.storyStore) {
+          const deltaY = ePoint.y - sPoint.y;
           super.mouseUp(e);
           this.cnt ^= 1;
-          return [
-            type,
-            [
-              [this.names, this.sTimeID, this.eTimeID],
-              [secNames, secSTimeID, secETimeID]
-            ]
-          ];
+          return {
+            deltaY: deltaY,
+            para: {
+              names: this.names,
+              sTimeID: this.sTimeID,
+              eTimeID: this.eTimeID
+            }
+          };
         }
       }
       super.mouseUp(e);

@@ -8,7 +8,8 @@ import RelateUtil from '../../interactions/IStoryEvent/relateUtil';
 import {
   getToolState,
   getCurrentStoryFlowProtoc,
-  getCurrentStoryFlowLayout
+  getCurrentStoryFlowLayout,
+  getCurrentStoryScaleRate
 } from '../../store/selectors';
 import { view } from 'paper';
 import ToolCanvas from './ToolCanvas';
@@ -23,11 +24,13 @@ import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
 import { notification } from 'antd';
+import DragUtil from '../../interactions/IStoryEvent/dragUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
     storyProtoc: getCurrentStoryFlowProtoc(state),
     storyLayout: getCurrentStoryFlowLayout(state),
+    storyScale: getCurrentStoryScaleRate(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
     sortState: getToolState(state, 'Sort'),
@@ -41,7 +44,8 @@ const mapStateToProps = (state: StateType) => {
     twineState: getToolState(state, 'Twine'),
     repelState: getToolState(state, 'Repel'),
     attractState: getToolState(state, 'Attract'),
-    transformState: getToolState(state, 'Transform')
+    transformState: getToolState(state, 'Transform'),
+    dragState: getToolState(state, 'Drag')
   };
 };
 const mapDispatchToProps = (dispatch: DispatchType) => {
@@ -71,6 +75,7 @@ type State = {
   repelUtil: RepelUtil;
   attractUtil: AttractUtil;
   transformUtil: TransformUtil;
+  dragUtil: DragUtil;
 };
 class UtilCanvas extends Component<Props, State> {
   constructor(props: Props) {
@@ -90,7 +95,8 @@ class UtilCanvas extends Component<Props, State> {
       twineUtil: new RelateUtil('Twine', 2),
       repelUtil: new RepelUtil('Repel', 0),
       attractUtil: new AttractUtil('Attract', 0),
-      transformUtil: new TransformUtil('Transform', 0)
+      transformUtil: new TransformUtil('Transform', 0),
+      dragUtil: new DragUtil('Drag', 0)
     };
   }
   updateUtils(graph: StoryGraph) {
@@ -108,6 +114,7 @@ class UtilCanvas extends Component<Props, State> {
     this.state.repelUtil.updateStoryStore(graph);
     this.state.attractUtil.updateStoryStore(graph);
     this.state.transformUtil.updateStoryStore(graph);
+    this.state.dragUtil.updateStoryStore(graph);
   }
   deepCopy(x: any) {
     return JSON.parse(JSON.stringify(x));
@@ -152,6 +159,7 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.transformState) this.state.transformUtil.down(e);
     if (this.props.repelState) this.state.repelUtil.down(e);
     if (this.props.attractState) this.state.attractUtil.down(e);
+    if (this.props.dragState) this.state.dragUtil.down(e);
   }
   onMouseDrag(e: paper.MouseEvent) {
     if (this.props.bendState) this.state.bendUtil.drag(e);
@@ -168,6 +176,7 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.attractState) this.state.attractUtil.drag(e);
     if (this.props.repelState) this.state.repelUtil.drag(e);
     if (this.props.transformState) this.state.transformUtil.drag(e);
+    if (this.props.dragState) this.state.dragUtil.drag(e);
   }
   onMouseUp(e: paper.MouseEvent) {
     if (this.props.compressState) {
@@ -372,26 +381,38 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.attractState) {
       const ret = this.state.attractUtil.up(e);
       if (ret) {
-        const [type, [[name1, s1, e1], [name2, s2, e2]]] = ret; //type为1 则第一组在下面
-        let flag = type ? 1 : -1;
+        const [names, sTimeID, eTimeID] = ret;
         let newLayout = this.deepCopy(this.props.storyLayout);
-        for (let j = 0; j < name1.length; j++) {
+        let minY = 1e9;
+        let maxY = 0;
+        for (let j = 0; j < names.length; j++) {
           for (let i = 0; i < newLayout.array.length; i++) {
-            if (newLayout.array[i].name === name1[j]) {
-              for (let k = s1; k <= e1; k++) {
-                if (newLayout.perm[i][k] !== -1) {
-                  newLayout.array[i].points[k].item3 -= flag * 30;
-                }
+            if (newLayout.array[i].name === names[j]) {
+              if (newLayout.perm[i][sTimeID] !== -1) {
+                minY = Math.min(newLayout.array[i].points[sTimeID].item3, minY);
+                maxY = Math.max(newLayout.array[i].points[sTimeID].item3, maxY);
+              }
+              if (newLayout.perm[i][eTimeID] !== -1) {
+                minY = Math.min(newLayout.array[i].points[eTimeID].item3, minY);
+                maxY = Math.max(newLayout.array[i].points[eTimeID].item3, maxY);
               }
             }
           }
         }
-        for (let j = 0; j < name2.length; j++) {
+        let midY = (minY + maxY) / 2;
+        for (let j = 0; j < names.length; j++) {
           for (let i = 0; i < newLayout.array.length; i++) {
-            if (newLayout.array[i].name === name2[j]) {
-              for (let k = s2; k <= e2; k++) {
+            if (newLayout.array[i].name === names[j]) {
+              for (let k = sTimeID; k <= eTimeID; k++) {
                 if (newLayout.perm[i][k] !== -1) {
-                  newLayout.array[i].points[k].item3 -= -flag * 30;
+                  const prevY = newLayout.array[i].points[k].item3;
+                  if (prevY > midY) {
+                    newLayout.array[i].points[k].item3 =
+                      (20 * (prevY - midY)) / (maxY - midY) + midY;
+                  } else {
+                    newLayout.array[i].points[k].item3 =
+                      midY - (20 * (midY - prevY)) / (midY - minY);
+                  }
                 }
               }
             }
@@ -399,6 +420,7 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
+        // this.openAttractNotification();
         this.openNotification(
           'Attract',
           'Please draw a circle to select a region and then draw a vertical line.'
@@ -455,7 +477,10 @@ class UtilCanvas extends Component<Props, State> {
             for (let i = 0; i < newLayout.array.length; i++) {
               if (newLayout.array[i].name === names[j]) {
                 for (let k = sTimeID, st = 0; k <= eTimeID; k++, st++) {
-                  if (newLayout.perm[i][k] !== -1) {
+                  if (
+                    newLayout.perm[i][k] !== -1 &&
+                    newLayout.array[i].name !== 'RABBIT'
+                  ) {
                     let l = st * increment;
                     let r = (st + 1) * increment - 1;
                     let m = Math.floor((l + r) / 2);
@@ -472,6 +497,35 @@ class UtilCanvas extends Component<Props, State> {
         }
       } else {
         // this.openTransformNotification();
+        this.openNotification(
+          'Transform',
+          'Please draw a circle to select at least one group, then draw a free path.'
+        );
+      }
+    }
+    if (this.props.dragState) {
+      const ret = this.state.dragUtil.up(e);
+      if (ret) {
+        const scaleRate = this.props.storyScale;
+        const deltaY = ret.deltaY * scaleRate;
+        const { names, sTimeID, eTimeID } = ret.para;
+        let newLayout = this.deepCopy(this.props.storyLayout);
+        for (let j = 0; j < names.length; j++) {
+          for (let i = 0; i < newLayout.array.length; i++) {
+            if (newLayout.array[i].name === names[j]) {
+              for (let k = sTimeID; k <= eTimeID; k++) {
+                if (
+                  newLayout.perm[i][k] !== -1 &&
+                  newLayout.array[i].name !== 'RABBIT'
+                ) {
+                  newLayout.array[i].points[k].item3 += deltaY;
+                }
+              }
+            }
+          }
+        }
+        this.props.updateLayoutAction(newLayout);
+      } else {
         this.openNotification(
           'Transform',
           'Please draw a circle to select at least one group, then draw a free path.'

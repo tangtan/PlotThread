@@ -66,6 +66,9 @@ export default class SortUtil extends StoryUtil {
       //-1是因为rabbit
       totY[i] = -1;
       let id = this.storyStore.getStorySegmentIDByTime(i, timespan);
+      console.log('i', i);
+      console.log('id', id);
+      console.log('timespan', timespan);
       if (id !== -1) {
         const compoundPath = this.storylines[i].children;
         if (compoundPath) {
@@ -78,6 +81,7 @@ export default class SortUtil extends StoryUtil {
           }
         }
       }
+      console.log('y', totY[i]);
     }
     for (let i = 0; i < names.length - 1; i++) {
       if (totY[i] !== -1) {
@@ -91,6 +95,7 @@ export default class SortUtil extends StoryUtil {
         order[i] = -1;
       }
     }
+    console.log(order);
     return order;
   }
   getOrderOfStorylines() {

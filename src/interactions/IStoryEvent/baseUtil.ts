@@ -256,6 +256,9 @@ export class CircleSelectionUtil extends StoryUtil {
     if (this._downPoint) this.currPath.add(this._downPoint);
     this.currPath.strokeWidth = 2;
     this.currPath.strokeColor = ColorPicker.black;
+    this.currPath.dashOffset = 0;
+    this.currPath.dashArray = [10, 10];
+    this.currPath.closed = false;
   }
 
   updateCurrPath() {

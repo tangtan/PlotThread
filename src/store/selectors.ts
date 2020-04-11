@@ -95,6 +95,18 @@ export const getCurrentStoryFlowLayout = (state: StateType) => {
   const { layoutQueue, pointer } = state.historyQueue;
   return layoutQueue[pointer];
 };
+export const getPreviousStoryFlowProtoc = (state: StateType) => {
+  const { protocQueue, originalPointer } = state.historyQueue;
+  return protocQueue[originalPointer];
+};
+export const getPreviousStoryFlowLayout = (state: StateType) => {
+  const { layoutQueue, originalPointer } = state.historyQueue;
+  return layoutQueue[originalPointer];
+};
+export const getCurrentStoryScaleRate = (state: StateType) => {
+  const { scaleQueue, pointer } = state.historyQueue;
+  return scaleQueue[pointer];
+};
 export const getCurrentPredictGraph = (state: StateType) => {
   const { predictQueue, predictPointer } = state.historyQueue;
   return predictQueue[predictPointer];

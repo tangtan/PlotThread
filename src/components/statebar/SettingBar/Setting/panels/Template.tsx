@@ -8,14 +8,25 @@ import {
   lastPredictAction,
   backPointerAction,
   forwardPointerAction,
-  abandonPointerAction
+  abandonPointerAction,
+  setTool
 } from '../../../../../store/actions';
-import { getCurrentPredictQueue } from '../../../../../store/selectors';
+import {
+  getCurrentPredictQueue,
+  getPreviousStoryFlowLayout,
+  getPreviousStoryFlowProtoc,
+  getCurrentStoryFlowLayout,
+  getCurrentStoryFlowProtoc
+} from '../../../../../store/selectors';
 
 const mapStateToProps = (state: StateType) => {
   return {
     historyQueue: state.historyQueue,
-    predictQueue: getCurrentPredictQueue(state)
+    storyLayout: getCurrentStoryFlowLayout(state),
+    storyProtoc: getCurrentStoryFlowProtoc(state),
+    predictQueue: getCurrentPredictQueue(state),
+    prevStoryLayout: getPreviousStoryFlowLayout(state),
+    prevStoryProtoc: getPreviousStoryFlowProtoc(state)
   };
 };
 
@@ -25,7 +36,8 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
     lastPredictAction: () => dispatch(lastPredictAction()),
     backPointerAction: () => dispatch(backPointerAction()),
     forwardPointerAction: () => dispatch(forwardPointerAction()),
-    abandonPointerAction: () => dispatch(abandonPointerAction())
+    abandonPointerAction: () => dispatch(abandonPointerAction()),
+    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
   };
 };
 
@@ -76,9 +88,9 @@ class Template extends Component<Props, State> {
         this.props.predictQueue[i].protoc
       );
       const nodes = [];
-      for (let i = 0; i < graph.paths.length; i++) {
-        if (graph.names[i] !== 'RABBIT') {
-          nodes.push(graph.paths[i]);
+      for (let j = 0; j < graph.paths.length; j++) {
+        if (graph.names[j] !== 'RABBIT') {
+          nodes.push(graph.paths[j]);
         }
       }
       const newNodes = nodes.map((line: any) => {
@@ -99,21 +111,31 @@ class Template extends Component<Props, State> {
           return pathStr;
         });
         let path = '';
-        for (let i = 0; i < segStrs.length; i++) {
-          path += segStrs[i];
+        for (let j = 0; j < segStrs.length; j++) {
+          path += segStrs[j];
         }
         return path;
       });
-      const storylines = pathStrs.map((pathStr: any) => (
-        <path d={pathStr} fill="transparent" stroke="white"></path>
-      ));
+      const chosen = i === this.props.historyQueue.predictPointer;
+      const storylines = [];
+      for (let j = 0; j < pathStrs.length; j++) {
+        if (chosen) {
+          storylines.push(
+            <path d={pathStrs[j]} fill="transparent" stroke="black"></path>
+          );
+        } else {
+          storylines.push(
+            <path d={pathStrs[j]} fill="transparent" stroke="white"></path>
+          );
+        }
+      }
       canvasQueue[i] = (
         <div
           className="svg-bg"
           style={{
-            background: 'black',
+            background: chosen ? 'white' : 'black',
             margin: '5px 0',
-            opacity: '0.4'
+            opacity: chosen ? '1' : '0.4'
           }}
         >
           <svg
@@ -129,6 +151,78 @@ class Template extends Component<Props, State> {
     }
     return canvasQueue;
   }
+  getPrevCanvas() {
+    let graph;
+    if (this.props.predictQueue.length <= 0) {
+      if (this.props.historyQueue.pointer <= 1) {
+        graph = null;
+      } else {
+        graph = this.state.storyLayouter._layout(
+          this.props.storyLayout,
+          this.props.prevStoryProtoc
+        );
+      }
+    } else {
+      graph = this.state.storyLayouter._layout(
+        this.props.prevStoryLayout,
+        this.props.prevStoryProtoc
+      );
+    }
+    const nodes = [];
+    if (graph) {
+      for (let j = 0; j < graph.paths.length; j++) {
+        if (graph.names[j] !== 'RABBIT') {
+          nodes.push(graph.paths[j]);
+        }
+      }
+    }
+    const newNodes = nodes.map((line: any) => {
+      const newLine = line.map((seg: any) => {
+        const newSeg = seg.map((point: any) => {
+          let newPoint = [];
+          newPoint[0] = (point[0] - 300) / 4;
+          newPoint[1] = (point[1] - 300) / 3;
+          return newPoint;
+        });
+        return newSeg;
+      });
+      return newLine;
+    });
+    const pathStrs = newNodes.map((line: any) => {
+      const segStrs = line.map((seg: any) => {
+        const pathStr = this.genSmoothPathStr(seg);
+        return pathStr;
+      });
+      let path = '';
+      for (let j = 0; j < segStrs.length; j++) {
+        path += segStrs[j];
+      }
+      return path;
+    });
+    const storylines = pathStrs.map((pathStr: any) => (
+      <path d={pathStr} fill="transparent" stroke="black"></path>
+    ));
+    const prevCanvas = (
+      <div
+        className="svg-bg"
+        style={{
+          background: 'white',
+          margin: '5px 0',
+          opacity: '1'
+        }}
+      >
+        <svg
+          width="100%"
+          height="30%"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {storylines}
+        </svg>
+      </div>
+    );
+    return prevCanvas;
+  }
   clickNext() {
     this.props.nextPredictAction();
   }
@@ -143,18 +237,30 @@ class Template extends Component<Props, State> {
   }
   clickAbandon() {
     this.props.abandonPointerAction();
+    this.props.activateTool('Setting', false);
   }
   render() {
+    let prevCanvas = this.getPrevCanvas();
     let canvasQueue = this.getCanvasQueue();
     return (
       <div className="template">
+        <div
+          className="prevcanvas"
+          style={{
+            overflowY: 'auto',
+            overflowX: 'auto',
+            width: '100%'
+          }}
+        >
+          {prevCanvas}
+        </div>
         <div
           className="canvasqueue"
           style={{
             overflowY: 'auto',
             overflowX: 'auto',
             width: '100%',
-            height: '750px'
+            height: '600px'
           }}
         >
           {canvasQueue}

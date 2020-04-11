@@ -96,6 +96,7 @@ export default class Transform extends CircleSelectionUtil {
           this.cnt ^= 1;
         }
         this.currPath.strokeColor = ColorPicker.blue;
+        this.currPath.closed = true;
       }
     }
   }
