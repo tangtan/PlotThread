@@ -153,14 +153,14 @@ class TemplateBTN extends Component<Props, State> {
       <Progress
         percent={percent}
         type="circle"
-        strokeWidth={6}
-        width={300}
+        strokeWidth={4}
+        width={180}
         strokeColor="#6376cc"
+        trailColor="#ffffff98"
         style={{
           position: 'fixed',
-          left: '38vw',
-          bottom: '32vh',
-          background: 'rgba(52,55,62,0.6)',
+          right: '430px',
+          bottom: '66vh',
           borderRadius: '3px'
         }}
       />

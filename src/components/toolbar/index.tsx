@@ -39,7 +39,7 @@ class ToolBar extends Component<Props, State> {
       width: ${this.props.Direction === 'horizontal' ? toolBarWidth : '50px'};
       padding: ${this.props.Direction === 'vertical'
         ? '20px 2px 20px 2px'
-        : '2px 18px 2px 18px'};
+        : '2px 20px 2px 20px'};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
         ? 'row'

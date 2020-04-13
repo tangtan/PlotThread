@@ -48,7 +48,6 @@ export default class StateBar extends Component<Props, State> {
           <FileBar />
           <FBBar xOffSet={250} />
           <GToolBar xOffSet={450} />
-
           <RightMenuWrapper>
             <StyleBar xOffSet={750} />
             <FontBar xOffSet={850} />
