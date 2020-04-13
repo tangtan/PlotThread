@@ -28,18 +28,27 @@ type Props = {
 } & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
-type State = {};
+type State = {
+  width: number;
+};
 
 class StrokePicker extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      width: 1
+    };
   }
+
   changeWidth(key: string) {
     const width = (key as unknown) as number;
+    this.setState({
+      width: width
+    });
     const { strokeWidthState, selectedItems } = this.props;
     selectedItems.forEach(item => this.changeItemWidth(item, width));
   }
+
   changeItemWidth(item: Item, width: number) {
     switch (item.data.type) {
       case 'storyline':
@@ -50,6 +59,7 @@ class StrokePicker extends Component<Props, State> {
         break;
     }
   }
+
   changeLineWidth(item: Item, width: number) {
     if (item.children && item.children.length) {
       let flag = item.children[0].selected;
@@ -60,9 +70,11 @@ class StrokePicker extends Component<Props, State> {
       }
     }
   }
+
   handleClick() {
     this.props.activateTool('StrokeWidth', true);
   }
+
   render() {
     const menu = (
       <Menu onClick={({ key }) => this.changeWidth(key)}>
@@ -88,14 +100,15 @@ class StrokePicker extends Component<Props, State> {
         </Menu.Item>
       </Menu>
     );
+    const url = `icons/l${this.state.width}.png`;
 
     return (
-      <div className="strokepicker" style={{ width: '50%', margin: '10px' }}>
+      <div>
         <Dropdown overlay={menu} trigger={['click']}>
           <Button
             style={{
-              width: 150,
-              margin: '0 10px',
+              width: 120,
+              margin: '0 0 0 10px',
               background: '#34373e',
               color: '#fff'
             }}
@@ -103,7 +116,8 @@ class StrokePicker extends Component<Props, State> {
               this.handleClick();
             }}
           >
-            StrokeWidth
+            {/*{this.state.width}*/}
+            <img src={url} />
           </Button>
         </Dropdown>
       </div>

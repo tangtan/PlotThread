@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../../../types';
-import { Button, Icon } from 'antd';
+import { Button, Icon, Divider } from 'antd';
 import { iStoryline } from 'iStoryline';
 import {
   nextPredictAction,
@@ -135,7 +135,8 @@ class Template extends Component<Props, State> {
           style={{
             background: chosen ? 'white' : 'black',
             margin: '5px 0',
-            opacity: chosen ? '1' : '0.4'
+            opacity: chosen ? '1' : '0.4',
+            border: chosen ? '#6376cc 2px solid' : '0px'
           }}
         >
           <svg
@@ -249,18 +250,20 @@ class Template extends Component<Props, State> {
           style={{
             overflowY: 'auto',
             overflowX: 'auto',
-            width: '100%'
+            width: '100%',
+            height: '100%'
           }}
         >
           {prevCanvas}
         </div>
+        <Divider></Divider>
         <div
           className="canvasqueue"
           style={{
             overflowY: 'auto',
             overflowX: 'auto',
             width: '100%',
-            height: '600px'
+            height: '620px'
           }}
         >
           {canvasQueue}

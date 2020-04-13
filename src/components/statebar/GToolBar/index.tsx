@@ -32,13 +32,13 @@ export default class GToolBar extends Component<Props, State> {
           type: 'png',
           url: 'icons/timeline.png',
           subTools: []
-        },
-        {
-          name: 'Preview',
-          type: 'png',
-          url: 'icons/preview.png',
-          subTools: []
         }
+        // {
+        //   name: 'Preview',
+        //   type: 'png',
+        //   url: 'icons/preview.png',
+        //   subTools: []
+        // }
       ]
     };
   }

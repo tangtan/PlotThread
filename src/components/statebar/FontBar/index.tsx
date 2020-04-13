@@ -75,7 +75,7 @@ class FontBar extends Component<Props, State> {
       display: flex;
       flex-direction: row;
       justify-content: space-around;
-      padding: 8px 4px 0 8px;
+      padding: 8px 0px 0 8px;
     `;
     const PopoverTitle = styled.h3`
       color: #fff;
@@ -122,7 +122,4 @@ class FontBar extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(FontBar);
+export default connect(mapStateToProps, null)(FontBar);

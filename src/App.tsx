@@ -46,6 +46,30 @@ class App extends React.Component<Props, State> {
           subTools: []
         },
         {
+          name: 'Drag',
+          type: 'png',
+          url: 'icons/drag.png',
+          subTools: []
+        },
+        {
+          name: 'Bend',
+          type: 'png',
+          url: 'icons/bend.png',
+          subTools: []
+        },
+        {
+          name: 'Compress',
+          type: 'png',
+          url: 'icons/expand.png',
+          subTools: []
+        },
+        {
+          name: 'Sort',
+          type: 'png',
+          url: 'icons/sort.png',
+          subTools: []
+        },
+        {
           name: 'Relate',
           type: 'png',
           url: 'icons/relate.png',
@@ -62,12 +86,6 @@ class App extends React.Component<Props, State> {
               url: 'icons/twine.png',
               subTools: []
             },
-            // {
-            //   name: 'Knot',
-            //   type: 'png',
-            //   url: 'icons/knot.png',
-            //   subTools: []
-            // },
             {
               name: 'Merge',
               type: 'png',
@@ -114,33 +132,9 @@ class App extends React.Component<Props, State> {
           ]
         },
         {
-          name: 'Bend',
-          type: 'png',
-          url: 'icons/bend.png',
-          subTools: []
-        },
-        {
-          name: 'Compress',
-          type: 'png',
-          url: 'icons/expand.png',
-          subTools: []
-        },
-        {
           name: 'Text',
           type: 'png',
           url: 'icons/label.png',
-          subTools: []
-        },
-        {
-          name: 'Sort',
-          type: 'png',
-          url: 'icons/sort.png',
-          subTools: []
-        },
-        {
-          name: 'Drag',
-          type: 'png',
-          url: 'icons/knot.png',
           subTools: []
         }
       ]
@@ -159,12 +153,16 @@ class App extends React.Component<Props, State> {
       <div className="App">
         <DrawCanvas />
         <StateBar />
-        <ToolBar
-          Bottom={0}
-          Left={500}
-          Direction={'horizontal'}
-          Tools={leftTools}
-        />
+        <div className="App-bottom-bar-wrapper">
+          <div className="App-bottom-bar">
+            <ToolBar
+              Bottom={0}
+              Left={0}
+              Direction={'horizontal'}
+              Tools={leftTools}
+            />
+          </div>
+        </div>
         <AIBTN />
       </div>
     );

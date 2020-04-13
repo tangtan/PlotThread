@@ -66,7 +66,7 @@ class StyleBar extends Component<Props, State> {
       // top: 0;
       // left: ${this.props.xOffSet || 0}px;
       width: 200px;
-      height: 30px;
+      height: 50px;
       align-items: center;
       display: flex;
       flex-direction: row;

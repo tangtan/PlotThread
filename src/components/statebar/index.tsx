@@ -36,15 +36,24 @@ export default class StateBar extends Component<Props, State> {
       justify-content: space-between;
       align-items: center;
     `;
+    const RightMenuWrapper = styled.div`
+      display: flex;
+      flex-direction: row;
+      width: auto;
+      height: auto;
+    `;
     return (
       <StateBar>
         <StateWrapper>
           <FileBar />
           <FBBar xOffSet={250} />
           <GToolBar xOffSet={450} />
-          <StyleBar xOffSet={750} />
-          <FontBar xOffSet={850} />
-          <SettingBar xOffSet={0} />
+
+          <RightMenuWrapper>
+            <StyleBar xOffSet={750} />
+            <FontBar xOffSet={850} />
+            <SettingBar xOffSet={-50} />
+          </RightMenuWrapper>
         </StateWrapper>
       </StateBar>
     );

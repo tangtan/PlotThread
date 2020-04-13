@@ -5,9 +5,6 @@ import styled from 'styled-components';
 import { ITool } from '../../types';
 import { connect } from 'react-redux';
 
-// add tool png-icons
-// import move from '../../assets/move.png';
-
 type Props = {
   Top?: number;
   Left?: number;
@@ -30,7 +27,7 @@ class ToolBar extends Component<Props, State> {
     const toolBarWidth = `${this.props.Tools.length * 60}px`;
 
     const ToolBarWrapper = styled.div`
-      position: ${this.props.Top === 0 ? '' : 'absolute'};
+      // position: ${this.props.Top === 0 ? '' : 'absolute'};
       display: flex;
       top: ${this.props.Top}px;
       left: ${this.props.Left}px;
@@ -41,7 +38,7 @@ class ToolBar extends Component<Props, State> {
       height: ${this.props.Direction === 'vertical' ? toolBarWidth : '50px'};
       width: ${this.props.Direction === 'horizontal' ? toolBarWidth : '50px'};
       padding: ${this.props.Direction === 'vertical'
-        ? '18px 2px 18px 2px'
+        ? '20px 2px 20px 2px'
         : '2px 18px 2px 18px'};
       display: flex;
       flex-direction: ${this.props.Direction === 'horizontal'
