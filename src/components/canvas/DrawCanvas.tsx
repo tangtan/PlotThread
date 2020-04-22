@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { StateType, DispatchType, StoryGraph, StyleConfig } from '../../types';
+import {
+  StateType,
+  DispatchType,
+  StoryGraph,
+  StyleConfig,
+  StoryFlowStoryType
+} from '../../types';
 import { iStoryline } from 'iStoryline';
 import UtilCanvas from './UtilCanvas';
 import {
@@ -59,10 +65,9 @@ class DrawCanvas extends Component<Props, State> {
     const protoc = this.props.storyProtoc;
     const data = this.props.storyLayout;
     const postUrl = this.state.serverUpdateUrl;
-    //    const postReq = { data: data, protoc: protoc };
     const postReq = { data: data, protoc: protoc };
+    if (!postReq.data) postReq.data = {} as StoryFlowStoryType;
     const postRes = await axios.post(postUrl, postReq);
-    console.log(postRes);
     if (postRes.data && postRes.data.data && postRes.data.protoc) {
       if (postRes.data.data[0] && postRes.data.protoc[0]) {
         const graph = this.state.storyLayouter._layout(

@@ -20,7 +20,7 @@ export default class BaseDrawer {
     this.fillColor = cfg.fillColor || ColorPicker.grey;
     this.creatingColor = cfg.creatingColor || ColorPicker.blue;
     this.strokeColor = cfg.strokeColor || ColorPicker.black;
-    this.strokeWidth = cfg.strokeWidth || 2;
+    this.strokeWidth = cfg.strokeWidth || 3;
     this.shadowColor = cfg.shadowColor || ColorPicker.black;
     this.shadowBlur = cfg.shadowBlur || 0;
     this.shadowOffset = cfg.shadowOffset || Coord.origin;

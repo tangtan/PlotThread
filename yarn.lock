@@ -3186,7 +3186,7 @@ d3-selection@1, d3-selection@^1.1.0, d3-selection@^1.4.0:
 
 d3-time-format@2:
   version "2.2.3"
-  resolved "https://registry.npm.taobao.org/d3-time-format/download/d3-time-format-2.2.3.tgz?cache=0&sync_timestamp=1577638399940&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fd3-time-format%2Fdownload%2Fd3-time-format-2.2.3.tgz#0c9a12ee28342b2037e5ea1cf0b9eb4dd75f29cb"
+  resolved "https://registry.npm.taobao.org/d3-time-format/download/d3-time-format-2.2.3.tgz#0c9a12ee28342b2037e5ea1cf0b9eb4dd75f29cb"
   integrity sha1-DJoS7ig0KyA35eoc8LnrTddfKcs=
   dependencies:
     d3-time "1"
@@ -4783,7 +4783,7 @@ husky@^2.3.0:
     run-node "^1.0.0"
     slash "^3.0.0"
 
-"iStoryline@file:../istoryline":
+"iStoryline@file:../istoryline.js":
   version "0.0.1"
   dependencies:
     d3-fetch "^1.1.2"

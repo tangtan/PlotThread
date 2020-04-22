@@ -46,9 +46,6 @@ type State = {
   percent: number;
   predictSignal: boolean;
 };
-let flag = 0;
-let trickcnt = 0;
-let datastr = { data: {}, protoc: {} };
 class TemplateBTN extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -112,10 +109,9 @@ class TemplateBTN extends Component<Props, State> {
       predictSignal: true
     });
     this.props.recordPointerAction(originalPointer);
-    //console.log(originalPointer);
     let tmpID = setInterval(() => this.increase(), 1000);
-    const protoc = flag ? datastr.protoc : this.props.storyProtoc;
-    let data = this.checkData(flag ? datastr.data : this.props.storyLayout);
+    const protoc = this.props.storyProtoc;
+    let data = this.checkData(this.props.storyLayout);
     this.props.activateTool('Setting', true);
     let postReq = { data: data, protoc: protoc };
     console.log(JSON.stringify(postReq));
@@ -159,8 +155,8 @@ class TemplateBTN extends Component<Props, State> {
         trailColor="#ffffff98"
         style={{
           position: 'fixed',
-          right: '430px',
-          bottom: '66vh',
+          right: '100px',
+          bottom: '46vh',
           borderRadius: '3px'
         }}
       />

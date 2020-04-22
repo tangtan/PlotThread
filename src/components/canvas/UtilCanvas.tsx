@@ -196,16 +196,16 @@ class UtilCanvas extends Component<Props, State> {
           newProtocol.interaction = 'compress';
           this.props.updateProtocAction(newProtocol);
         } else {
-          this.openNotification(
+          /*this.openNotification(
             'Compress',
             'Please draw a horizontal line to select the time range.'
-          );
+          );*/
         }
       } else {
-        this.openNotification(
+        /*this.openNotification(
           'Compress',
           'Please draw a circle to pick characters.'
-        );
+        );*/
       }
     }
     if (this.props.bendState) {
@@ -243,14 +243,13 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
       } else {
-        // this.openBendNotification();
-        this.openNotification('Bend', 'Please just click one name label.');
+        // /*this.openBendNotification();
+        /*this.openNotification('Bend', 'Please just click one name label.');*/
       }
     }
     if (this.props.sortState) {
       const param = this.state.sortUtil.up(e);
       if (param) {
-        // console.log(param);
         let newProtocol = this.deepCopy(this.props.storyProtoc);
         if (typeof param[0] === 'number') {
           const [id, order] = param;
@@ -262,7 +261,6 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
         newProtocol.interaction = 'sort';
-        // console.log("newProtoc",newProtocol);
         this.props.updateProtocAction(newProtocol);
       } else {
       }
@@ -300,8 +298,8 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
       } else {
-        // this.openStylishNotification();
-        this.openNotification('Stylish', 'Please click one name label first.');
+        // /*this.openStylishNotification();
+        /*this.openNotification('Stylish', 'Please click one name label first.');*/
       }
     }
     const relateName = this.props.collideState
@@ -338,8 +336,8 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateProtocAction(newProtocol);
         }
       } else {
-        // this.openRelateNotification();
-        this.openNotification('Relate', 'Please click two name labels first.');
+        // /*this.openRelateNotification();
+        /*this.openNotification('Relate', 'Please click two name labels first.');*/
       }
     }
     if (this.props.repelState) {
@@ -372,10 +370,10 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        this.openNotification(
+        /*this.openNotification(
           'Repel',
           'Please draw a circle to select a region and then draw a vertical line.'
-        );
+        );*/
       }
     }
     if (this.props.attractState) {
@@ -420,11 +418,11 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        // this.openAttractNotification();
-        this.openNotification(
+        // /*this.openAttractNotification();
+        /*this.openNotification(
           'Attract',
           'Please draw a circle to select a region and then draw a vertical line.'
-        );
+        );*/
       }
     }
     if (this.props.transformState) {
@@ -496,11 +494,11 @@ class UtilCanvas extends Component<Props, State> {
           this.props.updateLayoutAction(newLayout);
         }
       } else {
-        // this.openTransformNotification();
-        this.openNotification(
+        // /*this.openTransformNotification();
+        /*this.openNotification(
           'Transform',
           'Please draw a circle to select at least one group, then draw a free path.'
-        );
+        );*/
       }
     }
     if (this.props.dragState) {
@@ -526,10 +524,10 @@ class UtilCanvas extends Component<Props, State> {
         }
         this.props.updateLayoutAction(newLayout);
       } else {
-        this.openNotification(
+        /*this.openNotification(
           'Transform',
           'Please draw a circle to select at least one group, then draw a free path.'
-        );
+        );*/
       }
     }
   }

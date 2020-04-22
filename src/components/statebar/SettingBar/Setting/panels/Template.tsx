@@ -80,55 +80,63 @@ class Template extends Component<Props, State> {
     }
     return pathStr;
   }
+  getPathStrs(layout: any, protoc: any) {
+    const graph = this.state.storyLayouter._layout(layout, protoc);
+    const nodes = [];
+    for (let j = 0; j < graph.paths.length; j++) {
+      if (graph.names[j] !== 'RABBIT') {
+        nodes.push(graph.paths[j]);
+      }
+    }
+    const newNodes = nodes.map((line: any) => {
+      const newLine = line.map((seg: any) => {
+        const newSeg = seg.map((point: any) => {
+          let newPoint = [];
+          newPoint[0] = (point[0] - 300) / 4;
+          newPoint[1] = (point[1] - 300) / 3;
+          return newPoint;
+        });
+        return newSeg;
+      });
+      return newLine;
+    });
+    const pathStrs = newNodes.map((line: any) => {
+      const segStrs = line.map((seg: any) => {
+        const pathStr = this.genSmoothPathStr(seg);
+        return pathStr;
+      });
+      let path = '';
+      for (let j = 0; j < segStrs.length; j++) {
+        path += segStrs[j];
+      }
+      return path;
+    });
+    return pathStrs;
+  }
+  getStorylines(chosen: boolean, pathStrs: any) {
+    const storylines = [];
+    for (let j = 0; j < pathStrs.length; j++) {
+      if (chosen) {
+        storylines.push(
+          <path d={pathStrs[j]} fill="transparent" stroke="black"></path>
+        );
+      } else {
+        storylines.push(
+          <path d={pathStrs[j]} fill="transparent" stroke="white"></path>
+        );
+      }
+    }
+    return storylines;
+  }
   getCanvasQueue() {
     let canvasQueue = [];
     for (let i = 0; i < this.props.predictQueue.length; i++) {
-      const graph = this.state.storyLayouter._layout(
+      const pathStrs = this.getPathStrs(
         this.props.predictQueue[i].layout,
         this.props.predictQueue[i].protoc
       );
-      const nodes = [];
-      for (let j = 0; j < graph.paths.length; j++) {
-        if (graph.names[j] !== 'RABBIT') {
-          nodes.push(graph.paths[j]);
-        }
-      }
-      const newNodes = nodes.map((line: any) => {
-        const newLine = line.map((seg: any) => {
-          const newSeg = seg.map((point: any) => {
-            let newPoint = [];
-            newPoint[0] = (point[0] - 300) / 4;
-            newPoint[1] = (point[1] - 300) / 3;
-            return newPoint;
-          });
-          return newSeg;
-        });
-        return newLine;
-      });
-      const pathStrs = newNodes.map((line: any) => {
-        const segStrs = line.map((seg: any) => {
-          const pathStr = this.genSmoothPathStr(seg);
-          return pathStr;
-        });
-        let path = '';
-        for (let j = 0; j < segStrs.length; j++) {
-          path += segStrs[j];
-        }
-        return path;
-      });
       const chosen = i === this.props.historyQueue.predictPointer;
-      const storylines = [];
-      for (let j = 0; j < pathStrs.length; j++) {
-        if (chosen) {
-          storylines.push(
-            <path d={pathStrs[j]} fill="transparent" stroke="black"></path>
-          );
-        } else {
-          storylines.push(
-            <path d={pathStrs[j]} fill="transparent" stroke="white"></path>
-          );
-        }
-      }
+      const storylines = this.getStorylines(chosen, pathStrs);
       canvasQueue[i] = (
         <div
           className="svg-bg"
@@ -150,6 +158,7 @@ class Template extends Component<Props, State> {
         </div>
       );
     }
+
     return canvasQueue;
   }
   getPrevCanvas() {
@@ -263,7 +272,7 @@ class Template extends Component<Props, State> {
             overflowY: 'auto',
             overflowX: 'auto',
             width: '100%',
-            height: '620px'
+            height: '520px'
           }}
         >
           {canvasQueue}
