@@ -7,7 +7,7 @@ import 'antd/dist/antd.css';
 import ToolBar from './components/toolbar';
 import StateBar from './components/statebar';
 import DrawCanvas from './components/canvas/DrawCanvas';
-import AIBTN from './components/TemplateBTN';
+// import AIBTN from './components/TemplateBTN';
 import { ITool } from './types';
 
 type Props = {};
@@ -163,7 +163,6 @@ class App extends React.Component<Props, State> {
             />
           </div>
         </div>
-        <AIBTN />
       </div>
     );
   }

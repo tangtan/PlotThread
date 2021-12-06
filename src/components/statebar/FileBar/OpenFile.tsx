@@ -3,7 +3,7 @@ import { Modal, Upload, Icon, message } from 'antd';
 import { StateType, DispatchType } from '../../../types';
 import { newProtocAction, addAction } from '../../../store/actions';
 import { connect } from 'react-redux';
-import { iStoryline } from 'iStoryline';
+import iStoryline from 'i-storyline-js';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,

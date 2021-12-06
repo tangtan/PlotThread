@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../types';
 import { Button, Progress, Menu } from 'antd';
-import { iStoryline } from 'iStoryline';
+import iStoryline from 'i-storyline-js';
 import axios from 'axios';
 import {
   getCurrentStoryFlowProtoc,

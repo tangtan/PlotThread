@@ -6,6 +6,7 @@ import { getSelectedItemColor } from '../../../store/selectors';
 import { connect } from 'react-redux';
 import StyleModal from './StyleModal';
 import StrokePicker from './StrokePicker';
+import { Button } from 'antd';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -62,9 +63,6 @@ class StyleBar extends Component<Props, State> {
 
   render() {
     const FileBar = styled.div`
-      // position: absolute;
-      // top: 0;
-      // left: ${this.props.xOffSet || 0}px;
       width: 200px;
       height: 50px;
       align-items: center;
@@ -73,32 +71,35 @@ class StyleBar extends Component<Props, State> {
       justify-content: flex-end;
       padding: 0px 0px 0 8px;
     `;
-    const FillBtn = styled.div`
+    const BtnWrapper = styled.div`
       flex: 0 1 30px;
       height: 30px;
-      border-radius: 15px;
-      background: ${this.props.fillColor};
       margin: 0 1px;
     `;
-    const StrokeBtn = styled.div`
-      flex: 0 1 30px;
-      height: 30px;
-      border-radius: 15px;
-      border: 4px solid ${this.props.strokeColor};
-      margin: 0 1px;
-    `;
+
     return (
       <FileBar>
-        <StrokeBtn
-          onClick={() => {
-            this.onClick('StrokeStyle');
-          }}
-        />
-        <FillBtn
-          onClick={() => {
-            this.onClick('FillStyle');
-          }}
-        />
+        <BtnWrapper>
+          <Button
+            shape="circle"
+            onClick={() => {
+              this.onClick('FillStyle');
+            }}
+          >
+            F
+          </Button>
+        </BtnWrapper>
+        <BtnWrapper>
+          <Button
+            shape="circle"
+            type="dashed"
+            onClick={() => {
+              this.onClick('StrokeStyle');
+            }}
+          >
+            S
+          </Button>
+        </BtnWrapper>
         <StrokePicker xOffSet={20} />
         <StyleModal xOffSet={-100} />
       </FileBar>

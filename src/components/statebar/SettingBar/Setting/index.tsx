@@ -6,8 +6,9 @@ import { getToolState } from '../../../../store/selectors';
 import styled from 'styled-components';
 import { Tabs } from 'antd';
 
-import Template from './panels/Template';
+import Embellish from './panels/Embellish';
 import GlobalConfig from './panels/GlobalConfig';
+import Template from './panels/Template';
 
 const { TabPane } = Tabs;
 
@@ -65,11 +66,14 @@ class GlobalPanel extends Component<Props, State> {
       <div className="panel" ref={this.rootElement}>
         <Nav className="nav">
           <Tabs onChange={this.callback} size="small">
-            <TabPane tab="Template" key="1">
-              <Template />
+            <TabPane tab="Shapes" key="1">
+              <Embellish />
             </TabPane>
-            <TabPane tab="Settings" key="2">
+            <TabPane tab="Config" key="3">
               <GlobalConfig />
+            </TabPane>
+            <TabPane tab="AI" key="2">
+              <Template />
             </TabPane>
           </Tabs>
         </Nav>

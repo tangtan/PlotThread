@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { StateType } from '../../../types';
 import { getSelectedVisualObjects } from '../../../store/selectors';
-import { Select, Input, Slider, Popover } from 'antd';
+import { Input, Slider, Popover, Menu, Dropdown, Button } from 'antd';
 import { PointText } from 'paper';
 import './FontBar.css';
 
@@ -26,7 +26,7 @@ class FontBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      fontFamily: 'Sans Serif',
+      fontFamily: 'sans-serif',
       fontSize: 12
     };
   }
@@ -81,29 +81,33 @@ class FontBar extends Component<Props, State> {
       color: #fff;
     `;
     const TitleText = <PopoverTitle>Font Size</PopoverTitle>;
-    const { Option } = Select;
+    const menu = (
+      <Menu onClick={({ key }) => this.handleTextChange(key, 'fontFamily')}>
+        <Menu.Item key="sans-serif" style={{ color: '#fff' }}>
+          sans-serif
+        </Menu.Item>
+        <Menu.Item key="arial" style={{ color: '#fff' }}>
+          arial
+        </Menu.Item>
+        <Menu.Item key="times-new-roman" style={{ color: '#fff' }}>
+          times-new-roman
+        </Menu.Item>
+      </Menu>
+    );
     return (
       <FontBar>
-        <Select
-          value={this.state.fontFamily}
-          style={{
-            width: 150,
-            margin: '0 10px',
-            background: '#34373e',
-            color: '#fff'
-          }}
-          onChange={val => this.handleTextChange(val, 'fontFamily')}
-        >
-          <Option value="sans-serif" style={{ color: '#fff' }}>
-            Sans Serif
-          </Option>
-          <Option value="arial" style={{ color: '#fff' }}>
-            Arial
-          </Option>
-          <Option value="times-new-roman" style={{ color: '#fff' }}>
-            Times New Roman
-          </Option>
-        </Select>
+        <Dropdown overlay={menu} trigger={['click']}>
+          <Button
+            style={{
+              width: 150,
+              margin: '0 10px',
+              background: '#34373e',
+              color: '#fff'
+            }}
+          >
+            {this.state.fontFamily}
+          </Button>
+        </Dropdown>
         <Popover
           placement="topRight"
           style={{ width: 150 }}

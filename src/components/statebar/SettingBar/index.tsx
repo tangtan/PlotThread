@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import ToolBar from '../../toolbar';
 import ToolItem from '../../toolbar/ToolItem';
-import { IMenu, ITool } from '../../../types';
+import { ITool } from '../../../types';
 import SettingPanel from './Setting';
 import UploadPicModal from './UploadModal';
-import ShapePanel from './Shape';
 import styled from 'styled-components';
 
 type Props = {
@@ -21,12 +19,6 @@ export default class SettingBar extends Component<Props, State> {
     this.state = {
       settingTools: [
         {
-          name: 'Embellish',
-          type: 'png',
-          url: 'icons/embellish.png',
-          subTools: []
-        },
-        {
           name: 'Setting',
           type: 'png',
           url: 'icons/setting.png',
@@ -38,7 +30,7 @@ export default class SettingBar extends Component<Props, State> {
 
   render() {
     const Settingbar = styled.div`
-      width: 110px;
+      width: 80px;
     `;
     const ButtonListWrapper = styled.div`
       display: flex;
@@ -62,21 +54,8 @@ export default class SettingBar extends Component<Props, State> {
           <ButtonListWrapper>{ButtonList}</ButtonListWrapper>
         </Settingbar>
         <SettingPanel />
-        <ShapePanel />
         <UploadPicModal />
       </div>
-
-      //   <div>
-      //   <ToolBar
-      // Top={0}
-      // Right={this.props.xOffSet || 0}
-      // Direction={'horizontal'}
-      // Tools={this.state.settingTools}
-      // />
-      // <SettingPanel />
-      // <ShapePanel />
-      // <UploadPicModal />
-      // </div>
     );
   }
 }

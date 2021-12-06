@@ -21,24 +21,24 @@ export default class GToolBar extends Component<Props, State> {
           url: 'icons/zoom.png',
           subTools: []
         },
-        {
-          name: 'Move',
-          type: 'png',
-          url: 'icons/move.png',
-          subTools: []
-        },
+        // {
+        //   name: 'Move',
+        //   type: 'png',
+        //   url: 'icons/move.png',
+        //   subTools: []
+        // },
         {
           name: 'Timeline',
           type: 'png',
           url: 'icons/timeline.png',
           subTools: []
+        },
+        {
+          name: 'Preview',
+          type: 'png',
+          url: 'icons/preview.png',
+          subTools: []
         }
-        // {
-        //   name: 'Preview',
-        //   type: 'png',
-        //   url: 'icons/preview.png',
-        //   subTools: []
-        // }
       ]
     };
   }

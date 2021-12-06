@@ -19,7 +19,7 @@ import {
   updateProtocAction,
   updateLayoutAction
 } from '../../store/actions';
-import { iStoryline } from 'iStoryline';
+import iStoryline from 'i-storyline-js';
 import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';

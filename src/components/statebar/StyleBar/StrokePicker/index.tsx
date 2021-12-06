@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../../types';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Button } from 'antd';
 import {
   getSelectedVisualObjects,
   getToolState
 } from '../../../../store/selectors';
 import { setTool } from '../../../../store/actions';
-import { Button } from 'antd/lib/radio';
 import { Item } from 'paper';
 
 const mapStateToProps = (state: StateType) => {
@@ -79,23 +78,23 @@ class StrokePicker extends Component<Props, State> {
     const menu = (
       <Menu onClick={({ key }) => this.changeWidth(key)}>
         <Menu.Item key="1">
-          <img src="icons/l1.png" />
+          <img src="icons/l1.png" alt="1px" />
           1px
         </Menu.Item>
         <Menu.Item key="2">
-          <img src="icons/l2.png" />
+          <img src="icons/l2.png" alt="2px" />
           2px
         </Menu.Item>
         <Menu.Item key="3">
-          <img src="icons/l3.png" />
+          <img src="icons/l3.png" alt="3px" />
           3px
         </Menu.Item>
         <Menu.Item key="4">
-          <img src="icons/l4.png" />
+          <img src="icons/l4.png" alt="4px" />
           4px
         </Menu.Item>
         <Menu.Item key="5">
-          <img src="icons/l5.png" />
+          <img src="icons/l5.png" alt="5px" />
           5px
         </Menu.Item>
       </Menu>
@@ -103,24 +102,22 @@ class StrokePicker extends Component<Props, State> {
     const url = `icons/l${this.state.width}.png`;
 
     return (
-      <div>
-        <Dropdown overlay={menu} trigger={['click']}>
-          <Button
-            style={{
-              width: 120,
-              margin: '0 0 0 10px',
-              background: '#34373e',
-              color: '#fff'
-            }}
-            onClick={() => {
-              this.handleClick();
-            }}
-          >
-            {/*{this.state.width}*/}
-            <img src={url} />
-          </Button>
-        </Dropdown>
-      </div>
+      <Dropdown overlay={menu} trigger={['click']}>
+        <Button
+          style={{
+            width: 120,
+            margin: '0 0 0 10px',
+            background: '#34373e',
+            color: '#fff'
+          }}
+          onClick={() => {
+            this.handleClick();
+          }}
+        >
+          {/*{this.state.width}*/}
+          <img src={url} />
+        </Button>
+      </Dropdown>
     );
   }
 }

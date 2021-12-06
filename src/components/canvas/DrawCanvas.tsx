@@ -6,7 +6,7 @@ import {
   StyleConfig,
   StoryFlowStoryType
 } from '../../types';
-import { iStoryline } from 'iStoryline';
+import iStoryline from 'i-storyline-js';
 import UtilCanvas from './UtilCanvas';
 import {
   getCurrentStoryFlowProtoc,
@@ -67,20 +67,20 @@ class DrawCanvas extends Component<Props, State> {
     const postUrl = this.state.serverUpdateUrl;
     const postReq = { data: data, protoc: protoc };
     if (!postReq.data) postReq.data = {} as StoryFlowStoryType;
-    const postRes = await axios.post(postUrl, postReq);
-    if (postRes.data && postRes.data.data && postRes.data.protoc) {
-      if (postRes.data.data[0] && postRes.data.protoc[0]) {
-        const graph = this.state.storyLayouter._layout(
-          postRes.data.data[0],
-          postRes.data.protoc[0]
-        );
-        this.props.addAction(
-          postRes.data.protoc[0],
-          postRes.data.data[0],
-          graph.scaleRate
-        );
-      }
-    }
+    // const postRes = await axios.post(postUrl, postReq);
+    // if (postRes.data && postRes.data.data && postRes.data.protoc) {
+    //   if (postRes.data.data[0] && postRes.data.protoc[0]) {
+    //     const graph = this.state.storyLayouter._layout(
+    //       postRes.data.data[0],
+    //       postRes.data.protoc[0]
+    //     );
+    //     this.props.addAction(
+    //       postRes.data.protoc[0],
+    //       postRes.data.data[0],
+    //       graph.scaleRate
+    //     );
+    //   }
+    // }
   };
   private drawStorylines(graph: StoryGraph) {
     const storylines = this.props.renderQueue.filter(
