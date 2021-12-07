@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import './App.css';
 import 'antd/dist/antd.css';
 
-import ToolBar from './components/toolbar';
+import MenuBar from './components/menubar';
 import StateBar from './components/statebar';
 import DrawCanvas from './components/canvas/DrawCanvas';
-// import AIBTN from './components/TemplateBTN';
 import { ITool } from './types';
 
 type Props = {};
@@ -153,16 +152,7 @@ class App extends React.Component<Props, State> {
       <div className="App">
         <DrawCanvas />
         <StateBar />
-        <div className="App-bottom-bar-wrapper">
-          <div className="App-bottom-bar">
-            <ToolBar
-              Bottom={0}
-              Left={0}
-              Direction={'horizontal'}
-              Tools={leftTools}
-            />
-          </div>
-        </div>
+        <MenuBar mounted={true} bottom={60} left={60} tools={leftTools} />
       </div>
     );
   }

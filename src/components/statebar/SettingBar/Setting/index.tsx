@@ -8,7 +8,6 @@ import { Tabs } from 'antd';
 
 import Embellish from './panels/Embellish';
 import GlobalConfig from './panels/GlobalConfig';
-import Template from './panels/Template';
 
 const { TabPane } = Tabs;
 
@@ -71,9 +70,6 @@ class GlobalPanel extends Component<Props, State> {
             </TabPane>
             <TabPane tab="Config" key="3">
               <GlobalConfig />
-            </TabPane>
-            <TabPane tab="AI" key="2">
-              <Template />
             </TabPane>
           </Tabs>
         </Nav>

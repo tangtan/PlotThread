@@ -10,7 +10,6 @@ import dragSegment, {
   updateSegment
 } from '../../../interactions/IMouseEvent/segmentEvent';
 import { drawSelectionBounds } from '../../../drawers/baseDrawer';
-import { updateLayoutAction } from '../../actions';
 import { ColorPicker } from '../../../utils/color';
 
 const initialState: VisualObject[] = [];

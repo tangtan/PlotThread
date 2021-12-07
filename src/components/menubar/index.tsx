@@ -3,29 +3,42 @@ import { connect } from 'react-redux';
 import PieMenu, { PieCenter, Slice } from 'react-pie-menu';
 import { ITool } from '../../types';
 import { ThemeProvider } from 'styled-components';
-import * as styles from './index.style';
 import { setTool } from '../../store/actions';
+import { getToolName } from '../../store/selectors';
 import { StateType, DispatchType } from '../../types';
 import ReactSVG from 'react-svg';
+import { css } from 'styled-components';
+
+const container = css`
+  border: none;
+`;
+
+const slice = css`
+  cursor: pointer;
+  color: grey;
+  opacity: 0.78;
+  background: #34373e;
+  box-shadow: 0 2px 7px 0 rgba(131, 131, 131, 0.5);
+  &[filled='true'] {
+    color: black;
+  }
+  &:hover,
+  &[active='true'] {
+    color: black;
+    background: radial-gradient(transparent 30px, #eee 30px);
+  }
+`;
 
 const mapStateToProps = (state: StateType) => {
-  return {};
+  return {
+    toolName: getToolName(state)
+  };
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     activateTool: (name: string) => dispatch(setTool(name, true))
   };
-};
-
-const theme = {
-  pieMenu: {
-    container: styles.container,
-    center: styles.center
-  },
-  slice: {
-    container: styles.slice
-  }
 };
 
 type Props = {
@@ -41,10 +54,9 @@ type Props = {
   ReturnType<typeof mapStateToProps>;
 
 type State = {
-  center: ITool;
   option: number; // menu id
-  toolName: string;
-  expandUrl: string;
+  toolIconUrl: string;
+  goBackIconUrl: string;
 };
 
 function MenuPanel(props: any) {
@@ -65,7 +77,7 @@ function MenuPanel(props: any) {
     <ThemeProvider theme={theme}>
       <PieMenu
         centerRadius={`${centerRadius || 30}px`}
-        radius={`${radius || 100}px`}
+        radius={`${radius || 90}px`}
         Center={Center}
       >
         {option != -1 && (option === 0 ? MainMenu : SubMenus[option - 1])}
@@ -74,20 +86,52 @@ function MenuPanel(props: any) {
   );
 }
 
+function SliceIcon(props: any) {
+  const { item } = props;
+  return item.type === 'svg' ? (
+    <ReactSVG src={item.url} />
+  ) : (
+    <img style={{ width: 42, height: 42 }} src={item.url} alt={item.name} />
+  );
+}
+
+function CenterIcon(props: any) {
+  const { iconUrl } = props;
+  return (
+    <img style={{ width: 42, height: 42 }} src={iconUrl} alt="center-icon" />
+  );
+}
+
+function isInMenuBar(tools: ITool[], toolName: string) {
+  for (let i = 0; i < tools.length; i++) {
+    const toolItem = tools[i];
+    if (toolItem.name === toolName) return true;
+    for (let j = 0; j < toolItem.subTools.length; j++) {
+      const subToolItem = toolItem.subTools[j];
+      if (subToolItem.name === toolName) return true;
+    }
+  }
+  return false;
+}
+
 class MenuBar extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      option: -1,
-      toolName: '',
-      center: {
-        name: 'MenuCollapse',
-        type: 'svg',
-        url: 'svg/Menu_Tools/PieMenu_Collapse.svg',
-        subTools: []
-      },
-      expandUrl: 'svg/Menu_Tools/PieMenu_Expand.svg'
+      option: 0,
+      toolIconUrl: '',
+      goBackIconUrl: 'icons/terminate_active.png'
     };
+  }
+
+  static getDerivedStateFromProps(nextProps: Props) {
+    if (!isInMenuBar(nextProps.tools, nextProps.toolName)) {
+      return {
+        option: 0,
+        toolIconUrl: ''
+      };
+    }
+    return null;
   }
 
   goBack = (e: any) => {
@@ -108,11 +152,13 @@ class MenuBar extends Component<Props, State> {
       tools,
       mounted
     } = props;
-    const { center, option } = state;
+    const { option } = state;
     const Center = (props: Props) => (
       <PieCenter {...props} onClick={this.goBack}>
-        {option != -1 && option !== 0 && <ReactSVG src={center.url} />}
-        {option == -1 && <ReactSVG src={this.state.expandUrl} />}
+        {option !== -1 && option !== 0 && (
+          <CenterIcon iconUrl={this.state.goBackIconUrl} />
+        )}
+        {option === -1 && <CenterIcon iconUrl={this.state.toolIconUrl} />}
       </PieCenter>
     );
     const MainMenu = (
@@ -121,10 +167,15 @@ class MenuBar extends Component<Props, State> {
           <Slice
             key={`${item.name}-${i}`}
             onSelect={() => {
-              this.setState({ option: i + 1 });
+              this.props.activateTool(item.name);
+              if (item.subTools.length === 0) {
+                this.setState({ option: -1, toolIconUrl: item.url });
+              } else {
+                this.setState({ option: i + 1 });
+              }
             }}
           >
-            <ReactSVG src={item.url} />
+            <SliceIcon item={item} />
           </Slice>
         ))}
       </React.Fragment>
@@ -137,35 +188,39 @@ class MenuBar extends Component<Props, State> {
             key={`${item.name}-${i}`}
             onSelect={() => {
               this.props.activateTool(item.name);
-              this.setState({
-                option: -1
-              });
+              this.setState({ option: -1, toolIconUrl: item.url });
             }}
           >
-            <ReactSVG src={item.url} />
+            <SliceIcon item={item} />
           </Slice>
         ))}
       </React.Fragment>
     ));
-    // return (
-    //   <ThemeProvider theme={theme}>
-    //     <PieMenu
-    //       centerX={`${centerX || 150}px`}
-    //       centerY={`${centerY || 150}px`}
-    //       centerRadius={`${centerRadius || 30}px`}
-    //       radius={`${radius || 100}px`}
-    //       Center={Center}
-    //     >
-    //       {option === 0 ? MainMenu : SubMenus[option - 1]}
-    //     </PieMenu>
-    //   </ThemeProvider>
-    // );
     const style: React.CSSProperties = {
       position: 'absolute',
       left: left,
       right: right,
       top: top,
       bottom: bottom
+    };
+    const center = css`
+      background: ${option === -1 ? '#6376cc' : 'white'};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 7px 0 rgba(131, 131, 131, 0.5);
+      &:not(:empty):hover {
+        cursor: pointer;
+      }
+    `;
+    const theme = {
+      pieMenu: {
+        container: container,
+        center: center
+      },
+      slice: {
+        container: slice
+      }
     };
     return (
       <div
@@ -189,7 +244,4 @@ class MenuBar extends Component<Props, State> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MenuBar);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuBar);

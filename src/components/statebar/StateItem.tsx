@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Statebar.css';
 import { IMenu } from '../../types';
-import { redoAction, undoAction } from '../../store/actions';
 import store from '../../store';
 
 type Props = {
@@ -18,13 +17,7 @@ class StateItem extends Component<Props> {
 
   private onClick = () => {
     const actionName = this.props.menuInfo.name;
-    // console.log(actionName);
-    if (actionName == 'Back') {
-      store.dispatch(undoAction());
-    }
-    if (actionName == 'Forward') {
-      store.dispatch(redoAction());
-    }
+    console.log(actionName);
   };
 
   render() {

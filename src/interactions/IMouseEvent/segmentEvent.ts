@@ -1,7 +1,5 @@
 import { Path, Segment, Point } from 'paper';
-import { changeLayoutAction } from '../../store/actions';
 import store from '../../store';
-import { getCurrentStoryFlowProtoc } from '../../store/selectors';
 
 export default function dragSegment(
   e: paper.MouseEvent,
@@ -116,7 +114,7 @@ export function updateSegment(path: Path) {
       let characterID = path.data.characterID;
       let segmentID = path.data.segmentID;
       if (characterID !== -1 && segmentID !== -1) {
-        store.dispatch(changeLayoutAction(characterID, segmentID, deltaY));
+        // store.dispatch(changeLayoutAction(characterID, segmentID, deltaY));
       }
     }
   }

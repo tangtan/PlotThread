@@ -3,19 +3,13 @@ import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../../../../types';
 import { Slider } from 'antd';
 import { SliderValue } from 'antd/lib/slider';
-import { getCurrentStoryFlowProtoc } from '../../../../../store/selectors';
-import { updateProtocAction } from '../../../../../store/actions';
 
 const mapStateToProps = (state: StateType) => {
-  return {
-    storyProtoc: getCurrentStoryFlowProtoc(state)
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {
-    updateProtocAction: (protoc: any) => dispatch(updateProtocAction(protoc))
-  };
+  return {};
 };
 
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -39,38 +33,35 @@ class GlobalConfig extends Component<Props, State> {
   private changeSpace(value: SliderValue) {
     let newHeight = 190 + (value as number) * 10;
     let newWidth = this.state.width;
-    let newProtocol = this.deepCopy(this.props.storyProtoc);
-    newProtocol.sessionInnerGap = value as number;
-    newProtocol.sessionOuterGap = 36 + (value as number);
-    newProtocol.scaleInfo = [
-      { style: 'Scale', param: { width: newWidth, height: newHeight } }
-    ];
-    this.props.updateProtocAction(newProtocol);
+    // let newProtocol = this.deepCopy(this.props.storyProtoc);
+    // newProtocol.sessionInnerGap = value as number;
+    // newProtocol.sessionOuterGap = 36 + (value as number);
+    // newProtocol.scaleInfo = [
+    //   { style: 'Scale', param: { width: newWidth, height: newHeight } }
+    // ];
   }
 
   private changeWidth(value: SliderValue) {
     let newWidth = (1000 * (value as number)) / 100;
     let newHeight = this.state.height;
-    let newProtocol = this.deepCopy(this.props.storyProtoc);
-    newProtocol.scaleInfo = [
-      { style: 'Scale', param: { width: newWidth, height: newHeight } }
-    ];
-    this.setState({
-      width: newWidth
-    });
-    this.props.updateProtocAction(newProtocol);
+    // let newProtocol = this.deepCopy(this.props.storyProtoc);
+    // newProtocol.scaleInfo = [
+    //   { style: 'Scale', param: { width: newWidth, height: newHeight } }
+    // ];
+    // this.setState({
+    //   width: newWidth
+    // });
   }
   private changeHeight(value: SliderValue) {
     let newHeight = (372 * (value as number)) / 100;
     let newWidth = this.state.width;
-    let newProtocol = this.deepCopy(this.props.storyProtoc);
-    newProtocol.scaleInfo = [
-      { style: 'Scale', param: { width: newWidth, height: newHeight } }
-    ];
-    this.setState({
-      height: newHeight
-    });
-    this.props.updateProtocAction(newProtocol);
+    // let newProtocol = this.deepCopy(this.props.storyProtoc);
+    // newProtocol.scaleInfo = [
+    //   { style: 'Scale', param: { width: newWidth, height: newHeight } }
+    // ];
+    // this.setState({
+    //   height: newHeight
+    // });
   }
   deepCopy(x: any) {
     return JSON.parse(JSON.stringify(x));

@@ -1,49 +1,20 @@
 import React, { Component } from 'react';
-import {
-  StateType,
-  DispatchType,
-  StoryGraph,
-  StyleConfig,
-  StoryFlowStoryType
-} from '../../types';
-import iStoryline from 'i-storyline-js';
+import { StateType, DispatchType, StoryGraph, StyleConfig } from '../../types';
 import UtilCanvas from './UtilCanvas';
-import {
-  getCurrentStoryFlowProtoc,
-  getCurrentPredictGraph,
-  getCurrentStoryFlowLayout,
-  getCurrentActionType
-} from '../../store/selectors';
-import {
-  addVisualObject,
-  newPredictAction,
-  setTool,
-  addAction,
-  updateProtocAction
-} from '../../store/actions';
-import axios from 'axios';
+
+import { addVisualObject, setTool } from '../../store/actions';
 import { project, view, Item } from 'paper';
 import { connect } from 'react-redux';
 const mapStateToProps = (state: StateType) => {
   return {
-    storyProtoc: getCurrentStoryFlowProtoc(state),
-    predictGraph: getCurrentPredictGraph(state),
-    storyLayout: getCurrentStoryFlowLayout(state),
-    actionType: getCurrentActionType(state),
-    renderQueue: state.renderQueue,
-    historyQueue: state.historyQueue
+    renderQueue: state.renderQueue
   };
 };
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    newPredictAction: (newPredictQueue: any[]) =>
-      dispatch(newPredictAction(newPredictQueue)),
-    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use)),
-    addAction: (protoc: any, layout: any, scale: number) =>
-      dispatch(addAction(protoc, layout, scale)),
-    updateProtocAction: (protoc: any) => dispatch(updateProtocAction(protoc))
+    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
   };
 };
 type Props = {} & ReturnType<typeof mapStateToProps> &
@@ -51,37 +22,15 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
 
 type State = {
   serverUpdateUrl: string;
-  storyLayouter: any;
 };
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      serverUpdateUrl: 'api/update',
-      storyLayouter: new iStoryline()
+      serverUpdateUrl: 'api/update'
     };
   }
-  private genStoryGraph = async () => {
-    const protoc = this.props.storyProtoc;
-    const data = this.props.storyLayout;
-    const postUrl = this.state.serverUpdateUrl;
-    const postReq = { data: data, protoc: protoc };
-    if (!postReq.data) postReq.data = {} as StoryFlowStoryType;
-    // const postRes = await axios.post(postUrl, postReq);
-    // if (postRes.data && postRes.data.data && postRes.data.protoc) {
-    //   if (postRes.data.data[0] && postRes.data.protoc[0]) {
-    //     const graph = this.state.storyLayouter._layout(
-    //       postRes.data.data[0],
-    //       postRes.data.protoc[0]
-    //     );
-    //     this.props.addAction(
-    //       postRes.data.protoc[0],
-    //       postRes.data.data[0],
-    //       graph.scaleRate
-    //     );
-    //   }
-    // }
-  };
+  private genStoryGraph = async () => {};
   private drawStorylines(graph: StoryGraph) {
     const storylines = this.props.renderQueue.filter(
       item => item.data.type === 'storyline'
@@ -108,35 +57,31 @@ class DrawCanvas extends Component<Props, State> {
     // TODO: Copy style
     storylines.forEach(storyline => storyline.remove());
     // draw new graph
-    const animationType =
-      this.props.storyProtoc.interaction === 'stylish' ||
-      this.props.storyProtoc.interaction === 'relate'
-        ? 'regionalTransition'
-        : 'globalTransition';
-    for (let i = 0; i < graph.paths.length; i++) {
-      if (graph.names[i] === 'RABBIT') continue;
-      if (animationType === 'regionalTransition') {
-        this.props.addVisualObject('storyline', {
-          storylineName: graph.names[i],
-          storylinePath: graph.paths[i],
-          prevStoryline: i < storylines.length ? storylines[i].children : [],
-          animationType: animationType,
-          characterID: i + 1,
-          segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i]),
-          dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
-        });
-      } else {
-        this.props.addVisualObject('storyline', {
-          storylineName: graph.names[i],
-          storylinePath: graph.paths[i],
-          prevStoryline: i < storylines.length ? storylines[i].children : [],
-          animationType: animationType,
-          characterID: i + 1,
-          segmentIDs: [],
-          dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
-        });
-      }
-    }
+    // const animationType = 'globalTransition';
+    // for (let i = 0; i < graph.paths.length; i++) {
+    //   if (graph.names[i] === 'RABBIT') continue;
+    //   if (animationType === 'regionalTransition') {
+    //     this.props.addVisualObject('storyline', {
+    //       storylineName: graph.names[i],
+    //       storylinePath: graph.paths[i],
+    //       prevStoryline: i < storylines.length ? storylines[i].children : [],
+    //       animationType: animationType,
+    //       characterID: i + 1,
+    //       segmentIDs: this.getSegmentIDs(graph.styleConfig, graph.names[i]),
+    //       dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
+    //     });
+    //   } else {
+    //     this.props.addVisualObject('storyline', {
+    //       storylineName: graph.names[i],
+    //       storylinePath: graph.paths[i],
+    //       prevStoryline: i < storylines.length ? storylines[i].children : [],
+    //       animationType: animationType,
+    //       characterID: i + 1,
+    //       segmentIDs: [],
+    //       dashIDs: this.getDashIDs(graph.styleConfig, graph.names[i])
+    //     });
+    //   }
+    // }
   }
   getDashIDs(styleConfig: StyleConfig[], name: string) {
     if (!styleConfig) return [];
@@ -172,22 +117,7 @@ class DrawCanvas extends Component<Props, State> {
     if (type === 'LAST_PREDICT') return true;
     return false;
   }
-  async componentDidUpdate(prevProps: Props) {
-    if (this.props.historyQueue.pointer !== prevProps.historyQueue.pointer) {
-      if (this.checkActionStable(this.props.actionType)) {
-        if (this.props.storyLayout && this.props.storyProtoc) {
-          const graph = this.state.storyLayouter._layout(
-            this.props.storyLayout,
-            this.props.storyProtoc
-          );
-          if (this.props.historyQueue.pointer <= 2) this.drawStorylines(graph);
-          else this.updateStorylines(graph);
-        }
-      } else {
-        await this.genStoryGraph();
-      }
-    }
-  }
+
   async componentDidMount() {
     await this.genStoryGraph();
     view.onClick = (e: paper.MouseEvent) => {

@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
 import { Modal, Upload, Icon, message } from 'antd';
 import { StateType, DispatchType } from '../../../types';
-import { newProtocAction, addAction } from '../../../store/actions';
 import { connect } from 'react-redux';
-import iStoryline from 'i-storyline-js';
+
 const mapStateToProps = (state: StateType) => {
   return {
-    renderQueue: state.renderQueue,
-    historyQueue: state.historyQueue
+    renderQueue: state.renderQueue
   };
 };
+
 const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {
-    newProtocAction: (id: any) => dispatch(newProtocAction(id)),
-    addAction: (protoc: any, layout: any, scale: number) =>
-      dispatch(addAction(protoc, layout, scale))
-  };
+  return {};
 };
 
 type Props = {
@@ -28,7 +23,6 @@ type State = {
   name: string;
   multiple: boolean;
   action: string;
-  storyLayouter: any;
 };
 
 class OpenFile extends Component<Props, State> {
@@ -37,15 +31,14 @@ class OpenFile extends Component<Props, State> {
     this.state = {
       name: 'file',
       multiple: false,
-      action: 'http://localhost:5050/api/upload', //'https://www.mocky.io/v2/5cc8019d300000980a055e76'
-      storyLayouter: new iStoryline()
+      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76' // Pretend to upload
     };
   }
 
   onChange(info: any) {
     const { status, type } = info.file;
     if (status !== 'uploading') {
-      //console.log(info.file, info.fileList);
+      console.log(info.file, info.fileList);
     }
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);
@@ -62,20 +55,12 @@ class OpenFile extends Component<Props, State> {
     }
   }
   openXml(info: any) {
-    const id = info.file.response.data.identifier;
-    this.props.newProtocAction(id);
+    return;
   }
   openJson(info: any) {
-    const url = '/json/' + info.file.name;
-    fetch(url)
-      .then(response => response.json()) //解析为可读数据
-      .then(data => this.loadData(data)) //执行结果是 resolve就调用then方法
-      .catch(err => console.log('Error!', err)); //执行结果是 reject就调用catch方法
+    return;
   }
-  loadData(data: any) {
-    const graph = this.state.storyLayouter._layout(data.data, data.protoc);
-    this.props.addAction(data.protoc, data.data, graph.scaleRate);
-  }
+
   render() {
     const { Dragger } = Upload;
     const { name, multiple, action } = this.state;
