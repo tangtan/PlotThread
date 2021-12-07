@@ -3,8 +3,10 @@ import { combineReducers } from 'redux';
 
 import toolState from './toolbar/toolState';
 import renderQueue from './canvas/renderQueue';
+import storyState from './canvas/storyState';
 
 export default combineReducers<StateType, ActionType>({
   toolState: toolState,
-  renderQueue: renderQueue
+  renderQueue: renderQueue,
+  storyState: storyState
 });

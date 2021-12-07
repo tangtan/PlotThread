@@ -1,36 +1,61 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { StateType, DispatchType, StoryGraph, StyleConfig } from '../../types';
+import { getStoryGraph } from '../../store/selectors';
+import { addVisualObject } from '../../store/actions';
+import { project, view, Item } from 'paper';
 import UtilCanvas from './UtilCanvas';
 
-import { addVisualObject, setTool } from '../../store/actions';
-import { project, view, Item } from 'paper';
-import { connect } from 'react-redux';
 const mapStateToProps = (state: StateType) => {
   return {
-    renderQueue: state.renderQueue
+    renderQueue: state.renderQueue,
+    storyGraph: getStoryGraph(state)
   };
 };
+
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
-      dispatch(addVisualObject(type, cfg)),
-    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
+      dispatch(addVisualObject(type, cfg))
   };
 };
+
 type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
-  serverUpdateUrl: string;
+  storyGraph: StoryGraph;
 };
+
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      serverUpdateUrl: 'api/update'
+      storyGraph: {
+        names: [],
+        nodes: [],
+        paths: [],
+        styleConfig: [],
+        scaleRate: 1
+      }
     };
   }
-  private genStoryGraph = async () => {};
+
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.storyGraph === prevState.storyGraph) {
+      return null;
+    } else {
+      const graph = nextProps.storyGraph;
+      if (graph.names.length > 0) {
+        drawStorylines(nextProps);
+      }
+      console.log(nextProps.storyGraph);
+      return {
+        storyGraph: graph
+      };
+    }
+  }
+
   private drawStorylines(graph: StoryGraph) {
     const storylines = this.props.renderQueue.filter(
       item => item.data.type === 'storyline'
@@ -39,7 +64,6 @@ class DrawCanvas extends Component<Props, State> {
     storylines.forEach(storyline => storyline.remove());
     // draw new graph
     for (let i = 0; i < graph.paths.length; i++) {
-      if (graph.names[i] === 'RABBIT') continue;
       this.props.addVisualObject('storyline', {
         storylineName: graph.names[i],
         storylinePath: graph.paths[i],
@@ -50,12 +74,13 @@ class DrawCanvas extends Component<Props, State> {
       });
     }
   }
+
   private updateStorylines(graph: StoryGraph) {
-    const storylines = this.props.renderQueue.filter(
-      item => item.data.type === 'storyline'
-    );
-    // TODO: Copy style
-    storylines.forEach(storyline => storyline.remove());
+    // const storylines = this.props.renderQueue.filter(
+    //   item => item.data.type === 'storyline'
+    // );
+    // // TODO: Copy style
+    // storylines.forEach(storyline => storyline.remove());
     // draw new graph
     // const animationType = 'globalTransition';
     // for (let i = 0; i < graph.paths.length; i++) {
@@ -83,6 +108,7 @@ class DrawCanvas extends Component<Props, State> {
     //   }
     // }
   }
+
   getDashIDs(styleConfig: StyleConfig[], name: string) {
     if (!styleConfig) return [];
     // console.log(styleConfig);
@@ -99,6 +125,7 @@ class DrawCanvas extends Component<Props, State> {
     }
     return ret;
   }
+
   getSegmentIDs(styleConfig: StyleConfig[], name: string) {
     if (!styleConfig) return [];
     let ret = [];
@@ -109,21 +136,13 @@ class DrawCanvas extends Component<Props, State> {
     }
     return ret;
   }
-  checkActionStable(type: string) {
-    if (type === 'ADD') return true;
-    if (type === 'UPDATE_LAYOUT') return true;
-    if (type === 'CHANGE_LAYOUT') return true;
-    if (type === 'NEXT_PREDICT') return true;
-    if (type === 'LAST_PREDICT') return true;
-    return false;
-  }
 
-  async componentDidMount() {
-    await this.genStoryGraph();
+  componentDidMount() {
     view.onClick = (e: paper.MouseEvent) => {
       this.onMouseClick(e);
     };
   }
+
   onMouseClick(e: paper.MouseEvent) {
     if (project) {
       project.deselectAll();
@@ -134,6 +153,7 @@ class DrawCanvas extends Component<Props, State> {
       this.props.renderQueue.forEach(item => this.deselectItem(item));
     }
   }
+
   deselectItem(item: Item) {
     if (item.children) {
       item.children.forEach(item => {
@@ -141,8 +161,30 @@ class DrawCanvas extends Component<Props, State> {
       });
     }
   }
+
   render() {
     return <UtilCanvas />;
   }
 }
+
+function drawStorylines(props: Props) {
+  const graph = props.storyGraph;
+  const storylines = props.renderQueue.filter(
+    item => item.data.type === 'storyline'
+  );
+  // TODO: Copy style
+  storylines.forEach(storyline => storyline.remove());
+  // draw new graph
+  for (let i = 0; i < graph.paths.length; i++) {
+    props.addVisualObject('storyline', {
+      storylineName: graph.names[i],
+      storylinePath: graph.paths[i],
+      prevStoryline: [],
+      characterID: i + 1,
+      animationType: 'creation',
+      segmentIDs: []
+    });
+  }
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(DrawCanvas);

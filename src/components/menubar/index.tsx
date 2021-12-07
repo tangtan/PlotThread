@@ -80,7 +80,7 @@ function MenuPanel(props: any) {
         radius={`${radius || 90}px`}
         Center={Center}
       >
-        {option != -1 && (option === 0 ? MainMenu : SubMenus[option - 1])}
+        {option !== -1 && (option === 0 ? MainMenu : SubMenus[option - 1])}
       </PieMenu>
     </ThemeProvider>
   );

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Upload, Icon, message } from 'antd';
+import { loadStoryFile, loadStoryJson } from '../../../store/actions';
 import { StateType, DispatchType } from '../../../types';
 import { connect } from 'react-redux';
 
@@ -10,7 +11,11 @@ const mapStateToProps = (state: StateType) => {
 };
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
-  return {};
+  return {
+    openFile: (fileUrl: string, fileType: string) =>
+      dispatch(loadStoryFile(fileUrl, fileType)),
+    openJson: (story: any) => dispatch(loadStoryJson(story))
+  };
 };
 
 type Props = {
@@ -37,28 +42,41 @@ class OpenFile extends Component<Props, State> {
 
   onChange(info: any) {
     const { status, type } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
+    // if (status !== 'uploading') {
+    //   console.log(info.file, info.fileList);
+    // }
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);
       switch (type) {
         case 'text/xml':
-          this.openXml(info);
+          this.openXMLFile(info);
           break;
         case 'application/json':
-          this.openJson(info);
+          // this.openJSONFile(info);
+          this.openJSONData(info);
           break;
       }
     } else if (status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
     }
   }
-  openXml(info: any) {
-    return;
+  openXMLFile(info: any) {
+    const fileUrl = `xml/${info.file.name}`;
+    this.props.openFile(fileUrl, 'xml');
   }
-  openJson(info: any) {
-    return;
+  openJSONFile(info: any) {
+    const fileUrl = `json/${info.file.name}`;
+    this.props.openFile(fileUrl, 'json');
+  }
+
+  openJSONData(info: any) {
+    const fileUrl = `json/${info.file.name}`;
+    fetch(fileUrl)
+      .then(response => response.json())
+      .then(story => {
+        this.props.openJson(story);
+      })
+      .catch(err => console.error(err));
   }
 
   render() {

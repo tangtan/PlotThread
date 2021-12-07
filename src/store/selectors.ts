@@ -1,8 +1,7 @@
 import { StateType } from '../types';
 import { project, Color } from 'paper';
-import { deepCopy } from '../interactions/IMouseEvent/segmentEvent';
 
-// toolbar module
+// Tool Module
 export const getToolState = (state: StateType, name: string) => {
   const { toolName, toolMap } = state.toolState;
   if (name === 'FreeMode') {
@@ -77,3 +76,8 @@ function BSFSearch(nodes: any[], style = 'fillColor'): Color | undefined {
   }
   return BSFSearch(nodes, style);
 }
+
+// Story Module
+export const getStoryGraph = (state: StateType) => {
+  return state.storyState.storyGraph;
+};

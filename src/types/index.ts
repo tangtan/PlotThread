@@ -7,6 +7,7 @@ export type ActionType = ActionType<typeof actions>;
 export type DispatchType = typeof store.dispatch;
 
 export type StateType = {
+  storyState: StoryState;
   toolState: ToolStateType;
   renderQueue: VisualObject[];
 };
@@ -44,7 +45,6 @@ export type VisualObject = Group;
 export type StoryNode = number[];
 export type StorySegment = StoryNode[];
 export type StoryLine = StorySegment[];
-// export type StoryLine = StoryNode[];
 export type StoryName = string;
 export type StoryGraph = {
   names: StoryName[];
@@ -58,6 +58,11 @@ export type StyleConfig = {
   segmentID: number;
   styles: string[];
 };
+export type StoryState = {
+  storyLayouter: any;
+  storyGraph: StoryGraph;
+};
+
 export type PathGroup = Path[];
 
 export class PathStyleSegment {
