@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import StateItem from './../StateItem';
 import { IMenu } from '../../../types';
-import { StateType, DispatchType } from '../../../types';
-import { setTool } from '../../../store/actions';
-import { getToolState } from '../../../store/selectors';
-import OpenFile from './OpenFile';
+import { DispatchType } from '../../../types';
+import { setTool, loadStoryJson } from '../../../store/actions';
+import { Upload } from 'antd';
 import SaveFile from './SaveFile';
 import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
-    downloadPic: () => dispatch(setTool('DownloadPic', true))
+    downloadPic: () => dispatch(setTool('DownloadPic', true)),
+    openJson: (story: any) => dispatch(loadStoryJson(story))
   };
 };
 
@@ -74,6 +74,17 @@ class FileBar extends Component<Props, State> {
     }
   }
 
+  uploadStoryJson(info: any) {
+    const { name } = info.file;
+    const fileUrl = `json/${name}`;
+    fetch(fileUrl)
+      .then(response => response.json())
+      .then(story => {
+        this.props.openJson(story);
+      })
+      .catch(err => console.error(err));
+  }
+
   downloadPic() {
     // only download within-window content
     var canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -107,22 +118,33 @@ class FileBar extends Component<Props, State> {
     `;
 
     const FileButtonList = this.state.fileItems.map(
-      (fileItem: IMenu, i: number) => (
-        <div
-          key={`state-item-${i}`}
-          onClick={() => this.onShowModal(fileItem.name)}
-        >
-          <StateItem menuInfo={fileItem} />
-        </div>
-      )
+      (fileItem: IMenu, i: number) => {
+        if (fileItem.name === 'Open') {
+          return (
+            <Upload
+              key={`state-item-${i}`}
+              multiple={false}
+              showUploadList={false}
+              onChange={info => this.uploadStoryJson(info)}
+            >
+              <StateItem menuInfo={fileItem} />
+            </Upload>
+          );
+        } else {
+          return (
+            <div
+              key={`state-item-${i}`}
+              onClick={() => this.onShowModal(fileItem.name)}
+            >
+              <StateItem menuInfo={fileItem} />
+            </div>
+          );
+        }
+      }
     );
     return (
       <FileBar>
         <FileListWrapper>{FileButtonList}</FileListWrapper>
-        <OpenFile
-          visible={this.state.openFileVisible}
-          onCloseModal={this.onCloseModal.bind(this)}
-        />
         <SaveFile
           visible={this.state.saveFileVisible}
           onCloseModal={this.onCloseModal.bind(this)}

@@ -55,6 +55,7 @@ class FontBar extends Component<Props, State> {
           break;
         case 'fontSize':
           _textItem.fontSize = value;
+          break;
         default:
           break;
       }
