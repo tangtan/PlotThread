@@ -1,5 +1,5 @@
 import { ActionType, VisualObject } from '../../../types';
-import { Group, Rectangle, Path, Segment, Point } from 'paper';
+import { Group, Rectangle, Path } from 'paper';
 import StoryDrawer from '../../../drawers/storyDrawer';
 import ShapeDrawer from '../../../drawers/shapeDrawer';
 import ImageDrawer from '../../../drawers/imageDrawer';
@@ -138,9 +138,9 @@ const onStoryline = (storyline: Group) => {
 };
 
 export default (state = initialState, action: ActionType) => {
-  const newState = [...state];
   switch (action.type) {
-    case 'ADD_VISUALOBJECT':
+    case 'ADD_VISUALOBJECT': {
+      const newState = [...state];
       const { type, cfg } = action.payload;
       const object = drawVisualObject(type, cfg);
       if (type === 'storyline') onStoryline(object);
@@ -149,7 +149,9 @@ export default (state = initialState, action: ActionType) => {
         newState.push(object);
       }
       return newState;
-    case 'ADD_VISUALARRAY':
+    }
+    case 'ADD_VISUALARRAY': {
+      const newState = [...state];
       const { array, cfgs } = action.payload;
       array.forEach((type, index) => {
         const object = drawVisualObject(type, cfgs[index]);
@@ -160,6 +162,26 @@ export default (state = initialState, action: ActionType) => {
         }
       });
       return newState;
+    }
+    case 'CLEAN_STORYLINES': {
+      let newState: VisualObject[] = [];
+      state.forEach(visualObject => {
+        if (visualObject.data.type === 'storyline') {
+          visualObject.removeChildren();
+          visualObject.remove();
+        } else {
+          newState.push(visualObject);
+        }
+      });
+      return newState;
+    }
+    case 'CLEAN_RENDERQUEUE': {
+      state.forEach(visualObj => {
+        visualObj.removeChildren();
+        visualObj.remove();
+      });
+      return initialState;
+    }
     default:
       return state;
   }

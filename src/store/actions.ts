@@ -18,6 +18,15 @@ export const addVisualArray = createAction(
     action({ array: array, cfgs: cfgs || [] })
 );
 
+export const cleanStorylines = createAction('CLEAN_STORYLINES', action => () =>
+  action({})
+);
+
+export const cleanRenderQueue = createAction(
+  'CLEAN_RENDERQUEUE',
+  action => () => action({})
+);
+
 // Story Module
 export const loadStoryFile = createAction(
   'LOAD_STORYFILE',
