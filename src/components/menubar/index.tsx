@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { setTool } from '../../store/actions';
 import { getToolName } from '../../store/selectors';
 import { StateType, DispatchType } from '../../types';
+import { Tooltip } from 'antd';
 import ReactSVG from 'react-svg';
 import { css } from 'styled-components';
 
@@ -91,7 +92,9 @@ function SliceIcon(props: any) {
   return item.type === 'svg' ? (
     <ReactSVG src={item.url} />
   ) : (
-    <img style={{ width: 42, height: 42 }} src={item.url} alt={item.name} />
+    <Tooltip placement="top" title={item.name} arrowPointAtCenter>
+      <img style={{ width: 42, height: 42 }} src={item.url} alt={item.name} />
+    </Tooltip>
   );
 }
 

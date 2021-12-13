@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import { StateType, DispatchType, StoryGraph } from '../../types';
+import { connect } from 'react-redux';
+import { StateType, DispatchType } from '../../types';
+import { StoryStore } from '../../utils/storyStore';
+import { getToolState, getStoryStore } from '../../store/selectors';
+import { addVisualObject } from '../../store/actions';
+import ToolCanvas from './ToolCanvas';
+import { view } from 'paper';
 import BendUtil from '../../interactions/IStoryEvent/bendUtil';
 import CompressUtil from '../../interactions/IStoryEvent/compressUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortUtil';
 import StylishUtil from '../../interactions/IStoryEvent/stylishUtil';
 import RelateUtil from '../../interactions/IStoryEvent/relateUtil';
-import { getToolState } from '../../store/selectors';
-import { view } from 'paper';
-import ToolCanvas from './ToolCanvas';
-import { connect } from 'react-redux';
-import { addVisualObject } from '../../store/actions';
 import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
-import { notification } from 'antd';
 import DragUtil from '../../interactions/IStoryEvent/dragUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
+    storyStore: getStoryStore(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
     sortState: getToolState(state, 'Sort'),
@@ -35,16 +36,19 @@ const mapStateToProps = (state: StateType) => {
     dragState: getToolState(state, 'Drag')
   };
 };
+
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg))
   };
 };
+
 type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
+  storyStore: StoryStore | null;
   bendUtil: BendUtil;
   compressUtil: CompressUtil;
   sortUtil: SortUtil;
@@ -61,6 +65,7 @@ type State = {
   transformUtil: TransformUtil;
   dragUtil: DragUtil;
 };
+
 class UtilCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -79,29 +84,36 @@ class UtilCanvas extends Component<Props, State> {
       repelUtil: new RepelUtil('Repel', 0),
       attractUtil: new AttractUtil('Attract', 0),
       transformUtil: new TransformUtil('Transform', 0),
-      dragUtil: new DragUtil('Drag', 0)
+      dragUtil: new DragUtil('Drag', 0),
+      storyStore: null
     };
   }
-  updateUtils(graph: StoryGraph) {
-    this.state.bendUtil.updateStoryStore(graph);
-    this.state.compressUtil.updateStoryStore(graph);
-    this.state.sortUtil.updateStoryStore(graph);
-    this.state.bumpUtil.updateStoryStore(graph);
-    this.state.dashUtil.updateStoryStore(graph);
-    this.state.waveUtil.updateStoryStore(graph);
-    this.state.zigzagUtil.updateStoryStore(graph);
-    this.state.collideUtil.updateStoryStore(graph);
-    this.state.mergeUtil.updateStoryStore(graph);
-    this.state.splitUtil.updateStoryStore(graph);
-    this.state.twineUtil.updateStoryStore(graph);
-    this.state.repelUtil.updateStoryStore(graph);
-    this.state.attractUtil.updateStoryStore(graph);
-    this.state.transformUtil.updateStoryStore(graph);
-    this.state.dragUtil.updateStoryStore(graph);
+
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.storyStore !== prevState.storyStore) {
+      const storyStore = nextProps.storyStore;
+      prevState.bendUtil.updateStoryStore(storyStore);
+      prevState.compressUtil.updateStoryStore(storyStore);
+      prevState.sortUtil.updateStoryStore(storyStore);
+      prevState.bumpUtil.updateStoryStore(storyStore);
+      prevState.dashUtil.updateStoryStore(storyStore);
+      prevState.waveUtil.updateStoryStore(storyStore);
+      prevState.zigzagUtil.updateStoryStore(storyStore);
+      prevState.collideUtil.updateStoryStore(storyStore);
+      prevState.mergeUtil.updateStoryStore(storyStore);
+      prevState.splitUtil.updateStoryStore(storyStore);
+      prevState.twineUtil.updateStoryStore(storyStore);
+      prevState.repelUtil.updateStoryStore(storyStore);
+      prevState.attractUtil.updateStoryStore(storyStore);
+      prevState.transformUtil.updateStoryStore(storyStore);
+      prevState.dragUtil.updateStoryStore(storyStore);
+      return {
+        storyStore: storyStore
+      };
+    }
+    return null;
   }
-  deepCopy(x: any) {
-    return JSON.parse(JSON.stringify(x));
-  }
+
   componentDidMount() {
     view.onMouseDown = (e: paper.MouseEvent) => {
       this.onMouseDown(e);
@@ -113,6 +125,7 @@ class UtilCanvas extends Component<Props, State> {
       this.onMouseUp(e);
     };
   }
+
   onMouseDown(e: paper.MouseEvent) {
     if (this.props.bendState) this.state.bendUtil.down(e);
     if (this.props.compressState) this.state.compressUtil.down(e);
@@ -130,6 +143,7 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.attractState) this.state.attractUtil.down(e);
     if (this.props.dragState) this.state.dragUtil.down(e);
   }
+
   onMouseDrag(e: paper.MouseEvent) {
     if (this.props.bendState) this.state.bendUtil.drag(e);
     if (this.props.compressState) this.state.compressUtil.drag(e);
@@ -147,19 +161,27 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.transformState) this.state.transformUtil.drag(e);
     if (this.props.dragState) this.state.dragUtil.drag(e);
   }
-  onMouseUp(e: paper.MouseEvent) {}
 
-  openNotification = (toolName: string, msg: string, duration = 8) => {
-    notification.error({
-      message: toolName,
-      description: msg,
-      duration: duration,
-      placement: 'topLeft',
-      style: {
-        color: 'white'
-      }
-    });
-  };
+  onMouseUp(e: paper.MouseEvent) {
+    if (this.props.bendState) this.state.bendUtil.up(e);
+    if (this.props.compressState) this.state.compressUtil.up(e);
+    if (this.props.sortState) {
+      const ret = this.state.sortUtil.up(e);
+      console.log(ret);
+    }
+    if (this.props.bumpState) this.state.bumpUtil.up(e);
+    if (this.props.dashState) this.state.dashUtil.up(e);
+    if (this.props.waveState) this.state.waveUtil.up(e);
+    if (this.props.zigzagState) this.state.zigzagUtil.up(e);
+    if (this.props.collideState) this.state.collideUtil.up(e);
+    if (this.props.mergeState) this.state.mergeUtil.up(e);
+    if (this.props.splitState) this.state.splitUtil.up(e);
+    if (this.props.twineState) this.state.twineUtil.up(e);
+    if (this.props.attractState) this.state.attractUtil.up(e);
+    if (this.props.repelState) this.state.repelUtil.up(e);
+    if (this.props.transformState) this.state.transformUtil.up(e);
+    if (this.props.dragState) this.state.dragUtil.up(e);
+  }
 
   render() {
     return <ToolCanvas />;

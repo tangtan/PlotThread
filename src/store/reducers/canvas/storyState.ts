@@ -1,17 +1,10 @@
-import { ActionType, StoryGraph, StoryLine } from '../../../types';
+import { ActionType } from '../../../types';
 import { iStoryline } from 'i-storyline-js';
-
-const nullStoryGraph: StoryGraph = {
-  names: [],
-  nodes: [],
-  paths: [],
-  styleConfig: [],
-  scaleRate: 1
-};
+import { StoryStore } from '../../../utils/storyStore';
 
 const initialState = {
   storyLayouter: new iStoryline(),
-  storyGraph: nullStoryGraph
+  storyStore: new StoryStore()
 };
 
 export default (state = initialState, action: ActionType) => {
@@ -22,7 +15,7 @@ export default (state = initialState, action: ActionType) => {
       _iStoryliner.loadFile(fileUrl, fileType);
       return {
         storyLayouter: _iStoryliner,
-        storyGraph: nullStoryGraph
+        storyStore: new StoryStore()
       };
     case 'LOAD_STORYJSON':
       const { story } = action.payload;
@@ -30,7 +23,7 @@ export default (state = initialState, action: ActionType) => {
       // console.log(graph);
       return {
         storyLayouter: _iStoryliner,
-        storyGraph: transformGraph(graph)
+        storyStore: new StoryStore(graph)
       };
     default:
       break;
@@ -38,16 +31,15 @@ export default (state = initialState, action: ActionType) => {
   return state;
 };
 
-// transform iStoryline graph
-function transformGraph(graph: any): StoryGraph {
-  const nodes = [] as StoryLine;
-  const paths = graph.storylines;
-  paths.forEach((storyline: StoryLine) => nodes.push(...storyline));
-  return {
-    names: graph.characters,
-    nodes: nodes,
-    paths: paths,
-    styleConfig: [],
-    scaleRate: 1
-  };
-}
+// function transformGraph(graph: any): storyStore {
+//   const nodes = [] as StoryLine;
+//   const paths = graph.storylines;
+//   paths.forEach((storyline: StoryLine) => nodes.push(...storyline));
+//   return {
+//     names: graph.characters,
+//     nodes: nodes,
+//     paths: paths,
+//     styleConfig: [],
+//     scaleRate: 1
+//   };
+// }

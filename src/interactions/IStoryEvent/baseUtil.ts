@@ -1,5 +1,4 @@
 import paper, { Path, Point, project } from 'paper';
-import { StoryGraph } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
 import { ColorPicker } from '../../utils/color';
 
@@ -66,9 +65,10 @@ export class StoryUtil extends BaseSelectionUtil {
     );
   }
 
-  updateStoryStore(graph: StoryGraph) {
-    this.storyStore = new StoryStore(graph);
+  updateStoryStore(store: StoryStore) {
+    this.storyStore = store;
   }
+
   getStartTime(sPoint: Point) {
     if (!this.storyStore) return -1;
     const startX = sPoint.x as number;

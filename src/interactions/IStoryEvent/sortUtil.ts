@@ -1,5 +1,5 @@
 import { StoryUtil } from './baseUtil';
-import paper, { Group, CompoundPath, project, Point, Path } from 'paper';
+import paper, { Group, project, Point, Path } from 'paper';
 
 export default class SortUtil extends StoryUtil {
   constructor(type: string, actorNum: number) {
@@ -16,6 +16,7 @@ export default class SortUtil extends StoryUtil {
     console.log(item);
     if (item) {
       if (item.type === 'stroke') {
+        console.log(1, this.storyStore);
         //region
         if (this._downPoint) {
           if (this.storyStore) {
@@ -98,6 +99,7 @@ export default class SortUtil extends StoryUtil {
     console.log(order);
     return order;
   }
+
   getOrderOfStorylines() {
     if (!this.storyStore) return [];
     if (!this.storyStore.graph) return [];

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType, StoryGraph, StyleConfig } from '../../types';
-import { getStoryGraph } from '../../store/selectors';
+import { StateType, DispatchType } from '../../types';
+import { StoryStore } from '../../utils/storyStore';
+import { getStoryStore } from '../../store/selectors';
 import { addVisualObject, cleanRenderQueue } from '../../store/actions';
 import { project, view } from 'paper';
 import UtilCanvas from './UtilCanvas';
@@ -9,7 +10,7 @@ import UtilCanvas from './UtilCanvas';
 const mapStateToProps = (state: StateType) => {
   return {
     renderQueue: state.renderQueue,
-    storyGraph: getStoryGraph(state)
+    storyStore: getStoryStore(state)
   };
 };
 
@@ -25,35 +26,28 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
-  storyGraph: StoryGraph;
+  storyStore: StoryStore | null;
 };
 
 class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      storyGraph: {
-        names: [],
-        nodes: [],
-        paths: [],
-        styleConfig: [],
-        scaleRate: 1
-      }
+      storyStore: null
     };
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    if (nextProps.storyGraph === prevState.storyGraph) {
-      return null;
-    } else {
-      const graph = nextProps.storyGraph;
-      if (graph.names.length > 0) {
+    if (nextProps.storyStore !== prevState.storyStore) {
+      const storyStore = nextProps.storyStore;
+      if (storyStore.getCharactersNum() > 0) {
         drawStorylines(nextProps);
       }
       return {
-        storyGraph: graph
+        storyStore: storyStore
       };
     }
+    return null;
   }
 
   componentDidMount() {
@@ -87,22 +81,23 @@ class DrawCanvas extends Component<Props, State> {
 
 function drawStorylines(props: Props) {
   props.cleanRenderQueue();
-  const graph = props.storyGraph;
-  // draw new graph
-  for (let i = 0; i < graph.paths.length; i++) {
-    props.addVisualObject('storyline', {
-      storylineName: graph.names[i],
-      storylinePath: graph.paths[i],
-      prevStoryline: [],
-      characterID: i + 1,
-      animationType: 'creation',
-      segmentIDs: []
-    });
+  const graph = props.storyStore;
+  if (graph && graph.getCharactersNum() > 0) {
+    for (let i = 0; i < graph.paths.length; i++) {
+      props.addVisualObject('storyline', {
+        storylineName: graph.names[i],
+        storylinePath: graph.paths[i],
+        prevStoryline: [],
+        characterID: i + 1,
+        animationType: 'creation',
+        segmentIDs: []
+      });
+    }
   }
 }
 
 // function updateStorylines(props: Props, animationType: string) {
-//   const graph = props.storyGraph;
+//   const graph = props.storyStore;
 //   const storylines = props.renderQueue.filter(
 //     (item) => item.data.type === "storyline"
 //   );

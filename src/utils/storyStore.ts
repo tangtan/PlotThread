@@ -1,11 +1,25 @@
-import { StoryName } from '../types';
+import { StoryName, StoryLine, StorySegment } from '../types';
 
 export class StoryStore {
   graph: any;
   names: StoryName[];
-  constructor(graph: any) {
-    this.graph = graph;
-    this.names = graph.names;
+  nodes: StorySegment[];
+  paths: StoryLine[];
+  constructor(graph?: any) {
+    if (graph) {
+      this.graph = graph;
+      this.names = graph.characters;
+      const nodes = [] as StoryLine;
+      const paths = graph.storylines;
+      paths.forEach((storyline: StoryLine) => nodes.push(...storyline));
+      this.nodes = nodes;
+      this.paths = paths;
+    } else {
+      this.graph = null;
+      this.names = [];
+      this.nodes = [];
+      this.paths = [];
+    }
   }
   getCharactersNum() {
     return this.names.length;

@@ -78,6 +78,6 @@ function BSFSearch(nodes: any[], style = 'fillColor'): Color | undefined {
 }
 
 // Story Module
-export const getStoryGraph = (state: StateType) => {
-  return state.storyState.storyGraph;
+export const getStoryStore = (state: StateType) => {
+  return state.storyState.storyStore;
 };

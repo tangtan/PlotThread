@@ -2,6 +2,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../store/actions';
 import store from '../store';
 import { Path, Group } from 'paper';
+import { StoryStore } from '../utils/storyStore';
 
 export type ActionType = ActionType<typeof actions>;
 export type DispatchType = typeof store.dispatch;
@@ -12,7 +13,7 @@ export type StateType = {
   renderQueue: VisualObject[];
 };
 
-// Tool State
+// Tool Module
 export type ToolStateType = {
   toolName: string; // 辅助判断 FreeMode
   toolMap: Map<string, boolean>; // 动态储存工具状态
@@ -38,21 +39,14 @@ export type IHitOption = {
   tolerance?: number;
 };
 
-// Visual Object
+// VisualObject Module
 export type VisualObject = Group;
 
-// Storyline
+// Storyline Module
+export type StoryName = string;
 export type StoryNode = number[];
 export type StorySegment = StoryNode[];
 export type StoryLine = StorySegment[];
-export type StoryName = string;
-export type StoryGraph = {
-  names: StoryName[];
-  nodes: StorySegment[];
-  paths: StoryLine[];
-  styleConfig: StyleConfig[];
-  scaleRate: number;
-};
 export type StyleConfig = {
   name: string;
   segmentID: number;
@@ -60,7 +54,7 @@ export type StyleConfig = {
 };
 export type StoryState = {
   storyLayouter: any;
-  storyGraph: StoryGraph;
+  storyStore: StoryStore;
 };
 
 export type PathGroup = Path[];

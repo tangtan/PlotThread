@@ -1,7 +1,6 @@
 import { CircleSelectionUtil } from './baseUtil';
-import { project, Path, Point } from 'paper';
+import { Path, Point } from 'paper';
 import { ColorPicker } from '../../utils/color';
-import StylishUtil from './stylishUtil';
 
 export default class Transform extends CircleSelectionUtil {
   cnt: number;
