@@ -1,22 +1,8 @@
-import {
-  Path,
-  Matrix,
-  Point,
-  CompoundPath,
-  Item,
-  project,
-  PaperScope,
-  Color,
-  Segment
-} from 'paper';
+import { Path, Point, Item } from 'paper';
 import { StoryName, StoryLine, StorySegment } from '../types';
 import BaseDrawer from './baseDrawer';
 import TextDrawer from './textDrawer';
 import BaseAnimator from '../animators/baseAnimator';
-import { ColorPicker } from '../utils/color';
-import { StoryStore } from '../utils/storyStore';
-import { Children } from 'react';
-import { Group } from 'antd/lib/radio';
 
 export default class StoryDrawer extends BaseDrawer {
   cfg: any;
@@ -109,6 +95,7 @@ export default class StoryDrawer extends BaseDrawer {
     BaseAnimator.Animate(animationType, strokes, prevStrokes, segmentIDs);
     return strokes;
   }
+
   _drawStoryName(name: StoryName, path: Path[]) {
     const firstSegment = path[0].firstSegment.point || new Point(0, 0);
     const x0 = firstSegment.x || this.originPointX;

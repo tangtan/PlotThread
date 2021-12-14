@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import StateItem from './../StateItem';
 import { IMenu } from '../../../types';
 import { DispatchType } from '../../../types';
-import { setTool, loadStoryJson } from '../../../store/actions';
+import {
+  setTool,
+  loadStoryJson,
+  cleanRenderQueue
+} from '../../../store/actions';
 import { Upload } from 'antd';
 import SaveFile from './SaveFile';
 import { connect } from 'react-redux';
@@ -11,7 +15,9 @@ import { connect } from 'react-redux';
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     downloadPic: () => dispatch(setTool('DownloadPic', true)),
-    openJson: (story: any) => dispatch(loadStoryJson(story))
+    openJson: (name: string, story: any) =>
+      dispatch(loadStoryJson(name, story)),
+    cleanRenderQueue: () => dispatch(cleanRenderQueue())
   };
 };
 
@@ -75,12 +81,14 @@ class FileBar extends Component<Props, State> {
   }
 
   uploadStoryJson(info: any) {
+    // clean canvas
+    this.props.cleanRenderQueue();
     const { name } = info.file;
     const fileUrl = `json/${name}`;
     fetch(fileUrl)
       .then(response => response.json())
       .then(story => {
-        this.props.openJson(story);
+        this.props.openJson(name, story);
       })
       .catch(err => console.error(err));
   }

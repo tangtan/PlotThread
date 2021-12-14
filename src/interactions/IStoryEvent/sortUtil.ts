@@ -12,44 +12,36 @@ export default class SortUtil extends StoryUtil {
 
   up(e: paper.MouseEvent) {
     super.mouseUp(e);
+    if (this.storyStore === null) return null;
     const item = project ? project.hitTest(e.point as Point) : null;
-    console.log(item);
-    if (item) {
-      if (item.type === 'stroke') {
-        console.log(1, this.storyStore);
-        //region
-        if (this._downPoint) {
-          if (this.storyStore) {
-            const timespan = this.storyStore.getStoryTimeSpan(
-              this._downPoint.x as number
-            );
-            console.log(2, timespan, this._downPoint.x);
-            const timespanID = this.storyStore.getStoryTimeSpanID(
-              timespan[0],
-              timespan[1]
-            );
-            const names = this.storyStore.graph.names;
-
-            let order = this.getRegionOrders(names, timespan);
-            return [timespanID[0], order];
-          }
-        }
-      } else {
-        const order = this.getOrderOfStorylines();
-        const time = [0, 10000];
-        for (let i = 0, len = order.length; i < len; i++) {
-          const { name, oldY, newY } = order[i];
-          // console.log(name, oldY, newY);
-          const ID = this.getStorylineIDByName(name);
-          if (newY - oldY > 1) {
-            const upName = order[i - 1].name;
-            const upID = this.getStorylineIDByName(upName);
-            return [[upID, ID], time];
-          } else if (newY - oldY < -1) {
-            const downName = order[i + 1].name;
-            const downID = this.getStorylineIDByName(downName);
-            return [[ID, downID], time];
-          }
+    if (item === null) return null;
+    if (item.type === 'stroke') {
+      // Move storyline segment
+      if (this._downPoint) {
+        const timeSpan = this.storyStore.getStoryTimeSpan(
+          this._downPoint.x as number
+        );
+        let order = this.getRegionOrder(timeSpan);
+        return [order, timeSpan];
+      }
+    } else {
+      // Move the whole storyline
+      const order = this.getStorylinesOrder();
+      const time = [
+        this.storyStore.getStoryStartTime(),
+        this.storyStore.getStoryEndTime()
+      ];
+      for (let i = 0, len = order.length; i < len; i++) {
+        const { name, oldY, newY } = order[i];
+        const ID = this.getStorylineIDByName(name);
+        if (newY - oldY > 1) {
+          const upName = order[i - 1].name;
+          // const upID = this.getStorylineIDByName(upName);
+          return [[upName, name], time];
+        } else if (newY - oldY < -1) {
+          const downName = order[i + 1].name;
+          // const downID = this.getStorylineIDByName(downName);
+          return [[name, downName], time];
         }
       }
     }
@@ -59,35 +51,37 @@ export default class SortUtil extends StoryUtil {
   drag(e: paper.MouseEvent) {
     super.mouseDrag(e);
   }
-  getRegionOrders(names: any[], timespan: number[]) {
-    if (!this.storyStore) return [];
+
+  getPosYByTimeSpan(timeSpan: number[]) {
+    if (this.storyStore === null) return [];
+    const names = this.storyStore.names as string[];
     let totY = [];
-    let order = [];
-    for (let i = 0; i < names.length - 1; i++) {
-      //-1是因为rabbit
+    for (let i = 0; i < names.length; i++) {
       totY[i] = -1;
-      let id = this.storyStore.getStorySegmentIDByTime(i, timespan);
-      console.log('i', i);
-      console.log('id', id);
-      console.log('timespan', timespan);
-      if (id !== -1) {
-        const compoundPath = this.storylines[i].children;
-        if (compoundPath) {
-          const stroke = compoundPath.slice(1);
-          if (stroke && stroke.length > id) {
-            const path = stroke[id] as Path;
-            totY[i] = path.firstSegment.next.point
-              ? (path.firstSegment.next.point.y as number)
-              : -1;
-          }
+      let id = this.storyStore.getStorySegmentIDByTime(i, timeSpan);
+      const compoundPath = this.storylines[i].children;
+      if (compoundPath) {
+        const stroke = compoundPath.slice(1);
+        if (stroke && stroke.length > id) {
+          const path = stroke[id] as Path;
+          totY[i] = path.firstSegment.next.point
+            ? (path.firstSegment.next.point.y as number)
+            : -1;
         }
       }
-      console.log('y', totY[i]);
     }
-    for (let i = 0; i < names.length - 1; i++) {
+    return totY;
+  }
+
+  getRegionOrder(timeSpan: number[]) {
+    if (this.storyStore === null) return [];
+    const names = this.storyStore.names as string[];
+    const totY = this.getPosYByTimeSpan(timeSpan);
+    let order = [];
+    for (let i = 0; i < names.length; i++) {
       if (totY[i] !== -1) {
         order[i] = 1;
-        for (let j = 0; j < names.length - 1; j++) {
+        for (let j = 0; j < names.length; j++) {
           if (i !== j && totY[j] !== -1 && totY[j] < totY[i]) {
             order[i]++;
           }
@@ -96,15 +90,15 @@ export default class SortUtil extends StoryUtil {
         order[i] = -1;
       }
     }
-    console.log(order);
+    console.log(order, totY);
     return order;
   }
 
-  getOrderOfStorylines() {
+  getStorylinesOrder() {
     if (!this.storyStore) return [];
     if (!this.storyStore.graph) return [];
-    const _names = this.storyStore.graph.names;
-    const _paths = this.storyStore.graph.paths;
+    const _names = this.storyStore.names;
+    const _paths = this.storyStore.paths;
     const _ys = _paths.map((_path: any) => this.getPathYFromGraph(_path));
     const _newYs = this.storylines.map((_line: any) =>
       this.getPathYFromCanvas(_line)

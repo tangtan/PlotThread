@@ -55,6 +55,7 @@ export type StyleConfig = {
 export type StoryState = {
   storyLayouter: any;
   storyStore: StoryStore;
+  storyName: StoryName;
 };
 
 export type PathGroup = Path[];

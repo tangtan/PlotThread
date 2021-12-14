@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
-import { getToolState, getStoryStore } from '../../store/selectors';
-import { addVisualObject } from '../../store/actions';
+import {
+  getToolState,
+  getStoryStore,
+  getStoryLayouter
+} from '../../store/selectors';
+import { addVisualObject, updateStoryStore } from '../../store/actions';
 import ToolCanvas from './ToolCanvas';
 import { view } from 'paper';
+
 import BendUtil from '../../interactions/IStoryEvent/bendUtil';
 import CompressUtil from '../../interactions/IStoryEvent/compressUtil';
 import SortUtil from '../../interactions/IStoryEvent/sortUtil';
@@ -18,6 +23,7 @@ import DragUtil from '../../interactions/IStoryEvent/dragUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
+    storyLayouter: getStoryLayouter(state),
     storyStore: getStoryStore(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
@@ -40,7 +46,8 @@ const mapStateToProps = (state: StateType) => {
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
-      dispatch(addVisualObject(type, cfg))
+      dispatch(addVisualObject(type, cfg)),
+    updateStoreStore: (graph: any) => dispatch(updateStoryStore(graph))
   };
 };
 
@@ -167,7 +174,11 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.compressState) this.state.compressUtil.up(e);
     if (this.props.sortState) {
       const ret = this.state.sortUtil.up(e);
-      console.log(ret);
+      if (ret !== null) {
+        const graph = this.props.storyLayouter.sort(ret[0], ret[1]);
+        this.props.updateStoreStore(graph);
+        console.log(graph);
+      }
     }
     if (this.props.bumpState) this.state.bumpUtil.up(e);
     if (this.props.dashState) this.state.dashUtil.up(e);

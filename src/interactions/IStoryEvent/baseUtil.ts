@@ -172,6 +172,7 @@ export class StoryUtil extends BaseSelectionUtil {
     const ret = this.storyStore.getStorylineIDByName(name);
     return ret ? (ret as number) : -1;
   }
+
   isInSelectionRegion(name: string, sPoint: Point, ePoint: Point) {
     let flag = false;
     const sTime = this.getStartTime(sPoint);

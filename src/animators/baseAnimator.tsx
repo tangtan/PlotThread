@@ -2,7 +2,6 @@ import { Path, Point, Matrix, Item } from 'paper';
 import { ColorPicker } from '../utils/color';
 
 export default class BaseAnimator {
-  constructor() {}
   static Animate(
     type: string,
     strokes: Path[],
@@ -10,11 +9,12 @@ export default class BaseAnimator {
     segmentIDs: number[]
   ) {
     switch (type) {
-      case 'regionalTransition':
-        this.RegionalTransit(strokes, prevStrokes, segmentIDs);
-        break;
-      case 'globalTransition':
-        this.GlobalTransit(strokes, prevStrokes);
+      case 'transition':
+        if (segmentIDs.length > 0) {
+          this.RegionalTransit(strokes, prevStrokes, segmentIDs);
+        } else {
+          this.GlobalTransit(strokes, prevStrokes);
+        }
         break;
       case 'creation':
         this.Create(strokes, prevStrokes);

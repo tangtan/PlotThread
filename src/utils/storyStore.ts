@@ -21,6 +21,13 @@ export class StoryStore {
       this.paths = [];
     }
   }
+  getStoryStartTime() {
+    return this.graph.timeline[0];
+  }
+  getStoryEndTime() {
+    const timeIdx = this.graph.timeline.length - 1;
+    return this.graph.timeline[timeIdx];
+  }
   getCharactersNum() {
     return this.names.length;
   }

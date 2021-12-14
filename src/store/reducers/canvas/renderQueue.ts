@@ -1,5 +1,5 @@
 import { ActionType, VisualObject } from '../../../types';
-import { Group, Rectangle, Path } from 'paper';
+import { Group, Rectangle, Path, project } from 'paper';
 import StoryDrawer from '../../../drawers/storyDrawer';
 import ShapeDrawer from '../../../drawers/shapeDrawer';
 import ImageDrawer from '../../../drawers/imageDrawer';
@@ -162,6 +162,23 @@ export default (state = initialState, action: ActionType) => {
         }
       });
       return newState;
+    }
+    case 'DESELECT_VISUALOBJECTS': {
+      if (project) {
+        project.deselectAll();
+        state.forEach(item => {
+          item.data.isTransforming = false;
+          item.data.selectionBounds.visible = false;
+        });
+        state.forEach(item => {
+          if (item.children) {
+            item.children.forEach(item => {
+              item.data.isTransforming = false;
+            });
+          }
+        });
+      }
+      return state;
     }
     case 'CLEAN_STORYLINES': {
       let newState: VisualObject[] = [];

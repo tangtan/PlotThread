@@ -18,6 +18,11 @@ export const addVisualArray = createAction(
     action({ array: array, cfgs: cfgs || [] })
 );
 
+export const deSelectVisualObjects = createAction(
+  'DESELECT_VISUALOBJECTS',
+  action => () => action({})
+);
+
 export const cleanStorylines = createAction('CLEAN_STORYLINES', action => () =>
   action({})
 );
@@ -36,5 +41,11 @@ export const loadStoryFile = createAction(
 
 export const loadStoryJson = createAction(
   'LOAD_STORYJSON',
-  action => (story: any) => action({ story: story })
+  action => (storyName: string, storyJson: any) =>
+    action({ storyName: storyName, storyJson: storyJson })
+);
+
+export const updateStoryStore = createAction(
+  'UPDATE_STORYSTORE',
+  action => (graph: any) => action({ graph: graph })
 );

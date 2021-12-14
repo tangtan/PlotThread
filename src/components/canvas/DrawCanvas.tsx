@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
-import { getStoryStore } from '../../store/selectors';
-import { addVisualObject, cleanRenderQueue } from '../../store/actions';
-import { project, view } from 'paper';
+import { getStoryStore, getStoryName } from '../../store/selectors';
+import {
+  addVisualObject,
+  cleanStorylines,
+  deSelectVisualObjects
+} from '../../store/actions';
+import { view } from 'paper';
 import UtilCanvas from './UtilCanvas';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    renderQueue: state.renderQueue,
+    storyName: getStoryName(state),
     storyStore: getStoryStore(state)
   };
 };
@@ -18,7 +22,8 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    cleanRenderQueue: () => dispatch(cleanRenderQueue())
+    cleanStorylines: () => dispatch(cleanStorylines()),
+    resetVisualObjects: () => dispatch(deSelectVisualObjects())
   };
 };
 
@@ -26,6 +31,7 @@ type Props = {} & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 type State = {
+  storyName: string | null;
   storyStore: StoryStore | null;
 };
 
@@ -33,6 +39,7 @@ class DrawCanvas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      storyName: null,
       storyStore: null
     };
   }
@@ -41,9 +48,15 @@ class DrawCanvas extends Component<Props, State> {
     if (nextProps.storyStore !== prevState.storyStore) {
       const storyStore = nextProps.storyStore;
       if (storyStore.getCharactersNum() > 0) {
+        // if (nextProps.storyName === prevState.storyName) {
+        //   updateStorylines(nextProps);
+        // } else {
+        //   drawStorylines(nextProps);
+        // }
         drawStorylines(nextProps);
       }
       return {
+        storyName: nextProps.storyName,
         storyStore: storyStore
       };
     }
@@ -58,20 +71,7 @@ class DrawCanvas extends Component<Props, State> {
 
   // De-select all visual objects
   onMouseClick(e: paper.MouseEvent) {
-    if (project) {
-      project.deselectAll();
-      this.props.renderQueue.forEach(item => {
-        item.data.isTransforming = false;
-        item.data.selectionBounds.visible = false;
-      });
-      this.props.renderQueue.forEach(item => {
-        if (item.children) {
-          item.children.forEach(item => {
-            item.data.isTransforming = false;
-          });
-        }
-      });
-    }
+    this.props.resetVisualObjects();
   }
 
   render() {
@@ -80,20 +80,25 @@ class DrawCanvas extends Component<Props, State> {
 }
 
 function drawStorylines(props: Props) {
-  props.cleanRenderQueue();
-  const graph = props.storyStore;
-  if (graph && graph.getCharactersNum() > 0) {
-    for (let i = 0; i < graph.paths.length; i++) {
+  props.cleanStorylines();
+  const storyStore = props.storyStore;
+  if (storyStore.getCharactersNum() > 0) {
+    for (let i = 0; i < storyStore.paths.length; i++) {
       props.addVisualObject('storyline', {
-        storylineName: graph.names[i],
-        storylinePath: graph.paths[i],
+        storylineName: storyStore.names[i],
+        storylinePath: storyStore.paths[i],
         prevStoryline: [],
         characterID: i + 1,
         animationType: 'creation',
-        segmentIDs: []
+        segmentIDs: [],
+        dashIDs: []
       });
     }
   }
+}
+
+function updateStorylines(props: Props) {
+  console.log(2);
 }
 
 // function updateStorylines(props: Props, animationType: string) {
