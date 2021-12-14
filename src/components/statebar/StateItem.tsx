@@ -14,10 +14,9 @@ class StateItem extends Component<Props> {
     };
   }
 
-  private onClick = () => {
-    const actionName = this.props.menuInfo.name;
-    console.log(actionName);
-  };
+  // private onClick = () => {
+  //   const actionName = this.props.menuInfo.name;
+  // };
 
   render() {
     const imgIcon = (
@@ -35,7 +34,6 @@ class StateItem extends Component<Props> {
             ? 'statebar-icon-box-bg'
             : 'statebar-icon-box-nobg'
         }
-        onClick={this.onClick}
       >
         {imgIcon}
       </div>

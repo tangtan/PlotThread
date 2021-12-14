@@ -1,6 +1,8 @@
 import { ActionType } from '../../../types';
 import { iStoryline } from 'i-storyline-js';
+import StoryDrawer from '../../../drawers/storyDrawer';
 import { StoryStore } from '../../../utils/storyStore';
+import { project, Item } from 'paper';
 
 const initialState = {
   storyName: '',
@@ -41,10 +43,11 @@ export default (state = initialState, action: ActionType) => {
       // TODO: consider local re-ordering
       const [names, timeSpan] = args;
       const graph = state.storyLayouter.sort(names, timeSpan);
+      const storyStore = new StoryStore(graph);
       return {
         storyName: state.storyName,
         storyLayouter: state.storyLayouter,
-        storyStore: new StoryStore(graph)
+        storyStore: storyStore
       };
     }
     default:

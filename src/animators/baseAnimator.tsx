@@ -23,6 +23,7 @@ export default class BaseAnimator {
         break;
     }
   }
+
   static RegionalTransit(
     strokes: Path[],
     prevStoryline: Item[],
@@ -48,11 +49,13 @@ export default class BaseAnimator {
       }
     }
   }
+
   static GlobalTransit(strokes: Path[], prevStoryline: Item[]) {
     for (let i = 0; i < strokes.length; i++) {
       this.TransitBetweenTwoPath(prevStoryline[i] as Path, strokes[i]);
     }
   }
+
   static async Create(strokes: Path[], prevStrokes: Item[], duration = 1000) {
     let cnt = 0;
     while (cnt < strokes.length) {
@@ -73,6 +76,7 @@ export default class BaseAnimator {
       }
     }
   }
+
   static TweenBetweenTwoPath(
     path: Path,
     pathTo: Path,
@@ -93,7 +97,6 @@ export default class BaseAnimator {
         path.add(lastSegment);
       }
     }
-
     // tween two paths
     const pathFrom = path.clone({ insert: false }) as Path;
     setTimeout(
@@ -110,6 +113,7 @@ export default class BaseAnimator {
     );
     return cnt + 1;
   }
+
   static TransitBetweenTwoPath(path: Path, pathTo: Path, duration = 200) {
     if (!path) return;
     if (!pathTo) return;
@@ -124,7 +128,6 @@ export default class BaseAnimator {
         path.add(lastSegment);
       }
     }
-
     // tween two paths
     const pathToTo = pathTo.clone({ insert: false }) as Path;
     pathTo.tween(duration).onUpdate = (e: any) => {
@@ -136,6 +139,7 @@ export default class BaseAnimator {
         : ColorPicker.black;
     };
   }
+
   static async TweenFromFirstSegment(path: Path, cnt: number, duration = 200) {
     // path.set({ insert: false });
     const pathTo = path.clone({ insert: false }) as Path;

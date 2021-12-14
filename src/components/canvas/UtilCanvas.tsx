@@ -5,13 +5,9 @@ import { StoryStore } from '../../utils/storyStore';
 import {
   getToolState,
   getStoryStore,
-  getStoryLayouter
+  getVisualObjects
 } from '../../store/selectors';
-import {
-  addVisualObject,
-  updateStoryStore,
-  sortStorylines
-} from '../../store/actions';
+import { addVisualObject, sortStorylines } from '../../store/actions';
 import ToolCanvas from './ToolCanvas';
 import { view } from 'paper';
 
@@ -27,7 +23,7 @@ import DragUtil from '../../interactions/IStoryEvent/dragUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    // storyLayouter: getStoryLayouter(state),
+    visualObjects: getVisualObjects(state),
     storyStore: getStoryStore(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
@@ -51,7 +47,6 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    updateStoreStore: (graph: any) => dispatch(updateStoryStore(graph)),
     sort: (args: any) => dispatch(sortStorylines(args))
   };
 };
@@ -180,6 +175,7 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.sortState) {
       const sortArgs = this.state.sortUtil.up(e);
       this.props.sort(sortArgs);
+      this.updateStorylines();
     }
     if (this.props.bumpState) this.state.bumpUtil.up(e);
     if (this.props.dashState) this.state.dashUtil.up(e);
@@ -195,8 +191,40 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.dragState) this.state.dragUtil.up(e);
   }
 
+  updateStorylines() {
+    const storyStore = this.props.storyStore;
+    const storylines = this.props.visualObjects.filter(
+      item => item.data.type === 'storyline'
+    );
+    // TODO: Copy style
+    storylines.forEach(storyline => storyline.remove());
+    for (let i = 0, len = storyStore.getCharactersNum(); i < len; i++) {
+      const storylineName = storyStore.names[i];
+      const storylinePath = storyStore.paths[i];
+      const prevStoryline = this.getPrevStoryline(storylineName, storylines);
+      this.props.addVisualObject('storyline', {
+        storylineName: storylineName,
+        storylinePath: storylinePath,
+        prevStoryline: prevStoryline,
+        characterID: i + 1,
+        animationType: 'transition'
+      });
+    }
+  }
+
+  getPrevStoryline(storyName: string, storylines: paper.Group[]): paper.Item[] {
+    for (let i = 0; i < storylines.length; i++) {
+      const storyline = storylines[i];
+      if (storyline.name === storyName && storyline.children) {
+        return storyline.children.slice(1);
+      }
+    }
+    return [];
+  }
+
   render() {
     return <ToolCanvas />;
   }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(UtilCanvas);

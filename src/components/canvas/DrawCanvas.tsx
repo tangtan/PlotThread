@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
 import { getStoryStore, getStoryName } from '../../store/selectors';
-import {
-  addVisualObject,
-  cleanStorylines,
-  deSelectVisualObjects
-} from '../../store/actions';
+import { addVisualObject, deselectVisualObjects } from '../../store/actions';
 import { view } from 'paper';
 import UtilCanvas from './UtilCanvas';
 
@@ -22,8 +18,7 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     addVisualObject: (type: string, cfg: any) =>
       dispatch(addVisualObject(type, cfg)),
-    cleanStorylines: () => dispatch(cleanStorylines()),
-    resetVisualObjects: () => dispatch(deSelectVisualObjects())
+    resetVisualObjects: () => dispatch(deselectVisualObjects())
   };
 };
 
@@ -50,14 +45,12 @@ class DrawCanvas extends Component<Props, State> {
       if (storyStore.getCharactersNum() > 0) {
         if (nextProps.storyName !== prevState.storyName) {
           drawStorylines(nextProps);
-        } else {
-          console.log('fuck');
+          return {
+            storyName: nextProps.storyName,
+            storyStore: nextProps.storyStore
+          };
         }
       }
-      return {
-        storyName: nextProps.storyName,
-        storyStore: storyStore
-      };
     }
     return null;
   }
@@ -79,7 +72,6 @@ class DrawCanvas extends Component<Props, State> {
 }
 
 function drawStorylines(props: Props) {
-  props.cleanStorylines();
   const storyStore = props.storyStore;
   if (storyStore.getCharactersNum() > 0) {
     for (let i = 0; i < storyStore.paths.length; i++) {

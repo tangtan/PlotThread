@@ -24,6 +24,7 @@ export default class StoryDrawer extends BaseDrawer {
     this.segmentIDs = cfg.segmentIDs || [];
     this.dashIDs = cfg.dashIDs || [];
   }
+
   _drawVisualObjects(
     type: string,
     isCreating: boolean,
@@ -73,8 +74,8 @@ export default class StoryDrawer extends BaseDrawer {
       }
       let pathStr = DrawUtil.getPathStr('sketch', storyline[i]);
       let path = new Path(pathStr);
-      path.simplify();
-      //path.smooth();
+      // path.simplify();
+      // path.smooth();
       path.visible = false;
       path.strokeWidth = this.strokeWidth;
       path.strokeColor = this.strokeColor;
@@ -109,8 +110,6 @@ export default class StoryDrawer extends BaseDrawer {
 }
 
 class DrawUtil {
-  constructor() {}
-
   static getPathStr(type: string, line: StorySegment) {
     return type === 'sketch'
       ? this.getSketchPathStr(line)
@@ -118,6 +117,7 @@ class DrawUtil {
       ? this.getDashPathStr(line)
       : this.getSmoothPathStr(line);
   }
+
   static getDashPathStr(line: StorySegment) {
     let points = line;
     let pathStr = ``;
@@ -146,6 +146,7 @@ class DrawUtil {
     }
     return pathStr;
   }
+
   static getSketchPathStr(line: StorySegment) {
     let points = line;
     points.sort((a, b) => a[0] - b[0]);
@@ -156,6 +157,7 @@ class DrawUtil {
     }
     return pathStr;
   }
+
   static getSmoothPathStr(line: StorySegment) {
     let points = line;
     let pathStr = `M ${points[0][0]} ${points[0][1]} `;

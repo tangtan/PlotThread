@@ -1,6 +1,10 @@
 import { StateType } from '../types';
 import { project, Color } from 'paper';
 
+export const getVisualObjects = (state: StateType) => {
+  return state.renderQueue;
+};
+
 // Tool Module
 export const getToolState = (state: StateType, name: string) => {
   const { toolName, toolMap } = state.toolState;

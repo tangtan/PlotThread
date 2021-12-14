@@ -6,7 +6,7 @@ import { DispatchType } from '../../../types';
 import {
   setTool,
   loadStoryJson,
-  cleanRenderQueue
+  cleanVisualObjects
 } from '../../../store/actions';
 import { Upload } from 'antd';
 import SaveFile from './SaveFile';
@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
     downloadPic: () => dispatch(setTool('DownloadPic', true)),
     openJson: (name: string, story: any) =>
       dispatch(loadStoryJson(name, story)),
-    cleanRenderQueue: () => dispatch(cleanRenderQueue())
+    cleanRenderQueue: () => dispatch(cleanVisualObjects())
   };
 };
 

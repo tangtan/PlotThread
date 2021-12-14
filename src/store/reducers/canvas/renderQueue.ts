@@ -180,19 +180,7 @@ export default (state = initialState, action: ActionType) => {
       }
       return state;
     }
-    case 'CLEAN_STORYLINES': {
-      let newState: VisualObject[] = [];
-      state.forEach(visualObject => {
-        if (visualObject.data.type === 'storyline') {
-          visualObject.removeChildren();
-          visualObject.remove();
-        } else {
-          newState.push(visualObject);
-        }
-      });
-      return newState;
-    }
-    case 'CLEAN_RENDERQUEUE': {
+    case 'CLEAN_VISUALOBJECTS': {
       state.forEach(visualObj => {
         visualObj.removeChildren();
         visualObj.remove();
