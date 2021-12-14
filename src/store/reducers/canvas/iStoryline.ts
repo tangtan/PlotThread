@@ -35,6 +35,18 @@ export default (state = initialState, action: ActionType) => {
         storyStore: new StoryStore(graph)
       };
     }
+    case 'SORT_STORYLINES': {
+      const { args } = action.payload;
+      if (args === null) return state;
+      // TODO: consider local re-ordering
+      const [names, timeSpan] = args;
+      const graph = state.storyLayouter.sort(names, timeSpan);
+      return {
+        storyName: state.storyName,
+        storyLayouter: state.storyLayouter,
+        storyStore: new StoryStore(graph)
+      };
+    }
     default:
       break;
   }

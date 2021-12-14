@@ -48,12 +48,11 @@ class DrawCanvas extends Component<Props, State> {
     if (nextProps.storyStore !== prevState.storyStore) {
       const storyStore = nextProps.storyStore;
       if (storyStore.getCharactersNum() > 0) {
-        // if (nextProps.storyName === prevState.storyName) {
-        //   updateStorylines(nextProps);
-        // } else {
-        //   drawStorylines(nextProps);
-        // }
-        drawStorylines(nextProps);
+        if (nextProps.storyName !== prevState.storyName) {
+          drawStorylines(nextProps);
+        } else {
+          console.log('fuck');
+        }
       }
       return {
         storyName: nextProps.storyName,
@@ -89,16 +88,10 @@ function drawStorylines(props: Props) {
         storylinePath: storyStore.paths[i],
         prevStoryline: [],
         characterID: i + 1,
-        animationType: 'creation',
-        segmentIDs: [],
-        dashIDs: []
+        animationType: 'creation'
       });
     }
   }
-}
-
-function updateStorylines(props: Props) {
-  console.log(2);
 }
 
 // function updateStorylines(props: Props, animationType: string) {

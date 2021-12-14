@@ -1,4 +1,5 @@
 import { createAction } from 'typesafe-actions';
+import { StoryStore } from '../utils/storyStore';
 
 // Tool Module
 export const setTool = createAction(
@@ -22,6 +23,11 @@ export const deSelectVisualObjects = createAction(
   'DESELECT_VISUALOBJECTS',
   action => () => action({})
 );
+
+// export const updateStorylines = createAction(
+//   "UPDATE_STORYLINES",
+//   (action) => (storyStore: StoryStore) => action({ storyStore: storyStore })
+// );
 
 export const cleanStorylines = createAction('CLEAN_STORYLINES', action => () =>
   action({})
@@ -48,4 +54,9 @@ export const loadStoryJson = createAction(
 export const updateStoryStore = createAction(
   'UPDATE_STORYSTORE',
   action => (graph: any) => action({ graph: graph })
+);
+
+export const sortStorylines = createAction(
+  'SORT_STORYLINES',
+  action => (args: any) => action({ args: args })
 );
