@@ -21,9 +21,9 @@ export default class SortUtil extends StoryUtil {
         if (this._downPoint) {
           if (this.storyStore) {
             const timespan = this.storyStore.getStoryTimeSpan(
-              this._downPoint.x as number,
-              this._downPoint.y as number
+              this._downPoint.x as number
             );
+            console.log(2, timespan, this._downPoint.x);
             const timespanID = this.storyStore.getStoryTimeSpanID(
               timespan[0],
               timespan[1]

@@ -68,8 +68,8 @@ export class StoryStore {
   getStorylineIDByName(name: string) {
     return this.graph.getStorylineIDByName(name);
   }
-  getStoryTimeSpan(x: number | string, y: number | string) {
-    return this.graph.getStoryTimeSpan(x, y);
+  getStoryTimeSpan(x: number | string) {
+    return this.graph.getStoryTimeSpan(x);
   }
   getStoryTimeSpanID(startTime: number, endTime: number) {
     return this.graph.getStoryTimeSpanID(startTime, endTime);
