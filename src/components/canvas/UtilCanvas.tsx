@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
-import {
-  getToolState,
-  getStoryStore,
-  getVisualObjects
-} from '../../store/selectors';
+import { getToolState, getStoryStore } from '../../store/selectors';
 import { addVisualObject, sortStorylines } from '../../store/actions';
 import ToolCanvas from './ToolCanvas';
 import { view } from 'paper';
@@ -23,7 +19,6 @@ import DragUtil from '../../interactions/IStoryEvent/dragUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
-    visualObjects: getVisualObjects(state),
     storyStore: getStoryStore(state),
     bendState: getToolState(state, 'Bend'),
     compressState: getToolState(state, 'Compress'),
@@ -175,7 +170,6 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.sortState) {
       const sortArgs = this.state.sortUtil.up(e);
       this.props.sort(sortArgs);
-      this.updateStorylines();
     }
     if (this.props.bumpState) this.state.bumpUtil.up(e);
     if (this.props.dashState) this.state.dashUtil.up(e);
@@ -189,37 +183,6 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.repelState) this.state.repelUtil.up(e);
     if (this.props.transformState) this.state.transformUtil.up(e);
     if (this.props.dragState) this.state.dragUtil.up(e);
-  }
-
-  updateStorylines() {
-    const storyStore = this.props.storyStore;
-    const storylines = this.props.visualObjects.filter(
-      item => item.data.type === 'storyline'
-    );
-    // TODO: Copy style
-    storylines.forEach(storyline => storyline.remove());
-    for (let i = 0, len = storyStore.getCharactersNum(); i < len; i++) {
-      const storylineName = storyStore.names[i];
-      const storylinePath = storyStore.paths[i];
-      const prevStoryline = this.getPrevStoryline(storylineName, storylines);
-      this.props.addVisualObject('storyline', {
-        storylineName: storylineName,
-        storylinePath: storylinePath,
-        prevStoryline: prevStoryline,
-        characterID: i + 1,
-        animationType: 'transition'
-      });
-    }
-  }
-
-  getPrevStoryline(storyName: string, storylines: paper.Group[]): paper.Item[] {
-    for (let i = 0; i < storylines.length; i++) {
-      const storyline = storylines[i];
-      if (storyline.name === storyName && storyline.children) {
-        return storyline.children.slice(1);
-      }
-    }
-    return [];
   }
 
   render() {

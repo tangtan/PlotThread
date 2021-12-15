@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
-import { getStoryStore, getStoryName } from '../../store/selectors';
+import {
+  getStoryStore,
+  getStoryName,
+  getToolState,
+  getVisualObjects
+} from '../../store/selectors';
 import { addVisualObject, deselectVisualObjects } from '../../store/actions';
 import { view } from 'paper';
 import UtilCanvas from './UtilCanvas';
@@ -10,7 +15,9 @@ import UtilCanvas from './UtilCanvas';
 const mapStateToProps = (state: StateType) => {
   return {
     storyName: getStoryName(state),
-    storyStore: getStoryStore(state)
+    storyStore: getStoryStore(state),
+    visualObjects: getVisualObjects(state),
+    isLoadStoryJson: getToolState(state, 'Open')
   };
 };
 
@@ -44,26 +51,25 @@ class DrawCanvas extends Component<Props, State> {
       const storyStore = nextProps.storyStore;
       if (storyStore.getCharactersNum() > 0) {
         if (nextProps.storyName !== prevState.storyName) {
+          // Draw storylines after loading files
           drawStorylines(nextProps);
-          return {
-            storyName: nextProps.storyName,
-            storyStore: nextProps.storyStore
-          };
+        } else if (!nextProps.isLoadStoryJson) {
+          // Update storylines after iStoryline actions
+          updateStorylines(nextProps);
         }
       }
     }
-    return null;
-  }
-
-  componentDidMount() {
-    view.onClick = (e: paper.MouseEvent) => {
-      this.onMouseClick(e);
+    return {
+      storyName: nextProps.storyName,
+      storyStore: nextProps.storyStore
     };
   }
 
-  // De-select all visual objects
-  onMouseClick(e: paper.MouseEvent) {
-    this.props.resetVisualObjects();
+  componentDidMount() {
+    // De-select all visual objects
+    view.onClick = (e: paper.MouseEvent) => {
+      this.props.resetVisualObjects();
+    };
   }
 
   render() {
@@ -84,6 +90,40 @@ function drawStorylines(props: Props) {
       });
     }
   }
+}
+
+function updateStorylines(props: Props) {
+  const storyStore = props.storyStore;
+  const storylines = props.visualObjects.filter(
+    item => item.data.type === 'storyline'
+  );
+  // TODO: Copy style
+  storylines.forEach(storyline => storyline.remove());
+  for (let i = 0, len = storyStore.getCharactersNum(); i < len; i++) {
+    const storylineName = storyStore.names[i];
+    const storylinePath = storyStore.paths[i];
+    const prevStoryline = getPrevStoryline(storylineName, storylines);
+    props.addVisualObject('storyline', {
+      storylineName: storylineName,
+      storylinePath: storylinePath,
+      prevStoryline: prevStoryline,
+      characterID: i + 1,
+      animationType: 'transition'
+    });
+  }
+}
+
+function getPrevStoryline(
+  storyName: string,
+  storylines: paper.Group[]
+): paper.Item[] {
+  for (let i = 0; i < storylines.length; i++) {
+    const storyline = storylines[i];
+    if (storyline.name === storyName && storyline.children) {
+      return storyline.children.slice(1);
+    }
+  }
+  return [];
 }
 
 // function updateStorylines(props: Props, animationType: string) {

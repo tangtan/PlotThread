@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
+    activateTool: (toolName: string) => dispatch(setTool(toolName, true)),
     downloadPic: () => dispatch(setTool('DownloadPic', true)),
     openJson: (name: string, story: any) =>
       dispatch(loadStoryJson(name, story)),
@@ -68,6 +69,7 @@ class FileBar extends Component<Props, State> {
         });
         break;
       case 'Save':
+        this.props.activateTool('Save');
         this.setState({
           saveFileVisible: true
         });
@@ -82,6 +84,7 @@ class FileBar extends Component<Props, State> {
 
   uploadStoryJson(info: any) {
     // clean canvas
+    this.props.activateTool('Open');
     this.props.cleanRenderQueue();
     const { name } = info.file;
     const fileUrl = `json/${name}`;

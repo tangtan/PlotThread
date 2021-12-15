@@ -16,13 +16,14 @@ export default class SortUtil extends StoryUtil {
     const item = project ? project.hitTest(e.point as Point) : null;
     if (item === null) return null;
     if (item.type === 'stroke') {
-      // Move storyline segment
+      // TODO: Move storyline segment
       if (this._downPoint) {
         const timeSpan = this.storyStore.getStoryTimeSpan(
           this._downPoint.x as number
         );
         let order = this.getRegionOrder(timeSpan);
-        return [order, timeSpan];
+        // return [order, timeSpan];
+        return null;
       }
     } else {
       // Move the whole storyline
@@ -90,7 +91,7 @@ export default class SortUtil extends StoryUtil {
         order[i] = -1;
       }
     }
-    console.log(order, totY);
+    // console.log(order, totY);
     return order;
   }
 
