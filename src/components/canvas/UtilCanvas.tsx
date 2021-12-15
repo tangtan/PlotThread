@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { StateType, DispatchType } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
 import { getToolState, getStoryStore } from '../../store/selectors';
-import { addVisualObject, sortStorylines } from '../../store/actions';
+import {
+  sortStorylines,
+  bendStorylines,
+  compressStorylines
+} from '../../store/actions';
 import ToolCanvas from './ToolCanvas';
 import { view } from 'paper';
 
@@ -40,9 +44,9 @@ const mapStateToProps = (state: StateType) => {
 
 const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
-    addVisualObject: (type: string, cfg: any) =>
-      dispatch(addVisualObject(type, cfg)),
-    sort: (args: any) => dispatch(sortStorylines(args))
+    sort: (args: any) => dispatch(sortStorylines(args)),
+    bend: (args: any) => dispatch(bendStorylines(args)),
+    compress: (args: any) => dispatch(compressStorylines(args))
   };
 };
 
@@ -165,8 +169,14 @@ class UtilCanvas extends Component<Props, State> {
   }
 
   onMouseUp(e: paper.MouseEvent) {
-    if (this.props.bendState) this.state.bendUtil.up(e);
-    if (this.props.compressState) this.state.compressUtil.up(e);
+    if (this.props.bendState) {
+      const bendArgs = this.state.bendUtil.up(e);
+      this.props.bend(bendArgs);
+    }
+    if (this.props.compressState) {
+      const compressArgs = this.state.compressUtil.up(e);
+      this.props.compress(compressArgs);
+    }
     if (this.props.sortState) {
       const sortArgs = this.state.sortUtil.up(e);
       this.props.sort(sortArgs);

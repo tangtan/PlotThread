@@ -41,12 +41,17 @@ export const loadStoryJson = createAction(
     action({ storyName: storyName, storyJson: storyJson })
 );
 
-export const updateStoryStore = createAction(
-  'UPDATE_STORYSTORE',
-  action => (graph: any) => action({ graph: graph })
+export const bendStorylines = createAction(
+  'BEND_STORYLINES',
+  action => (args: any) => action({ args: args })
 );
 
 export const sortStorylines = createAction(
   'SORT_STORYLINES',
+  action => (args: any) => action({ args: args })
+);
+
+export const compressStorylines = createAction(
+  'COMPRESS_STORYLINES',
   action => (args: any) => action({ args: args })
 );

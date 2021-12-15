@@ -1,8 +1,6 @@
 import { ActionType } from '../../../types';
 import { iStoryline } from 'i-storyline-js';
-import StoryDrawer from '../../../drawers/storyDrawer';
 import { StoryStore } from '../../../utils/storyStore';
-import { project, Item } from 'paper';
 
 const initialState = {
   storyName: '',
@@ -29,8 +27,14 @@ export default (state = initialState, action: ActionType) => {
         storyLayouter: _iStoryliner,
         storyStore: new StoryStore(graph)
       };
-    case 'UPDATE_STORYSTORE': {
-      const { graph } = action.payload;
+    case 'BEND_STORYLINES': {
+      const { args } = action.payload;
+      if (args === null) return state;
+      const [names, timeSpan] = args;
+      const graph =
+        timeSpan.length === 1
+          ? state.storyLayouter.bend(names, timeSpan)
+          : state.storyLayouter.straighten(names, timeSpan);
       return {
         storyName: state.storyName,
         storyLayouter: state.storyLayouter,
@@ -43,11 +47,22 @@ export default (state = initialState, action: ActionType) => {
       // TODO: consider local re-ordering
       const [names, timeSpan] = args;
       const graph = state.storyLayouter.sort(names, timeSpan);
-      const storyStore = new StoryStore(graph);
       return {
         storyName: state.storyName,
         storyLayouter: state.storyLayouter,
-        storyStore: storyStore
+        storyStore: new StoryStore(graph)
+      };
+    }
+    case 'COMPRESS_STORYLINES': {
+      const { args } = action.payload;
+      if (args === null) return state;
+      const [names, timeSpan] = args;
+      // TODO: enable scale adjustment
+      const graph = state.storyLayouter.compress(names, timeSpan, 0.5);
+      return {
+        storyName: state.storyName,
+        storyLayouter: state.storyLayouter,
+        storyStore: new StoryStore(graph)
       };
     }
     default:
