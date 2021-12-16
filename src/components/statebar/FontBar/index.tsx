@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { StateType } from '../../../types';
+import { StateType, DispatchType } from '../../../types';
+import { setTool } from '../../../store/actions';
 import { getSelectedVisualObjects } from '../../../store/selectors';
 import { Input, Slider, Popover, Menu, Dropdown, Button } from 'antd';
 import { PointText } from 'paper';
@@ -13,9 +14,16 @@ const mapStateToProps = (state: StateType) => {
   };
 };
 
+const mapDispatchToProps = (dispatch: DispatchType) => {
+  return {
+    activateTool: (name: string, use: boolean) => dispatch(setTool(name, use))
+  };
+};
+
 type Props = {
   xOffSet?: number;
-} & ReturnType<typeof mapStateToProps>;
+} & ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
 
 type State = {
   fontFamily: string;
@@ -97,6 +105,14 @@ class FontBar extends Component<Props, State> {
     );
     return (
       <FontBar>
+        <Button
+          shape="circle"
+          onClick={() => {
+            this.props.activateTool('Text', true);
+          }}
+        >
+          文
+        </Button>
         <Dropdown overlay={menu} trigger={['click']}>
           <Button
             style={{
@@ -127,4 +143,4 @@ class FontBar extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, null)(FontBar);
+export default connect(mapStateToProps, mapDispatchToProps)(FontBar);

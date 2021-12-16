@@ -27,18 +27,6 @@ class App extends React.Component<Props, State> {
         //   subTools: []
         // },
         {
-          name: 'Repel',
-          type: 'png',
-          url: 'icons/repel.png',
-          subTools: []
-        },
-        {
-          name: 'Attract',
-          type: 'png',
-          url: 'icons/attract.png',
-          subTools: []
-        },
-        {
           name: 'Transform',
           type: 'png',
           url: 'icons/transform.png',
@@ -48,7 +36,20 @@ class App extends React.Component<Props, State> {
           name: 'Drag',
           type: 'png',
           url: 'icons/drag.png',
-          subTools: []
+          subTools: [
+            {
+              name: 'Repel',
+              type: 'png',
+              url: 'icons/repel.png',
+              subTools: []
+            },
+            {
+              name: 'Attract',
+              type: 'png',
+              url: 'icons/attract.png',
+              subTools: []
+            }
+          ]
         },
         {
           name: 'Bend',
@@ -131,7 +132,7 @@ class App extends React.Component<Props, State> {
           ]
         },
         {
-          name: 'Text',
+          name: 'Adjust',
           type: 'png',
           url: 'icons/label.png',
           subTools: []

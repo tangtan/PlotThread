@@ -123,7 +123,7 @@ class MenuBar extends Component<Props, State> {
     this.state = {
       option: 0,
       toolIconUrl: '',
-      goBackIconUrl: 'icons/terminate_active.png'
+      goBackIconUrl: 'icons/goback.png'
     };
   }
 
