@@ -9,12 +9,11 @@ export default class BaseAnimator {
     segmentIDs: number[]
   ) {
     switch (type) {
-      case 'transition':
-        if (segmentIDs.length > 0) {
-          this.RegionalTransit(strokes, prevStrokes, segmentIDs);
-        } else {
-          this.GlobalTransit(strokes, prevStrokes);
-        }
+      case 'localTransition':
+        this.RegionalTransit(strokes, prevStrokes, segmentIDs);
+        break;
+      case 'globalTransition':
+        this.GlobalTransit(strokes, prevStrokes);
         break;
       case 'creation':
         this.Create(strokes, prevStrokes);

@@ -55,3 +55,13 @@ export const compressStorylines = createAction(
   'COMPRESS_STORYLINES',
   action => (args: any) => action({ args: args })
 );
+
+export const stylishStorylines = createAction(
+  'STYLISH_STORYLINES',
+  action => (args: any) => action({ args: args })
+);
+
+export const relateStorylines = createAction(
+  'RELATE_STORYLINES',
+  action => (args: any) => action({ args: args })
+);

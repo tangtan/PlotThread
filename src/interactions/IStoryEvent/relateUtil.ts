@@ -13,30 +13,11 @@ export default class RelateUtil extends BrushSelectionUtil {
     super.mouseUp(e);
     if (this.selectedItems.length !== this.actorNum) return null;
     if (this._downPoint && this._dragPoint) {
-      const sTime = this.getStartTimeID(this._downPoint);
-      const eTime = this.getEndTimeID(this._dragPoint);
+      const sTime = this.getStartTime(this._downPoint);
+      const eTime = this.getEndTime(this._dragPoint);
+      // TODO: only storylines allowed
       const names = this.selectedItems.map(item => item.name);
-      const {
-        lTime,
-        rTime,
-        sSessionID,
-        mSessionID,
-        eSessionID
-      } = this.getSessionBreaks(this._downPoint, this._dragPoint);
-      const nameIDs: number[] = [];
-      names.forEach((val, id, array) => {
-        nameIDs.push(Number(this.getStorylineIDByName(val)));
-      });
-      const x1 = this._downPoint.x || 0;
-      const y1 = this._downPoint.y || 0;
-      const x2 = this._dragPoint.x || 0;
-      const y2 = this._dragPoint.y || 0;
-      const thresK = 2.5;
-      if (y2 - y1 > thresK * (x2 - x1)) {
-        return [nameIDs, [lTime, rTime, sSessionID, mSessionID, eSessionID]]; // Bend
-      } else {
-        return [nameIDs, [sTime, eTime]];
-      }
+      return [names.slice(0, 2), [sTime, eTime]];
     }
     return null;
   }

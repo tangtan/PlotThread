@@ -47,10 +47,10 @@ export type StoryName = string;
 export type StoryNode = number[];
 export type StorySegment = StoryNode[];
 export type StoryLine = StorySegment[];
-export type StyleConfig = {
+export type StoryStyle = {
   name: string;
+  type: string;
   segmentID: number;
-  styles: string[];
 };
 export type StoryState = {
   storyLayouter: any;

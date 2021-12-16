@@ -65,6 +65,29 @@ export default (state = initialState, action: ActionType) => {
         storyStore: new StoryStore(graph)
       };
     }
+    case 'STYLISH_STORYLINES': {
+      const { args } = action.payload;
+      if (args === null) return state;
+      const [names, timeSpan, type] = args;
+      const graph = state.storyLayouter.stylish(names, timeSpan, type);
+      return {
+        storyName: state.storyName,
+        storyLayouter: state.storyLayouter,
+        storyStore: new StoryStore(graph)
+      };
+    }
+    case 'RELATE_STORYLINES': {
+      const { args } = action.payload;
+      if (args === null) return state;
+      const [names, timeSpan, type] = args;
+      console.log(args);
+      const graph = state.storyLayouter.relate(names, timeSpan, type);
+      return {
+        storyName: state.storyName,
+        storyLayouter: state.storyLayouter,
+        storyStore: new StoryStore(graph)
+      };
+    }
     default:
       break;
   }

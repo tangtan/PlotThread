@@ -1,13 +1,15 @@
-import { StoryName, StoryLine, StorySegment } from '../types';
+import { StoryName, StoryLine, StorySegment, StoryStyle } from '../types';
 
 export class StoryStore {
   graph: any;
   names: StoryName[];
   nodes: StorySegment[];
   paths: StoryLine[];
+  style: StoryStyle[];
   constructor(graph?: any) {
     if (graph) {
       this.graph = graph;
+      this.style = graph.style;
       this.names = graph.characters;
       const nodes = [] as StoryLine;
       const paths = graph.storylines;
@@ -19,6 +21,7 @@ export class StoryStore {
       this.names = [];
       this.nodes = [];
       this.paths = [];
+      this.style = [];
     }
   }
   getStoryStartTime() {

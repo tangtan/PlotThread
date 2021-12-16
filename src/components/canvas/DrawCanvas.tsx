@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StateType, DispatchType } from '../../types';
+import { StateType, DispatchType, StoryStyle } from '../../types';
 import { StoryStore } from '../../utils/storyStore';
 import {
   getStoryStore,
@@ -99,6 +99,9 @@ function updateStorylines(props: Props) {
   );
   // TODO: Copy style
   storylines.forEach(storyline => storyline.remove());
+  const animationType =
+    storyStore.style.length > 0 ? 'localTransition' : 'globalTransition';
+  console.log(storyStore.style);
   for (let i = 0, len = storyStore.getCharactersNum(); i < len; i++) {
     const storylineName = storyStore.names[i];
     const storylinePath = storyStore.paths[i];
@@ -108,7 +111,9 @@ function updateStorylines(props: Props) {
       storylinePath: storylinePath,
       prevStoryline: prevStoryline,
       characterID: i + 1,
-      animationType: 'transition'
+      animationType: animationType,
+      segmentIDs: getSegmentIDs(storyStore.style, storylineName),
+      dashIDs: getDashIDs(storyStore.style, storylineName)
     });
   }
 }
@@ -126,52 +131,18 @@ function getPrevStoryline(
   return [];
 }
 
-// function updateStorylines(props: Props, animationType: string) {
-//   const graph = props.storyStore;
-//   const storylines = props.renderQueue.filter(
-//     (item) => item.data.type === "storyline"
-//   );
-//   // TODO: Copy style
-//   storylines.forEach((storyline) => storyline.remove());
-//   // draw new graph
-//   for (let i = 0; i < graph.paths.length; i++) {
-//     props.addVisualObject('storyline', {
-//       storylineName: graph.names[i],
-//       storylinePath: graph.paths[i],
-//       prevStoryline: i < storylines.length ? storylines[i].children : [],
-//       animationType: animationType,
-//       characterID: i + 1,
-//       segmentIDs: animationType === 'regionalTransition' ? getSegmentIDs(graph.styleConfig, graph.names[i]) : [],
-//       dashIDs: getDashIDs(graph.styleConfig, graph.names[i])
-//     });
-//   }
-// }
+function getDashIDs(style: StoryStyle[], name: string) {
+  const _style = style.filter(
+    styleItem => styleItem.name === name && styleItem.type === 'Dash'
+  );
+  return _style.map(styleItem => styleItem.segmentID);
+}
 
-// function getDashIDs(styleConfig: StyleConfig[], name: string) {
-//   if (!styleConfig) return [];
-//   let ret = [];
-//   for (let i = 0; i < styleConfig.length; i++) {
-//     if (styleConfig[i].name === name) {
-//       for (let j = 0; j < styleConfig[i].styles.length; j++) {
-//         if (styleConfig[i].styles[j] === 'Dash') {
-//           ret.push(styleConfig[i].segmentID);
-//           break;
-//         }
-//       }
-//     }
-//   }
-//   return ret;
-// }
-
-// function getSegmentIDs(styleConfig: StyleConfig[], name: string) {
-//   if (!styleConfig) return [];
-//   let ret = [];
-//   for (let i = 0; i < styleConfig.length; i++) {
-//     if (styleConfig[i].name === name) {
-//       ret.push(styleConfig[i].segmentID);
-//     }
-//   }
-//   return ret;
-// }
+function getSegmentIDs(style: StoryStyle[], name: string) {
+  const _style = style.filter(
+    styleItem => styleItem.name === name && styleItem.type !== 'Normal'
+  );
+  return _style.map(styleItem => styleItem.segmentID);
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrawCanvas);

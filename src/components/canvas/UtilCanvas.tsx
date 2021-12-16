@@ -6,7 +6,9 @@ import { getToolState, getStoryStore } from '../../store/selectors';
 import {
   sortStorylines,
   bendStorylines,
-  compressStorylines
+  compressStorylines,
+  stylishStorylines,
+  relateStorylines
 } from '../../store/actions';
 import ToolCanvas from './ToolCanvas';
 import { view } from 'paper';
@@ -19,7 +21,6 @@ import RelateUtil from '../../interactions/IStoryEvent/relateUtil';
 import RepelUtil from '../../interactions/IStoryEvent/repelUtil';
 import AttractUtil from '../../interactions/IStoryEvent/attractUtil';
 import TransformUtil from '../../interactions/IStoryEvent/transformUtil';
-import DragUtil from '../../interactions/IStoryEvent/dragUtil';
 
 const mapStateToProps = (state: StateType) => {
   return {
@@ -46,7 +47,9 @@ const mapDispatchToProps = (dispatch: DispatchType) => {
   return {
     sort: (args: any) => dispatch(sortStorylines(args)),
     bend: (args: any) => dispatch(bendStorylines(args)),
-    compress: (args: any) => dispatch(compressStorylines(args))
+    compress: (args: any) => dispatch(compressStorylines(args)),
+    stylish: (args: any) => dispatch(stylishStorylines(args)),
+    relate: (args: any) => dispatch(relateStorylines(args))
   };
 };
 
@@ -69,7 +72,6 @@ type State = {
   repelUtil: RepelUtil;
   attractUtil: AttractUtil;
   transformUtil: TransformUtil;
-  dragUtil: DragUtil;
 };
 
 class UtilCanvas extends Component<Props, State> {
@@ -90,7 +92,6 @@ class UtilCanvas extends Component<Props, State> {
       repelUtil: new RepelUtil('Repel', 0),
       attractUtil: new AttractUtil('Attract', 0),
       transformUtil: new TransformUtil('Transform', 0),
-      dragUtil: new DragUtil('Drag', 0),
       storyStore: null
     };
   }
@@ -112,7 +113,6 @@ class UtilCanvas extends Component<Props, State> {
       prevState.repelUtil.updateStoryStore(storyStore);
       prevState.attractUtil.updateStoryStore(storyStore);
       prevState.transformUtil.updateStoryStore(storyStore);
-      prevState.dragUtil.updateStoryStore(storyStore);
       return {
         storyStore: storyStore
       };
@@ -147,7 +147,6 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.transformState) this.state.transformUtil.down(e);
     if (this.props.repelState) this.state.repelUtil.down(e);
     if (this.props.attractState) this.state.attractUtil.down(e);
-    if (this.props.dragState) this.state.dragUtil.down(e);
   }
 
   onMouseDrag(e: paper.MouseEvent) {
@@ -165,7 +164,6 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.attractState) this.state.attractUtil.drag(e);
     if (this.props.repelState) this.state.repelUtil.drag(e);
     if (this.props.transformState) this.state.transformUtil.drag(e);
-    if (this.props.dragState) this.state.dragUtil.drag(e);
   }
 
   onMouseUp(e: paper.MouseEvent) {
@@ -181,18 +179,54 @@ class UtilCanvas extends Component<Props, State> {
       const sortArgs = this.state.sortUtil.up(e);
       this.props.sort(sortArgs);
     }
-    if (this.props.bumpState) this.state.bumpUtil.up(e);
-    if (this.props.dashState) this.state.dashUtil.up(e);
-    if (this.props.waveState) this.state.waveUtil.up(e);
-    if (this.props.zigzagState) this.state.zigzagUtil.up(e);
-    if (this.props.collideState) this.state.collideUtil.up(e);
-    if (this.props.mergeState) this.state.mergeUtil.up(e);
-    if (this.props.splitState) this.state.splitUtil.up(e);
-    if (this.props.twineState) this.state.twineUtil.up(e);
-    if (this.props.attractState) this.state.attractUtil.up(e);
-    if (this.props.repelState) this.state.repelUtil.up(e);
-    if (this.props.transformState) this.state.transformUtil.up(e);
-    if (this.props.dragState) this.state.dragUtil.up(e);
+    if (this.props.dashState) {
+      const dashArgs = this.state.dashUtil.up(e);
+      if (dashArgs !== null) {
+        this.props.stylish([...dashArgs, 'Normal']);
+      }
+    }
+    if (this.props.bumpState) {
+      const bumpArgs = this.state.bumpUtil.up(e);
+      if (bumpArgs !== null) {
+        this.props.stylish([...bumpArgs, 'Bump']);
+      }
+    }
+    if (this.props.waveState) {
+      const stylishArgs = this.state.waveUtil.up(e);
+      if (stylishArgs !== null) {
+        this.props.stylish([...stylishArgs, 'Wave']);
+      }
+    }
+    if (this.props.zigzagState) {
+      const zigzagArgs = this.state.zigzagUtil.up(e);
+      if (zigzagArgs !== null) {
+        this.props.stylish([...zigzagArgs, 'Zigzag']);
+      }
+    }
+    if (this.props.collideState) {
+      const collideArgs = this.state.collideUtil.up(e);
+      if (collideArgs !== null) {
+        this.props.relate([...collideArgs, 'Collide']);
+      }
+    }
+    if (this.props.mergeState) {
+      const mergeArgs = this.state.mergeUtil.up(e);
+      if (mergeArgs !== null) {
+        this.props.relate([...mergeArgs, 'Merge']);
+      }
+    }
+    if (this.props.splitState) {
+      const splitArgs = this.state.splitUtil.up(e);
+      if (splitArgs !== null) {
+        this.props.relate([...splitArgs, 'Unmerge']);
+      }
+    }
+    if (this.props.twineState) {
+      const twineArgs = this.state.twineUtil.up(e);
+      if (twineArgs !== null) {
+        this.props.relate([...twineArgs, 'Twine']);
+      }
+    }
   }
 
   render() {
