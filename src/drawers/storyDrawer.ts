@@ -89,11 +89,7 @@ export default class StoryDrawer extends BaseDrawer {
       }
       strokes.push(path);
     }
-    let prevStrokes = [];
-    for (let i = 1; i < prevStoryline.length; i++) {
-      prevStrokes.push(prevStoryline[i]);
-    }
-    BaseAnimator.Animate(animationType, strokes, prevStrokes, segmentIDs);
+    BaseAnimator.Animate(animationType, strokes, prevStoryline, segmentIDs);
     return strokes;
   }
 
