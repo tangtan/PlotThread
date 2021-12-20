@@ -1,6 +1,5 @@
 import BaseDrawer from './baseDrawer';
-import { Path, Segment, CompoundPath } from 'paper';
-import { ENGINE_METHOD_PKEY_ASN1_METHS } from 'constants';
+import { Path, CompoundPath } from 'paper';
 
 export default class ShapeDrawer extends BaseDrawer {
   defaultRadius: number;

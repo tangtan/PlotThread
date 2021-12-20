@@ -1,5 +1,4 @@
 import { Path, Segment, Point } from 'paper';
-import store from '../../store';
 
 export default function dragSegment(
   e: paper.MouseEvent,

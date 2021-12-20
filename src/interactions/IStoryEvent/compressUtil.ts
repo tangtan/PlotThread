@@ -22,10 +22,7 @@ export default class CompressUtil extends CircleSelectionUtil {
       if (sPoint && ePoint && cPoint && this.storyStore) {
         const sTime = this.getStartTime(sPoint);
         const eTime = this.getEndTime(ePoint);
-        // const sessions = this.getSessions(sPoint, ePoint);
-        const names = this.storyStore.names.filter(name =>
-          this.isInSelectionRegion(name, sPoint, ePoint)
-        );
+        const names = ['TODO'];
         super.mouseUp(e);
         return [names, [sTime, eTime]];
       }

@@ -69,6 +69,7 @@ export default (state = initialState, action: ActionType) => {
       const { args } = action.payload;
       if (args === null) return state;
       const [names, timeSpan, type] = args;
+      if (timeSpan[0] === -1 || timeSpan[1] === -1) return state;
       const graph = state.storyLayouter.stylish(names, timeSpan, type);
       return {
         storyName: state.storyName,
@@ -80,7 +81,7 @@ export default (state = initialState, action: ActionType) => {
       const { args } = action.payload;
       if (args === null) return state;
       const [names, timeSpan, type] = args;
-      console.log(args);
+      if (timeSpan[0] === -1 || timeSpan[1] === -1) return state;
       const graph = state.storyLayouter.relate(names, timeSpan, type);
       return {
         storyName: state.storyName,

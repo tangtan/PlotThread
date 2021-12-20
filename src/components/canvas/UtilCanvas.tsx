@@ -182,7 +182,7 @@ class UtilCanvas extends Component<Props, State> {
     if (this.props.dashState) {
       const dashArgs = this.state.dashUtil.up(e);
       if (dashArgs !== null) {
-        this.props.stylish([...dashArgs, 'Normal']);
+        this.props.stylish([...dashArgs, 'Dash']);
       }
     }
     if (this.props.bumpState) {

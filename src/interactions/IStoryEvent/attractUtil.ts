@@ -25,13 +25,11 @@ export default class AttractUtil extends CircleSelectionUtil {
       const lPoint = bounds.topLeft;
       const rPoint = bounds.bottomRight;
       if (sPoint && ePoint && cPoint && lPoint && rPoint && this.storyStore) {
-        const sTimeID = this.getStartTimeID(lPoint);
-        const eTimeID = this.getEndTimeID(rPoint);
-        const names = this.storyStore.names.filter(name =>
-          this.isInSelectionRegion(name, sPoint, ePoint)
-        );
         super.mouseUp(e);
-        return [names, sTimeID, eTimeID];
+        const sTime = this.getStartTime(lPoint);
+        const eTime = this.getEndTime(rPoint);
+        const names = ['TODO'];
+        return [names, sTime, eTime];
       }
     }
     super.mouseUp(e);

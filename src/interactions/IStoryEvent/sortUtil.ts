@@ -34,14 +34,11 @@ export default class SortUtil extends StoryUtil {
       ];
       for (let i = 0, len = order.length; i < len; i++) {
         const { name, oldY, newY } = order[i];
-        const ID = this.getStorylineIDByName(name);
         if (newY - oldY > 1) {
           const upName = order[i - 1].name;
-          // const upID = this.getStorylineIDByName(upName);
           return [[upName, name], time];
         } else if (newY - oldY < -1) {
           const downName = order[i + 1].name;
-          // const downID = this.getStorylineIDByName(downName);
           return [[name, downName], time];
         }
       }

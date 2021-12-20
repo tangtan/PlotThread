@@ -86,14 +86,14 @@ export default class Transform extends CircleSelectionUtil {
         const ePoint = bounds.bottomCenter;
         const lPoint = bounds.topLeft;
         const rPoint = bounds.bottomRight;
-        if (sPoint && ePoint && cPoint && lPoint && rPoint && this.storyStore) {
-          this.sTimeID = this.getStartTimeID(lPoint);
-          this.eTimeID = this.getEndTimeID(rPoint);
-          this.names = this.storyStore.names.filter(name =>
-            this.isInSelectionRegion(name, sPoint, ePoint)
-          );
-          this.cnt ^= 1;
-        }
+        // if (sPoint && ePoint && cPoint && lPoint && rPoint && this.storyStore) {
+        //   this.sTimeID = this.getStartTimeID(lPoint);
+        //   this.eTimeID = this.getEndTimeID(rPoint);
+        //   this.names = this.storyStore.names.filter(name =>
+        //     this.isInSelectionRegion(name, sPoint, ePoint)
+        //   );
+        //   this.cnt ^= 1;
+        // }
         this.currPath.strokeColor = ColorPicker.blue;
         this.currPath.closed = true;
       }

@@ -1,7 +1,6 @@
 import { CircleSelectionUtil } from './baseUtil';
-import { project, Path, Point } from 'paper';
+import { Path, Point } from 'paper';
 import { ColorPicker } from '../../utils/color';
-import StylishUtil from './stylishUtil';
 
 export default class RepelUtil extends CircleSelectionUtil {
   cnt: number;
@@ -57,59 +56,59 @@ export default class RepelUtil extends CircleSelectionUtil {
       super.mouseUp(e);
       return null;
     }
-    if (this.cnt & 1) {
-      //这个逻辑下面不做完一次操作的话 circle不会消失
-      if (this.path) {
-        this.path.remove();
-        this.path = null;
-      }
-      const bounds = this.createBounds(e.point);
-      if (bounds) {
-        const lPoint = bounds.topLeft;
-        const rPoint = bounds.bottomRight;
-        const sPoint = this.startPoint;
-        const ePoint = this.endPoint;
-        if (lPoint && rPoint && sPoint && ePoint && this.storyStore) {
-          const secSTimeID = this.getStartTimeID(lPoint);
-          const secETimeID = this.getEndTimeID(rPoint);
-          const secNames = this.storyStore.names.filter(name =>
-            this.isInSelectionRegion(name, lPoint, rPoint)
-          );
-          const type = sPoint.y && ePoint.y ? sPoint.y > ePoint.y : 0; // s > e bottom to top
-          super.mouseUp(e);
-          this.cnt ^= 1;
-          return [
-            type,
-            [
-              [this.names, this.sTimeID, this.eTimeID],
-              [secNames, secSTimeID, secETimeID]
-            ]
-          ];
-        }
-      }
-      super.mouseUp(e);
-      this.cnt ^= 1;
-      return null;
-    } else {
-      if (this.currPath && this.currPath.bounds) {
-        const bounds = this.currPath.bounds;
-        const cPoint = bounds.center;
-        const sPoint = bounds.topCenter;
-        const ePoint = bounds.bottomCenter;
-        const lPoint = bounds.topLeft;
-        const rPoint = bounds.bottomRight;
-        if (sPoint && ePoint && cPoint && lPoint && rPoint && this.storyStore) {
-          this.sTimeID = this.getStartTimeID(lPoint);
-          this.eTimeID = this.getEndTimeID(rPoint);
-          this.names = this.storyStore.names.filter(name =>
-            this.isInSelectionRegion(name, sPoint, ePoint)
-          );
-          this.cnt ^= 1;
-        }
-        this.currPath.strokeColor = ColorPicker.blue;
-        this.currPath.closed = true;
-      }
-    }
+    // if (this.cnt & 1) {
+    //   //这个逻辑下面不做完一次操作的话 circle不会消失
+    //   if (this.path) {
+    //     this.path.remove();
+    //     this.path = null;
+    //   }
+    //   const bounds = this.createBounds(e.point);
+    //   if (bounds) {
+    //     const lPoint = bounds.topLeft;
+    //     const rPoint = bounds.bottomRight;
+    //     const sPoint = this.startPoint;
+    //     const ePoint = this.endPoint;
+    //     if (lPoint && rPoint && sPoint && ePoint && this.storyStore) {
+    //       const secSTimeID = this.getStartTimeID(lPoint);
+    //       const secETimeID = this.getEndTimeID(rPoint);
+    //       const secNames = this.storyStore.names.filter(name =>
+    //         this.isInSelectionRegion(name, lPoint, rPoint)
+    //       );
+    //       const type = sPoint.y && ePoint.y ? sPoint.y > ePoint.y : 0; // s > e bottom to top
+    //       super.mouseUp(e);
+    //       this.cnt ^= 1;
+    //       return [
+    //         type,
+    //         [
+    //           [this.names, this.sTimeID, this.eTimeID],
+    //           [secNames, secSTimeID, secETimeID]
+    //         ]
+    //       ];
+    //     }
+    //   }
+    //   super.mouseUp(e);
+    //   this.cnt ^= 1;
+    //   return null;
+    // } else {
+    //   if (this.currPath && this.currPath.bounds) {
+    //     const bounds = this.currPath.bounds;
+    //     const cPoint = bounds.center;
+    //     const sPoint = bounds.topCenter;
+    //     const ePoint = bounds.bottomCenter;
+    //     const lPoint = bounds.topLeft;
+    //     const rPoint = bounds.bottomRight;
+    //     if (sPoint && ePoint && cPoint && lPoint && rPoint && this.storyStore) {
+    //       this.sTimeID = this.getStartTimeID(lPoint);
+    //       this.eTimeID = this.getEndTimeID(rPoint);
+    //       this.names = this.storyStore.names.filter(name =>
+    //         this.isInSelectionRegion(name, sPoint, ePoint)
+    //       );
+    //       this.cnt ^= 1;
+    //     }
+    //     this.currPath.strokeColor = ColorPicker.blue;
+    //     this.currPath.closed = true;
+    //   }
+    // }
   }
 
   drag(e: paper.MouseEvent) {
